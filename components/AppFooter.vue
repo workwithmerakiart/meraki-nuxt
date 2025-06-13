@@ -30,11 +30,11 @@
                     </p>
                 </div>
 
-                <div class="flex gap-3 mt-4">
+                <!-- <div class="flex gap-3 mt-4">
                     <img src="/icons/instagram.png" alt="Instagram" class="w-6 h-6" />
                     <img src="/icons/facebook.png" alt="Facebook" class="w-6 h-6" />
                     <img src="/icons/tiktok.png" alt="Tiktok" class="w-6 h-6" />
-                </div>
+                </div> -->
             </div>
 
             <!-- Sitemap Columns -->
