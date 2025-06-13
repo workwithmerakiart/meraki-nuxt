@@ -1,7 +1,7 @@
 <template>
   <header
     class="header fixed top-0 left-0 w-full z-50 transition-all duration-300"
-    :class="{ 'bg-black/30': isScrolled && !isOpen, 'fixed inset-0 bg-[#2c2c2c] flex flex-col': isOpen }"
+    :class="{ 'bg-black/60': isScrolled && !isOpen, 'fixed inset-0 bg-[#2c2c2c] flex flex-col': isOpen }"
   >
     <div class="flex items-center justify-between px-6 h-16">
       <NuxtLink to="/" class="text-white font-bold text-xl flex items-center h-full">
@@ -12,22 +12,15 @@
         />
       </NuxtLink>
       <a
-        v-if="!isOpen"
         href="javascript:void(0)"
         @click="toggleMenu"
         class="hamburger z-50"
+        :class="{ 'is-open': isOpen }"
       >
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
       </a>
-      <button
-        v-if="isOpen"
-        @click="toggleMenu"
-        class="text-5xl font-black text-white z-50 transition-transform duration-300 hover:rotate-90"
-      >
-        &times;
-      </button>
     </div>
 
     <transition name="slide-fade">
@@ -75,7 +68,7 @@ import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 
 const isOpen = ref(false);
 const isScrolled = ref(false);
-const hoveredIndex = ref(-1); // Initialize to -1 so no submenu is active by default
+const hoveredIndex = ref(-1);
 
 const navigation = [
   {
@@ -132,7 +125,7 @@ const navigationStyle = computed(() => ({
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value;
-  if (!isOpen.value) { // Only reset hovered index when closing the drawer
+  if (!isOpen.value) {
     hoveredIndex.value = -1;
   }
 };
@@ -157,7 +150,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* Slide-fade animation for drawer */
 .slide-fade-enter-active,
 .slide-fade-leave-active {
   transition: all 0.4s ease-out;
@@ -174,33 +166,33 @@ onBeforeUnmount(() => {
   opacity: 1;
 }
 
-/* Hamburger menu styling */
 .hamburger {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Distribute lines vertically */
+  justify-content: space-between;
   align-items: flex-end;
   cursor: pointer;
-  height: 30px; /* Increased height */
-  width: 38px; /* Increased width */
+  height: 30px;
+  width: 38px;
   margin-left: 30px;
+  position: relative;
 }
 
 .hamburger-line {
-  height: 4px; /* Increased thickness */
+  height: 3px;
   background: #fff;
   transition: all 0.3s ease;
   display: block;
 }
 
 .hamburger-line:first-child {
-  width: 20px; /* Adjusted width */
+  width: 20px;
 }
 .hamburger-line:nth-child(2) {
-  width: 44px; /* Adjusted width */
+  width: 44px;
 }
 .hamburger-line:last-child {
-  width: 32px; /* Adjusted width */
+  width: 32px;
 }
 
 .hamburger:hover .hamburger-line {
@@ -219,10 +211,43 @@ onBeforeUnmount(() => {
   transition-delay: 0.2s;
 }
 
-/* Outline text styling for main menu items */
+.hamburger.is-open .hamburger-line {
+  background: #fff;
+  position: absolute;
+  width: 30px;
+  left: 50%;
+  top: 50%;
+  transform-origin: center;
+  transform: translate(-50%, -50%);
+}
+
+.hamburger.is-open .hamburger-line:first-child {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.hamburger.is-open .hamburger-line:nth-child(2) {
+  opacity: 0;
+  display: none;
+}
+
+.hamburger.is-open .hamburger-line:last-child {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.hamburger.is-open:hover .hamburger-line:first-child,
+.hamburger.is-open:hover .hamburger-line:last-child {
+  background: #f97316;
+  transform: translate(-50%, -50%) rotate(45deg) scale(1.1);
+  width: 35px;
+}
+
+.hamburger.is-open:hover .hamburger-line:last-child {
+  transform: translate(-50%, -50%) rotate(-45deg) scale(1.1);
+}
+
 .outline-text {
   color: transparent;
-  -webkit-text-stroke: 1.5px #888; /* Slightly thicker outline */
+  -webkit-text-stroke: 1.5px #888;
   transition: color 0.3s ease, -webkit-text-stroke-color 0.3s ease;
 }
 
@@ -236,35 +261,34 @@ onBeforeUnmount(() => {
   -webkit-text-stroke-color: white;
 }
 
-/* Sublink styling */
 .sublink {
   position: relative;
-  padding-left: 25px; /* Increased to make room for bullet */
-  border-left: 3px solid transparent; /* Thicker border */
-  transition: all 0.3s ease; /* Smooth transition for all properties */
-  line-height: 1.5; /* Add some line height for better spacing */
+  padding-left: 25px;
+  border-left: 3px solid transparent;
+  transition: all 0.3s ease;
+  line-height: 1.5;
 }
 
 .sublink::before {
-  content: "•"; /* Bullet point */
+  content: "•";
   position: absolute;
-  left: 5px; /* Position the bullet */
+  left: 5px;
   top: 50%;
   transform: translateY(-50%);
-  color: #f97316; /* Accent color for bullet */
-  font-size: 0.8em; /* Smaller bullet relative to text */
-  opacity: 0.7; /* Slightly faded */
+  color: #f97316;
+  font-size: 0.8em;
+  opacity: 0.7;
   transition: all 0.3s ease;
 }
 
 .sublink:hover {
   border-left-color: #f97316;
-  padding-left: 30px; /* Moves further on hover */
+  padding-left: 30px;
 }
 
 .sublink:hover::before {
-  color: white; /* Bullet color changes on hover */
+  color: white;
   opacity: 1;
-  transform: translateY(-50%) translateX(5px); /* Bullet moves right */
+  transform: translateY(-50%) translateX(5px);
 }
 </style>
