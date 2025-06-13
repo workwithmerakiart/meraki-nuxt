@@ -1,16 +1,18 @@
 <template>
     <footer class="app-footer bg-zinc-900 text-white py-10 px-6 font-light">
         <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+
             <!-- Brand/Logo Column -->
             <div>
                 <!-- Logo -->
                 <NuxtLink to="/">
                     <img class="h-6 sm:h-8" src="https://merakiui.com/images/full-logo.svg" alt="Logo" />
                 </NuxtLink>
-                <p class="text-sm text-gray-300">Warehouse 1, Al Marabea’ Street, Al Quoz 1, Dubai</p>
+                <p class="text-sm text-gray-300 mt-2">Warehouse 1, Al Marabea’ Street, Al Quoz 1, Dubai</p>
                 <a href="#" class="text-orange-400 font-semibold flex items-center gap-1 mt-2">
                     <i class="fa-solid fa-location-arrow"></i> Get Direction
                 </a>
+
                 <div class="mt-4 text-sm font-mono space-y-1">
                     <div v-for="(time, day) in timings" :key="day" class="flex gap-2">
                         <span class="w-10">{{ day }}</span>
@@ -19,14 +21,15 @@
                     </div>
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-4 space-y-1">
                     <p class="flex items-center gap-2">
                         <i class="fa-brands fa-whatsapp"></i> +971 54 505 7944
                     </p>
-                    <p class="flex items-center gap-2 mt-1">
+                    <p class="flex items-center gap-2">
                         <i class="fa-solid fa-envelope"></i> hello@wildpainthouse.com
                     </p>
                 </div>
+
                 <div class="flex gap-3 mt-4">
                     <img src="/icons/instagram.png" alt="Instagram" class="w-6 h-6" />
                     <img src="/icons/facebook.png" alt="Facebook" class="w-6 h-6" />
@@ -34,71 +37,21 @@
                 </div>
             </div>
 
-            <!-- Sitemap Column 1 -->
-            <div>
-                <h3 class="font-bold text-lg uppercase mb-4">Experiences</h3>
-                <ul class="text-sm space-y-1">
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/experiences/events">Events</NuxtLink>
-                    </li>
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/experiences/workshops">Workshops</NuxtLink>
-                    </li>
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/experiences/courses">Courses</NuxtLink>
-                    </li>
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/experiences/activities">Activities</NuxtLink>
-                    </li>
-                </ul>
-
-                <h3 class="font-bold text-lg uppercase mt-6 mb-4">Shop</h3>
-                <ul class="text-sm space-y-1">
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/shop/products">Products</NuxtLink>
-                    </li>
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/shop/custom-orders">Custom Orders</NuxtLink>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Sitemap Column 2 -->
-            <div>
-                <h3 class="font-bold text-lg uppercase mb-4">Studio</h3>
-                <ul class="text-sm space-y-1">
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/studio/our-story">Our Story</NuxtLink>
-                    </li>
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/studio/partner-with-us">Partner with us</NuxtLink>
-                    </li>
-                </ul>
-
-                <h3 class="font-bold text-lg uppercase mt-6 mb-4">Community</h3>
-                <ul class="text-sm space-y-1">
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/community/blogs">Blogs</NuxtLink>
-                    </li>
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/community/lookbook">Meraki’s Lookbook</NuxtLink>
-                    </li>
-                </ul>
-
-                <h3 class="font-bold text-lg uppercase mt-6 mb-4">About</h3>
-                <ul class="text-sm space-y-1">
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/about/contact">Contact us</NuxtLink>
-                    </li>
-                    <li class="ml-4 text-gray-300">
-                        <NuxtLink to="/about/faqs">FAQs</NuxtLink>
-                    </li>
-                </ul>
+            <!-- Sitemap Columns -->
+            <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div v-for="section in sitemap" :key="section.title">
+                    <div class="font-bold text-sm uppercase mb-4">{{ section.title }}</div>
+                    <ul class="text-sm space-y-1">
+                        <li v-for="link in section.links" :key="link.label" class="text-gray-300">
+                            <NuxtLink :to="link.to">{{ link.label }}</NuxtLink>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <!-- Newsletter Column -->
             <div>
-                <h3 class="font-bold text-lg uppercase mb-4">Stay Updated</h3>
+                <div class="font-bold text-sm uppercase mb-4">Stay Updated</div>
                 <p class="text-sm text-gray-300 mb-3">
                     Join our newsletter and be the first to be notified of our latest news and promotions.
                 </p>
@@ -124,6 +77,46 @@ const timings = {
     SAT: '10:00-22:00',
     SUN: '10:00-22:00'
 }
+
+const sitemap = [
+    {
+        title: 'Experiences',
+        links: [
+            { label: 'Events', to: '/experiences/events' },
+            { label: 'Workshops', to: '/experiences/workshops' },
+            { label: 'Courses', to: '/experiences/courses' },
+            { label: 'Activities', to: '/experiences/activities' },
+        ]
+    },
+    {
+        title: 'Shop',
+        links: [
+            { label: 'Products', to: '/shop/products' },
+            { label: 'Custom Orders', to: '/shop/custom-orders' },
+        ]
+    },
+    {
+        title: 'Studio',
+        links: [
+            { label: 'Our Story', to: '/studio/our-story' },
+            { label: 'Partner with us', to: '/studio/partner-with-us' },
+        ]
+    },
+    {
+        title: 'Community',
+        links: [
+            { label: 'Blogs', to: '/community/blogs' },
+            { label: 'Meraki’s Lookbook', to: '/community/lookbook' },
+        ]
+    },
+    {
+        title: 'About',
+        links: [
+            { label: 'Contact us', to: '/about/contact' },
+            { label: 'FAQs', to: '/about/faqs' },
+        ]
+    }
+]
 </script>
 
 <style scoped>
@@ -136,6 +129,6 @@ footer a:hover {
 }
 
 .app-footer * {
-    font-family: "Fraunces", serif;
+    font-family: "Inter", sans-serif;
 }
 </style>
