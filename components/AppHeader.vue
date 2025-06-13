@@ -1,9 +1,14 @@
 <template>
-  <nav class="app-header bg-white shadow dark:bg-gray-800 relative z-50 font-light">
-    <div class="container mx-auto px-6 py-0 flex items-center justify-between">
+  <nav :class="[
+    'app-header fixed top-0 left-0 w-full z-50 transition-all duration-300 font-light',
+    isScrolled ? 'bg-white shadow text-black' : 'bg-transparent text-white'
+  ]">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
       <!-- Logo -->
       <NuxtLink to="/">
-        <img class="h-6 sm:h-8" src="https://merakiui.com/images/full-logo.svg" alt="Logo" />
+        <img class="h-6 sm:h-8"
+          :src="isScrolled ? 'https://merakiui.com/images/full-logo.svg' : 'https://merakiui.com/images/full-logo.svg'"
+          alt="Logo" />
       </NuxtLink>
 
       <!-- Menu -->
@@ -11,7 +16,7 @@
         <li v-for="item in navigation" :key="item.label" class="relative group mr-0">
           <!-- Parent Menu -->
           <div
-            class="px-5 py-4 cursor-pointer w-40 text-gray-800 dark:text-white group-hover:bg-zinc-900 group-hover:text-white dark:group-hover:bg-gray-700 transition">
+            class="font-bold px-5 py-2 cursor-pointer w-40 group-hover:bg-zinc-900 group-hover:text-white dark:group-hover:bg-gray-700 transition">
             <NuxtLink :to="item.to" class="block w-full h-full">
               {{ item.label }}
             </NuxtLink>
@@ -34,58 +39,75 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const isScrolled = ref(false)
+
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > window.innerHeight / 2
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
 const navigation = [
   {
-    label: "Home",
-    to: "/",
+    label: 'Home',
+    to: '/',
   },
   {
-    label: "Experiences",
-    to: "/experiences",
+    label: 'Experiences',
+    to: '/experiences',
     children: [
-      { label: "Events", to: "/experiences/events" },
-      { label: "Workshops", to: "/experiences/workshops" },
-      { label: "Courses", to: "/experiences/courses" },
-      { label: "Activities", to: "/experiences/activities" },
+      { label: 'Events', to: '/experiences/events' },
+      { label: 'Workshops', to: '/experiences/workshops' },
+      { label: 'Courses', to: '/experiences/courses' },
+      { label: 'Activities', to: '/experiences/activities' },
     ],
   },
   {
-    label: "Shop",
-    to: "/shop",
+    label: 'Shop',
+    to: '/shop',
     children: [
-      { label: "Products", to: "/shop/products" },
-      { label: "Custom Orders", to: "/shop/custom-orders" },
+      { label: 'Products', to: '/shop/products' },
+      { label: 'Custom Orders', to: '/shop/custom-orders' },
     ],
   },
   {
-    label: "Studio",
-    to: "/studio",
+    label: 'Studio',
+    to: '/studio',
     children: [
-      { label: "Our Story", to: "/studio/our-story" },
-      { label: "Partner with us", to: "/studio/partner-with-us" },
+      { label: 'Our Story', to: '/studio/our-story' },
+      { label: 'Partner with us', to: '/studio/partner-with-us' },
     ],
   },
   {
-    label: "Community",
-    to: "/community",
+    label: 'Community',
+    to: '/community',
     children: [
-      { label: "Blogs", to: "/community/blogs" },
-      { label: "Lookbook", to: "/community/lookbook" },
+      { label: 'Blogs', to: '/community/blogs' },
+      { label: 'Lookbook', to: '/community/lookbook' },
     ],
   },
   {
-    label: "About",
-    to: "/about",
+    label: 'About',
+    to: '/about',
     children: [
-      { label: "Contact us", to: "/about/contact" },
-      { label: "FAQs", to: "/about/faqs" },
+      { label: 'Contact us', to: '/about/contact' },
+      { label: 'FAQs', to: '/about/faqs' },
     ],
   },
-];
+]
 </script>
 
 <style scoped>
 .app-header * {
-  font-family: "Fraunces", serif;
+  font-family: "Inter", sans-serif;
+  transition: color 0.3s ease, background-color 0.3s ease;
 }
 </style>
