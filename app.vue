@@ -1,6 +1,8 @@
 <template>
   <div class="min-h-screen flex flex-col">
-    <AppLoader v-if="isLoading" />
+    <!-- Page Loader overlays while loading -->
+    <PageLoader />
+
     <AppHeader />
 
     <!-- Main content grows to push footer down -->
@@ -14,13 +16,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted } from 'vue'
+import { useRouter } from '#app'  // <-- change here
+import { usePageLoader } from '~/composables/usePageLoader'
+import PageLoader from '~/components/PageLoader.vue'
 
-const isLoading = ref(true);
+const { startLoading, finishLoading } = usePageLoader()
+const router = useRouter()
+
+router.beforeEach((to, from, next) => {
+  startLoading()
+  next()
+})
+
+router.afterEach(() => {
+  setTimeout(() => finishLoading(), 300)
+})
 
 onMounted(() => {
-  if (import.meta.client) {
-    isLoading.value = false;
-  }
-});
+  finishLoading()
+})
 </script>

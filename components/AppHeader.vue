@@ -1,80 +1,15 @@
-<template>
-  <header
-    class="header fixed top-0 left-0 w-full z-50 transition-all duration-300"
-    :class="{ 'bg-black/60': isScrolled && !isOpen, 'fixed inset-0 bg-[#2c2c2c] flex flex-col': isOpen }"
-  >
-    <div class="flex items-center justify-between px-6 h-16">
-      <NuxtLink to="/" class="text-white font-bold text-xl flex items-center h-full">
-        <img
-          class="h-6 sm:h-8"
-          :src="'https://merakiui.com/images/full-logo.svg'"
-          alt="Logo"
-        />
-      </NuxtLink>
-      <a
-        href="javascript:void(0)"
-        @click="toggleMenu"
-        class="hamburger z-50"
-        :class="{ 'is-open': isOpen }"
-      >
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-      </a>
-    </div>
-
-    <transition name="slide-fade">
-      <div v-if="isOpen" class="flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12">
-        <div class="flex flex-1">
-          <div class="w-1/2 space-y-4 md:space-y-6">
-            <div
-              v-for="(item, index) in navigation"
-              :key="index"
-              @mouseenter="hoveredIndex = index"
-              class="group text-4xl md:text-5xl font-semibold tracking-tight cursor-pointer"
-            >
-              <NuxtLink
-                :to="item.to"
-                class="outline-text block transition-all duration-300"
-                :class="
-                  hoveredIndex === index
-                    ? 'text-white'
-                    : 'text-gray-500'
-                "
-              >
-                {{ item.label }}
-              </NuxtLink>
-            </div>
-          </div>
-
-          <div class="w-1/2 pl-8 md:pl-16 space-y-4 pt-6">
-            <div
-              v-if="navigationStyle.hoveredItem && navigationStyle.hoveredItem.children"
-              v-for="(child, cIndex) in navigationStyle.hoveredItem.children"
-              :key="cIndex"
-              class="sublink text-xl md:text-2xl text-gray-100 hover:text-white transition-colors duration-200"
-            >
-              <NuxtLink :to="child.to">{{ child.label }}</NuxtLink>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
-  </header>
-</template>
-
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from "vue";
+import { ref } from 'vue'
+import MobileMenuOverlay from '~/components/MobileMenuOverlay.vue'
 
-const isOpen = ref(false);
-const isScrolled = ref(false);
-const hoveredIndex = ref(-1);
+const menuOpen = ref(false)
+
+const toggleMenu = () => {
+  menuOpen.value = !menuOpen.value
+}
 
 const navigation = [
-  {
-    label: "Home",
-    to: "/",
-  },
+  { label: 'Home', to: '/' },
   {
     label: "Experiences",
     to: "/experiences",
@@ -149,146 +84,31 @@ onBeforeUnmount(() => {
 });
 </script>
 
+<template>
+  <nav class="fixed top-0 left-0 w-full z-50 font-light bg-transparent">
+    <div class="flex items-center justify-between w-full px-4 sm:px-6 lg:px-8 py-4">
+      <NuxtLink to="/" class="flex-shrink-0 pl-2 sm:pl-4">
+        <img class="h-8 sm:h-10" src="https://merakiui.com/images/full-logo.svg" alt="Logo" />
+      </NuxtLink>
+
+      <button @click="toggleMenu" class="relative w-8 h-6 flex flex-col justify-between items-end pr-2 sm:pr-4 group"
+        aria-label="Toggle menu" :aria-expanded="menuOpen">
+        <span
+          class="h-1 bg-white group-hover:bg-orange-500 transition-all duration-300 ease-in-out rounded-sm w-6 group-hover:w-4"></span>
+        <span
+          class="h-1 bg-white group-hover:bg-orange-500 transition-all duration-300 ease-in-out rounded-sm w-full group-hover:w-full"></span>
+        <span
+          class="h-1 bg-white group-hover:bg-orange-500 transition-all duration-300 ease-in-out rounded-sm w-4 group-hover:w-6"></span>
+      </button>
+    </div>
+
+    <MobileMenuOverlay :show="menuOpen" :navigation="navigation" @close="menuOpen = false" />
+  </nav>
+</template>
+
 <style scoped>
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.4s ease-out;
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateY(-30px);
-  opacity: 0;
-}
-
-.slide-fade-enter-to {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.hamburger {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
-  cursor: pointer;
-  height: 30px;
-  width: 38px;
-  margin-left: 30px;
-  position: relative;
-}
-
-.hamburger-line {
-  height: 3px;
-  background: #fff;
-  transition: all 0.3s ease;
-  display: block;
-}
-
-.hamburger-line:first-child {
-  width: 20px;
-}
-.hamburger-line:nth-child(2) {
-  width: 44px;
-}
-.hamburger-line:last-child {
-  width: 32px;
-}
-
-.hamburger:hover .hamburger-line {
-  background-color: #f97316;
-}
-
-.hamburger:hover .hamburger-line:first-child {
-  width: 15px;
-}
-.hamburger:hover .hamburger-line:nth-child(2) {
-  width: 35px;
-  transition-delay: 0.1s;
-}
-.hamburger:hover .hamburger-line:last-child {
-  width: 25px;
-  transition-delay: 0.2s;
-}
-
-.hamburger.is-open .hamburger-line {
-  background: #fff;
-  position: absolute;
-  width: 30px;
-  left: 50%;
-  top: 50%;
-  transform-origin: center;
-  transform: translate(-50%, -50%);
-}
-
-.hamburger.is-open .hamburger-line:first-child {
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.hamburger.is-open .hamburger-line:nth-child(2) {
-  opacity: 0;
-  display: none;
-}
-
-.hamburger.is-open .hamburger-line:last-child {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-.hamburger.is-open:hover .hamburger-line:first-child,
-.hamburger.is-open:hover .hamburger-line:last-child {
-  background: #f97316;
-  transform: translate(-50%, -50%) rotate(45deg) scale(1.1);
-  width: 35px;
-}
-
-.hamburger.is-open:hover .hamburger-line:last-child {
-  transform: translate(-50%, -50%) rotate(-45deg) scale(1.1);
-}
-
-.outline-text {
-  color: transparent;
-  -webkit-text-stroke: 1.5px #888;
-  transition: color 0.3s ease, -webkit-text-stroke-color 0.3s ease;
-}
-
-.outline-text:hover {
-  color: white;
-  -webkit-text-stroke-color: white;
-}
-
-.outline-text.text-white {
-  color: white;
-  -webkit-text-stroke-color: white;
-}
-
-.sublink {
-  position: relative;
-  padding-left: 25px;
-  border-left: 3px solid transparent;
-  transition: all 0.3s ease;
-  line-height: 1.5;
-}
-
-.sublink::before {
-  content: "•";
-  position: absolute;
-  left: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #f97316;
-  font-size: 0.8em;
-  opacity: 0.7;
-  transition: all 0.3s ease;
-}
-
-.sublink:hover {
-  border-left-color: #f97316;
-  padding-left: 30px;
-}
-
-.sublink:hover::before {
-  color: white;
-  opacity: 1;
-  transform: translateY(-50%) translateX(5px);
+button:focus {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
 }
 </style>

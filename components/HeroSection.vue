@@ -1,47 +1,24 @@
 <template>
-  <section class="relative w-full h-screen overflow-hidden">
-    <Swiper
-      :modules="[Autoplay, Pagination, Navigation]"
-      :autoplay="{ delay: 5000, disableOnInteraction: false }"
-      :loop="true"
-      :pagination="{ clickable: true }"
-      class="w-full h-full"
-    >
-      <SwiperSlide v-for="(slide, index) in slides" :key="index">
-        <div
-          class="relative w-full h-full flex items-center justify-center overflow-hidden"
-        >
-          <!-- Background media -->
-          <div class="absolute inset-0 w-full h-full">
-            <video
-              v-if="slide.video"
-              :src="slide.video"
-              autoplay
-              muted
-              loop
-              playsinline
-              class="w-full h-full object-cover"
-            ></video>
-            <div
-              v-else
-              class="w-full h-full bg-cover bg-center"
-              :style="{ backgroundImage: `url(${slide.image})` }"
-            ></div>
-            <div
-              class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"
-            ></div>
-          </div>
+    <section class="relative w-full h-screen overflow-hidden">
+        <Swiper :modules="[Autoplay, Pagination, Navigation]" :autoplay="{ delay: 5000, disableOnInteraction: false }"
+            :loop="true" :pagination="{ clickable: true }" :navigation="true" class="w-full h-full">
+            <SwiperSlide v-for="(slide, index) in slides" :key="index">
+                <div class="relative w-full h-full flex items-center justify-center overflow-hidden">
+                    <!-- Background media -->
+                    <div class="absolute inset-0 w-full h-full">
+                        <video v-if="slide.video" :src="slide.video" autoplay muted loop playsinline
+                            class="w-full h-full object-cover"></video>
+                        <div v-else class="w-full h-full bg-cover bg-center"
+                            :style="{ backgroundImage: `url(${slide.image})` }"></div>
+                        <!-- REMOVED BLACK GRADIENT OVERLAY -->
+                    </div>
 
-          <!-- Content -->
-          <div
-            class="relative z-10 text-center px-6 max-w-2xl animate-fadein-slow"
-          >
-            <div
-              v-if="slide.badge"
-              class="inline-block mb-2 px-3 py-1 text-xs font-semibold text-white bg-[#C88039] rounded-full uppercase tracking-wider animate-slideup"
-            >
-              {{ slide.badge }}
-            </div>
+                    <!-- Content -->
+                    <div class="relative z-10 text-center px-6 max-w-2xl animate-fadein-slow pt-24 md:pt-0">
+                        <div v-if="slide.badge"
+                            class="inline-block mb-2 px-3 py-1 text-xs font-semibold text-white bg-[#C88039] rounded-full uppercase tracking-wider animate-slideup">
+                            {{ slide.badge }}
+                        </div>
 
             <p
               v-if="slide.tagline"
@@ -80,50 +57,49 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 const slides = [
-  {
-    title: "Events",
-    tagline: "Soulful Gatherings",
-    badge: "Limited Time",
-    description: "Explore soulful gatherings crafted to elevate your energy.",
-    cta: "Book Now",
-    link: "/experiences/events",
-    video:
-      "https://stream.mux.com/SDte3KxHZW00kXTI2bjFQvamHDl00An1c1SMzEsGLOXZM/high.mp4",
-  },
-  {
-    title: "Workshops",
-    tagline: "Deep Dives",
-    badge: "Popular",
-    description:
-      "Participate in transformative sessions designed for personal growth.",
-    cta: "Book Now",
-    link: "/experiences/workshops",
-    image: "https://source.unsplash.com/1600x900/?workshop",
-  },
-  {
-    title: "Courses",
-    description: "Enroll in immersive courses designed to guide your journey.",
-    cta: "Buy Now",
-    link: "/experiences/courses",
-    video:
-      "https://stream.mux.com/At01p00A01Zf6jXjio6HapAkDvnzExSpdGh3gkJ7C2OiPU/high.mp4",
-  },
-  {
-    title: "Activities",
-    description: "Join soulful activities tailored to ignite inner joy.",
-    cta: "Book Now",
-    link: "/experiences/activities",
-    image: "https://source.unsplash.com/1600x900/?activities",
-  },
-  {
-    title: "Shop",
-    badge: "New Arrivals",
-    description: "Discover curated pieces that resonate with your spirit.",
-    cta: "Shop Now",
-    link: "/shop",
-    image: "https://source.unsplash.com/1600x900/?interiors,shop",
-  },
-];
+    {
+        title: 'Events',
+        tagline: 'Soulful Gatherings',
+        badge: 'Limited Time',
+        description: 'Explore soulful gatherings crafted to elevate your energy.',
+        cta: 'Book Now',
+        link: '/experiences/events',
+        video:
+            'https://stream.mux.com/SDte3KxHZW00kXTI2bjFQvamHDl00An1c1SMzEsGLOXZM/high.mp4',
+    },
+    {
+        title: 'Workshops',
+        tagline: 'Deep Dives',
+        badge: 'Popular',
+        description: 'Participate in transformative sessions designed for personal growth.',
+        cta: 'Book Now',
+        link: '/experiences/workshops',
+        image: 'https://source.unsplash.com/1600x900/?workshop',
+    },
+    {
+        title: 'Courses',
+        description: 'Enroll in immersive courses designed to guide your journey.',
+        cta: 'Buy Now',
+        link: '/experiences/courses',
+        video:
+            'https://stream.mux.com/At01p00A01Zf6jXjio6HapAkDvnzExSpdGh3gkJ7C2OiPU/high.mp4',
+    },
+    {
+        title: 'Activities',
+        description: 'Join soulful activities tailored to ignite inner joy.',
+        cta: 'Book Now',
+        link: '/experiences/activities',
+        image: 'https://source.unsplash.com/1600x900/?activities',
+    },
+    {
+        title: 'Shop',
+        badge: 'New Arrivals',
+        description: 'Discover curated pieces that resonate with your spirit.',
+        cta: 'Shop Now',
+        link: '/shop',
+        image: 'https://source.unsplash.com/1600x900/?interiors,shop',
+    },
+]
 </script>
 
 <style scoped>
