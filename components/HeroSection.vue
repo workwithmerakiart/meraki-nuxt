@@ -1,7 +1,7 @@
 <template>
     <section class="relative w-full h-screen overflow-hidden">
-        <Swiper :modules="[Autoplay, Pagination, Navigation]" :autoplay="{ delay: 5000, disableOnInteraction: false }"
-            :loop="true" :pagination="{ clickable: true }" :navigation="true" class="w-full h-full">
+        <Swiper :modules="[Autoplay, Pagination]" :autoplay="{ delay: 5000, disableOnInteraction: false }"
+            :loop="true" :pagination="{ clickable: true }" :navigation="false" class="w-full h-full">
             <SwiperSlide v-for="(slide, index) in slides" :key="index">
                 <div class="relative w-full h-full flex items-center justify-center overflow-hidden">
                     <!-- Background media -->
@@ -28,7 +28,7 @@
             </p>
 
             <h1
-              class="text-white text-3xl md:text-5xl font-serif uppercase mb-4"
+              class="text-white text-3xl md:text-5xl font-serif uppercase mb-4 hero-slider-headings"
             >
               {{ slide.title }}
             </h1>
@@ -38,7 +38,7 @@
 
             <NuxtLink
               :to="slide.link"
-              class="inline-block bg-[#C88039] hover:bg-[#a96c30] text-white px-6 py-3 rounded-md text-sm uppercase tracking-wide"
+              class="inline-block bg-[#C88039] hover:bg-[#a96c30] text-white px-6 py-3 rounded-md text-sm uppercase tracking-wide hero-slider-subheadings"
             >
               {{ slide.cta }}
             </NuxtLink>
@@ -51,10 +51,9 @@
 
 <script setup>
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/navigation";
 
 const slides = [
     {
@@ -179,5 +178,11 @@ const slides = [
 
 .animate-fadein-slow {
   animation: fadein-slow 1.2s ease-in-out forwards;
+}
+.hero-slider-headings * {
+    font-family: "Fraunces", serif;
+}
+.hero-slider-subheadings * {
+    font-family: "Inter", sans-serif;
 }
 </style>

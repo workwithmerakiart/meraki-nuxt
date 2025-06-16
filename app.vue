@@ -8,6 +8,8 @@
     <!-- Main content grows to push footer down -->
     <div class="flex-1">
       <HeroSection />
+      <BlockTwo />
+      <BlockThree />
       <NuxtPage />
     </div>
 
