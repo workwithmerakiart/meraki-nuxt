@@ -1,10 +1,16 @@
 <template>
   <header
     class="header fixed top-0 left-0 w-full z-50 transition-all duration-300"
-    :class="{ 'bg-white': isScrolled && !isOpen, 'fixed inset-0 bg-[#2c2c2c] flex flex-col': isOpen }"
+    :class="{
+      'bg-white': isScrolled && !isOpen,
+      'fixed inset-0 bg-[#2c2c2c] flex flex-col': isOpen,
+    }"
   >
     <div class="flex items-center justify-between px-6 h-16">
-      <NuxtLink to="/" class="text-white font-bold text-xl flex items-center h-full">
+      <NuxtLink
+        to="/"
+        class="text-white font-bold text-xl flex items-center h-full"
+      >
         <img
           class="h-6 sm:h-8"
           :src="'https://merakiui.com/images/full-logo.svg'"
@@ -24,7 +30,10 @@
     </div>
 
     <transition name="slide-fade">
-      <div v-if="isOpen" class="flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12">
+      <div
+        v-if="isOpen"
+        class="flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12"
+      >
         <div class="flex flex-1">
           <div class="w-1/2 space-y-4 md:space-y-6">
             <div
@@ -36,11 +45,8 @@
               <NuxtLink
                 :to="item.to"
                 class="outline-text block transition-all duration-300"
-                :class="
-                  hoveredIndex === index
-                    ? 'text-white'
-                    : 'text-gray-500'
-                "
+                :class="hoveredIndex === index ? 'text-white' : 'text-gray-500'"
+                @click="toggleMenu"
               >
                 {{ item.label }}
               </NuxtLink>
@@ -49,12 +55,17 @@
 
           <div class="w-1/2 pl-8 md:pl-16 space-y-4 pt-6">
             <div
-              v-if="navigationStyle.hoveredItem && navigationStyle.hoveredItem.children"
+              v-if="
+                navigationStyle.hoveredItem &&
+                navigationStyle.hoveredItem.children
+              "
               v-for="(child, cIndex) in navigationStyle.hoveredItem.children"
               :key="cIndex"
               class="sublink text-xl md:text-2xl text-gray-100 hover:text-white transition-colors duration-200"
             >
-              <NuxtLink :to="child.to">{{ child.label }}</NuxtLink>
+              <NuxtLink :to="child.to" @click="toggleMenu">{{
+                child.label
+              }}</NuxtLink>
             </div>
           </div>
         </div>
@@ -252,7 +263,7 @@ onBeforeUnmount(() => {
 
 .outline-text {
   color: transparent;
-  -webkit-text-stroke: 1px #ffffff;
+  -webkit-text-stroke: 1px #ffffff75;
   transition: color 0.3s ease, -webkit-text-stroke-color 0.3s ease;
 }
 
