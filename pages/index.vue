@@ -1,5 +1,7 @@
 <template>
-    <div>
-        <!-- <h1>Welcome to the Meraki Art Studio</h1> -->
-    </div>
+  <div class="home">
+    <HeroSection />
+    <BlockTwo />
+    <BlockThree />
+  </div>
 </template>
