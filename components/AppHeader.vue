@@ -261,11 +261,6 @@ onBeforeUnmount(() => {
   -webkit-text-stroke-color: white;
 }
 
-.outline-text.text-white {
-  color: white;
-  -webkit-text-stroke-color: white;
-}
-
 .sublink {
   position: relative;
   padding-left: 25px;
