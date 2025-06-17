@@ -2,40 +2,35 @@
   <div class="min-h-screen flex flex-col">
     <!-- Page Loader overlays while loading -->
     <PageLoader />
-
+    <!-- Page Header -->
     <AppHeader />
-
-    <!-- Main content grows to push footer down -->
-    <div class="flex-1">
-      <HeroSection />
-      <BlockTwo />
-      <BlockThree />
+    <!-- Main content -->
+    <NuxtLayout>
       <NuxtPage />
-    </div>
-
+    </NuxtLayout>
+    <!-- Page Footer -->
     <AppFooter />
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { useRouter } from '#app'  // <-- change here
-import { usePageLoader } from '~/composables/usePageLoader'
-import PageLoader from '~/components/PageLoader.vue'
+import { onMounted } from "vue";
+import { useRouter } from "#app"; // <-- change here
+import { usePageLoader } from "~/composables/usePageLoader";
 
-const { startLoading, finishLoading } = usePageLoader()
-const router = useRouter()
+const { startLoading, finishLoading } = usePageLoader();
+const router = useRouter();
 
 router.beforeEach((to, from, next) => {
-  startLoading()
-  next()
-})
+  startLoading();
+  next();
+});
 
 router.afterEach(() => {
-  setTimeout(() => finishLoading(), 300)
-})
+  setTimeout(() => finishLoading(), 300);
+});
 
 onMounted(() => {
-  finishLoading()
-})
+  finishLoading();
+});
 </script>
