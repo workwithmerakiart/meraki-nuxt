@@ -7,12 +7,13 @@
       :pagination="{ clickable: true }"
       :navigation="false"
       class="w-full h-full"
+      @swiper="onSwiper"
+      @autoplayTimeLeft="onAutoplayTimeLeft"
     >
       <SwiperSlide v-for="(slide, index) in slides" :key="index">
         <div
           class="relative w-full h-full flex items-center justify-center overflow-hidden"
         >
-          <!-- Background media -->
           <div class="absolute inset-0 w-full h-full">
             <video
               v-if="slide.video"
@@ -28,39 +29,42 @@
               class="w-full h-full bg-cover bg-center"
               :style="{ backgroundImage: `url(${slide.image})` }"
             ></div>
-            <!-- REMOVED BLACK GRADIENT OVERLAY -->
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"
+            ></div>
           </div>
 
-          <!-- Content -->
           <div
-            class="relative z-10 text-center px-6 max-w-2xl animate-fadein-slow pt-24 md:pt-0"
+            class="relative z-10 text-center px-6 py-10 max-w-xl pt-24 md:pt-0"
           >
             <div
               v-if="slide.badge"
-              class="inline-block mb-2 px-3 py-1 text-xs font-semibold text-white bg-[#C88039] rounded-full uppercase tracking-wider animate-slideup"
+              class="inline-block mb-4 px-5 py-2 text-xs font-bold text-white bg-[#C88039] rounded-full uppercase tracking-widest animate-slideup animation-delay-200 animation-backwards"
             >
               {{ slide.badge }}
             </div>
 
             <p
               v-if="slide.tagline"
-              class="text-sm md:text-base text-orange-200 mb-2 animate-slidein"
+              class="text-base md:text-lg text-orange-200 mb-3 animate-slidein animation-delay-400 animation-backwards"
             >
               {{ slide.tagline }}
             </p>
 
             <h1
-              class="text-white text-3xl md:text-5xl font-serif uppercase mb-4 hero-slider-headings"
+              class="text-white text-4xl md:text-5xl lg:text-6xl font-serif uppercase mb-6 hero-slider-headings leading-tight drop-shadow-lg animate-fadein-quick animation-delay-600 animation-backwards"
             >
               {{ slide.title }}
             </h1>
-            <p class="text-gray-200 text-sm md:text-base mb-6">
+            <p
+              class="text-gray-100 text-base md:text-lg mb-10 animate-fadein-quick animation-delay-800 animation-backwards"
+            >
               {{ slide.description }}
             </p>
 
             <NuxtLink
               :to="slide.link"
-              class="inline-block bg-[#C88039] hover:bg-[#a96c30] text-white px-6 py-3 rounded-md text-sm uppercase tracking-wide hero-slider-subheadings"
+              class="inline-block bg-[#C88039] hover:bg-[#a96c30] text-white px-10 py-4 rounded-full text-lg uppercase tracking-wide font-bold shadow-xl transition-all duration-300 hover:scale-105 hero-slider-subheadings animate-slideup animation-delay-1000 animation-backwards"
             >
               {{ slide.cta }}
             </NuxtLink>
@@ -76,6 +80,25 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import { ref } from "vue";
+
+// Swiper instance
+const swiperInstance = ref(null);
+
+const onSwiper = (swiper) => {
+  swiperInstance.value = swiper;
+};
+
+const onAutoplayTimeLeft = (s, timeLeft, percentage) => {
+  if (swiperInstance.value && swiperInstance.value.pagination.bullets) {
+    const activeBullet = swiperInstance.value.pagination.bullets[s.activeIndex];
+    if (activeBullet) {
+      // Calculate progress from 0% to 100%
+      const progressWidth = 100 - Math.round(percentage * 100);
+      activeBullet.style.setProperty('--swiper-pagination-progress', `${progressWidth}%`);
+    }
+  }
+};
 
 const slides = [
   {
@@ -122,7 +145,7 @@ const slides = [
     cta: "Shop Now",
     link: "/shop",
     image:
-      "https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB3eHFwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
 ];
 </script>
@@ -133,39 +156,76 @@ const slides = [
   height: 100%;
 }
 
-:deep(.swiper-pagination-bullet) {
-  background-color: #ffffff;
-  opacity: 0.2;
-  bottom: 20px;
-}
-
-:deep(.swiper-pagination-bullet-active) {
-  background-color: #ffffff;
-  opacity: 1;
-}
-
+/* Custom Pagination Lines */
 :deep(.swiper-pagination-bullets) {
-  bottom: 20px;
+  bottom: 40px !important; /* Position from bottom */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px; /* Space between lines */
+  width: 100%; /* Ensure it spans the width for proper centering */
+  z-index: 20; /* Ensure pagination is above other elements */
+  pointer-events: auto; /* Ensure the container is clickable */
 }
 
-.swiper-button-prev,
-.swiper-button-next {
-  color: #fff;
+/* Base style for the clickable wrapper around each line */
+:deep(.swiper-pagination-bullet) {
+  position: relative;
+  width: 50px; /* Increased clickable width for all lines */
+  height: 15px; /* Increased clickable height */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: transparent; /* Make the wrapper transparent */
+  transition: transform 0.2s ease-in-out; /* For hover animation */
+  pointer-events: auto; /* Ensure individual bullets are clickable */
 }
 
-@media (max-width: 767px) {
-  .swiper-button-prev,
-  .swiper-button-next {
-    display: none;
-  }
+/* Visual line within the clickable wrapper */
+:deep(.swiper-pagination-bullet::before) {
+  content: "";
+  display: block;
+  width: 50px; /* Visual width of all lines (increased) */
+  height: 6px; /* Thickness of the line */
+  border-radius: 1.5px;
+  background-color: #ffffff;
+  opacity: 0.4; /* Inactive line opacity */
+  transition: all 0.3s ease-in-out; /* For active state transition */
 }
 
+/* Hover animation for the visual line */
+:deep(.swiper-pagination-bullet:hover) {
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+:deep(.swiper-pagination-bullet:hover::before) {
+  opacity: 0.7; /* Slightly brighter on hover */
+}
+
+/* Active state for the visual line (same width, but with progress fill) */
+:deep(.swiper-pagination-bullet-active::before) {
+  width: 50px; /* Same visual width as inactive */
+  height: 6px; /* Slightly thicker for active */
+  opacity: 1; /* Fully opaque for active */
+  border-radius: 2px;
+  /* Progress animation for the active line */
+  background: linear-gradient(
+    to right,
+    #ffffff var(--swiper-pagination-progress, 0%),
+    #ffffff40 var(--swiper-pagination-progress, 0%)
+  );
+  transform-origin: left; /* Ensure progress fills from the left */
+}
+
+/* Animations */
 @keyframes slidein {
   from {
-    transform: translateY(-10px);
+    transform: translateY(-20px);
     opacity: 0;
   }
-
   to {
     transform: translateY(0);
     opacity: 1;
@@ -174,41 +234,55 @@ const slides = [
 
 @keyframes slideup {
   from {
-    transform: translateY(10px);
+    transform: translateY(20px);
     opacity: 0;
   }
-
   to {
     transform: translateY(0);
     opacity: 1;
   }
 }
 
-@keyframes fadein-slow {
+@keyframes fadein-quick {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
 }
 
+/* Animation Utility Classes */
 .animate-slidein {
-  animation: slidein 0.8s ease-out forwards;
+  animation: slidein 0.6s ease-out forwards;
 }
 
 .animate-slideup {
-  animation: slideup 0.6s ease-out forwards;
+  animation: slideup 0.5s ease-out forwards;
 }
 
-.animate-fadein-slow {
-  animation: fadein-slow 1.2s ease-in-out forwards;
+.animate-fadein-quick {
+  animation: fadein-quick 0.8s ease-in-out forwards;
 }
-.hero-slider-headings * {
+
+/* For staggered animations: ensures initial state is hidden and maintains final state */
+.animation-backwards {
+  animation-fill-mode: backwards;
+}
+
+/* Animation Delay Utility Classes */
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-600 { animation-delay: 0.6s; }
+.animation-delay-800 { animation-delay: 0.8s; }
+.animation-delay-1000 { animation-delay: 1.0s; }
+
+
+/* Custom font application */
+.hero-slider-headings {
   font-family: "Fraunces", serif;
 }
-.hero-slider-subheadings * {
+.hero-slider-subheadings {
   font-family: "Inter", sans-serif;
 }
 </style>
