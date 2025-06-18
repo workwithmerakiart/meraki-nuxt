@@ -21,7 +21,6 @@ const svgPaths = ref([]);
 const menuContainer = ref(null); // Ref for the overall menu content container
 const navigationHeadings = ref([]); // Ref for the main navigation headings
 const submenuChildren = ref([]); // Ref for the submenu items
-const logoElement = ref(null); // Ref for the logo
 
 const pathsClosed = [
   "M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0",
@@ -175,22 +174,8 @@ watch(
         },
         "-=0.3" // Start after headings
       );
-      // Animate the logo
-      tl.fromTo(
-        logoElement.value,
-        { autoAlpha: 0, y: -20 },
-        { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
-        "<0.2" // Start slightly after the previous animation starts
-      );
     } else {
       const tl = gsap.timeline();
-      // Animate out the logo first
-      tl.to(logoElement.value, {
-        autoAlpha: 0,
-        y: -20,
-        duration: 0.3,
-        ease: "power2.in",
-      });
       // Animate out submenu children
       tl.to(
         submenuChildren.value,
@@ -265,10 +250,9 @@ watch(
     <div class="flex items-center justify-between px-6 h-16">
       <NuxtLink
         to="/"
-        class="text-white font-bold text-xl flex items-center h-full"
+        class="text-white font-bold text-xl flex items-center h-full z-50"
       >
         <img
-          ref="logoElement"
           class="h-6 sm:h-8"
           :src="'https://merakiui.com/images/full-logo.svg'"
           alt="Logo"
