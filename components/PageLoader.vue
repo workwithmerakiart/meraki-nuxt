@@ -1,15 +1,8 @@
 <template>
-  <div
-    v-if="visible"
-    class="fixed inset-0 z-[9999] flex items-center justify-center bg-black"
-  >
+  <div v-if="visible" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black">
     <!-- SVG overlay for curtain animation -->
-    <svg
-      ref="overlaySVG"
-      class="fixed inset-0 w-full h-full pointer-events-none"
-      viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-    >
+    <svg ref="overlaySVG" class="fixed inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100"
+      preserveAspectRatio="none">
       <defs>
         <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stop-color="#FF6B6B" />
@@ -32,21 +25,11 @@
           <stop offset="100%" stop-color="#FF85A1" />
         </linearGradient>
       </defs>
-      <path
-        v-for="(d, i) in pathsClosed"
-        :key="i"
-        class="shape-overlays__path"
-        :fill="`url(#grad${i + 1})`"
-        :d="d"
-      />
+      <path v-for="(d, i) in pathsClosed" :key="i" class="shape-overlays__path" :fill="`url(#grad${i + 1})`" :d="d" />
     </svg>
 
     <!-- Heartbeat Logo -->
-    <img
-      src="https://merakiui.com/images/full-logo.svg"
-      alt="Logo"
-      class="w-40 h-auto animate-heartbeat"
-    />
+    <img src="/images/meraki-logo-black.png" alt="Logo" class="w-40 h-auto animate-heartbeat" />
   </div>
 </template>
 
@@ -109,15 +92,20 @@ onMounted(() => {
 <style scoped>
 /* Heartbeat animation */
 @keyframes heartbeat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   25% {
     transform: scale(1.15);
   }
+
   50% {
     transform: scale(1);
   }
+
   75% {
     transform: scale(1.15);
   }

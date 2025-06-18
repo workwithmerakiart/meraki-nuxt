@@ -254,7 +254,7 @@ watch(
       >
         <img
           class="h-6 sm:h-8"
-          :src="'https://merakiui.com/images/full-logo.svg'"
+          :src="'/images/meraki-logo-black.png'"
           alt="Logo"
         />
       </NuxtLink>

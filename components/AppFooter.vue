@@ -6,7 +6,7 @@
             <div>
                 <!-- Logo -->
                 <NuxtLink to="/">
-                    <img class="h-6 sm:h-8" src="https://merakiui.com/images/full-logo.svg" alt="Logo" />
+                    <img class="h-6 sm:h-8" src="/images/meraki-logo-white.png" alt="Logo" />
                 </NuxtLink>
                 <p class="text-sm text-gray-300 mt-2">Warehouse 1, Al Marabea’ Street, Al Quoz 1, Dubai</p>
                 <a href="#" class="text-orange-400 font-semibold flex items-center gap-1 mt-2">
