@@ -1,0 +1,214 @@
+<template>
+  <section class="relative w-full h-screen overflow-hidden">
+    <Swiper
+      :modules="[Autoplay, Pagination]"
+      :autoplay="{ delay: 5000, disableOnInteraction: false }"
+      :loop="true"
+      :pagination="{ clickable: true }"
+      :navigation="false"
+      class="w-full h-full"
+    >
+      <SwiperSlide v-for="(slide, index) in slides" :key="index">
+        <div
+          class="relative w-full h-full flex items-center justify-center overflow-hidden"
+        >
+          <!-- Background media -->
+          <div class="absolute inset-0 w-full h-full">
+            <video
+              v-if="slide.video"
+              :src="slide.video"
+              autoplay
+              muted
+              loop
+              playsinline
+              class="w-full h-full object-cover"
+            ></video>
+            <div
+              v-else
+              class="w-full h-full bg-cover bg-center"
+              :style="{ backgroundImage: `url(${slide.image})` }"
+            ></div>
+            <!-- REMOVED BLACK GRADIENT OVERLAY -->
+          </div>
+
+          <!-- Content -->
+          <div
+            class="relative z-10 text-center px-6 max-w-2xl animate-fadein-slow pt-24 md:pt-0"
+          >
+            <div
+              v-if="slide.badge"
+              class="inline-block mb-2 px-3 py-1 text-xs font-semibold text-white bg-[#C88039] rounded-full uppercase tracking-wider animate-slideup"
+            >
+              {{ slide.badge }}
+            </div>
+
+            <p
+              v-if="slide.tagline"
+              class="text-sm md:text-base text-orange-200 mb-2 animate-slidein"
+            >
+              {{ slide.tagline }}
+            </p>
+
+            <h1
+              class="text-white text-3xl md:text-5xl font-serif uppercase mb-4 hero-slider-headings"
+            >
+              {{ slide.title }}
+            </h1>
+            <p class="text-gray-200 text-sm md:text-base mb-6">
+              {{ slide.description }}
+            </p>
+
+            <NuxtLink
+              :to="slide.link"
+              class="inline-block bg-[#C88039] hover:bg-[#a96c30] text-white px-6 py-3 rounded-md text-sm uppercase tracking-wide hero-slider-subheadings"
+            >
+              {{ slide.cta }}
+            </NuxtLink>
+          </div>
+        </div>
+      </SwiperSlide>
+    </Swiper>
+  </section>
+</template>
+
+<script setup>
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+
+const slides = [
+  {
+    title: "Events",
+    tagline: "Soulful Gatherings",
+    badge: "Limited Time",
+    description: "Explore soulful gatherings crafted to elevate your energy.",
+    cta: "Book Now",
+    link: "/experiences/events",
+    video:
+      "https://stream.mux.com/SDte3KxHZW00kXTI2bjFQvamHDl00An1c1SMzEsGLOXZM/high.mp4",
+  },
+  {
+    title: "Workshops",
+    tagline: "Deep Dives",
+    badge: "Popular",
+    description:
+      "Participate in transformative sessions designed for personal growth.",
+    cta: "Book Now",
+    link: "/experiences/workshops",
+    image:
+      "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    title: "Courses",
+    description: "Enroll in immersive courses designed to guide your journey.",
+    cta: "Buy Now",
+    link: "/experiences/courses",
+    video:
+      "https://stream.mux.com/At01p00A01Zf6jXjio6HapAkDvnzExSpdGh3gkJ7C2OiPU/high.mp4",
+  },
+  {
+    title: "Activities",
+    description: "Join soulful activities tailored to ignite inner joy.",
+    cta: "Book Now",
+    link: "/experiences/activities",
+    image:
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    title: "Shop",
+    badge: "New Arrivals",
+    description: "Discover curated pieces that resonate with your spirit.",
+    cta: "Shop Now",
+    link: "/shop",
+    image:
+      "https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+];
+</script>
+
+<style scoped>
+.swiper,
+.swiper-slide {
+  height: 100%;
+}
+
+:deep(.swiper-pagination-bullet) {
+  background-color: #ffffff;
+  opacity: 0.2;
+  bottom: 20px;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background-color: #ffffff;
+  opacity: 1;
+}
+
+:deep(.swiper-pagination-bullets) {
+  bottom: 20px;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: #fff;
+}
+
+@media (max-width: 767px) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none;
+  }
+}
+
+@keyframes slidein {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideup {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadein-slow {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slidein {
+  animation: slidein 0.8s ease-out forwards;
+}
+
+.animate-slideup {
+  animation: slideup 0.6s ease-out forwards;
+}
+
+.animate-fadein-slow {
+  animation: fadein-slow 1.2s ease-in-out forwards;
+}
+.hero-slider-headings * {
+  font-family: "Fraunces", serif;
+}
+.hero-slider-subheadings * {
+  font-family: "Inter", sans-serif;
+}
+</style>
