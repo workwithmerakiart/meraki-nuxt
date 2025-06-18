@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <HeroSection />
-    <BlockTwo />
-    <BlockThree />
+    <HomeHeroSection />
+    <HomeBlockTwo />
+    <HomeBlockThree />
   </div>
 </template>
