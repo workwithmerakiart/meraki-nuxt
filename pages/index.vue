@@ -3,5 +3,6 @@
     <HomeHeroSection />
     <HomeBlockTwo />
     <HomeBlockThree />
+    <HomeBlockFour />
   </div>
 </template>
