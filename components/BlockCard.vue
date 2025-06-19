@@ -3,10 +3,10 @@
     <div class="block-card-inner">
       <img :src="block.imageUrl" :alt="block.title" class="block-card-image" />
       <div class="block-card-overlay">
-        <h3 class="block-card-title inter-font">{{ block.title }}</h3>
-        <p v-if="block.location" class="block-card-location">{{ block.location }}</p>
+        <h3 class="block-card-title dm-serif-font">{{ block.title }}</h3>
+        <p v-if="block.location" class="block-card-location inter-font">{{ block.location }}</p>
       </div>
-      <div v-if="block.type" class="block-card-badge">{{ block.type }}</div>
+      <div v-if="block.type" class="block-card-badge inter-font">{{ block.type }}</div>
     </div>
   </NuxtLink>
 </template>
@@ -78,12 +78,12 @@ const props = defineProps({
 .block-card-title {
   margin: 0;
   font-size: 1.2em;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .block-card-location {
   margin-top: 5px;
-  font-size: 0.9em;
+  font-size: 0.8em;
   opacity: 0.8;
 }
 
