@@ -3,7 +3,7 @@
     <div class="block-card-inner">
       <img :src="block.imageUrl" :alt="block.title" class="block-card-image" />
       <div class="block-card-overlay">
-        <h3 class="block-card-title">{{ block.title }}</h3>
+        <h3 class="block-card-title inter-font">{{ block.title }}</h3>
         <p v-if="block.location" class="block-card-location">{{ block.location }}</p>
       </div>
       <div v-if="block.type" class="block-card-badge">{{ block.type }}</div>
@@ -89,14 +89,18 @@ const props = defineProps({
 
 .block-card-badge {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  background-color: rgba(0, 0, 0, 0.6); /* Dark background for badge */
+  background-color: #474747;
   color: white;
   padding: 5px 10px;
-  border-radius: 3px;
   font-size: 0.75em;
   text-transform: uppercase;
-  font-weight: bold;
+}
+
+.dm-serif-font {
+  font-family: 'DM Serif Display', serif;
+}
+
+.inter-font {
+  font-family: 'Inter', sans-serif;
 }
 </style>
