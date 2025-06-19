@@ -28,8 +28,8 @@
         @touchend.passive="handleTouchEnd">
         <template v-for="n in 2">
           <NuxtLink v-for="(item, index) in products" :key="`${n}-${index}`" :to="item.link"
-            class="min-w-[320px] sm:min-w-[340px] md:min-w-[360px] h-[240px] flex-shrink-0 relative rounded-xl shadow-lg bg-white cursor-pointer snap-start transition-transform duration-300 hover:scale-[1.02] overflow-hidden">
-            <img :src="item.image" :alt="item.title" class="w-full h-full object-cover" />
+            class="min-w-[320px] sm:min-w-[340px] md:min-w-[360px] h-[240px] flex-shrink-0 relative rounded-xl shadow-lg bg-white cursor-pointer snap-start overflow-hidden">
+            <img :src="item.image" :alt="item.title" class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-300" />
             <div v-if="item.tag"
               :class="['absolute top-3 right-3 rounded-full px-3 py-1 text-xs font-semibold uppercase', item.tagColor, 'text-white transition-opacity duration-300']">
               {{ item.tag }}
