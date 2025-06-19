@@ -1,146 +1,177 @@
 <template>
   <section class="relative bg-white py-16 px-6 md:px-12 overflow-hidden">
-    <div class="absolute top-0 left-0 w-full h-2 bg-blue-500" aria-hidden="true"></div>
-
-    <div class="max-w-7xl mx-auto text-center mb-12 relative z-10">
-      <h2
-        class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 text-[#3366ff] font-['var(--font-display)']"
-      >
-        Discover New Brands
+    <!-- Section Heading -->
+    <div class="max-w-7xl mx-auto text-center mb-12">
+      <h2 class="text-4xl md:text-5xl font-extrabold text-black mb-4 hero-slider-headings">
+        Meraki Art Studio: What's Brewing Now
       </h2>
-      <p class="text-gray-700 max-w-3xl mx-auto text-lg md:text-xl">
+      <p class="text-black max-w-3xl mx-auto text-lg md:text-xl hero-slider-subheadings font-light">
         There's a heck of a lot of stuff out there. We've sorted through it and
         rounded up the most exciting new items from independents.
       </p>
     </div>
 
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto relative z-10"
-    >
-      <div
-        v-for="(item, index) in products"
-        :key="index"
-        :class="[
-          'relative rounded-xl shadow-lg p-6 flex flex-col items-center justify-between cursor-pointer transition-transform duration-300 transform', /* Increased p-4 to p-6 for more padding */
-          item.bgColor, // Base background color
-          hoverIndex === index ? 'scale-[1.02]' : '', // Subtle scale on hover
-        ]"
-        @mouseenter="hoverIndex = index"
-        @mouseleave="hoverIndex = null"
-      >
-        <div class="w-full h-72 sm:h-80 mb-4 flex items-center justify-center">
-          <img
-            :src="item.image"
-            :alt="item.title"
-            class="max-h-full max-w-full object-contain"
-          />
-        </div>
+    <!-- Carousel Container with Arrows Only -->
+    <div class="relative max-w-7xl mx-auto">
+      <!-- Left Arrow -->
+      <button @click="scrollLeft"
+        class="absolute left-2 top-1/2 transform -translate-y-1/2 z-20 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
+        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
 
-        <div
-          v-if="item.tag"
-          :class="[
-            'absolute top-4 right-4 rounded-full px-3 py-1 text-xs font-semibold uppercase',
-            item.tagColor, // Tag background color
-            item.tagTextColor, // Tag text color
-            'transition-opacity duration-300',
-            hoverIndex === index ? 'opacity-100' : 'opacity-90', // Slightly more opaque on hover
-          ]"
-        >
-          {{ item.tag }}
-        </div>
+      <!-- Scrollable Cards -->
+      <div ref="carouselRef"
+        class="flex space-x-6 overflow-x-auto px-6 scrollbar-hide snap-x snap-mandatory scroll-smooth"
+        @mouseenter="pauseAutoscroll" @mouseleave="startAutoscroll" @touchstart.passive="handleTouchStart"
+        @touchend.passive="handleTouchEnd">
+        <template v-for="n in 2">
+          <NuxtLink v-for="(item, index) in products" :key="`${n}-${index}`" :to="item.link"
+            class="min-w-[320px] sm:min-w-[340px] md:min-w-[360px] h-[240px] flex-shrink-0 relative rounded-xl shadow-lg bg-white cursor-pointer snap-start transition-transform duration-300 hover:scale-[1.02] overflow-hidden">
+            <img :src="item.image" :alt="item.title" class="w-full h-full object-cover" />
+            <div v-if="item.tag"
+              :class="['absolute top-3 right-3 rounded-full px-3 py-1 text-xs font-semibold uppercase', item.tagColor, 'text-white transition-opacity duration-300']">
+              {{ item.tag }}
+            </div>
+            <div
+              class="absolute bottom-0 left-0 w-full bg-black/60 text-white text-center text-sm font-semibold py-2 hero-slider-subheadings">
+              {{ item.title }}
+            </div>
+          </NuxtLink>
+        </template>
       </div>
-    </div>
 
-    <div class="text-center mt-12 relative z-10">
-      <button
-        class="inline-flex items-center px-8 py-3 rounded-full text-lg font-semibold border-2 border-gray-400 text-gray-700 bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:border-blue-500 hover:text-blue-500"
-      >
-        Browse the directory
-        <span class="ml-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M17 8l4 4m0 0l-4 4m4-4H3"
-            />
-          </svg>
-        </span>
+      <!-- Right Arrow -->
+      <button @click="scrollRight"
+        class="absolute right-2 top-1/2 transform -translate-y-1/2 z-20 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
+        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
       </button>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useResizeObserver } from '@vueuse/core'
 
-const hoverIndex = ref(null)
+const carouselRef = ref(null)
+const scrollAmount = 320
+let autoScrollInterval = null
+const scrollWidth = ref(0)
+
+useResizeObserver(carouselRef, (entries) => {
+  if (entries.length) {
+    scrollWidth.value = entries[0].target.scrollWidth
+  }
+})
+
+const scrollLeft = () => {
+  carouselRef.value?.scrollBy({ left: -scrollAmount, behavior: 'smooth' })
+}
+
+const scrollRight = () => {
+  carouselRef.value?.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+}
+
+const startAutoscroll = () => {
+  stopAutoscroll()
+  autoScrollInterval = setInterval(() => {
+    const container = carouselRef.value
+    if (!container) return
+    const currentScroll = container.scrollLeft
+    const resetPoint = scrollWidth.value / 2
+    if (currentScroll >= resetPoint) {
+      container.scrollTo({ left: 0, behavior: 'auto' })
+    } else {
+      container.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+    }
+  }, 3000)
+}
+
+const pauseAutoscroll = () => stopAutoscroll()
+const stopAutoscroll = () => {
+  if (autoScrollInterval) {
+    clearInterval(autoScrollInterval)
+    autoScrollInterval = null
+  }
+}
+
+const handleTouchStart = () => pauseAutoscroll()
+const handleTouchEnd = () => startAutoscroll()
+
+onMounted(() => {
+  startAutoscroll()
+})
+onBeforeUnmount(() => {
+  stopAutoscroll()
+})
 
 const products = [
   {
-    image: 'https://via.placeholder.com/150/f0e68c?text=Pistachio+Spread',
-    title: 'Pistachio Spread',
-    tag: 'Gift Guide',
-    bgColor: 'bg-[#f0e68c]',
-    tagColor: 'bg-emerald-500',
-    tagTextColor: 'text-white',
+    image: 'https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop',
+    title: 'Events',
+    tag: 'Upcoming',
+    tagColor: 'bg-gray-900',
+    link: '/events'
   },
   {
-    image: 'https://via.placeholder.com/150/d2b48c?text=Drumroll+Protein',
-    title: 'Drumroll Protein',
-    tag: 'Protein',
-    bgColor: 'bg-[#d2b48c]',
-    tagColor: 'bg-blue-500',
-    tagTextColor: 'text-white',
+    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2340&auto=format&fit=crop',
+    title: 'Workshops',
+    tag: 'Upcoming',
+    tagColor: 'bg-gray-900',
+    link: '/workshops'
   },
   {
-    image: 'https://via.placeholder.com/150/90ee90?text=Monte\'s+Sauce',
-    title: "Monte's Sauce",
-    tag: 'Pantry Staples',
-    bgColor: 'bg-[#90ee90]',
-    tagColor: 'bg-indigo-600',
-    tagTextColor: 'text-white',
+    image: 'https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop',
+    title: "Activities",
+    tag: 'Recommended',
+    tagColor: 'bg-gray-900',
+    link: '/activities'
   },
   {
-    image: 'https://via.placeholder.com/150/ffb6c1?text=Founder+Picks',
-    title: 'Founder Picks',
-    tag: 'Founder Picks',
-    bgColor: 'bg-[#ffb6c1]',
-    tagColor: 'bg-blue-600',
-    tagTextColor: 'text-white',
+    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2340&auto=format&fit=crop',
+    title: 'Courses',
+    tag: 'Must Buy',
+    tagColor: 'bg-gray-900',
+    link: '/courses'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop',
+    title: 'Shop',
+    tag: 'Offer Expiring Soon',
+    tagColor: 'bg-gray-900',
+    link: '/shop'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2340&auto=format&fit=crop',
+    title: 'Blogs',
+    tag: 'Trending',
+    tagColor: 'bg-gray-900',
+    link: '/blogs'
   },
 ]
 </script>
 
 <style scoped>
-/* Custom font for the heading, replace with your actual font if needed */
-:root {
-  --font-display: 'Georgia', serif; /* Example: use a serif font. You'd typically link a Google Font here */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter&display=swap');
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
-/* Ensure images within cards are centered and scale correctly */
-.product-image-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%; /* Take full height of its parent */
-  width: 100%; /* Take full width of its parent */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.product-image-container img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain; /* Ensures the whole image is visible within the container */
+.hero-slider-headings {
+  font-family: 'DM Serif Display', serif;
 }
 
-/* Specific styling for tags, if needed beyond Tailwind */
-.tag-style {
-  letter-spacing: 0.05em; /* Slightly increased letter spacing for tags */
+.hero-slider-subheadings {
+  font-family: 'Inter', sans-serif;
 }
 </style>
