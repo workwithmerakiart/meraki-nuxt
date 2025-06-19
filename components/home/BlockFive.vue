@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-blue-500 min-h-screen py-16 relative overflow-hidden">
+  <div class="bg-white min-h-screen py-16 relative overflow-hidden">
     <div
       class="absolute top-0 right-0 w-64 h-64 bg-purple-700 opacity-30 rounded-full mix-blend-multiply transform translate-x-1/2 -translate-y-1/2 animate-blob"
     ></div>
@@ -9,11 +9,11 @@
 
     <div class="container mx-auto px-4">
       <h1
-        class="text-6xl font-extrabold text-white text-center mb-4 relative z-10 animate-fade-in-down"
+        class="text-6xl block-five-headings font-extrabold text-black text-center mb-4 relative z-10 animate-fade-in-down"
       >
-        <span class="text-orange-400">EXPERIENCE</span> THE VIBE
+        <span class="text-black block-five-headings">Experience</span> The Vibe
       </h1>
-      <p class="text-white text-center mb-12 animate-fade-in">
+      <p class="text-black text-center block-five-subheadings mb-12 animate-fade-in font-light">
         Colorful, uninhibited fun for all ages - here's a sneak peak of our unique space:
       </p>
 
@@ -208,4 +208,11 @@ export default {
 /* Delay for sequential animations - now generated dynamically */
 .animation-delay-2000 { animation-delay: 2s; } /* For blob */
 
+.block-five-headings {
+  font-family: 'DM Serif Display', serif;
+}
+
+.block-five-subheadings {
+  font-family: 'Inter', sans-serif;
+}
 </style>
