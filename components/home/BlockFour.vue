@@ -1,9 +1,10 @@
 <template>
-  <div class="page-container">
+  <div class="page-container xl:px-12">
     <masonry-wall
       :items="blocksData"
       :columns="3"
       :gap="20"
+      :column-width="300"
       :responsive="false"
     >
       <template #default="{ item }">
@@ -101,4 +102,5 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style>
+</style>
