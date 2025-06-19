@@ -17,6 +17,7 @@
     "@nuxtjs/sanity": "^1.13.3",
     "@tailwindcss/vite": "^4.1.8",
     "@vueuse/core": "^13.3.0",
+    "@yeger/vue-masonry-wall": "^5.0.20",
     "gsap": "^3.13.0",
     "nuxt": "^3.17.5",
     "nuxt-app": "file:",
