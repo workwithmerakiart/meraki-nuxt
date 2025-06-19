@@ -1,5 +1,14 @@
 <template>
   <div class="page-container xl:px-12">
+    <!-- Added heading with more repetitions for seamless loop -->
+    <div class="heading-bg p-2.5 mb-5 overflow-hidden relative">
+      <h2 class="heading text-5xl font-bold text-white whitespace-nowrap inline-block inter-font">
+        JOIN OUR UPCOMING EVENTS &nbsp;
+        JOIN OUR UPCOMING EVENTS &nbsp;
+        JOIN OUR UPCOMING EVENTS &nbsp;
+        JOIN OUR UPCOMING EVENTS &nbsp;
+      </h2>
+    </div>
     <masonry-wall
       :items="blocksData"
       :columns="3"
@@ -103,4 +112,24 @@ onMounted(() => {
 </script>
 
 <style>
+@keyframes slide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-25%); }
+}
+
+.heading {
+  animation: slide 16s infinite linear;
+}
+
+.heading-bg {
+  background: #5c5c5c;
+}
+
+.dm-serif-font {
+  font-family: 'DM Serif Display', serif;
+}
+
+.inter-font {
+  font-family: 'Inter', sans-serif;
+}
 </style>
