@@ -55,7 +55,7 @@
                 </p>
                 <form class="flex border border-orange-400 w-full max-w-xs">
                     <input type="email" placeholder="Enter Your Email"
-                        class="flex-1 px-3 py-2 bg-transparent text-white placeholder:text-gray-400 focus:outline-none app-footer-subheading" />
+                        class="flex-1 min-w-0 px-3 py-2 bg-transparent text-white placeholder:text-gray-400 focus:outline-none app-footer-subheading" />
                     <button type="submit" class="bg-orange-400 px-3">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </button>
