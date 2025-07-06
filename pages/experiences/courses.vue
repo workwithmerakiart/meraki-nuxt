@@ -126,6 +126,20 @@ const workshopsData = [
             text: "Menorca",
           },
         ],
+        modal: true,
+        modalContent: {
+          title: "Family Workshops",
+          dates: "Sat 10 May - Sun 26 October 2025",
+          time: "11:15 am - 12:45 pm",
+          location: "Menorca",
+          registerText: "Register",
+          imageSrc:
+            "https://media.hauserwirth.com/asset/e2f6292e-a9d2-4e10-ab07-b8231c6447d5/web-hires-jpg-72dpi/24-07-13_H-W-4.jpg",
+          imageCaption:
+            "Family Workshops at Hauser & Wirth Menorca. Photo: Mateu Carles",
+          content:
+            "<p>A range of workshops to engage the whole family, with activities relating to Mika Rottenberg’s exhibition 'Vibrant Matter'. Lasting a maximum of an hour and a half, families will discover the art on Illa del Rei.</p><p>All children should be accompanied by an adult. Ages 5 and up.</p><p><strong>10 May - 19 June</strong><br>Saturdays at 11:15 am</p><p><strong>23 June - 6 September</strong><br>Fridays and Saturdays at 11:15 am</p><p><strong>7 September - 26 October</strong><br>Saturdays at 11:15 am</p><p>We suggest booking in advance here.</p>",
+        },
       },
       {
         badge: "TOURS",
@@ -146,6 +160,20 @@ const workshopsData = [
             text: "Menorca",
           },
         ],
+        modal: true,
+        modalContent: {
+          title: "Family Workshops",
+          dates: "Sat 10 May - Sun 26 October 2025",
+          time: "11:15 am - 12:45 pm",
+          location: "Menorca",
+          registerText: "Register",
+          imageSrc:
+            "https://media.hauserwirth.com/asset/e2f6292e-a9d2-4e10-ab07-b8231c6447d5/web-hires-jpg-72dpi/24-07-13_H-W-4.jpg",
+          imageCaption:
+            "Family Workshops at Hauser & Wirth Menorca. Photo: Mateu Carles",
+          content:
+            "<p>A range of workshops to engage the whole family, with activities relating to Mika Rottenberg’s exhibition 'Vibrant Matter'. Lasting a maximum of an hour and a half, families will discover the art on Illa del Rei.</p><p>All children should be accompanied by an adult. Ages 5 and up.</p><p><strong>10 May - 19 June</strong><br>Saturdays at 11:15 am</p><p><strong>23 June - 6 September</strong><br>Fridays and Saturdays at 11:15 am</p><p><strong>7 September - 26 October</strong><br>Saturdays at 11:15 am</p><p>We suggest booking in advance here.</p>",
+        },
       },
       {
         badge: "MUSIC",
@@ -166,6 +194,20 @@ const workshopsData = [
             text: "Menorca",
           },
         ],
+        modal: true,
+        modalContent: {
+          title: "Family Workshops",
+          dates: "Sat 10 May - Sun 26 October 2025",
+          time: "11:15 am - 12:45 pm",
+          location: "Menorca",
+          registerText: "Register",
+          imageSrc:
+            "https://media.hauserwirth.com/asset/e2f6292e-a9d2-4e10-ab07-b8231c6447d5/web-hires-jpg-72dpi/24-07-13_H-W-4.jpg",
+          imageCaption:
+            "Family Workshops at Hauser & Wirth Menorca. Photo: Mateu Carles",
+          content:
+            "<p>A range of workshops to engage the whole family, with activities relating to Mika Rottenberg’s exhibition 'Vibrant Matter'. Lasting a maximum of an hour and a half, families will discover the art on Illa del Rei.</p><p>All children should be accompanied by an adult. Ages 5 and up.</p><p><strong>10 May - 19 June</strong><br>Saturdays at 11:15 am</p><p><strong>23 June - 6 September</strong><br>Fridays and Saturdays at 11:15 am</p><p><strong>7 September - 26 October</strong><br>Saturdays at 11:15 am</p><p>We suggest booking in advance here.</p>",
+        },
       },
     ],
   },
