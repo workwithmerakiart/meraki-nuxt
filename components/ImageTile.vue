@@ -1,32 +1,32 @@
 <template>
-  <div class="bg-white overflow-hidden hover:shadow-md event-tile">
+  <div class="bg-white overflow-hidden hover:shadow-md image-tile">
     <div class="relative">
       <img
-        :src="event.image"
-        :alt="event.title || event.description"
+        :src="tile.image"
+        :alt="tile.title || tile.description"
         class="w-full h-64 object-cover"
       />
       <div
-        v-if="event.badge"
+        v-if="tile.badge"
         class="absolute top-0 left-0 bg-gray-700 text-white px-3 py-1 text-xs font-medium uppercase tracking-wide"
       >
-        {{ event.badge }}
+        {{ tile.badge }}
       </div>
     </div>
 
     <div class="bg-gray-100 p-4 h-full">
-      <div v-if="event.description && !event.title" class="space-y-1">
+      <div v-if="tile.description && !tile.title" class="space-y-1">
         <div class="text-gray-800 text-md font-semibold">
-          {{ event.description }}
+          {{ tile.description }}
         </div>
       </div>
-      <div v-else-if="event.title">
+      <div v-else-if="tile.title">
         <div class="text-gray-800 text-lg font-bold mb-4">
-          {{ event.title }}
+          {{ tile.title }}
         </div>
         <div class="space-y-3">
           <div
-            v-for="(section, index) in event.sections"
+            v-for="(section, index) in tile.sections"
             :key="index"
             class="flex items-center space-x-3"
           >
@@ -50,7 +50,7 @@
 
 <script setup>
 defineProps({
-  event: {
+  tile: {
     type: Object,
     required: true,
     default: () => ({}),
@@ -63,14 +63,14 @@ div * {
   font-family: "Inter", sans-serif;
 }
 
-.event-tile {
+.image-tile {
   cursor: pointer;
   position: relative;
   top: 0;
   transition: top ease-in-out 0.2s;
 }
 
-.event-tile:hover {
+.image-tile:hover {
   top: -2px;
 }
 </style>
