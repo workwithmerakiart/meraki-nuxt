@@ -6,7 +6,7 @@
       <!-- LEFT TEXT CONTENT -->
       <div class="space-y-6">
         <h1
-          class="text-5xl sm:text-6xl font-extrabold text-[#3e3e62] leading-tight"
+          class="text-4xl sm:text-5xl font-extrabold text-[#3e3e62] leading-tight"
         >
           <span class="block">{{ title }}</span>
         </h1>
