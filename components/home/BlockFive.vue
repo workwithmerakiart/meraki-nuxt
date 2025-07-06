@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white min-h-screen py-16 relative overflow-hidden">
+  <div class="bg-[#F9F3EB] min-h-screen py-16 relative overflow-hidden">
     <div
       class="absolute top-0 right-0 w-64 h-64 bg-purple-700 opacity-30 rounded-full mix-blend-multiply transform translate-x-1/2 -translate-y-1/2 animate-blob"
     ></div>
@@ -11,7 +11,7 @@
       <h1
         class="text-6xl block-five-headings font-extrabold text-black text-center mb-4 relative z-10 animate-fade-in-down"
       >
-        <span class="text-black block-five-headings">Experience</span> The Vibe
+        <span class="text-[#b76c53] block-five-headings">Experience</span> <span class="text-[#1A1A1A] block-five-headings">The Vibe</span>
       </h1>
       <p class="text-black text-center block-five-subheadings mb-12 animate-fade-in font-light">
         Colorful, uninhibited fun for all ages - here's a sneak peak of our unique space:

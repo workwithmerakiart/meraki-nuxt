@@ -1,8 +1,8 @@
 <template>
-  <section class="relative bg-white py-16 px-6 md:px-12 overflow-hidden">
+  <section class="relative bg-[#F9F3EB] py-16 px-6 md:px-12 overflow-hidden">
     <!-- Section Heading -->
     <div class="max-w-7xl mx-auto text-center mb-12">
-      <h2 class="text-4xl md:text-5xl font-extrabold text-black mb-4 hero-slider-headings">
+      <h2 class="text-4xl md:text-5xl font-extrabold text-[#b76c53] mb-4 hero-slider-headings">
         Meraki Art Studio: What's Brewing Now
       </h2>
       <p class="text-black max-w-3xl mx-auto text-lg md:text-xl hero-slider-subheadings font-light">
@@ -157,6 +157,7 @@ const products = [
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter&display=swap');
+@import url('https://fonts.cdnfonts.com/css/sell-your-soul');
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -173,5 +174,9 @@ const products = [
 
 .hero-slider-subheadings {
   font-family: 'Inter', sans-serif;
+}
+
+.block-three-subheadings {
+    font-family: "Caveat Brush", serif;
 }
 </style>
