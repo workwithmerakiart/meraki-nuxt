@@ -8,10 +8,10 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
-      <EventTile 
-        v-for="(event, index) in events" 
+      <ImageTile 
+        v-for="(tile, index) in tiles" 
         :key="index" 
-        :event="event"
+        :tile="tile"
       />
     </div>
   </div>
@@ -23,7 +23,7 @@ defineProps({
     type: String,
     default: ''
   },
-  events: {
+  tiles: {
     type: Array,
     required: true,
     default: () => []
