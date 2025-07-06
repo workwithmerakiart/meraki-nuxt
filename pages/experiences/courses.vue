@@ -1,15 +1,7 @@
 <template>
   <div class="experiences--courses">
-    <ExperiencesBlockOne
-      image="https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      title="Interiors"
-      description="We believe that every space has a story to tell. Our interior design approach is inspired by context and enchanted with fine craftsmanship. The beauty of tones and textures meets the magic of tales to craft tactile spaces that offer a sensory experience."
-    />
-    <ExperiencesBlockTwo
-      image="https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      title=""
-      description="We believe that every space has a story to tell. Our interior design approach is inspired by context and enchanted with fine craftsmanship. The beauty of tones and textures meets the magic of tales to craft tactile spaces that offer a sensory experience."
-    />
+    <ExperiencesBlockOne v-bind="blockOneData" />
+    <ExperiencesBlockTwo v-bind="blockTwoData" />
     <div class="pt-5 pb-8">
       <ImageTilesBlock
         v-for="(courseSection, index) in coursesData"
@@ -36,6 +28,22 @@ import {
   ClockIcon,
   MapPinIcon,
 } from "@heroicons/vue/24/outline";
+
+const blockOneData = {
+  image:
+    "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  title: "Interiors",
+  description:
+    "We believe that every space has a story to tell. Our interior design approach is inspired by context and enchanted with fine craftsmanship. The beauty of tones and textures meets the magic of tales to craft tactile spaces that offer a sensory experience.",
+};
+
+const blockTwoData = {
+  image:
+    "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  title: "",
+  description:
+    "We believe that every space has a story to tell. Our interior design approach is inspired by context and enchanted with fine craftsmanship. The beauty of tones and textures meets the magic of tales to craft tactile spaces that offer a sensory experience.",
+};
 
 const coursesData = [
   {
