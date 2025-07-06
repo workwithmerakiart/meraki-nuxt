@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white overflow-hidden hover:shadow-md image-tile">
+  <div class="bg-white overflow-hidden hover:shadow-md image-tile" @click="handleClick">
     <div class="relative">
       <img
         :src="tile.image"
@@ -49,13 +49,19 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   tile: {
     type: Object,
     required: true,
     default: () => ({}),
   },
 });
+
+const emit = defineEmits(['click']);
+
+const handleClick = () => {
+  emit('click', props.tile);
+};
 </script>
 
 <style scoped>
