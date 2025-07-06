@@ -1,4 +1,3 @@
-import { EventTile } from '../.nuxt/components';
 <template>
   <div class="bg-white overflow-hidden hover:shadow-md event-tile">
     <div class="relative">
