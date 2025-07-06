@@ -11,7 +11,7 @@
                     class="w-60 sm:w-72 md:w-80 lg:w-[320px] rounded-lg shadow-lg transition-all duration-300" />
 
                 <h2
-                    class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-snug text-gray-900 max-w-md text-center">
+                    class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold block-two-headings leading-snug text-[#447C9D] max-w-md text-center">
                     <span class="inline-block">You're in the</span><br />
                     <span class="inline-block w-full text-center">right place...</span>
                 </h2>
@@ -20,8 +20,8 @@
             </div>
 
             <!-- Right Column: Text Content -->
-            <div class="w-full md:w-1/2 max-w-lg text-gray-800 text-lg space-y-6 fraunces-font font-normal">
-                <p>
+            <div class="w-full md:w-1/2 max-w-lg text-[#1A1A1A] text-lg space-y-6 fraunces-font font-normal">
+                <p class="text-[#b76c53]">
                     <strong>Does this sound like you?</strong>
                 </p>
                 <ul class="list-disc list-inside space-y-3 inter-font font-light">
@@ -43,6 +43,12 @@
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700&family=Inter&display=swap');
+@import url('https://fonts.cdnfonts.com/css/sell-your-soul');
+
+.block-two-headings {
+    font-family: "Caveat Brush", serif;
+    /* font-family: 'Sell Your Soul', sans-serif; */
+}
 
 .fraunces-font {
     font-family: "DM Serif Display", serif;

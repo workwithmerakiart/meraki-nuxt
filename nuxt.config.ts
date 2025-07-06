@@ -18,7 +18,8 @@ export default defineNuxtConfig({
       'DM Serif Display': [400],
       Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900],
       'Playfair Display': [400, 500, 600, 700, 800, 900],
-      Forum: [400, 500, 600, 700, 800, 900]
+      Forum: [400, 500, 600, 700, 800, 900],
+      'Caveat Brush': [400]
     },
     display: 'swap',
     download: true, // optional: downloads fonts for offline use

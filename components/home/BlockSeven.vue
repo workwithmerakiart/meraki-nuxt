@@ -1,6 +1,6 @@
 <template>
-    <section class="bg-white py-8 px-4 sm:px-8 md:px-12 lg:px-24">
-        <h2 class="text-3xl md:text-4xl font-semibold text-center mb-8 header-font">
+    <section class="bg-[#F9F3EB] py-8 px-4 sm:px-8 md:px-12 lg:px-24">
+        <h2 class="text-3xl md:text-4xl font-semibold text-center mb-8 header-font text-[#b76c53]">
             Let the magic slide into the DMs.
         </h2>
 

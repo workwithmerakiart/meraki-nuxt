@@ -26,7 +26,7 @@
             </p>
 
             <h1
-              class="text-white text-4xl md:text-5xl lg:text-6xl font-serif uppercase mb-6 hero-slider-headings leading-tight drop-shadow-lg animate-fadein-quick animation-delay-600 animation-backwards">
+              class="text-white text-4xl md:text-5xl lg:text-6xl font-serif uppercase mb-6 font-extrabold hero-slider-headings leading-tight drop-shadow-lg animate-fadein-quick animation-delay-600 animation-backwards">
               {{ slide.title }}
             </h1>
             <p
@@ -135,6 +135,8 @@ const slides = [
 </script>
 
 <style scoped>
+@import url('https://fonts.cdnfonts.com/css/sell-your-soul');
+
 .swiper,
 .swiper-slide {
   height: 100%;
@@ -298,7 +300,7 @@ const slides = [
 
 /* Custom font application */
 .hero-slider-headings {
-  font-family: "DM Serif Display", serif;
+  font-family: 'Sell Your Soul', sans-serif;
 }
 
 .hero-slider-subheadings {

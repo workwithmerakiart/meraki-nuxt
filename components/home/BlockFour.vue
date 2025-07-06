@@ -2,7 +2,7 @@
   <div class="page-container xl:px-12">
     <!-- Added heading with more repetitions for seamless loop -->
     <div class="heading-bg p-2.5 mb-5 overflow-hidden relative">
-      <h2 class="heading text-5xl font-bold text-white whitespace-nowrap inline-block inter-font">
+      <h2 class="heading text-5xl font-bold text-[#ff5757] whitespace-nowrap inline-block inter-font">
         JOIN OUR UPCOMING EVENTS &nbsp;
         JOIN OUR UPCOMING EVENTS &nbsp;
         JOIN OUR UPCOMING EVENTS &nbsp;
@@ -122,14 +122,13 @@ onMounted(() => {
 }
 
 .heading-bg {
-  background: #5c5c5c;
+  background: #000000;
 }
-
 .dm-serif-font {
   font-family: 'DM Serif Display', serif;
 }
 
-.inter-font {
+.inter-font { 
   font-family: 'Inter', sans-serif;
 }
 </style>
