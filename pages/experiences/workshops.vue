@@ -10,7 +10,7 @@
         :tiles="workshopsSection.sections"
       />
     </div>
-    <BookBlock v-bind="bookBlockData" />
+    <EventBlock v-bind="eventBlockData" />
     <ImageStackBlock :image-stack-data="imageStackData" />
   </div>
 </template>
@@ -213,17 +213,16 @@ const workshopsData = [
   },
 ];
 
-const bookBlockData = {
+const eventBlockData = {
   title: "SOULFUSION PAINT YOGA",
+  dateShort: "20 Sun, Nov 2022",
   subtitle: "The Art of SoulFusion Yoga.",
   date: "Sunday, 20 November 2022",
-  time: "13:00–14:15",
-  dateDisplay: "20 Sun, Nov 2022",
+  time: "13:00-14:15",
   description:
     "Come flow with @soulfusionwithamira through a grounding sequence, brought alive by a soul-mending playlist... while painting your own chakra-centred canvas you can take home!",
-  imageSrc:
-    "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  buttonText: "Book now",
+  imageUrl:
+    "https://wildpainthouse.com/public/uploads/events/Soulfusion%20Paint%20Yoga_1672311937.JPG",
 };
 
 const imageStackData = {
