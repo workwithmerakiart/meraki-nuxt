@@ -12,6 +12,7 @@
     </div>
     <EventBlock v-bind="eventBlockData" />
     <ImageStackBlock :image-stack-data="imageStackData" />
+    <ExperiencesInquiryForm />
   </div>
 </template>
 
