@@ -11,8 +11,8 @@
     <div class="absolute inset-0 bg-black/60"></div>
 
     <!-- Bottom-Centered Content -->
-    <div class="relative z-10 h-full flex items-end justify-center">
-      <div class="text-white text-left max-w-4xl px-6 pb-12 md:pb-20 animate-fade-in-up">
+    <div class="relative z-10 h-full flex items-end justify-center mb-16 md:mb-32">
+      <div class="text-white text-left max-w-4xl px-6 pb-24 md:pb-32 animate-fade-in-up">
         <h1 class="text-4xl md:text-5xl font-bold mb-4">
           {{ title }}
         </h1>

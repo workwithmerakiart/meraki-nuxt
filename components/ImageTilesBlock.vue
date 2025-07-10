@@ -2,7 +2,7 @@
   <div class="w-full max-w-7xl mx-auto px-4 md:px-10">
     <div
       v-if="title"
-      class="text-black text-4xl md:text-6xl font-bold tracking-wide text-center uppercase py-5 bg-[#F9F9F9]"
+      class="text-[#DD4912] text-4xl md:text-6xl font-bold tracking-wide text-center uppercase py-5"
     >
       {{ title }}
     </div>
