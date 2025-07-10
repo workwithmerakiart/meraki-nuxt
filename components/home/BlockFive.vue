@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#F9F3EB] min-h-screen py-16 relative overflow-hidden">
+  <div class="bg-[#F9F3EB] py-16 relative overflow-hidden">
     <div
       class="absolute top-0 right-0 w-64 h-64 bg-purple-700 opacity-30 rounded-full mix-blend-multiply transform translate-x-1/2 -translate-y-1/2 animate-blob"
     ></div>
