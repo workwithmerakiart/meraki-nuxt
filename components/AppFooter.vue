@@ -1,81 +1,87 @@
 <template>
-    <footer class="bg-black text-white py-10 px-6 font-light">
-        <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+    <footer class="bg-black text-white font-light">
+        <!-- Main Grid -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-12 md:grid-cols-4">
 
-            <!-- Brand/Logo Column -->
-            <div>
-                <NuxtLink to="/" class="block mb-4 max-w-[180px]">
-                    <img class="h-10 sm:h-12 md:h-16 w-auto" src="/images/meraki-logo-white.png" alt="Meraki Logo" />
+            <!-- Brand / Address Column -->
+            <div class="space-y-4">
+                <NuxtLink to="/" class="inline-block max-w-[180px]">
+                    <img src="/images/meraki-logo-white.png" alt="Meraki Logo" class="h-12 w-auto" />
                 </NuxtLink>
-                <p class="text-sm text-gray-300 leading-relaxed app-footer-subheading">
+                <p class="text-sm text-gray-300 leading-relaxed app-footer-subheading max-w-xs">
                     40, Meraki Art Studio, Goshi Warehouse Village, Al Quoz 3, Dubai
                 </p>
                 <a href="#"
-                    class="text-orange-400 font-semibold flex items-center gap-1 mt-2 text-sm app-footer-subheading">
+                    class="text-orange-500 font-semibold inline-flex items-center gap-1 text-sm app-footer-subheading">
                     <i class="fa-solid fa-location-arrow"></i> Get Direction
                 </a>
-
-                <div class="mt-4 text-sm font-mono space-y-1 app-footer-subheading">
-                    <div v-for="(time, day) in timings" :key="day" class="flex gap-2">
-                        <span class="w-10">{{ day }}</span><span class="w-1">:</span><span>{{ time }}</span>
-                    </div>
-                </div>
-
-                <div class="mt-4 space-y-1 text-sm app-footer-subheading">
-                    <p class="flex items-center gap-2">
+                <div class="space-y-2 text-sm app-footer-subheading">
+                    <a href="tel:+971508523600" class="flex items-center gap-2 hover:text-orange-500">
                         <i class="fa-brands fa-whatsapp"></i> +971 50 852 3600
-                    </p>
-                    <p class="flex items-center gap-2">
+                    </a>
+                    <a href="mailto:hello@merakiartstudio.ae" class="flex items-center gap-2 hover:text-orange-500">
                         <i class="fa-solid fa-envelope"></i> hello@merakiartstudio.ae
-                    </p>
+                    </a>
                 </div>
             </div>
 
             <!-- Sitemap Section -->
-            <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8 pl-4 md:pl-12">
+            <div class="md:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-8">
                 <div v-for="section in sitemap" :key="section.title">
-                    <div class="font-normal text-lg tracking-normal uppercase mb-4 app-footer-heading">
+                    <div class="text-lg uppercase mb-3 app-footer-heading">
                         {{ section.title }}
                     </div>
                     <ul class="text-sm space-y-1 text-gray-300 app-footer-subheading">
                         <li v-for="link in section.links" :key="link.label">
-                            <NuxtLink :to="link.to">{{ link.label }}</NuxtLink>
+                            <NuxtLink :to="link.to" class="hover:text-orange-500">{{ link.label }}</NuxtLink>
                         </li>
                     </ul>
                 </div>
             </div>
 
             <!-- Newsletter Column -->
-            <div>
-                <div class="font-normal text-lg uppercase mb-4 app-footer-heading">
+            <div class="space-y-4 w-full max-w-sm md:max-w-md">
+                <div class="text-lg uppercase app-footer-heading">
                     Stay Updated
                 </div>
-                <p class="text-sm text-gray-300 mb-3 app-footer-subheading">
-                    Join our newsletter and be the first to be notified of our latest news and promotions.
+                <p class="text-sm text-gray-300 app-footer-subheading">
+                    Join our newsletter and be the first to know about our latest news and promotions.
                 </p>
-                <form class="flex border border-orange-400 w-full max-w-xs">
+                <form class="flex flex-col sm:flex-row border border-orange-500 rounded overflow-hidden w-full">
                     <input type="email" placeholder="Enter Your Email"
-                        class="flex-1 min-w-0 px-3 py-2 bg-transparent text-white placeholder:text-gray-400 focus:outline-none app-footer-subheading" />
-                    <button type="submit" class="bg-orange-400 px-3">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        class="flex-1 px-3 py-2 bg-transparent text-white placeholder-gray-400 focus:outline-none app-footer-subheading" />
+                    <button type="submit"
+                        class="bg-orange-500 text-white px-4 py-2 uppercase text-sm font-semibold hover:bg-orange-600 transition">
+                        Submit
                     </button>
                 </form>
             </div>
+        </div>
 
+        <!-- Bottom Bar -->
+        <div class="mt-10 pt-6 pb-4 text-center text-xs text-gray-400 space-y-2 app-footer-subheading">
+            <div class="flex flex-wrap justify-center gap-4">
+                <NuxtLink to="/privacy-policy" class="hover:text-orange-500">Privacy Policy</NuxtLink>
+                <span>|</span>
+                <NuxtLink to="/cookie-policy" class="hover:text-orange-500">Cookie Policy</NuxtLink>
+                <span>|</span>
+                <NuxtLink to="/terms-of-use" class="hover:text-orange-500">Terms of Use</NuxtLink>
+            </div>
+            <div>© {{ currentYear }} Meraki Art Studio. All rights reserved.</div>
+            <div class="max-w-3xl mx-auto px-4 text-gray-400">
+                Site Crafted and Managed by SS Communications<br>
+                For support or inquiries, contact us at
+                <a href="mailto:hellosscommunications@gmail.com"
+                    class="underline hover:text-orange-500">hellosscommunications@gmail.com</a>
+                |
+                <a href="tel:+917303262306" class="hover:text-orange-500">+91-7303262306</a>
+            </div>
         </div>
     </footer>
 </template>
 
 <script setup>
-const timings = {
-    MON: '14:00-22:00',
-    TUE: '14:00-22:00',
-    WED: '14:00-22:00',
-    THU: '14:00-22:00',
-    FRI: '14:00-22:00',
-    SAT: '10:00-22:00',
-    SUN: '10:00-22:00'
-}
+const currentYear = new Date().getFullYear()
 
 const sitemap = [
     {
@@ -124,7 +130,8 @@ footer a {
 }
 
 footer a:hover {
-    color: #faae3c;
+    color: #EA580C;
+    /* Tailwind orange-500 hex */
 }
 
 .app-footer-heading {
