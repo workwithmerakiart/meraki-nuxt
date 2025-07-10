@@ -1,28 +1,15 @@
 <template>
   <div class="page-container xl:px-12">
     <!-- Added heading with more repetitions for seamless loop -->
-    <div class="heading-bg p-2.5 mb-5 overflow-hidden relative">
-      <h2 class="heading text-5xl font-bold text-[#ff5757] whitespace-nowrap inline-block inter-font">
-        JOIN OUR UPCOMING EVENTS &nbsp;
-        JOIN OUR UPCOMING EVENTS &nbsp;
-        JOIN OUR UPCOMING EVENTS &nbsp;
-        JOIN OUR UPCOMING EVENTS &nbsp;
+    <div class="heading-bg p-2.5 mb-5">
+      <h2 class="heading text-5xl font-bold text-[#447c9d] inter-font">
+        JOIN OUR UPCOMING EVENTS
       </h2>
     </div>
-    <masonry-wall
-      :items="blocksData"
-      :columns="3"
-      :gap="20"
-      :column-width="300"
-      :responsive="false"
-    >
+    <masonry-wall :items="blocksData" :columns="3" :gap="20" :column-width="300" :responsive="false">
       <template #default="{ item }">
-        <BlockCard
-          :key="item.id"
-          :block="item"
-          :style="{ transitionDelay: `${index * 0.1}s` }"
-          :class="{ animate: isAnimated }"
-        />
+        <BlockCard :key="item.id" :block="item" :style="{ transitionDelay: `${index * 0.1}s` }"
+          :class="{ animate: isAnimated }" />
       </template>
     </masonry-wall>
   </div>
@@ -112,23 +99,24 @@ onMounted(() => {
 </script>
 
 <style>
-@keyframes slide {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-25%); }
-}
 
 .heading {
-  animation: slide 16s infinite linear;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #dd4912;
+  text-align: center;
 }
 
 .heading-bg {
-  background: #000000;
+  background: #f9f3eb;
+  text-align: center;
 }
+
 .dm-serif-font {
   font-family: 'DM Serif Display', serif;
 }
 
-.inter-font { 
+.inter-font {
   font-family: 'Inter', sans-serif;
 }
 </style>
