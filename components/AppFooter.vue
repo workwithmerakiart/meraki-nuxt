@@ -49,9 +49,9 @@
                 </p>
                 <form class="flex flex-col sm:flex-row border border-orange-500 rounded overflow-hidden w-full">
                     <input type="email" placeholder="Enter Your Email"
-                        class="flex-1 px-3 py-2 bg-transparent text-white placeholder-gray-400 focus:outline-none app-footer-subheading" />
+                        class="flex-1 min-w-0 px-3 py-2 bg-transparent text-white placeholder-gray-400 focus:outline-none app-footer-subheading" />
                     <button type="submit"
-                        class="bg-orange-500 text-white px-4 py-2 uppercase text-sm font-semibold hover:bg-orange-600 transition">
+                        class="shrink-0 bg-orange-500 text-white px-4 py-2 uppercase text-sm font-semibold hover:bg-orange-600 transition">
                         Submit
                     </button>
                 </form>
