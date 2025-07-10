@@ -2,7 +2,7 @@
   <section class="relative bg-[#F9F3EB] py-16 px-0 md:px-0 overflow-hidden">
     <!-- Section Heading -->
     <div class="max-w-7xl mx-auto text-center mb-12">
-      <h2 class="text-4xl md:text-5xl font-extrabold text-[#b76c53] mb-4 hero-slider-headings">
+      <h2 class="text-4xl md:text-5xl font-extrabold text-[#dd4912] mb-4 hero-slider-headings">
         Meraki Art Studio: What's Brewing Now
       </h2>
       <p class="text-black max-w-3xl mx-auto text-lg md:text-xl hero-slider-subheadings font-light">
