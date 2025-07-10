@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-hidden bg-[#f96c6c] py-16 px-6 sm:px-14 font-sans">
+  <div class="relative overflow-hidden py-16 px-6 sm:px-14 font-sans" :style="{ backgroundColor: background }">
     <!-- Splash SVG Top Right -->
     <img src="/images/splash.svg" alt="Splash" class="absolute top-0 right-0 w-28 sm:w-40 z-0 animate-paint-blob" />
 
@@ -50,6 +50,10 @@ defineProps({
   time: String,
   description: String,
   imageUrl: String,
+  background: {
+    type: String,
+    default: '#f96c6c',
+  },
 });
 </script>
 
