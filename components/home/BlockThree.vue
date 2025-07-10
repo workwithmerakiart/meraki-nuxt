@@ -1,5 +1,5 @@
 <template>
-  <section class="relative bg-[#F9F3EB] py-16 px-6 md:px-12 overflow-hidden">
+  <section class="relative bg-[#F9F3EB] py-16 px-0 md:px-0 overflow-hidden">
     <!-- Section Heading -->
     <div class="max-w-7xl mx-auto text-center mb-12">
       <h2 class="text-4xl md:text-5xl font-extrabold text-[#b76c53] mb-4 hero-slider-headings">
@@ -12,7 +12,7 @@
     </div>
 
     <!-- Carousel Container with Arrows Only -->
-    <div class="relative max-w-7xl mx-auto">
+    <div class="relative w-full max-w-none mx-auto">
       <!-- Left Arrow -->
       <button @click="scrollLeft"
         class="absolute left-2 top-1/2 transform -translate-y-1/2 z-20 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
@@ -23,12 +23,12 @@
 
       <!-- Scrollable Cards -->
       <div ref="carouselRef"
-        class="flex space-x-6 overflow-x-auto px-6 scrollbar-hide snap-x snap-mandatory scroll-smooth"
+        class="flex space-x-8 overflow-x-auto px-0 scrollbar-hide snap-x snap-mandatory scroll-smooth w-full"
         @mouseenter="pauseAutoscroll" @mouseleave="startAutoscroll" @touchstart.passive="handleTouchStart"
         @touchend.passive="handleTouchEnd">
         <template v-for="n in 2">
           <NuxtLink v-for="(item, index) in products" :key="`${n}-${index}`" :to="item.link"
-            class="min-w-[320px] sm:min-w-[340px] md:min-w-[360px] h-[240px] flex-shrink-0 relative rounded-xl shadow-lg bg-white cursor-pointer snap-start overflow-hidden">
+            class="min-w-[420px] sm:min-w-[480px] md:min-w-[520px] h-[320px] flex-shrink-0 relative rounded-xl shadow-lg bg-white cursor-pointer snap-start overflow-hidden">
             <img :src="item.image" :alt="item.title" class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-300" />
             <div v-if="item.tag"
               :class="['absolute top-3 right-3 rounded-full px-3 py-1 text-xs font-semibold uppercase', item.tagColor, 'text-white transition-opacity duration-300']">
