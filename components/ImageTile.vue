@@ -72,11 +72,10 @@ div * {
 .image-tile {
   cursor: pointer;
   position: relative;
-  top: 0;
-  transition: top ease-in-out 0.2s;
+  transition: transform 0.2s ease-in-out;
 }
 
 .image-tile:hover {
-  top: -2px;
+  transform: scale(1.02);
 }
 </style>

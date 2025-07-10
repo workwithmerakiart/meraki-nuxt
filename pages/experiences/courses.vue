@@ -47,7 +47,7 @@ const blockTwoData = {
 
 const coursesData = [
   {
-    title: "🟣 Resin Mastery Series",
+    title: "Resin Mastery Series",
     sections: [
       {
         badge: "Courses",
@@ -70,7 +70,7 @@ const coursesData = [
     ],
   },
   {
-    title: "🌸 Sculpture Special",
+    title: "Sculpture Special",
     sections: [
       {
         badge: "Courses",
@@ -81,7 +81,7 @@ const coursesData = [
     ],
   },
   {
-    title: "🎨 Fine Art Foundations",
+    title: "Fine Art Foundations",
     sections: [
       {
         badge: "Courses",
