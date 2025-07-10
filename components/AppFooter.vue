@@ -59,7 +59,7 @@
         </div>
 
         <!-- Bottom Bar -->
-        <div class="mt-10 pt-6 pb-4 text-center text-xs text-gray-400 space-y-2 app-footer-subheading">
+        <div class="mt-10 pt-6 pb-8 text-center text-xs text-gray-400 space-y-2 app-footer-subheading">
             <div class="flex flex-wrap justify-center gap-4">
                 <NuxtLink to="/privacy-policy" class="hover:text-orange-500">Privacy Policy</NuxtLink>
                 <span>|</span>
