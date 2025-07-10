@@ -1,7 +1,7 @@
 <template>
   <section class="relative bg-[#F9F3EB] py-16 px-0 md:px-0 overflow-hidden">
     <!-- Section Heading -->
-    <div class="max-w-7xl mx-auto text-center mb-12">
+    <div class="max-w-screen-2xl 2xl:max-w-[2560px] mx-auto text-center mb-12">
       <h2 class="text-4xl md:text-5xl font-extrabold text-[#dd4912] mb-4 hero-slider-headings">
         Meraki Art Studio: What's Brewing Now
       </h2>
@@ -12,7 +12,7 @@
     </div>
 
     <!-- Carousel Container with Arrows Only -->
-    <div class="relative w-full max-w-none mx-auto">
+    <div class="relative w-full max-w-screen-2xl 2xl:max-w-[2560px] mx-auto">
       <!-- Left Arrow -->
       <button @click="scrollLeft"
         class="absolute left-2 top-1/2 transform -translate-y-1/2 z-20 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
@@ -28,7 +28,7 @@
         @touchend.passive="handleTouchEnd">
         <template v-for="n in 2">
           <NuxtLink v-for="(item, index) in products" :key="`${n}-${index}`" :to="item.link"
-            class="min-w-[420px] sm:min-w-[480px] md:min-w-[520px] h-[320px] flex-shrink-0 relative rounded-xl shadow-lg bg-white cursor-pointer snap-start overflow-hidden">
+            class="min-w-[420px] sm:min-w-[480px] md:min-w-[520px] 2xl:min-w-[600px] h-[320px] 2xl:h-[400px] flex-shrink-0 relative rounded-xl shadow-lg bg-white cursor-pointer snap-start overflow-hidden">
             <img :src="item.image" :alt="item.title" class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-300" />
             <div v-if="item.tag"
               :class="['absolute top-3 right-3 rounded-full px-3 py-1 text-xs font-semibold uppercase', item.tagColor, 'text-white transition-opacity duration-300']">
