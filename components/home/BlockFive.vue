@@ -11,7 +11,7 @@
       <h1
         class="text-6xl block-five-headings font-extrabold text-black text-center mb-4 relative z-10 animate-fade-in-down"
       >
-        <span class="text-[#b76c53] block-five-headings">Experience</span> <span class="text-[#1A1A1A] block-five-headings">The Vibe</span>
+        <span class="text-[#dd4912] block-five-headings">Experience</span> <span class="text-[#1A1A1A] block-five-headings">The Vibe</span>
       </h1>
       <p class="text-black text-center block-five-subheadings mb-12 animate-fade-in font-light">
         Colorful, uninhibited fun for all ages - here's a sneak peak of our unique space:

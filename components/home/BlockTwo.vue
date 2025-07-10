@@ -21,7 +21,7 @@
 
             <!-- Right Column: Text Content -->
             <div class="w-full md:w-1/2 max-w-lg text-[#1A1A1A] text-lg space-y-6 fraunces-font font-normal">
-                <p class="text-[#b76c53]">
+                <p class="text-[#dd4912]">
                     <strong>Does this sound like you?</strong>
                 </p>
                 <ul class="list-disc list-inside space-y-3 inter-font font-light">
