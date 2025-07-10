@@ -1,5 +1,5 @@
 <template>
-  <section class="relative bg-[#F9F3EB] py-16 px-0 md:px-0 overflow-hidden">
+  <section class="relative bg-[#F9F3EB] py-16 px-6 md:px-12 overflow-hidden">
     <!-- Section Heading -->
     <div class="max-w-screen-2xl 2xl:max-w-[2560px] mx-auto text-center mb-12">
       <h2 class="text-4xl md:text-5xl font-extrabold text-[#dd4912] mb-4 hero-slider-headings">
