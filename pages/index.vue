@@ -5,6 +5,7 @@
     <HomeBlockThree />
     <HomeBlockFour />
     <HomeBlockFive />
+    <HomeFeaturedIn />
     <HomeBlockSeven />
   </div>
 </template>
