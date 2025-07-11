@@ -103,11 +103,13 @@ onMounted(() => {
 .heading {
   font-size: 3rem;
   font-weight: bold;
+  font-family: 'DM Serif Display', serif;
   color: #dd4912;
   text-align: center;
 }
 
 .heading-bg {
+  font-family: 'DM Serif Display', serif;
   background: #f9f3eb;
   text-align: center;
 }
@@ -117,6 +119,6 @@ onMounted(() => {
 }
 
 .inter-font {
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Serif Display', serif;
 }
 </style>

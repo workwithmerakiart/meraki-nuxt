@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-[#f9f3eb]">
+  <section class="bg-white">
     <!-- Hero Image -->
     <div class="relative w-full h-[300px] md:h-[500px] overflow-hidden">
       <img src="/images/products/meraki-hero.avif" alt="Contact Us Hero" class="w-full h-full object-cover" />
