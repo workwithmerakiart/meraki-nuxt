@@ -20,17 +20,17 @@ import {
 const blockOneData = {
   image:
     "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  title: "Interiors",
+  title: "Events",
   description:
-    "We believe that every space has a story to tell. Our interior design approach is inspired by context and enchanted with fine craftsmanship. The beauty of tones and textures meets the magic of tales to craft tactile spaces that offer a sensory experience.",
+    "At Meraki, every event is thoughtfully curated to feel personal, joyful, and beautifully designed for the crème de la crème of Dubai.",
 };
 
 const blockTwoData = {
   image:
     "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  title: "",
+  title: "Why Choose Art-Filled Events?",
   description:
-    "We believe that every space has a story to tell. Our interior design approach is inspired by context and enchanted with fine craftsmanship. The beauty of tones and textures meets the magic of tales to craft tactile spaces that offer a sensory experience.",
+    "Art brings people together—and at Meraki, every event becomes a memorable experience. From birthdays to corporate activations, we offer curated, creative celebrations filled with color, connection, and joy right here in Dubai.",
 };
 
 const eventBlockData = [
