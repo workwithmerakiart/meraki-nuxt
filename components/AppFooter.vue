@@ -11,7 +11,8 @@
                 <p class="text-sm text-gray-300 leading-relaxed app-footer-subheading max-w-xs">
                     40, Meraki Art Studio, Goshi Warehouse Village, Al Quoz 3, Dubai
                 </p>
-                <a href="#"
+                <a href="https://www.google.com/maps/search/?api=1&query=Meraki+Art+%26+Design+Studio,+Al+Quoz+-+Al+Quoz+Industrial+Area+3+-+Dubai"
+                    target="_blank" rel="noopener noreferrer"
                     class="text-orange-500 font-semibold inline-flex items-center gap-1 text-sm app-footer-subheading">
                     <i class="fa-solid fa-location-arrow"></i> Get Direction
                 </a>
