@@ -15,7 +15,7 @@
     <!-- Block Two: Intro -->
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 py-12 px-4">
       <div class="md:w-1/2 text-center md:text-left">
-        <h2 class="text-2xl sm:text-3xl font-bold mb-4">Meraki is an Art Studio</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-[#dd4912]">Meraki is an Art Studio</h2>
         <p class="text-gray-700 leading-relaxed">
           Founded to celebrate creativity in all forms, Meraki Art Studio specializes in crafting custom art
           experiences.
@@ -31,7 +31,7 @@
     <!-- Block Three: Mission -->
     <div class="bg-white py-12 px-4">
       <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-2xl sm:text-3xl font-bold mb-4">Our Mission</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-[#dd4912]">Our Mission</h2>
         <p class="text-gray-700 leading-relaxed max-w-3xl mx-auto">
           At Meraki, our mission is to co-create art that resonates on a personal level. We are dedicated to sustainable
           practices,
@@ -44,7 +44,7 @@
 
     <!-- Block Four: Our Team -->
     <div class="max-w-6xl mx-auto py-12 px-4">
-      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8">The Source of Our Strength is Our People</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 text-[#dd4912]">The Source of Our Strength is Our People</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
         <div v-for="member in team" :key="member.id"
           class="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition">
@@ -63,13 +63,13 @@
 
     <!-- Block Five: Image Carousel -->
     <div class="bg-white py-12 px-4">
-      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8">Our Work in Focus</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 text-[#dd4912]">Our Work in Focus</h2>
       <Carousel />
     </div>
 
     <!-- Block Six: Testimonials -->
     <div class="bg-[#f9f3eb] py-12">
-      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8">What Our Clients Say</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 text-[#dd4912]">What Our Clients Say</h2>
       <div class="max-w-7xl mx-auto px-4">
         <Testimonials />
       </div>
@@ -79,7 +79,7 @@
     <!-- Block Seven: Mission Repeat -->
     <div class="bg-white py-12 px-4">
       <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-2xl sm:text-3xl font-bold mb-4">Our Commitment</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-[#dd4912]">Our Commitment</h2>
         <p class="text-gray-700 leading-relaxed max-w-3xl mx-auto">
           We strive to make art accessible, personal, and sustainable. Our studio values collaboration,
           quality, and storytelling in every piece we create. Join us in making art that speaks from the heart.
