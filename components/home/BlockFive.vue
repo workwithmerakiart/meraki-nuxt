@@ -39,7 +39,7 @@
     </div>
 
     <button
-      class="fixed right-0 top-1/2 transform -translate-y-1/2 bg-orange-500 text-white font-bold py-3 px-4 rounded-l-lg shadow-lg z-20 animate-slide-in-right hover:bg-orange-600 transition-colors duration-300"
+      class="fixed right-0 top-1/2 transform -translate-y-1/2 bg-[#447C9D] text-white font-bold py-3 px-4 rounded-l-lg shadow-lg z-20 animate-slide-in-right hover:bg-[#376A86] transition-colors duration-300"
       style="writing-mode: vertical-lr; text-orientation: mixed;"
     >
       Book now

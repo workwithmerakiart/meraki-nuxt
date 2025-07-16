@@ -8,7 +8,7 @@
 
         <div class="mt-10 text-center">
             <button @click="navigateToInstagram"
-                class="border border-black px-6 py-3 text-sm uppercase tracking-widest font-semibold text-black rounded-full hover:bg-orange-500 hover:text-white transform hover:scale-105 transition-all duration-300">
+                class="border border-black px-6 py-3 text-sm uppercase tracking-widest font-semibold text-black rounded-full hover:bg-[#DD4912] hover:text-white transform hover:scale-105 transition-all duration-300">
                 Follow us on Instagram
             </button>
         </div>

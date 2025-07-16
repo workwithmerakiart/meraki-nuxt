@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-white">
+  <section class="bg-[#f9f3eb]">
     <!-- Hero Image -->
     <div class="relative w-full h-[300px] md:h-[500px] overflow-hidden">
       <img src="/images/products/meraki-hero.avif" alt="Contact Us Hero" class="w-full h-full object-cover" />
@@ -101,7 +101,7 @@
             <div class="font-semibold mb-1">Opening Hours:</div>
             <div class="grid grid-cols-2 gap-x-6">
               <div v-for="(time, day) in timings" :key="day" class="contents">
-                <span class="font-medium">{{ day }}</span>
+                <span class="font-medium  ">{{ day }}</span>
                 <span class="text-left">{{ time }}</span>
               </div>
             </div>

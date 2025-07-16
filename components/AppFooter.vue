@@ -52,7 +52,7 @@
                     <input type="email" placeholder="Enter Your Email"
                         class="flex-1 min-w-0 px-3 py-2 bg-transparent text-black placeholder-black-400 focus:outline-none app-footer-subheading" />
                     <button type="submit"
-                        class="shrink-0 bg-black text-white px-4 py-2 uppercase text-sm font-semibold hover:bg-black-600 transition">
+                        class="shrink-0 bg-black text-white px-4 py-2 uppercase text-sm font-semibold transition hover:bg-white hover:text-black">
                         Submit
                     </button>
                 </form>

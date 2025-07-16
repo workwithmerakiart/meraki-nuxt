@@ -37,7 +37,7 @@
             <!-- CTA only for slides except first -->
             <template v-if="index !== 0">
               <NuxtLink :to="slide.link"
-                class="inline-block bg-transparent border border-white border-opacity-70 text-white text-opacity-70 px-10 py-4 rounded-full text-lg uppercase tracking-wide font-bold shadow-xl transition-all duration-300 hover:bg-[#C88039] hover:text-white hover:text-opacity-100 hover:scale-105 hero-slider-subheadings animate-slideup animation-delay-1000 animation-backwards">
+                class="inline-block bg-transparent border border-white border-opacity-70 text-white text-opacity-70 px-10 py-4 rounded-full text-lg uppercase tracking-wide font-bold shadow-xl transition-all duration-300 hover:bg-[#DD4912] hover:text-white hover:text-opacity-100 hover:scale-105 hero-slider-subheadings animate-slideup animation-delay-1000 animation-backwards">
                 {{ slide.cta }}
               </NuxtLink>
             </template>
