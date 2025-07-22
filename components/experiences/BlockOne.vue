@@ -1,11 +1,8 @@
 <template>
   <div class="relative h-screen overflow-hidden">
     <!-- Parallax Background -->
-    <div
-      ref="bg"
-      class="absolute inset-0 bg-cover bg-center scale-110 will-change-transform"
-      :style="{ backgroundImage: `url(${image})` }"
-    ></div>
+    <div ref="bg" class="absolute inset-0 bg-cover bg-center scale-110 will-change-transform"
+      :style="{ backgroundImage: `url(${image})` }"></div>
 
     <!-- Dark Overlay -->
     <div class="absolute inset-0 bg-black/60"></div>
@@ -13,14 +10,23 @@
     <!-- Bottom-Centered Content -->
     <div class="relative z-10 h-full flex items-end justify-center mb-16 md:mb-32">
       <div class="text-white text-left max-w-4xl px-6 pb-24 md:pb-32 animate-fade-in-up">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+        <!-- Main Heading -->
+        <h1 class="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
           {{ title }}
         </h1>
-        <p class="text-lg md:text-xl leading-relaxed">
+
+        <!-- Tagline -->
+        <p v-if="tagline" class="text-xl md:text-2xl italic text-white/80 mb-6">
+          {{ tagline }}
+        </p>
+
+        <!-- Description -->
+        <p class="text-base md:text-lg leading-relaxed text-white/90 max-w-2xl">
           {{ description }}
         </p>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -30,6 +36,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 const props = defineProps({
   image: String,
   title: String,
+  tagline: String,
   description: String
 })
 
@@ -71,6 +78,7 @@ div * {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
