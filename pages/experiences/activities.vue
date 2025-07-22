@@ -1,22 +1,20 @@
 <template>
   <div class="experiences--activities">
     <ExperiencesBlockOne v-bind="blockOneData" />
+    <ExperiencesBlockBetweenOneAndTwo v-bind="blockBetweenOneAndTwoData" />
     <ExperiencesBlockTwo v-bind="blockTwoData" />
+
+    <!-- NEW ACTIVITY GRID + MODAL -->
+    <ActivityGrid :activities="activities" @open-modal="selectedActivity = $event" />
+    <ActivityModal :activity="selectedActivity" @close="selectedActivity = null" />
+
     <div class="pt-5 pb-8">
-      <ImageTilesBlock
-        v-for="(courseSection, index) in coursesData"
-        :key="index"
-        :title="courseSection.title"
-        :tiles="courseSection.sections"
-      />
+      <ImageTilesBlock v-for="(courseSection, index) in coursesData" :key="index" :title="courseSection.title"
+        :tiles="courseSection.sections" />
     </div>
     <div class="pt-5 pb-8">
-      <ImageTilesBlock
-        v-for="(workshopsSection, index) in workshopsData"
-        :key="index"
-        :title="workshopsSection.title"
-        :tiles="workshopsSection.sections"
-      />
+      <ImageTilesBlock v-for="(workshopsSection, index) in workshopsData" :key="index" :title="workshopsSection.title"
+        :tiles="workshopsSection.sections" />
     </div>
     <ImageStackBlock :image-stack-data="imageStackData" />
   </div>
@@ -28,14 +26,93 @@ import {
   ClockIcon,
   MapPinIcon,
 } from "@heroicons/vue/24/outline";
+import ActivityGrid from "~/components/experiences/activities/ActivityGrid.vue";
+import ActivityModal from "~/components/experiences/activities/ActivityModal.vue";
+
+const selectedActivity = ref(null);
+
+const activities = [
+  {
+    id: 1,
+    name: "Neon Art Zone",
+    image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+    shortDescription: "Glow, splash, pour — all things neon.",
+    modal: true,
+    subtypes: [
+      {
+        id: "1.1",
+        title: "Neon Art Attack",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Splash, flick & throw neon paint in full-body suits.",
+        price: "AED 155",
+        vatIncluded: false,
+        duration: "~45 mins",
+        minTickets: 3,
+        bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!"
+      },
+      {
+        id: "1.2",
+        title: "Neon Slime",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Glow-in-the-dark gooey fun for all ages.",
+        price: "AED 85",
+        vatIncluded: false,
+        duration: "30 mins",
+        bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!"
+      },
+      {
+        id: "1.3",
+        title: "Neon Bear Pouring",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Create your own neon resin bear.",
+        duration: "30 mins",
+        bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!",
+        variants: [
+          { name: "Keychain", price: "AED 40", vatIncluded: false },
+          { name: "Small", price: "AED 140", vatIncluded: false },
+          { name: "Medium", price: "AED 195", vatIncluded: false },
+          { name: "Large", price: "AED 275", vatIncluded: false }
+        ]
+      },
+      {
+        id: "1.4",
+        title: "Neon Fluid Art",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Pour and swirl your own neon canvas masterpiece.",
+        duration: "~45–60 mins",
+        bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!",
+        variants: [
+          { name: "30x25 cm", price: "AED 140", vatIncluded: false },
+          { name: "40x50 cm", price: "AED 185", vatIncluded: false },
+          { name: "60x60 cm", price: "AED 310", vatIncluded: false },
+          { name: "60x90 cm", price: "AED 375", vatIncluded: false },
+          { name: "75x100 cm", price: "AED 525", vatIncluded: false }
+        ]
+      }
+    ]
+  }
+];
+
+
 
 const blockOneData = {
   image:
     "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   title: "Activities",
+  tagline: "Spontaneous creativity. Guided experiences. Always inspiring.",
   description:
-    "Our curated art courses are immersive journeys designed to help you grow your skills with intention and style. From mastering resin techniques to exploring the foundations of fine art, every course offers hands-on learning, premium materials, and personal guidance in our Dubai studio.",
+    "Whether you’re booking ahead or walking in, Meraki offers a vibrant mix of hands-on art activities designed for every age and mood.",
 };
+
+const blockBetweenOneAndTwoData = {
+  title: "Unwind",
+  description:
+    "Get messy, feel free, and make something uniquely yours — every activity is a chance to express, connect, and create joy.",
+  image: "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif", // replace with your visual if needed
+};
+
+
+
 
 const blockTwoData = {
   image:
