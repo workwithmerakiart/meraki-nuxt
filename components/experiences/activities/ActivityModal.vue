@@ -26,7 +26,8 @@
                             <div v-if="!subtype.variants" class="mt-3 space-y-1 text-sm">
                                 <p><strong>Price:</strong> {{ subtype.price }} <span v-if="!subtype.vatIncluded">+
                                         VAT</span></p>
-                                <p><strong>Duration:</strong> {{ subtype.duration }}</p>
+                                <p v-if="subtype.duration"><strong>Duration:</strong> {{ subtype.duration }}</p>
+
                                 <p v-if="subtype.minTickets"><strong>Minimum Tickets:</strong> {{ subtype.minTickets }}
                                 </p>
                             </div>

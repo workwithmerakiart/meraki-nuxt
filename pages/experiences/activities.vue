@@ -68,10 +68,10 @@ const activities = [
         duration: "30 mins",
         bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!",
         variants: [
-          { name: "Keychain", price: "AED 40", vatIncluded: false },
-          { name: "Small", price: "AED 140", vatIncluded: false },
-          { name: "Medium", price: "AED 195", vatIncluded: false },
-          { name: "Large", price: "AED 275", vatIncluded: false }
+          { name: "Keychain", price: "AED 40", vatIncluded: true },
+          { name: "Small", price: "AED 140", vatIncluded: true },
+          { name: "Medium", price: "AED 195", vatIncluded: true },
+          { name: "Large", price: "AED 275", vatIncluded: true }
         ]
       },
       {
@@ -82,12 +82,138 @@ const activities = [
         duration: "~45–60 mins",
         bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!",
         variants: [
-          { name: "30x25 cm", price: "AED 140", vatIncluded: false },
-          { name: "40x50 cm", price: "AED 185", vatIncluded: false },
-          { name: "60x60 cm", price: "AED 310", vatIncluded: false },
-          { name: "60x90 cm", price: "AED 375", vatIncluded: false },
-          { name: "75x100 cm", price: "AED 525", vatIncluded: false }
+          { name: "30x25 cm", price: "AED 140", vatIncluded: true },
+          { name: "40x50 cm", price: "AED 185", vatIncluded: true },
+          { name: "60x60 cm", price: "AED 310", vatIncluded: true },
+          { name: "60x90 cm", price: "AED 375", vatIncluded: true },
+          { name: "75x100 cm", price: "AED 525", vatIncluded: true }
         ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: "Resin Art",
+    image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+    shortDescription: "Pour your creativity into glossy, high-end pieces.",
+    modal: true,
+    subtypes: [
+      {
+        id: "2.1",
+        title: "MDF Coasters (Set of 2)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Perfect for beginners — create two glossy MDF coasters.",
+        price: "AED 175",
+        vatIncluded: true,
+        bottomNote: "Get started with resin on a small canvas. Easy, fun, and stylish!"
+      },
+      {
+        id: "2.2",
+        title: "MDF Coasters (Set of 4)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "A set of four handmade resin coasters on MDF base.",
+        price: "AED 250",
+        vatIncluded: true,
+        bottomNote: "Add more flair with this extended coaster-making session."
+      },
+      {
+        id: "2.3",
+        title: "Agate Coasters (Set of 2)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Elegant, crystal-like agate coasters made with resin.",
+        price: "AED 300",
+        vatIncluded: true,
+        bottomNote: "Craft beautiful faux-agate pieces perfect for gifting."
+      },
+      {
+        id: "2.4",
+        title: "Acrylic Tray (13x26 cm)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Customize a sleek rectangular acrylic tray with resin art.",
+        price: "AED 200",
+        vatIncluded: true,
+        bottomNote: "Functional and fabulous — your art becomes a lifestyle piece!"
+      },
+      {
+        id: "2.5",
+        title: "Acrylic Tray (20x20 cm)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Square-shaped tray ideal for modern resin designs.",
+        price: "AED 275",
+        vatIncluded: true,
+        bottomNote: "Perfect for gifting or keeping your trinkets stylishly sorted."
+      },
+      {
+        id: "2.6",
+        title: "Acrylic Tray (20x30 cm)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Larger tray option for elaborate resin effects.",
+        price: "AED 350",
+        vatIncluded: true,
+        bottomNote: "Unleash more creativity with a larger working surface."
+      },
+      {
+        id: "2.7",
+        title: "Clock (30 cm dia)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Create a round resin wall clock — artistic and functional.",
+        price: "AED 275",
+        vatIncluded: true,
+        bottomNote: "Design a piece of time you’ll love watching!"
+      },
+      {
+        id: "2.8",
+        title: "Clock with Rings (40 cm dia)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Stylish wall clock with intricate resin ring detailing.",
+        price: "AED 500",
+        vatIncluded: true,
+        bottomNote: "Go big and bold with layered resin textures."
+      },
+      {
+        id: "2.9",
+        title: "Cheeseboard",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Decorate a wood and resin cheeseboard for serving in style.",
+        price: "AED 350",
+        vatIncluded: true,
+        bottomNote: "Serve up style with your own handmade resin cheeseboard."
+      },
+      {
+        id: "2.10",
+        title: "Beach Painting",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Create dreamy ocean waves using beach-inspired resin art.",
+        price: "AED 425",
+        vatIncluded: true,
+        bottomNote: "Bring the calm of the coast to your canvas."
+      },
+      {
+        id: "2.11",
+        title: "Book Cover",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Customize a hardback book cover with resin textures.",
+        price: "AED 200",
+        vatIncluded: true,
+        bottomNote: "Turn reading into a resin masterpiece."
+      },
+      {
+        id: "2.12",
+        title: "Bookmark",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Make a glossy, colorful bookmark to mark your reads.",
+        price: "AED 25",
+        vatIncluded: true,
+        bottomNote: "Short, sweet, and stunning — a quick win for all ages."
+      },
+      {
+        id: "2.13",
+        title: "Keychains",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Craft your own mini resin keychains with initials or glitter.",
+        price: "AED 35",
+        vatIncluded: true,
+        bottomNote: "Small but stylish. Great for gifts or personal flair."
       }
     ]
   }
