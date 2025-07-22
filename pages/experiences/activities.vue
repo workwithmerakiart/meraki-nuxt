@@ -8,15 +8,8 @@
     <ActivityGrid :activities="activities" @open-modal="selectedActivity = $event" />
     <ActivityModal :activity="selectedActivity" @close="selectedActivity = null" />
 
-    <div class="pt-5 pb-8">
-      <ImageTilesBlock v-for="(courseSection, index) in coursesData" :key="index" :title="courseSection.title"
-        :tiles="courseSection.sections" />
-    </div>
-    <div class="pt-5 pb-8">
-      <ImageTilesBlock v-for="(workshopsSection, index) in workshopsData" :key="index" :title="workshopsSection.title"
-        :tiles="workshopsSection.sections" />
-    </div>
-    <ImageStackBlock :image-stack-data="imageStackData" />
+    <BookActivities v-bind="bookActivitiesContent" />
+
   </div>
 </template>
 
@@ -28,6 +21,7 @@ import {
 } from "@heroicons/vue/24/outline";
 import ActivityGrid from "~/components/experiences/activities/ActivityGrid.vue";
 import ActivityModal from "~/components/experiences/activities/ActivityModal.vue";
+import BookActivities from "~/components/experiences/activities/BookActivities.vue";
 
 const selectedActivity = ref(null);
 
@@ -216,9 +210,304 @@ const activities = [
         bottomNote: "Small but stylish. Great for gifts or personal flair."
       }
     ]
+  },
+  {
+    id: 3,
+    name: "Jesmonite Creations",
+    image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+    shortDescription: "Where minimalist style meets bold texture.",
+    modal: true,
+    subtypes: [
+      {
+        id: "3.1",
+        title: "Tray",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Craft your own minimalistic tray with unique textures.",
+        price: "AED 150",
+        vatIncluded: true,
+        bottomNote: "Perfect for keys, candles, or just aesthetic organization."
+      },
+      {
+        id: "3.2",
+        title: "Coasters (Set of 2)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Pour and pigment your own pair of stylish coasters.",
+        price: "AED 125",
+        vatIncluded: true,
+        bottomNote: "A simple yet impactful addition to any space."
+      },
+      {
+        id: "3.3",
+        title: "Pot",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Make your own chic jesmonite pot for plants or storage.",
+        price: "AED 150",
+        vatIncluded: true,
+        bottomNote: "Smooth finish, modern shape, and 100% handmade by you."
+      },
+      {
+        id: "3.4",
+        title: "Tray + Coasters Set",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Create a matching set — ideal for home styling.",
+        price: "AED 250",
+        vatIncluded: true,
+        bottomNote: "Looks even better when you say you made it yourself."
+      },
+      {
+        id: "3.5",
+        title: "Moroccan Tray",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Design a textured statement tray with Moroccan inspiration.",
+        price: "AED 450",
+        vatIncluded: true,
+        bottomNote: "A bold centrepiece handcrafted in your unique colour palette."
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: "Decoden Delights",
+    image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+    shortDescription: "Kawaii overload! Customize accessories with whipped clay and cute charms.",
+    modal: true,
+    subtypes: [
+      {
+        id: "4.1",
+        title: "Phone Case",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Design your dream kawaii phone case.",
+        price: "AED 85",
+        vatIncluded: true,
+        bottomNote: "Turn your phone into a cute masterpiece!"
+      },
+      {
+        id: "4.2",
+        title: "Mirror",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Decorate your mirror with charms and whipped clay.",
+        price: "AED 150",
+        vatIncluded: true,
+        bottomNote: "Every glance will sparkle with your custom flair!"
+      },
+      {
+        id: "4.3",
+        title: "Hand Mirror",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Add a pop of kawaii to your hand mirror.",
+        price: "AED 85",
+        vatIncluded: true,
+        bottomNote: "Perfect for glam on the go."
+      },
+      {
+        id: "4.4",
+        title: "Mini Hair Brush",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Small but packed with personality!",
+        price: "AED 35",
+        vatIncluded: true,
+        bottomNote: "Let your style shine through even in the tiniest details."
+      },
+      {
+        id: "4.5",
+        title: "Hair Brush",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Make every stroke magical.",
+        price: "AED 65",
+        vatIncluded: true,
+        bottomNote: "Style meets cuteness overload!"
+      },
+      {
+        id: "4.6",
+        title: "Jewelry Box",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Store your treasures in a box full of charm.",
+        price: "AED 185",
+        vatIncluded: true,
+        bottomNote: "Cute on the outside, precious on the inside."
+      }
+    ]
+  },
+  {
+    id: 5,
+    name: "Beauty Blend",
+    image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+    shortDescription: "Make it cute. Make it scented. Make it you!",
+    modal: true,
+    subtypes: [
+      {
+        id: "5.1",
+        title: "Candle Making",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Craft your own aromatic candle.",
+        price: "AED 250",
+        vatIncluded: true,
+        bottomNote: "From wick to wax — pour your personality into a candle!"
+      },
+      {
+        id: "5.2",
+        title: "Soap Making",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Customize and create beautiful handmade soaps.",
+        price: "AED 175",
+        vatIncluded: true,
+        bottomNote: "Clean, fun, and totally custom — your soap, your vibe!"
+      },
+      {
+        id: "5.3",
+        title: "Bath Bomb",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Fizz up your bath time with personalized bombs.",
+        price: "AED 125",
+        vatIncluded: true,
+        bottomNote: "Scented fizzies made by you — soak, relax, repeat."
+      }
+    ]
+  },
+  {
+    id: 6,
+    name: "Other Creative Experiences",
+    image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+    shortDescription: "Eclectic DIY fun – pour, paint, sculpt and stuff!",
+    modal: true,
+    subtypes: [
+      {
+        id: "6.1",
+        title: "Bear Pouring (Classic)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Pour and customize your own adorable resin bear.",
+        duration: "30 mins",
+        bottomNote: "Craft a timeless keepsake with your personal touch.",
+        variants: [
+          { name: "Keychain", price: "AED 35", vatIncluded: true },
+          { name: "Small", price: "AED 125", vatIncluded: true },
+          { name: "Medium", price: "AED 160", vatIncluded: true },
+          { name: "Large", price: "AED 270", vatIncluded: true }
+        ]
+      },
+      {
+        id: "6.2",
+        title: "Fluid Art (Non-Neon)",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Pour and swirl high-gloss abstract art in your favorite colors.",
+        duration: "~45 mins",
+        bottomNote: "Create soothing, flowy masterpieces without the neon splash.",
+        variants: [
+          { name: "30x25 cm", price: "AED 125", vatIncluded: true },
+          { name: "40x50 cm", price: "AED 160", vatIncluded: true },
+          { name: "60x60 cm", price: "AED 270", vatIncluded: true },
+          { name: "60x90 cm", price: "AED 325", vatIncluded: true },
+          { name: "75x100 cm", price: "AED 450", vatIncluded: true }
+        ]
+      },
+      {
+        id: "6.3",
+        title: "DIY Painting Session",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Rent a canvas, brushes, and unlimited paints at our open bar.",
+        duration: "All day access",
+        bottomNote: "A freestyle painting space to bring your imagination to life.",
+        variants: [
+          { name: "30x25 cm", price: "AED 85", vatIncluded: true },
+          { name: "40x50 cm", price: "AED 155", vatIncluded: true },
+          { name: "60x60 cm", price: "AED 200", vatIncluded: true },
+          { name: "60x90 cm", price: "AED 325", vatIncluded: true },
+          { name: "75x100 cm", price: "AED 460", vatIncluded: true }
+        ]
+      },
+      {
+        id: "6.4",
+        title: "Regular Slime",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Classic slime-making fun with unlimited squish!",
+        price: "AED 65",
+        duration: "30 mins",
+        vatIncluded: true,
+        bottomNote: "Stretch, swirl, and squish your own perfect slime mix."
+      },
+      {
+        id: "6.5",
+        title: "Bear Stuffing",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Stuff your very own plushie bear.",
+        price: "AED 160",
+        duration: "30 mins",
+        vatIncluded: true,
+        bottomNote: "Create a furry friend that’s uniquely yours!"
+      },
+      {
+        id: "6.6",
+        title: "Russian Floral Sculpture",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Sculpt stunningly realistic florals from clay.",
+        price: "AED 600",
+        duration: "3 hours",
+        vatIncluded: true,
+        bottomNote: "Master intricate flower-making techniques in this elegant session."
+      },
+      {
+        id: "6.7",
+        title: "Texture Painting",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Add dimension and style to your art using texture mediums.",
+        price: "AED 275",
+        duration: "2 hours",
+        vatIncluded: true,
+        bottomNote: "Bold strokes and textured depth — a feast for your walls."
+      },
+      {
+        id: "6.8",
+        title: "3D Texture Painting",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Sculpt and paint elevated textures for a 3D effect.",
+        price: "AED 325",
+        duration: "2 hours",
+        vatIncluded: true,
+        bottomNote: "Sculptural artistry that truly pops!"
+      },
+      {
+        id: "6.9",
+        title: "Tote Bag Painting",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Design your own custom canvas tote bag.",
+        price: "AED 175",
+        duration: "1.5 hours",
+        vatIncluded: true,
+        bottomNote: "Wear your art wherever you go."
+      },
+      {
+        id: "6.10",
+        title: "Pot Painting",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Paint cute and quirky patterns on your very own pot.",
+        price: "AED 125",
+        duration: "1.5 hours",
+        vatIncluded: true,
+        bottomNote: "The perfect addition to your window sill or balcony garden."
+      },
+      {
+        id: "6.11",
+        title: "Fabric Painting",
+        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        description: "Unleash your creativity on fabric with vibrant colors.",
+        price: "AED 200",
+        duration: "2 hours",
+        vatIncluded: true,
+        bottomNote: "Perfect for statement pieces or handmade gifts."
+      }
+    ]
   }
+
+
 ];
 
+const allProductOptions = activities.flatMap(activity =>
+  activity.subtypes.flatMap(sub =>
+    sub.variants
+      ? sub.variants.map(variant => `${sub.title} – ${variant.name}`)
+      : [`${sub.title}`]
+  )
+);
 
 
 const blockOneData = {
@@ -236,6 +525,33 @@ const blockBetweenOneAndTwoData = {
     "Get messy, feel free, and make something uniquely yours — every activity is a chance to express, connect, and create joy.",
   image: "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif", // replace with your visual if needed
 };
+
+const bookActivitiesContent = {
+  heading: "Ready for happy-time?",
+  body: "Swipe through a mix of our favorite activities. Book your session or walk in — we’ll have your station ready.",
+  highlights: ["All materials included", "Guided sessions", "Suitable for all ages"],
+  ctaText: "Book Your Session Now",
+
+  // NEWLY ADDED
+  productOptions: activities.flatMap(activity =>
+    activity.subtypes.flatMap(sub =>
+      sub.variants
+        ? sub.variants.map(variant => `${sub.title} – ${variant.name}`)
+        : [`${sub.title}`]
+    )
+  ),
+
+  // Visual styles
+  backgroundColor: "bg-[#F9F3EB]",
+  textColor: "text-[#447C9D]",
+  highlightBgColor: "bg-white",
+  highlightTextColor: "text-[#1A1A1A]",
+  highlightBorderColor: "border border-[#1A1A1A]"
+};
+
+
+
+
 
 
 
