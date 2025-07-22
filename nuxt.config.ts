@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       tailwindcss(),
     ],
   },
-  modules: ['@nuxtjs/google-fonts'],
+  modules: ['@nuxtjs/google-fonts', '@oku-ui/motion/nuxt'],
   // @ts-expect-error: Google Fonts config not typed by default
   googleFonts: {
     families: {
