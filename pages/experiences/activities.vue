@@ -1,8 +1,20 @@
 <template>
   <div class="experiences--activities">
-    <ExperiencesBlockOne v-bind="blockOneData" />
-    <ExperiencesBlockBetweenOneAndTwo v-bind="blockBetweenOneAndTwoData" />
-    <ExperiencesBlockTwo v-bind="blockTwoData" />
+    <!-- Page intro block with animation -->
+    <motion tag="div" :initial="{ opacity: 0, y: 50 }" :animate="{ opacity: 1, y: 0 }"
+      :transition="{ duration: 0.7, delay: 0.1 }">
+      <ExperiencesBlockOne v-bind="blockOneData" />
+    </motion>
+
+    <motion tag="div" :initial="{ opacity: 0, y: 70 }" :animate="{ opacity: 1, y: 0 }"
+      :transition="{ duration: 0.7, delay: 0.4 }">
+      <ExperiencesBlockBetweenOneAndTwo v-bind="blockBetweenOneAndTwoData" />
+    </motion>
+
+    <motion tag="div" :initial="{ opacity: 0, y: 50 }" :animate="{ opacity: 1, y: 0 }"
+      :transition="{ duration: 0.7, delay: 0.7 }">
+      <ExperiencesBlockTwo v-bind="blockTwoData" />
+    </motion>
 
     <!-- NEW ACTIVITY GRID + MODAL -->
     <ActivityGrid :activities="activities" @open-modal="selectedActivity = $event" />

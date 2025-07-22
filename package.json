@@ -16,6 +16,8 @@
     "@nuxtjs/device": "^3.2.4",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/sanity": "^1.13.3",
+    "@oku-ui/motion": "^0.4.3",
+    "@oku-ui/motion-nuxt": "^0.2.1",
     "@tailwindcss/vite": "^4.1.8",
     "@vueuse/core": "^13.3.0",
     "@yeger/vue-masonry-wall": "^5.0.20",
