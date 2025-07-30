@@ -1,12 +1,5 @@
 <script setup>
-import {
-  ref,
-  onMounted,
-  onBeforeUnmount,
-  computed,
-  watch,
-  nextTick,
-} from "vue";
+import { ref, onMounted, onBeforeUnmount, computed, watch, nextTick } from "vue";
 import gsap from "gsap";
 import { MorphSVGPlugin } from "gsap/MorphSVGPlugin";
 
@@ -15,43 +8,17 @@ gsap.registerPlugin(MorphSVGPlugin);
 const isOpen = ref(false);
 const isScrolled = ref(false);
 const hoveredIndex = ref(-1);
+const canvas = ref(null);
 
-// Animation related refs and data
-const svgPaths = ref([]);
-const menuContainer = ref(null); // Ref for the overall menu content container
-const navigationHeadings = ref([]); // Ref for the main navigation headings
-const submenuChildren = ref([]); // Ref for the submenu items
-const logoRef = ref(null); // Ref for the logo element
-const hamburgerRef = ref(null); // Ref for the hamburger element
-
-const pathsClosed = [
-  "M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0",
-  "M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0",
-  "M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0",
-  "M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0",
-  "M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0",
-];
-const pathsOpened = [
-  "M 0 0 V 100 C 50 100 50 100 100 100 V 0 H 0",
-  "M 0 0 V 100 C 50 100 50 100 100 100 V 0 H 0",
-  "M 0 0 V 100 C 50 100 50 100 100 100 V 0 H 0",
-  "M 0 0 V 100 C 50 100 50 100 100 100 V 0 H 0",
-  "M 0 0 V 100 C 50 100 50 100 100 100 V 0 H 0",
-];
-
-const gradientIds = [
-  "url(#grad1)",
-  "url(#grad2)",
-  "url(#grad3)",
-  "url(#grad4)",
-  "url(#grad5)",
-];
+// Animation related refs
+const menuContainer = ref(null);
+const navigationHeadings = ref([]);
+const submenuChildren = ref([]);
+const logoRef = ref(null);
+const hamburgerRef = ref(null);
 
 const navigation = [
-  {
-    label: "Home",
-    to: "/",
-  },
+  { label: "Home", to: "/" },
   {
     label: "Experiences",
     to: "/experiences",
@@ -116,31 +83,31 @@ const onScroll = () => {
 
 const animateLogoAndHamburger = () => {
   if (logoRef.value && hamburgerRef.value) {
-    const isMobile = window.innerWidth < 640; // Tailwind's sm breakpoint
+    const isMobile = window.innerWidth < 640;
     if (isMobile) {
       gsap.to(logoRef.value, {
-        height: isScrolled.value ? "2rem" : "3rem", // 32px (h-8) to 48px (h-12)
-        marginLeft: isScrolled.value ? "0" : "0.5rem", // 0 to 8px (ml-2)
-        marginTop: isScrolled.value ? "0" : "0.5rem", // 0 to 8px (mt-2)
+        height: isScrolled.value ? "2rem" : "3rem",
+        marginLeft: isScrolled.value ? "0" : "0.5rem",
+        marginTop: isScrolled.value ? "0" : "0.5rem",
         duration: 0.3,
         ease: "power2.out",
       });
       gsap.to(hamburgerRef.value, {
-        marginLeft: isScrolled.value ? "0" : "0.5rem", // 0 to 8px (ml-2)
-        marginTop: isScrolled.value ? "0" : "0.5rem", // 0 to 8px (mt-2)
+        marginLeft: isScrolled.value ? "0" : "0.5rem",
+        marginTop: isScrolled.value ? "0" : "0.5rem",
         duration: 0.3,
         ease: "power2.out",
       });
     } else {
       gsap.to(logoRef.value, {
-        height: isScrolled.value ? "2.5rem" : "4rem", // 40px (h-10) to 64px (h-16)
-        marginLeft: isScrolled.value ? "0" : "4rem", // 0 to 64px (ml-16)
-        marginTop: isScrolled.value ? "0" : "4rem", // 0 to 64px (mt-16)
+        height: isScrolled.value ? "2.5rem" : "4rem",
+        marginLeft: isScrolled.value ? "0" : "4rem",
+        marginTop: isScrolled.value ? "0" : "4rem",
         duration: 0.3,
         ease: "power2.out",
       });
       gsap.to(hamburgerRef.value, {
-        marginLeft: isScrolled.value ? "0" : "4rem", // 0 to 64px (ml-16)
+        marginLeft: isScrolled.value ? "0" : "4rem",
         duration: 0.3,
         ease: "power2.out",
       });
@@ -148,11 +115,12 @@ const animateLogoAndHamburger = () => {
   }
 };
 
+let fluidInstance = null;
+
 onMounted(() => {
   if (process.client) {
     window.addEventListener("scroll", onScroll);
-    window.addEventListener("resize", animateLogoAndHamburger); // Handle resize
-    // Initialize logo and hamburger state on mount
+    window.addEventListener("resize", animateLogoAndHamburger);
     animateLogoAndHamburger();
   }
 });
@@ -161,6 +129,10 @@ onBeforeUnmount(() => {
   if (process.client) {
     window.removeEventListener("scroll", onScroll);
     window.removeEventListener("resize", animateLogoAndHamburger);
+    if (fluidInstance && fluidInstance.destroy) {
+      fluidInstance.destroy();
+      fluidInstance = null;
+    }
   }
 });
 
@@ -168,30 +140,50 @@ watch(
   () => isOpen.value,
   async (open) => {
     await nextTick();
-    svgPaths.value = [...document.querySelectorAll(".shape-overlays__path")];
-    // Get the current references to the elements for animation
-    navigationHeadings.value = [
-      ...document.querySelectorAll(".navigation-heading"),
-    ];
+    navigationHeadings.value = [...document.querySelectorAll(".navigation-heading")];
     submenuChildren.value = [...document.querySelectorAll(".sublink")];
 
     if (open) {
+      // Initialize WebGL Fluid when menu opens
+      if (process.client && canvas.value) {
+        import('https://cdn.jsdelivr.net/npm/webgl-fluid@0.3/dist/webgl-fluid.mjs').then(({ default: WebGLFluid }) => {
+          fluidInstance = WebGLFluid(canvas.value, {
+            TRIGGER: 'hover', // Animation triggers on hover
+            IMMEDIATE: false, // Don't start immediately
+            AUTO: false, // No continuous background animation
+            SIM_RESOLUTION: 128,
+            DYE_RESOLUTION: 1024,
+            DENSITY_DISSIPATION: 1,
+            VELOCITY_DISSIPATION: 0.3,
+            PRESSURE: 0.8,
+            PRESSURE_ITERATIONS: 20,
+            CURL: 30,
+            SPLAT_RADIUS: 0.35,
+            SPLAT_FORCE: 6000,
+            SHADING: true,
+            COLORFUL: true,
+            COLOR_UPDATE_SPEED: 10,
+            BACK_COLOR: { r: 0, g: 0, b: 0 }, // Black background
+            TRANSPARENT: false,
+            BLOOM: true,
+            BLOOM_ITERATIONS: 8,
+            BLOOM_RESOLUTION: 256,
+            BLOOM_INTENSITY: 0.8,
+            BLOOM_THRESHOLD: 0.6,
+            BLOOM_SOFT_KNEE: 0.7,
+            SUNRAYS: true,
+            SUNRAYS_RESOLUTION: 196,
+            SUNRAYS_WEIGHT: 1.0
+          });
+        });
+      }
+
       const tl = gsap.timeline();
-      tl.to(svgPaths.value, {
-        duration: 1,
-        ease: "power4.out",
-        morphSVG: (i) => pathsOpened[i],
-        fill: (i) => gradientIds[i],
-        stagger: 0.12,
-      });
-      // Animate the main menu container after SVG
       tl.fromTo(
         menuContainer.value,
         { autoAlpha: 0, y: 40, scale: 0.9 },
-        { autoAlpha: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
-        "-=0.6"
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" }
       );
-      // Animate each navigation heading
       tl.from(
         navigationHeadings.value,
         {
@@ -199,40 +191,34 @@ watch(
           opacity: 0,
           ease: "power3.out",
           duration: 0.7,
-          stagger: 0.08, // Stagger effect
+          stagger: 0.08,
         },
-        "-=0.4" // Start this animation slightly before the previous one ends
+        "-=0.4"
       );
-      // Animate each submenu child
       tl.from(
         submenuChildren.value,
         {
-          x: 30, // Animate from left
+          x: 30,
           opacity: 0,
           ease: "power2.out",
           duration: 0.5,
-          stagger: 0.05, // Stagger effect for children
+          stagger: 0.05,
         },
-        "-=0.3" // Start after headings
+        "-=0.3"
       );
     } else {
       const tl = gsap.timeline();
-      // Animate out submenu children
       tl.to(
         submenuChildren.value,
         {
-          x: 30, // Animate out to the right
+          x: 30,
           opacity: 0,
           ease: "power2.in",
           duration: 0.3,
-          stagger: {
-            each: 0.03,
-            from: "end", // Animate out from bottom to top
-          },
+          stagger: { each: 0.03, from: "end" },
         },
-        "<0.1" // Start slightly after logo
-      ); // Start slightly after children
-      // Animate out navigation headings
+        "<0.1"
+      );
       tl.to(
         navigationHeadings.value,
         {
@@ -240,14 +226,10 @@ watch(
           opacity: 0,
           ease: "power3.in",
           duration: 0.4,
-          stagger: {
-            each: 0.05,
-            from: "end", // Animate out from bottom to top
-          },
+          stagger: { each: 0.05, from: "end" },
         },
         "<0.1"
-      ); // Start slightly after children
-      // Animate out main menu container
+      );
       tl.to(
         menuContainer.value,
         {
@@ -258,22 +240,11 @@ watch(
           ease: "power3.in",
         },
         "<0.1"
-      ); // Start slightly after headings
-      // Animate SVG last
-      tl.to(
-        svgPaths.value,
-        {
-          duration: 1,
-          ease: "power4.inOut",
-          morphSVG: (i) => pathsClosed[i],
-          fill: "#f7f7f7",
-          stagger: {
-            each: 0.1,
-            from: "end", // Close SVG paths from right to left
-          },
-        },
-        "-=0.6"
       );
+      if (fluidInstance && fluidInstance.destroy) {
+        fluidInstance.destroy();
+        fluidInstance = null;
+      }
       hoveredIndex.value = -1;
     }
   }
@@ -281,79 +252,79 @@ watch(
 </script>
 
 <template>
-  <header class="header fixed top-0 left-0 w-full z-50 transition-all duration-300" :class="{
-    'bg-white': isScrolled && !isOpen,
-    'fixed inset-0 bg-[#2c2c2c] flex flex-col': isOpen,
-  }">
+  <header
+    class="header fixed top-0 left-0 w-full z-50 transition-all duration-300"
+    :class="{
+      'bg-white': isScrolled && !isOpen,
+      'fixed inset-0 bg-black flex flex-col': isOpen,
+    }"
+  >
     <div class="flex items-center justify-between px-6 h-20">
       <NuxtLink to="/" class="text-white font-bold text-xl flex items-center h-full z-50">
-        <img ref="logoRef" class="h-12 sm:h-16 md:h-24" :src="'/images/meraki-logo-black.png'" :class="{
-          'filter-white': !isScrolled,
-          'filter-black': isScrolled,
-        }" style="transition: filter 0.3s ease;" alt="Logo" />
+        <img
+          ref="logoRef"
+          class="h-12 sm:h-16 md:h-24"
+          :src="'/images/meraki-logo-black.png'"
+          :class="{ 'filter-white': !isScrolled, 'filter-black': isScrolled }"
+          style="transition: filter 0.3s ease;"
+          alt="Logo"
+        />
       </NuxtLink>
-      <a ref="hamburgerRef" href="javascript:void(0)" @click="toggleMenu" class="hamburger z-50"
-        :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }">
+      <a
+        ref="hamburgerRef"
+        href="javascript:void(0)"
+        @click="toggleMenu"
+        class="hamburger z-50"
+        :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }"
+      >
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
       </a>
     </div>
 
-    <transition name="fade">
-      <svg v-if="isOpen" class="shape-overlays fixed inset-0 w-full h-full pointer-events-none z-0"
-        viewBox="0 0 100 100" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#FF6B6B" />
-            <stop offset="100%" stop-color="#FFD93D" />
-          </linearGradient>
-          <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#6BCB77" />
-            <stop offset="100%" stop-color="#4D96FF" />
-          </linearGradient>
-          <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#FF9F1C" />
-            <stop offset="100%" stop-color="#E71D36" />
-          </linearGradient>
-          <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#8338EC" />
-            <stop offset="100%" stop-color="#3A86FF" />
-          </linearGradient>
-          <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#FF477E" />
-            <stop offset="100%" stop-color="#FF85A1" />
-          </linearGradient>
-        </defs>
-        <path class="shape-overlays__path drop-shadow-lg" d="M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0" fill="#f7f7f7" />
-        <path class="shape-overlays__path drop-shadow-lg" d="M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0" fill="#f7f7f7" />
-        <path class="shape-overlays__path drop-shadow-lg" d="M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0" fill="#f7f7f7" />
-        <path class="shape-overlays__path drop-shadow-lg" d="M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0" fill="#f7f7f7" />
-        <path class="shape-overlays__path drop-shadow-lg" d="M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0" fill="#f7f7f7" />
-      </svg>
-    </transition>
+    <ClientOnly>
+      <canvas
+        v-if="isOpen"
+        ref="canvas"
+        class="fixed inset-0 w-full h-full pointer-events-auto z-0"
+      />
+    </ClientOnly>
 
     <transition name="slide-fade">
-      <div v-if="isOpen" ref="menuContainer"
-        class="flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12 relative z-10">
+      <div
+        v-if="isOpen"
+        ref="menuContainer"
+        class="flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12 relative z-10"
+      >
         <div class="flex flex-1">
           <div class="w-1/2 space-y-4 md:space-y-6">
-            <div v-for="(item, index) in navigation" :key="index" @mouseenter="hoveredIndex = index"
-              class="group text-4xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading">
-              <NuxtLink :to="item.to" class="outline-text block transition-all duration-300"
-                :class="hoveredIndex === index ? 'text-white' : 'text-gray-500'" @click="toggleMenu">
+            <div
+              v-for="(item, index) in navigation"
+              :key="index"
+              @mouseenter="hoveredIndex = index"
+              class="group text-4xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading"
+            >
+              <NuxtLink
+                :to="item.to"
+                class="outline-text block transition-all duration-300"
+                :class="hoveredIndex === index ? 'text-white' : 'text-gray-500'"
+                @click="toggleMenu"
+              >
                 {{ item.label }}
               </NuxtLink>
             </div>
           </div>
-
           <div class="w-1/2 pl-8 md:pl-16 space-y-2 pt-6">
-            <div v-if="
-              navigationStyle.hoveredItem &&
-              navigationStyle.hoveredItem.children
-            " class="submenu-list">
-              <div v-for="(child, cIndex) in navigationStyle.hoveredItem.children" :key="cIndex"
-                class="sublink group relative text-xl md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out py-2 cursor-pointer">
+            <div
+              v-if="navigationStyle.hoveredItem && navigationStyle.hoveredItem.children"
+              class="submenu-list"
+            >
+              <div
+                v-for="(child, cIndex) in navigationStyle.hoveredItem.children"
+                :key="cIndex"
+                class="sublink group relative text-xl md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out py-2 cursor-pointer"
+              >
                 <NuxtLink :to="child.to" @click="toggleMenu" class="block">
                   {{ child.label }}
                   <span class="sublink-underline"></span>
@@ -368,31 +339,6 @@ watch(
 </template>
 
 <style scoped>
-.shape-overlays__path {
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.15));
-  transition: fill 0.8s ease;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.4s ease-out;
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  opacity: 0;
-}
-
 .hamburger {
   display: flex;
   flex-direction: column;
@@ -430,20 +376,17 @@ watch(
 
 .hamburger:hover .hamburger-line:first-child {
   background-color: #ffd93d;
-  /* Yellow */
   width: 15px;
 }
 
 .hamburger:hover .hamburger-line:nth-child(2) {
   background-color: #6bcb77;
-  /* Green */
   width: 35px;
   transition-delay: 0.1s;
 }
 
 .hamburger:hover .hamburger-line:last-child {
   background-color: #4d96ff;
-  /* Blue */
   width: 25px;
   transition-delay: 0.2s;
 }
@@ -500,16 +443,13 @@ watch(
   -webkit-text-stroke-color: white;
 }
 
-/* Submenu Styling */
 .sublink {
   position: relative;
   padding-left: 0;
   border-left: none;
   overflow: hidden;
   font-size: 1.8rem;
-  /* Increased font size */
   line-height: 1.4;
-  /* Adjusted line height for better readability */
 }
 
 .sublink a {
@@ -517,21 +457,16 @@ watch(
   text-decoration: none;
   color: inherit;
   padding: 8px 0;
-  /* Add vertical padding for better spacing */
   transition: padding-left 0.3s ease;
-  /* Smooth transition for padding */
 }
 
-/* Underline effect */
 .sublink-underline {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 3px;
-  /* Slightly thicker underline */
   background-color: #ffffff;
-  /* A more vibrant light blue */
   transform: scaleX(0);
   transform-origin: bottom left;
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -543,19 +478,9 @@ watch(
 
 .sublink:hover a {
   padding-left: 20px;
-  /* Slight indent on hover */
   color: #ffffff;
-  /* Change text color on hover to match underline */
 }
 
-.sublink:hover::before {
-  left: 0;
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
-  /* Slide in on hover */
-}
-
-/* Custom filters for logo color */
 .filter-white {
   filter: brightness(0) invert(1);
   transition: filter 0.3s ease;
@@ -564,5 +489,25 @@ watch(
 .filter-black {
   filter: brightness(0);
   transition: filter 0.3s ease;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.4s ease-out;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
 }
 </style>
