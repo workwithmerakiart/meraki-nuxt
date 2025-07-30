@@ -61,10 +61,13 @@
                                     </div>
 
                                     <!-- CTA -->
-                                    <button
-                                        class="mt-4 px-4 py-2 bg-[#447C9D] text-white rounded hover:bg-[#376a86] text-sm font-medium">
+                                    <button type="button"
+                                        class="mt-4 px-4 py-2 bg-[#447C9D] text-white rounded hover:bg-[#376a86] text-sm font-medium"
+                                        @click="goToAvailability(subtype, selectedVariants[subtype.id])">
                                         Book Now
                                     </button>
+
+
                                 </div>
 
                                 <!-- Right Column: Image -->
@@ -95,6 +98,10 @@
 
 <script setup>
 import { reactive, watch, onMounted, onBeforeUnmount, nextTick, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { navigateTo } from '#app';
+const router = useRouter(); // ⬅️ NEW: for programmatic navigation
+
 
 const props = defineProps({ activity: Object });
 const emit = defineEmits(['close']);
@@ -102,6 +109,26 @@ const emit = defineEmits(['close']);
 const selectedVariants = reactive({});
 const modalContent = ref(null);
 const showScrollTop = ref(false);
+
+const goToAvailability = async (subtype, variantName = null) => {
+    await navigateTo({
+        path: '/experiences/activities/availability',
+        query: {
+            title: subtype.title,
+            price: subtype.price,
+            duration: subtype.duration,
+            image: subtype.image || activity.image,
+            description: subtype.description,
+            variant: variantName || '',
+        },
+    })
+    emit('close') // triggers delayed modal removal
+}
+
+
+
+
+
 
 // Select first variant
 watch(
