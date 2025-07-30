@@ -18,7 +18,9 @@
 
     <!-- NEW ACTIVITY GRID + MODAL -->
     <ActivityGrid :activities="activities" @open-modal="selectedActivity = $event" />
-    <ActivityModal :activity="selectedActivity" @close="selectedActivity = null" />
+    <ActivityModal :activity="selectedActivity" @close="handleModalClose" />
+
+    <NuxtPage />
 
     <BookActivities v-bind="bookActivitiesContent" />
 
@@ -36,6 +38,14 @@ import ActivityModal from "~/components/experiences/activities/ActivityModal.vue
 import BookActivities from "~/components/experiences/activities/BookActivities.vue";
 
 const selectedActivity = ref(null);
+
+const handleModalClose = () => {
+  // Delay unmounting to allow navigation to complete
+  setTimeout(() => {
+    selectedActivity.value = null
+  }, 300)
+}
+
 
 const activities = [
   {
