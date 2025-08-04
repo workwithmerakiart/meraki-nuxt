@@ -74,6 +74,13 @@ const toggleMenu = () => {
   }
 };
 
+const handleOutsideTouch = (event) => {
+  if (menuContainer.value && !menuContainer.value.contains(event.target)) {
+    hoveredIndex.value = -1;
+  }
+};
+
+
 const onScroll = () => {
   if (process.client) {
     isScrolled.value = window.scrollY > 10;
@@ -121,6 +128,7 @@ onMounted(() => {
   if (process.client) {
     window.addEventListener("scroll", onScroll);
     window.addEventListener("resize", animateLogoAndHamburger);
+    document.addEventListener("touchstart", handleOutsideTouch); // 👈 add this
     animateLogoAndHamburger();
   }
 });
@@ -129,12 +137,14 @@ onBeforeUnmount(() => {
   if (process.client) {
     window.removeEventListener("scroll", onScroll);
     window.removeEventListener("resize", animateLogoAndHamburger);
+    document.removeEventListener("touchstart", handleOutsideTouch); // 👈 and this
     if (fluidInstance && fluidInstance.destroy) {
       fluidInstance.destroy();
       fluidInstance = null;
     }
   }
 });
+
 
 watch(
   () => isOpen.value,
@@ -252,31 +262,18 @@ watch(
 </script>
 
 <template>
-  <header
-    class="header fixed top-0 left-0 w-full z-50 transition-all duration-300"
-    :class="{
-      'bg-white': isScrolled && !isOpen,
-      'fixed inset-0 bg-black flex flex-col': isOpen,
-    }"
-  >
+  <header class="header fixed top-0 left-0 w-full z-50 transition-all duration-300" :class="{
+    'bg-white': isScrolled && !isOpen,
+    'fixed inset-0 bg-black flex flex-col': isOpen,
+  }">
     <div class="flex items-center justify-between px-6 h-20">
       <NuxtLink to="/" class="text-white font-bold text-xl flex items-center h-full z-50">
-        <img
-          ref="logoRef"
-          class="h-12 sm:h-16 md:h-24"
-          :src="'/images/meraki-logo-black.png'"
-          :class="{ 'filter-white': !isScrolled, 'filter-black': isScrolled }"
-          style="transition: filter 0.3s ease;"
-          alt="Logo"
-        />
+        <img ref="logoRef" class="h-12 sm:h-16 md:h-24" :src="'/images/meraki-logo-black.png'"
+          :class="{ 'filter-white': !isScrolled, 'filter-black': isScrolled }" style="transition: filter 0.3s ease;"
+          alt="Logo" />
       </NuxtLink>
-      <a
-        ref="hamburgerRef"
-        href="javascript:void(0)"
-        @click="toggleMenu"
-        class="hamburger z-50"
-        :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }"
-      >
+      <a ref="hamburgerRef" href="javascript:void(0)" @click="toggleMenu" class="hamburger z-50"
+        :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
@@ -284,51 +281,35 @@ watch(
     </div>
 
     <ClientOnly>
-      <canvas
-        v-if="isOpen"
-        ref="canvas"
-        class="fixed inset-0 w-full h-full pointer-events-auto z-0"
-      />
+      <canvas v-if="isOpen" ref="canvas" class="fixed inset-0 w-full h-full pointer-events-auto z-0" />
     </ClientOnly>
 
     <transition name="slide-fade">
-      <div
-        v-if="isOpen"
-        ref="menuContainer"
-        class="flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12 relative z-10"
-      >
-        <div class="flex flex-1">
-          <div class="w-1/2 space-y-4 md:space-y-6">
-            <div
-              v-for="(item, index) in navigation"
-              :key="index"
-              @mouseenter="hoveredIndex = index"
-              class="group text-4xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading"
-            >
-              <NuxtLink
-                :to="item.to"
-                class="outline-text block transition-all duration-300"
-                :class="hoveredIndex === index ? 'text-white' : 'text-gray-500'"
-                @click="toggleMenu"
-              >
-                {{ item.label }}
-              </NuxtLink>
-            </div>
-          </div>
-          <div class="w-1/2 pl-8 md:pl-16 space-y-2 pt-6">
-            <div
-              v-if="navigationStyle.hoveredItem && navigationStyle.hoveredItem.children"
-              class="submenu-list"
-            >
-              <div
-                v-for="(child, cIndex) in navigationStyle.hoveredItem.children"
-                :key="cIndex"
-                class="sublink group relative text-xl md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out py-2 cursor-pointer"
-              >
-                <NuxtLink :to="child.to" @click="toggleMenu" class="block">
-                  {{ child.label }}
-                  <span class="sublink-underline"></span>
+      <div v-if="isOpen"
+        class="pointer-events-none flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12 relative z-10">
+        <div ref="menuContainer" class="pointer-events-auto flex flex-1">
+
+          <div class="flex flex-1">
+            <div class="w-1/2 space-y-4 md:space-y-6">
+              <div v-for="(item, index) in navigation" :key="index" @mouseenter="hoveredIndex = index"
+                @touchstart.prevent="hoveredIndex = index"
+                class="group text-4xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading">
+
+                <NuxtLink :to="item.to" class="outline-text block transition-all duration-300"
+                  :class="hoveredIndex === index ? 'text-white' : 'text-gray-500'" @click="toggleMenu">
+                  {{ item.label }}
                 </NuxtLink>
+              </div>
+            </div>
+            <div class="w-1/2 pl-8 md:pl-16 space-y-2 pt-6">
+              <div v-if="navigationStyle.hoveredItem && navigationStyle.hoveredItem.children" class="submenu-list">
+                <div v-for="(child, cIndex) in navigationStyle.hoveredItem.children" :key="cIndex"
+                  class="sublink group relative text-xl md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out py-2 cursor-pointer">
+                  <NuxtLink :to="child.to" @click="toggleMenu" class="block">
+                    {{ child.label }}
+                    <span class="sublink-underline"></span>
+                  </NuxtLink>
+                </div>
               </div>
             </div>
           </div>
@@ -456,9 +437,12 @@ watch(
   display: block;
   text-decoration: none;
   color: inherit;
-  padding: 8px 0;
+  padding: 12px 0;
+  min-height: 44px;
+  /* for touch targets */
   transition: padding-left 0.3s ease;
 }
+
 
 .sublink-underline {
   position: absolute;
