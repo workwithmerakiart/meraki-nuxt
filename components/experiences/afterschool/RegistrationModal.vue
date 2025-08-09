@@ -1,22 +1,33 @@
 <template>
     <Teleport to="body">
         <transition name="fade">
-            <div v-if="open" class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 px-4"
+            <div v-if="open"
+                class="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center bg-black/60 px-0 sm:px-4 py-0 sm:py-4"
                 role="dialog" aria-modal="true">
-                <div class="w-full max-w-3xl rounded-2xl bg-white shadow-xl">
-                    <div class="flex items-center justify-between px-6 py-4 border-b">
-                        <div>
-                            <h3 class="text-xl font-bold">📝 Registration Form</h3>
-                            <p class="text-sm text-gray-600">Enroll Your Child in a Meraki Art Experience</p>
+                <!-- Modal shell -->
+                <div class="w-full sm:max-w-lg md:max-w-2xl lg:max-w-3xl bg-white shadow-xl
+                 rounded-t-2xl sm:rounded-2xl
+                 max-h-[92svh] overflow-y-auto">
+                    <!-- Sticky header -->
+                    <div class="sticky top-0 bg-white z-10">
+                        <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b">
+                            <div>
+                                <h3 class="text-lg sm:text-xl font-bold">📝 Registration Form</h3>
+                                <p class="text-xs sm:text-sm text-gray-600">Enroll Your Child in a Meraki Art Experience
+                                </p>
+                            </div>
+                            <button class="text-2xl leading-none px-3 py-1 -mr-2 hover:opacity-70"
+                                @click="$emit('close')" aria-label="Close">
+                                &times;
+                            </button>
                         </div>
-                        <button class="text-2xl leading-none px-2 hover:opacity-70"
-                            @click="$emit('close')">&times;</button>
                     </div>
 
-                    <form class="p-6 space-y-6" @submit.prevent="submit">
+                    <!-- Body -->
+                    <form class="p-4 sm:p-6 space-y-6 pb-7 sm:pb-8" @submit.prevent="submit">
                         <input type="hidden" v-model="form.program" />
 
-                        <div class="grid md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Child’s Full Name *</label>
                                 <input v-model="form.childName" required type="text" class="w-full rounded-xl border bg-white border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400
@@ -50,7 +61,7 @@
                         <!-- Health & Safety -->
                         <div class="border-t border-gray-200 pt-6">
                             <h4 class="text-lg font-semibold mb-3">📍 Health & Safety</h4>
-                            <div class="flex items-center gap-6 mb-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-3">
                                 <label class="flex items-center gap-2">
                                     <input type="radio" value="no" v-model="form.hasConditions" />
                                     <span>No allergies/conditions</span>
@@ -73,22 +84,16 @@
                        focus:outline-none focus:ring-2 focus:ring-black/70 focus:border-black/70" />
                         </div>
 
-                        <div class="flex items-center justify-between gap-4">
+                        <!-- Footer actions -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-2">
                             <p class="text-sm text-gray-500">
                                 🎨 Thank you! We’ll be in touch to confirm your child’s spot.
                             </p>
                             <button type="submit"
-                                class="inline-flex items-center rounded-2xl px-5 py-3 text-base font-semibold bg-black text-white hover:opacity-90 transition">
+                                class="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-base font-semibold bg-black text-white hover:opacity-90 transition">
                                 Submit Registration
                             </button>
                         </div>
-
-                        <transition name="fade">
-                            <div v-if="submitted"
-                                class="mt-4 rounded-xl bg-green-50 border border-green-200 p-4 text-green-800">
-                                Thanks! Your registration has been received. We’ll contact you shortly.
-                            </div>
-                        </transition>
                     </form>
                 </div>
             </div>
@@ -120,7 +125,6 @@ watch(() => props.program, v => (form.value.program = v))
 
 const submitted = ref(false)
 function submit() {
-    // TODO: integrate Netlify Forms or API; for now show success
     submitted.value = true
     setTimeout(() => {
         submitted.value = false
