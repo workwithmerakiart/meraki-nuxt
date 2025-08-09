@@ -10,6 +10,7 @@
     </NuxtLayout>
     <!-- Page Footer -->
     <AppFooter />
+    <WhatsappWidget />
   </div>
 </template>
 

@@ -89,6 +89,13 @@ const products = ref([
     link: '/courses'
   },
   {
+    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2340&auto=format&fit=crop',
+    title: 'Afterschool Classes',
+    tag: 'Must Try',
+    tagColor: 'bg-gray-900',
+    link: '/experiences/afterschool'
+  },
+  {
     image: 'https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop',
     title: 'Shop',
     tag: 'Offer Expiring Soon',

@@ -1,6 +1,10 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed, watch, nextTick } from "vue";
 import { gsap } from "gsap"; // ✅ named import
+import { useRouter, useRoute } from "vue-router"; // ⭐ ADDED
+
+const router = useRouter(); // ⭐ ADDED
+const route = useRoute();
 
 // NOTE: don't statically import MorphSVGPlugin on the server.
 // We'll register it on the client after mount.
@@ -9,6 +13,11 @@ const isOpen = ref(false);
 const isScrolled = ref(false);
 const hoveredIndex = ref(-1);
 const canvas = ref(null);
+
+// Transparent header only on the Afterschool page when at top and menu is closed
+const isAfterschool = computed(() => route.path.includes('/experiences/afterschool')); // ⭐ add
+const showLightHeader = computed(() => isAfterschool.value && !isScrolled.value && !isOpen.value); // ⭐ add
+
 
 // Animation related refs
 const menuContainer = ref(null);
@@ -27,6 +36,7 @@ const navigation = [
       { label: "Workshops", to: "/experiences/workshops" },
       { label: "Courses", to: "/experiences/courses" },
       { label: "Activities", to: "/experiences/activities" },
+      { label: 'Afterschool Classes', to: '/experiences/afterschool' },
     ],
   },
   {
@@ -74,6 +84,22 @@ const toggleMenu = () => {
   }
 };
 
+// ⭐ ADDED — navigate helper
+const navigate = async (to) => {
+  const current = router.currentRoute.value.fullPath;
+  if (current === to) {
+    isOpen.value = false;
+    hoveredIndex.value = -1;
+    return;
+  }
+  try {
+    await router.push(to);
+  } finally {
+    isOpen.value = false;
+    hoveredIndex.value = -1;
+  }
+};
+
 const handleOutsideTouch = (event) => {
   if (menuContainer.value && !menuContainer.value.contains(event.target)) {
     hoveredIndex.value = -1;
@@ -84,6 +110,7 @@ const onScroll = () => {
   if (process.client) {
     isScrolled.value = window.scrollY > 10;
     animateLogoAndHamburger();
+    setHeaderHeightVar();
   }
 };
 
@@ -121,23 +148,28 @@ const animateLogoAndHamburger = () => {
   }
 };
 
+const setHeaderHeightVar = () => {
+  if (process.client) {
+    const h = document.getElementById('site-header')?.offsetHeight || 0
+    document.documentElement.style.setProperty('--header-h', `${h}px`)
+  }
+}
+
 let fluidInstance = null;
 
 onMounted(async () => {
   if (process.client) {
-    // ✅ register MorphSVGPlugin on client only
     try {
       const mod = await import("gsap/MorphSVGPlugin");
       const MorphSVGPlugin = mod.default || mod.MorphSVGPlugin;
       if (MorphSVGPlugin) gsap.registerPlugin(MorphSVGPlugin);
-    } catch {
-      // ignore if not available
-    }
+    } catch { }
 
     window.addEventListener("scroll", onScroll);
     window.addEventListener("resize", animateLogoAndHamburger);
     document.addEventListener("touchstart", handleOutsideTouch);
     animateLogoAndHamburger();
+    setHeaderHeightVar();
   }
 });
 
@@ -267,17 +299,17 @@ watch(
 );
 </script>
 
-
 <template>
-  <header class="header fixed top-0 left-0 w-full z-50 transition-all duration-300" :class="{
-    'bg-white': isScrolled && !isOpen,
-    'fixed inset-0 bg-black flex flex-col': isOpen,
+  <header id="site-header" class="header fixed top-0 left-0 w-full z-50 transition-all duration-300" :class="{
+    'bg-white': (isScrolled || isOpen) && !showLightHeader,
+    'bg-transparent': showLightHeader,                       // ⭐ add
   }">
     <div class="flex items-center justify-between px-6 h-20">
       <NuxtLink to="/" class="text-white font-bold text-xl flex items-center h-full z-50">
-        <img ref="logoRef" class="h-12 sm:h-16 md:h-24" :src="'/images/meraki-logo-black.png'"
-          :class="{ 'filter-white': !isScrolled, 'filter-black': isScrolled }" style="transition: filter 0.3s ease;"
-          alt="Logo" />
+        <img ref="logoRef" class="h-12 sm:h-16 md:h-24" :src="'/images/meraki-logo-black.png'" :class="{
+          'filter-white': showLightHeader || !isScrolled,     // ⭐ changed: prefer white when hero under header
+          'filter-black': !showLightHeader && isScrolled
+        }" style="transition: filter 0.3s ease;" alt="Logo" />
       </NuxtLink>
       <a ref="hamburgerRef" href="javascript:void(0)" @click="toggleMenu" class="hamburger z-50"
         :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }">
@@ -302,8 +334,9 @@ watch(
                 @touchstart.prevent="hoveredIndex = index"
                 class="group text-4xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading">
 
+                <!-- ⭐ CHANGED -->
                 <NuxtLink :to="item.to" class="outline-text block transition-all duration-300"
-                  :class="hoveredIndex === index ? 'text-white' : 'text-gray-500'" @click="toggleMenu">
+                  :class="hoveredIndex === index ? 'text-white' : 'text-gray-500'" @click.prevent="navigate(item.to)">
                   {{ item.label }}
                 </NuxtLink>
               </div>
@@ -312,7 +345,8 @@ watch(
               <div v-if="navigationStyle.hoveredItem && navigationStyle.hoveredItem.children" class="submenu-list">
                 <div v-for="(child, cIndex) in navigationStyle.hoveredItem.children" :key="cIndex"
                   class="sublink group relative text-xl md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out py-2 cursor-pointer">
-                  <NuxtLink :to="child.to" @click="toggleMenu" class="block">
+                  <!-- ⭐ CHANGED -->
+                  <NuxtLink :to="child.to" @click.prevent="navigate(child.to)" class="block">
                     {{ child.label }}
                     <span class="sublink-underline"></span>
                   </NuxtLink>
@@ -325,6 +359,7 @@ watch(
     </transition>
   </header>
 </template>
+
 
 <style scoped>
 .hamburger {
@@ -501,4 +536,8 @@ watch(
 .slide-fade-leave-to {
   opacity: 0;
 }
+
+/* When header is transparent, we want white hamburger lines by default */
+:global(header.bg-transparent) .hamburger-line { background: #fff; }   /* ⭐ add */
+/* Existing styles below unchanged */
 </style>
