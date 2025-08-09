@@ -8,20 +8,18 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import gsap from 'gsap'
+import { gsap } from 'gsap' // ✅ named import
 
 const visible = ref(true)
 const logoRef = ref(null)
 
 onMounted(() => {
-  const img = logoRef.value
-  if (!img.complete) {
-    img.onload = startAnimation
-  } else {
-    startAnimation()
-  }
+  if (!process.client) return
 
-  function startAnimation() {
+  const img = logoRef.value
+  if (!img) return
+
+  const startAnimation = () => {
     gsap.to(img, {
       duration: 3,
       ease: 'power1.inOut',
@@ -33,8 +31,15 @@ onMounted(() => {
       },
     })
   }
+
+  if (!img.complete) {
+    img.onload = startAnimation
+  } else {
+    startAnimation()
+  }
 })
 </script>
+
 
 <style scoped>
 /* Heartbeat animation */

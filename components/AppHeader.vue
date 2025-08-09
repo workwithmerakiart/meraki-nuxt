@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed, watch, nextTick } from "vue";
-import gsap from "gsap";
-import { MorphSVGPlugin } from "gsap/MorphSVGPlugin";
+import { gsap } from "gsap"; // ✅ named import
 
-gsap.registerPlugin(MorphSVGPlugin);
+// NOTE: don't statically import MorphSVGPlugin on the server.
+// We'll register it on the client after mount.
 
 const isOpen = ref(false);
 const isScrolled = ref(false);
@@ -80,7 +80,6 @@ const handleOutsideTouch = (event) => {
   }
 };
 
-
 const onScroll = () => {
   if (process.client) {
     isScrolled.value = window.scrollY > 10;
@@ -124,11 +123,20 @@ const animateLogoAndHamburger = () => {
 
 let fluidInstance = null;
 
-onMounted(() => {
+onMounted(async () => {
   if (process.client) {
+    // ✅ register MorphSVGPlugin on client only
+    try {
+      const mod = await import("gsap/MorphSVGPlugin");
+      const MorphSVGPlugin = mod.default || mod.MorphSVGPlugin;
+      if (MorphSVGPlugin) gsap.registerPlugin(MorphSVGPlugin);
+    } catch {
+      // ignore if not available
+    }
+
     window.addEventListener("scroll", onScroll);
     window.addEventListener("resize", animateLogoAndHamburger);
-    document.addEventListener("touchstart", handleOutsideTouch); // 👈 add this
+    document.addEventListener("touchstart", handleOutsideTouch);
     animateLogoAndHamburger();
   }
 });
@@ -137,14 +145,13 @@ onBeforeUnmount(() => {
   if (process.client) {
     window.removeEventListener("scroll", onScroll);
     window.removeEventListener("resize", animateLogoAndHamburger);
-    document.removeEventListener("touchstart", handleOutsideTouch); // 👈 and this
+    document.removeEventListener("touchstart", handleOutsideTouch);
     if (fluidInstance && fluidInstance.destroy) {
       fluidInstance.destroy();
       fluidInstance = null;
     }
   }
 });
-
 
 watch(
   () => isOpen.value,
@@ -154,13 +161,12 @@ watch(
     submenuChildren.value = [...document.querySelectorAll(".sublink")];
 
     if (open) {
-      // Initialize WebGL Fluid when menu opens
       if (process.client && canvas.value) {
         import('https://cdn.jsdelivr.net/npm/webgl-fluid@0.3/dist/webgl-fluid.mjs').then(({ default: WebGLFluid }) => {
           fluidInstance = WebGLFluid(canvas.value, {
-            TRIGGER: 'hover', // Animation triggers on hover
-            IMMEDIATE: false, // Don't start immediately
-            AUTO: false, // No continuous background animation
+            TRIGGER: 'hover',
+            IMMEDIATE: false,
+            AUTO: false,
             SIM_RESOLUTION: 128,
             DYE_RESOLUTION: 1024,
             DENSITY_DISSIPATION: 1,
@@ -173,7 +179,7 @@ watch(
             SHADING: true,
             COLORFUL: true,
             COLOR_UPDATE_SPEED: 10,
-            BACK_COLOR: { r: 0, g: 0, b: 0 }, // Black background
+            BACK_COLOR: { r: 0, g: 0, b: 0 },
             TRANSPARENT: false,
             BLOOM: true,
             BLOOM_ITERATIONS: 8,
@@ -260,6 +266,7 @@ watch(
   }
 );
 </script>
+
 
 <template>
   <header class="header fixed top-0 left-0 w-full z-50 transition-all duration-300" :class="{

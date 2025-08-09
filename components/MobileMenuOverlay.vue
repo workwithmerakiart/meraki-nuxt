@@ -1,9 +1,9 @@
 <script setup>
 import { ref, watch, nextTick } from 'vue'
-import gsap from 'gsap'
-import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin'
+import { gsap } from 'gsap' // ✅ named import (fixes registerPlugin issue)
 
-gsap.registerPlugin(MorphSVGPlugin)
+// (removed) import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin'
+// (removed) gsap.registerPlugin(MorphSVGPlugin)
 
 const props = defineProps({
     show: Boolean,
@@ -13,7 +13,7 @@ const emit = defineEmits(['close'])
 
 const svgPaths = ref([])
 const menuContainer = ref(null)
-const hoveredIndex = ref(null) // track hovered heading
+const hoveredIndex = ref(null)
 
 const pathsClosed = [
     "M 0 0 V 0 C 50 0 50 0 100 0 V 0 H 0",
@@ -30,13 +30,7 @@ const pathsOpened = [
     "M 0 0 V 100 C 50 100 50 100 100 100 V 0 H 0",
 ]
 
-const gradientIds = [
-    'url(#grad1)',
-    'url(#grad2)',
-    'url(#grad3)',
-    'url(#grad4)',
-    'url(#grad5)',
-]
+const gradientIds = ['url(#grad1)', 'url(#grad2)', 'url(#grad3)', 'url(#grad4)', 'url(#grad5)']
 
 watch(
     () => props.show,
@@ -45,7 +39,16 @@ watch(
         svgPaths.value = [...document.querySelectorAll('.shape-overlays__path')]
 
         if (open) {
-            if (svgPaths.value.length === 0) return
+            if (!process.client || svgPaths.value.length === 0) return
+
+            // ✅ Register MorphSVGPlugin on the client right before use
+            try {
+                const mod = await import('gsap/MorphSVGPlugin')
+                const MorphSVGPlugin = mod.default || mod.MorphSVGPlugin
+                if (MorphSVGPlugin) gsap.registerPlugin(MorphSVGPlugin)
+            } catch {
+                // If plugin isn't available (e.g., missing in bundle), skip gracefully
+            }
 
             const tl = gsap.timeline()
             tl.to(svgPaths.value, {
@@ -62,7 +65,7 @@ watch(
                 '-=0.6'
             )
         } else {
-            if (svgPaths.value.length === 0) return
+            if (!process.client || svgPaths.value.length === 0) return
 
             const tl = gsap.timeline()
             tl.to(menuContainer.value, {
@@ -88,6 +91,7 @@ watch(
     }
 )
 </script>
+
 
 <template>
     <transition name="fade">
