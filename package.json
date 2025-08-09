@@ -23,7 +23,6 @@
     "@yeger/vue-masonry-wall": "^5.0.20",
     "gsap": "^3.13.0",
     "nuxt": "^3.17.5",
-    "nuxt-app": "file:",
     "nuxt-icon": "^1.0.0-beta.7",
     "swiper": "^11.2.8",
     "tailwindcss": "^4.1.8",
