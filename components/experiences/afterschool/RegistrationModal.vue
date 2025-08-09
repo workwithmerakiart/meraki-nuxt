@@ -19,31 +19,31 @@
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Child’s Full Name *</label>
-                                <input v-model="form.childName" required type="text"
-                                    class="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-black/70" />
+                                <input v-model="form.childName" required type="text" class="w-full rounded-xl border bg-white border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400
+                         focus:outline-none focus:ring-2 focus:ring-black/70 focus:border-black/70" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Child’s Age *</label>
-                                <input v-model="form.childAge" required type="number" min="1"
-                                    class="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-black/70" />
+                                <input v-model="form.childAge" required type="number" min="1" class="w-full rounded-xl border bg-white border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400
+                         focus:outline-none focus:ring-2 focus:ring-black/70 focus:border-black/70" />
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Parent/Guardian Name
                                     *</label>
-                                <input v-model="form.parentName" required type="text"
-                                    class="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-black/70" />
+                                <input v-model="form.parentName" required type="text" class="w-full rounded-xl border bg-white border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400
+                         focus:outline-none focus:ring-2 focus:ring-black/70 focus:border-black/70" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Parent Email *</label>
-                                <input v-model="form.parentEmail" required type="email"
-                                    class="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-black/70" />
+                                <input v-model="form.parentEmail" required type="email" class="w-full rounded-xl border bg-white border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400
+                         focus:outline-none focus:ring-2 focus:ring-black/70 focus:border-black/70" />
                             </div>
 
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-                                <input v-model="form.phone" required type="tel"
-                                    class="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-black/70" />
+                                <input v-model="form.phone" required type="tel" class="w-full rounded-xl border bg-white border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400
+                         focus:outline-none focus:ring-2 focus:ring-black/70 focus:border-black/70" />
                             </div>
                         </div>
 
@@ -61,20 +61,22 @@
                                 </label>
                             </div>
                             <textarea v-model="form.conditionNotes" :disabled="form.hasConditions !== 'yes'"
-                                placeholder="If yes, please provide details…"
-                                class="w-full min-h-[90px] rounded-xl border-gray-300 focus:ring-2 focus:ring-black/70" />
+                                placeholder="If yes, please provide details…" class="w-full min-h-[90px] rounded-xl border bg-white border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400
+                       focus:outline-none focus:ring-2 focus:ring-black/70 focus:border-black/70
+                       disabled:opacity-60 disabled:bg-gray-100" />
                         </div>
 
                         <!-- Additional Notes -->
                         <div class="border-t border-gray-200 pt-6">
                             <h4 class="text-lg font-semibold mb-3">✏️ Additional Notes</h4>
-                            <textarea v-model="form.notes" placeholder="Anything else you'd like us to know?"
-                                class="w-full min-h-[90px] rounded-xl border-gray-300 focus:ring-2 focus:ring-black/70" />
+                            <textarea v-model="form.notes" placeholder="Anything else you'd like us to know?" class="w-full min-h-[90px] rounded-xl border bg-white border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400
+                       focus:outline-none focus:ring-2 focus:ring-black/70 focus:border-black/70" />
                         </div>
 
                         <div class="flex items-center justify-between gap-4">
-                            <p class="text-sm text-gray-500">🎨 Thank you! We’ll be in touch to confirm your child’s
-                                spot.</p>
+                            <p class="text-sm text-gray-500">
+                                🎨 Thank you! We’ll be in touch to confirm your child’s spot.
+                            </p>
                             <button type="submit"
                                 class="inline-flex items-center rounded-2xl px-5 py-3 text-base font-semibold bg-black text-white hover:opacity-90 transition">
                                 Submit Registration
@@ -95,6 +97,8 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
+
 const props = defineProps({
     open: { type: Boolean, default: false },
     program: { type: String, default: '' }
