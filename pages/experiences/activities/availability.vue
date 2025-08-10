@@ -6,21 +6,43 @@
 
             <!-- Selected Activity Info -->
             <div class="border border-gray-200 rounded p-4 mb-6">
-                <h2 class="text-xl font-bold text-black">{{ selectedSubtype.title }}</h2>
-                <p class="text-gray-700 text-sm mb-1">{{ selectedSubtype.description }}</p>
-                <p class="text-sm">
-                    <strong>Price:</strong> {{ selectedSubtype.price }}
-                    <span v-if="!selectedSubtype.vatIncluded">+ VAT</span>
-                </p>
-                <p v-if="selectedSubtype.duration" class="text-sm">
-                    <strong>Duration:</strong> {{ selectedSubtype.duration }}
-                </p>
-                <p v-if="selectedSubtype.minTickets" class="text-sm">
-                    <strong>Min Tickets:</strong> {{ selectedSubtype.minTickets }}
-                </p>
-                <p v-if="selectedSubtype.variant" class="text-sm italic text-gray-500">
-                    Selected Variant: {{ selectedSubtype.variant }}
-                </p>
+                <div class="flex flex-col md:flex-row gap-4 items-start">
+                    <div class="flex-1">
+                        <h2 class="text-xl font-bold text-black">{{ selectedSubtype.title }}</h2>
+                        <p class="text-gray-700 text-sm mb-1">{{ selectedSubtype.description }}</p>
+
+                        <p class="text-sm">
+                            <strong>Unit Price:</strong> {{ selectedSubtype.price }}
+                            <span v-if="!selectedSubtype.vatIncluded">+ VAT</span>
+                        </p>
+
+                        <p v-if="selectedSubtype.duration" class="text-sm">
+                            <strong>Duration:</strong> {{ selectedSubtype.duration }}
+                        </p>
+                        <p v-if="selectedSubtype.minTickets" class="text-sm">
+                            <strong>Min Tickets:</strong> {{ selectedSubtype.minTickets }}
+                        </p>
+                        <p v-if="selectedSubtype.variant" class="text-sm italic text-gray-500">
+                            Selected Variant: {{ selectedSubtype.variant }}
+                        </p>
+
+                        <!-- NEW: qty + total -->
+                        <div class="mt-2 text-sm">
+                            <strong>Quantity:</strong> {{ selectedSubtype.quantity }}
+                            <span v-if="selectedSubtype.totalPrice" class="ml-3">
+                                <strong>Total:</strong> {{ selectedSubtype.totalPrice }}
+                                <span v-if="!selectedSubtype.vatIncluded"> + VAT</span>
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <!-- NEW: image preview -->
+                    <div v-if="selectedSubtype.image" class="w-full md:w-56">
+                        <img :src="selectedSubtype.image" :alt="selectedSubtype.title"
+                            class="w-full h-40 object-cover rounded-md" />
+                    </div>
+                </div>
             </div>
 
             <!-- Calendar Navigation -->
@@ -75,9 +97,12 @@ const selectedSubtype = computed(() => ({
     price: route.query.price || '',
     duration: route.query.duration || '',
     minTickets: route.query.minTickets || '',
-    image: route.query.image || '',
+    image: route.query.image || '',               // already there
     variant: route.query.variant || '',
-    vatIncluded: route.query.vatIncluded === 'true'
+    vatIncluded: route.query.vatIncluded === 'true',
+    // NEW
+    quantity: Number(route.query.quantity || 1),
+    totalPrice: route.query.totalPrice || ''
 }))
 
 // Calendar logic
