@@ -1,5 +1,12 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed, watch, nextTick } from "vue";
+import {
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  computed,
+  watch,
+  nextTick,
+} from "vue";
 import { gsap } from "gsap"; // ✅ named import
 import { useRouter, useRoute } from "vue-router"; // ⭐ ADDED
 
@@ -15,9 +22,12 @@ const hoveredIndex = ref(-1);
 const canvas = ref(null);
 
 // Transparent header only on the Afterschool page when at top and menu is closed
-const isAfterschool = computed(() => route.path.includes('/experiences/afterschool')); // ⭐ add
-const showLightHeader = computed(() => isAfterschool.value && !isScrolled.value && !isOpen.value); // ⭐ add
-
+const isAfterschool = computed(() =>
+  route.path.includes("/experiences/afterschool")
+); // ⭐ add
+const showLightHeader = computed(
+  () => isAfterschool.value && !isScrolled.value && !isOpen.value
+); // ⭐ add
 
 // Animation related refs
 const menuContainer = ref(null);
@@ -36,7 +46,7 @@ const navigation = [
       { label: "Workshops", to: "/experiences/workshops" },
       { label: "Courses", to: "/experiences/courses" },
       { label: "Activities", to: "/experiences/activities" },
-      { label: 'Afterschool Classes', to: '/experiences/afterschool' },
+      { label: "Afterschool Classes", to: "/experiences/afterschool" },
     ],
   },
   {
@@ -150,10 +160,10 @@ const animateLogoAndHamburger = () => {
 
 const setHeaderHeightVar = () => {
   if (process.client) {
-    const h = document.getElementById('site-header')?.offsetHeight || 0
-    document.documentElement.style.setProperty('--header-h', `${h}px`)
+    const h = document.getElementById("site-header")?.offsetHeight || 0;
+    document.documentElement.style.setProperty("--header-h", `${h}px`);
   }
-}
+};
 
 let fluidInstance = null;
 
@@ -165,24 +175,24 @@ const lockBodyScroll = () => {
   if (!process.client || __isScrollLocked) return;
   __scrollYBeforeLock = window.scrollY || window.pageYOffset || 0;
   const body = document.body;
-  body.style.position = 'fixed';
+  body.style.position = "fixed";
   body.style.top = `-${__scrollYBeforeLock}px`;
-  body.style.left = '0';
-  body.style.right = '0';
-  body.style.width = '100%';
-  body.style.overflow = 'hidden';
+  body.style.left = "0";
+  body.style.right = "0";
+  body.style.width = "100%";
+  body.style.overflow = "hidden";
   __isScrollLocked = true;
 };
 
 const unlockBodyScroll = () => {
   if (!process.client || !__isScrollLocked) return;
   const body = document.body;
-  body.style.position = '';
-  body.style.top = '';
-  body.style.left = '';
-  body.style.right = '';
-  body.style.width = '';
-  body.style.overflow = '';
+  body.style.position = "";
+  body.style.top = "";
+  body.style.left = "";
+  body.style.right = "";
+  body.style.width = "";
+  body.style.overflow = "";
   window.scrollTo(0, __scrollYBeforeLock || 0);
   __isScrollLocked = false;
 };
@@ -193,7 +203,7 @@ onMounted(async () => {
       const mod = await import("gsap/MorphSVGPlugin");
       const MorphSVGPlugin = mod.default || mod.MorphSVGPlugin;
       if (MorphSVGPlugin) gsap.registerPlugin(MorphSVGPlugin);
-    } catch { }
+    } catch {}
 
     window.addEventListener("scroll", onScroll);
     window.addEventListener("resize", animateLogoAndHamburger);
@@ -221,15 +231,19 @@ watch(
   () => isOpen.value,
   async (open) => {
     await nextTick();
-    navigationHeadings.value = [...document.querySelectorAll(".navigation-heading")];
+    navigationHeadings.value = [
+      ...document.querySelectorAll(".navigation-heading"),
+    ];
     submenuChildren.value = [...document.querySelectorAll(".sublink")];
 
     if (open) {
       lockBodyScroll();
       if (process.client && canvas.value) {
-        import('https://cdn.jsdelivr.net/npm/webgl-fluid@0.3/dist/webgl-fluid.mjs').then(({ default: WebGLFluid }) => {
+        import(
+          "https://cdn.jsdelivr.net/npm/webgl-fluid@0.3/dist/webgl-fluid.mjs"
+        ).then(({ default: WebGLFluid }) => {
           fluidInstance = WebGLFluid(canvas.value, {
-            TRIGGER: 'hover',
+            TRIGGER: "hover",
             IMMEDIATE: false,
             AUTO: false,
             SIM_RESOLUTION: 128,
@@ -254,7 +268,7 @@ watch(
             BLOOM_SOFT_KNEE: 0.7,
             SUNRAYS: true,
             SUNRAYS_RESOLUTION: 196,
-            SUNRAYS_WEIGHT: 1.0
+            SUNRAYS_WEIGHT: 1.0,
           });
         });
       }
@@ -334,19 +348,38 @@ watch(
 </script>
 
 <template>
-  <header id="site-header" class="header fixed top-0 left-0 w-full z-50 transition-all duration-300" :class="{
-    'bg-white': (isScrolled || isOpen) && !showLightHeader,
-    'bg-transparent': showLightHeader,                       // ⭐ add
-  }">
+  <header
+    id="site-header"
+    class="header fixed top-0 left-0 w-full z-50 transition-all duration-300"
+    :class="{
+      'bg-white': (isScrolled || isOpen) && !showLightHeader,
+      'bg-transparent': showLightHeader, // ⭐ add
+    }"
+  >
     <div class="flex items-center justify-between px-8 lg:px-16 h-20">
-      <NuxtLink to="/" class="text-white font-bold text-xl flex items-center h-full z-50">
-        <img ref="logoRef" class="h-12 sm:h-16 md:h-24" :src="'/images/meraki-logo-black.png'" :class="{
-          'filter-white': showLightHeader || !isScrolled,     // ⭐ changed: prefer white when hero under header
-          'filter-black': !showLightHeader && isScrolled
-        }" style="transition: filter 0.3s ease;" alt="Logo" />
+      <NuxtLink
+        to="/"
+        class="text-white font-bold text-xl flex items-center h-full z-50"
+      >
+        <img
+          ref="logoRef"
+          class="h-12 sm:h-16 md:h-24"
+          :src="'/images/meraki-logo-black.png'"
+          :class="{
+            'filter-white': showLightHeader || !isScrolled, // ⭐ changed: prefer white when hero under header
+            'filter-black': !showLightHeader && isScrolled,
+          }"
+          style="transition: filter 0.3s ease"
+          alt="Logo"
+        />
       </NuxtLink>
-      <a ref="hamburgerRef" href="javascript:void(0)" @click="toggleMenu" class="hamburger z-50"
-        :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }">
+      <a
+        ref="hamburgerRef"
+        href="javascript:void(0)"
+        @click="toggleMenu"
+        class="hamburger z-50"
+        :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }"
+      >
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
@@ -354,35 +387,64 @@ watch(
     </div>
 
     <ClientOnly>
-      <canvas v-if="isOpen" ref="canvas" class="fixed inset-0 w-full h-full pointer-events-auto z-0" />
+      <canvas
+        v-if="isOpen"
+        ref="canvas"
+        class="fixed inset-0 w-full h-full pointer-events-auto z-0"
+      />
     </ClientOnly>
 
     <transition name="slide-fade">
-      <div v-if="isOpen"
-        class="pointer-events-none flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12 relative z-10">
+      <div
+        v-if="isOpen"
+        class="pointer-events-none flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12 relative z-10"
+      >
         <div ref="menuContainer" class="pointer-events-auto flex flex-1">
-
           <div class="flex flex-1">
             <div class="w-1/2 space-y-4 md:space-y-6">
-              <div v-for="(item, index) in navigation" :key="index" @mouseenter="hoveredIndex = index"
+              <div
+                v-for="(item, index) in navigation"
+                :key="index"
+                @mouseenter="hoveredIndex = index"
                 @touchstart.prevent="hoveredIndex = index"
-                class="group text-3xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading">
-
+                class="group text-2xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading"
+              >
                 <!-- ⭐ CHANGED -->
-                <NuxtLink :to="item.to" class="outline-text block transition-all duration-300"
-                  :class="hoveredIndex === index ? 'text-white active' : 'text-gray-500'" @click.prevent="navigate(item.to)">
+                <NuxtLink
+                  :to="item.to"
+                  class="outline-text block transition-all duration-300"
+                  :class="
+                    hoveredIndex === index
+                      ? 'text-white active'
+                      : 'text-gray-500'
+                  "
+                  @click.prevent="navigate(item.to)"
+                >
                   {{ item.label }}
                 </NuxtLink>
               </div>
             </div>
             <div class="w-1/2 pl-8 md:pl-16 space-y-2">
-              <div v-if="navigationStyle.hoveredItem && navigationStyle.hoveredItem.children" class="submenu-list">
-                <div v-for="(child, cIndex) in navigationStyle.hoveredItem.children" :key="cIndex"
-                  class="sublink group relative text-xl md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out mb-2 cursor-pointer">
+              <div
+                v-if="
+                  navigationStyle.hoveredItem &&
+                  navigationStyle.hoveredItem.children
+                "
+                class="submenu-list"
+              >
+                <div
+                  v-for="(child, cIndex) in navigationStyle.hoveredItem
+                    .children"
+                  :key="cIndex"
+                  class="sublink group relative text-lg md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out mb-7 cursor-pointer"
+                >
                   <!-- ⭐ CHANGED -->
-                  <NuxtLink :to="child.to" @click.prevent="navigate(child.to)" class="block">
+                  <NuxtLink
+                    :to="child.to"
+                    @click.prevent="navigate(child.to)"
+                    class="block"
+                  >
                     {{ child.label }}
-                    <span class="sublink-underline"></span>
                   </NuxtLink>
                 </div>
               </div>
@@ -393,7 +455,6 @@ watch(
     </transition>
   </header>
 </template>
-
 
 <style scoped>
 .hamburger {
@@ -490,56 +551,49 @@ watch(
 }
 
 .outline-text {
-  color: transparent;
-  -webkit-text-stroke: 0.5px #ffffff75;
-  transition: color 0.3s ease-in-out, -webkit-text-stroke-color 0.3s ease-in-out;
-  font-family: 'Inter', sans-serif;
+  color: transparent; /* No fill initially */
+  -webkit-text-stroke: 0.5px #ffffff75; /* Outline stays */
+  background: linear-gradient(to right, white 0%, white 100%);
+  background-repeat: no-repeat;
+  background-size: 0% 100%; /* Start with no fill horizontally */
+  background-position: left; /* Fill will grow from left to right */
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: background-size 0.7s ease-in-out;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
 }
 
 .outline-text.active {
-  color: white;
-  -webkit-text-stroke-color: white;
-}
-
-.sublink {
-  position: relative;
-  padding-left: 0;
-  border-left: none;
-  overflow: hidden;
-  line-height: 1.4;
-  font-family: 'Inter', sans-serif;
+  background-size: 100% 100%; /* Fill expands fully */
 }
 
 .sublink a {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  padding: 0;
-  min-height: 44px;
-  /* for touch targets */
-  transition: padding-left 0.3s ease;
+  position: relative;
+  padding-bottom: 4px;
 }
 
-
-.sublink-underline {
+.sublink a::after {
+  content: "";
   position: absolute;
-  bottom: 0;
   left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: #ffffff;
-  transform: scaleX(0);
-  transform-origin: bottom left;
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  bottom: -6px;
+  width: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #ffffff, #ffffff, #ffffff);
+  transition: width 0.4s ease;
 }
 
-.sublink:hover .sublink-underline {
-  transform: scaleX(1);
+.sublink:hover a::after {
+  width: 100%;
 }
 
 .sublink:hover a {
-  padding-left: 20px;
-  color: #ffffff;
+  font-weight: 700;
+}
+
+.submenu-list {
+  width: max-content;
 }
 
 .filter-white {
@@ -573,6 +627,8 @@ watch(
 }
 
 /* When header is transparent, we want white hamburger lines by default */
-:global(header.bg-transparent) .hamburger-line { background: #fff; }   /* ⭐ add */
+:global(header.bg-transparent) .hamburger-line {
+  background: #fff;
+} /* ⭐ add */
 /* Existing styles below unchanged */
 </style>
