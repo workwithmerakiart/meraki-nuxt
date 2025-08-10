@@ -120,13 +120,13 @@ const animateLogoAndHamburger = () => {
     if (isMobile) {
       gsap.to(logoRef.value, {
         height: isScrolled.value ? "2rem" : "3rem",
-        marginLeft: isScrolled.value ? "0" : "0.5rem",
+        marginLeft: "0rem",
         marginTop: isScrolled.value ? "0" : "0.5rem",
         duration: 0.3,
         ease: "power2.out",
       });
       gsap.to(hamburgerRef.value, {
-        marginLeft: isScrolled.value ? "0" : "0.5rem",
+        marginLeft: "0rem",
         marginTop: isScrolled.value ? "0" : "0.5rem",
         duration: 0.3,
         ease: "power2.out",
@@ -134,13 +134,13 @@ const animateLogoAndHamburger = () => {
     } else {
       gsap.to(logoRef.value, {
         height: isScrolled.value ? "2.5rem" : "4rem",
-        marginLeft: isScrolled.value ? "0" : "4rem",
+        marginLeft: "0rem",
         marginTop: isScrolled.value ? "0" : "4rem",
         duration: 0.3,
         ease: "power2.out",
       });
       gsap.to(hamburgerRef.value, {
-        marginLeft: isScrolled.value ? "0" : "4rem",
+        marginLeft: "0rem",
         duration: 0.3,
         ease: "power2.out",
       });
@@ -156,6 +156,36 @@ const setHeaderHeightVar = () => {
 }
 
 let fluidInstance = null;
+
+// Manage background scroll lock when menu is open
+let __isScrollLocked = false;
+let __scrollYBeforeLock = 0;
+
+const lockBodyScroll = () => {
+  if (!process.client || __isScrollLocked) return;
+  __scrollYBeforeLock = window.scrollY || window.pageYOffset || 0;
+  const body = document.body;
+  body.style.position = 'fixed';
+  body.style.top = `-${__scrollYBeforeLock}px`;
+  body.style.left = '0';
+  body.style.right = '0';
+  body.style.width = '100%';
+  body.style.overflow = 'hidden';
+  __isScrollLocked = true;
+};
+
+const unlockBodyScroll = () => {
+  if (!process.client || !__isScrollLocked) return;
+  const body = document.body;
+  body.style.position = '';
+  body.style.top = '';
+  body.style.left = '';
+  body.style.right = '';
+  body.style.width = '';
+  body.style.overflow = '';
+  window.scrollTo(0, __scrollYBeforeLock || 0);
+  __isScrollLocked = false;
+};
 
 onMounted(async () => {
   if (process.client) {
@@ -182,6 +212,8 @@ onBeforeUnmount(() => {
       fluidInstance.destroy();
       fluidInstance = null;
     }
+    // Ensure scroll is restored if component unmounts while menu open
+    unlockBodyScroll();
   }
 });
 
@@ -193,6 +225,7 @@ watch(
     submenuChildren.value = [...document.querySelectorAll(".sublink")];
 
     if (open) {
+      lockBodyScroll();
       if (process.client && canvas.value) {
         import('https://cdn.jsdelivr.net/npm/webgl-fluid@0.3/dist/webgl-fluid.mjs').then(({ default: WebGLFluid }) => {
           fluidInstance = WebGLFluid(canvas.value, {
@@ -293,6 +326,7 @@ watch(
         fluidInstance.destroy();
         fluidInstance = null;
       }
+      unlockBodyScroll();
       hoveredIndex.value = -1;
     }
   }
@@ -304,7 +338,7 @@ watch(
     'bg-white': (isScrolled || isOpen) && !showLightHeader,
     'bg-transparent': showLightHeader,                       // ⭐ add
   }">
-    <div class="flex items-center justify-between px-6 h-20">
+    <div class="flex items-center justify-between px-8 lg:px-16 h-20">
       <NuxtLink to="/" class="text-white font-bold text-xl flex items-center h-full z-50">
         <img ref="logoRef" class="h-12 sm:h-16 md:h-24" :src="'/images/meraki-logo-black.png'" :class="{
           'filter-white': showLightHeader || !isScrolled,     // ⭐ changed: prefer white when hero under header
