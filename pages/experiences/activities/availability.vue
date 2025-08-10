@@ -1,16 +1,15 @@
 <!-- File: pages/experiences/activities/availability.vue -->
 <template>
     <ExperiencesBlockHalf v-bind="blockOneData">
-    <template #content>
-      <NuxtLink
-        href="https://www.google.com/maps/search/?api=1&query=Meraki+Art+%26+Design+Studio,+Al+Quoz+-+Al+Quoz+Industrial+Area+3+-+Dubai"
-        target="_blank"
-        class="inline-block bg-transparent border border-white border-opacity-70 text-white text-opacity-70 px-10 py-2 rounded-full text-md uppercase tracking-wide font-bold shadow-xl transition-all duration-300 hover:bg-[#DD4912] hover:text-white hover:text-opacity-100 hover:scale-105 hero-slider-subheadings animate-slideup animation-delay-1000 animation-backwards"
-      >
-        Show on map
-      </NuxtLink>
-    </template>
-  </ExperiencesBlockHalf>
+        <template #content>
+            <NuxtLink
+                href="https://www.google.com/maps/search/?api=1&query=Meraki+Art+%26+Design+Studio,+Al+Quoz+-+Al+Quoz+Industrial+Area+3+-+Dubai"
+                target="_blank"
+                class="inline-block bg-transparent border border-white border-opacity-70 text-white text-opacity-70 px-10 py-2 rounded-full text-md uppercase tracking-wide font-bold shadow-xl transition-all duration-300 hover:bg-[#DD4912] hover:text-white hover:text-opacity-100 hover:scale-105 hero-slider-subheadings animate-slideup animation-delay-1000 animation-backwards">
+                Show on map
+            </NuxtLink>
+        </template>
+    </ExperiencesBlockHalf>
     <section class="min-h-screen bg-[#F9F3EB] py-12 px-6">
         <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-8">
             <h1 class="text-3xl font-extrabold text-[#447C9D] mb-4">Check Slot Availability</h1>
@@ -66,6 +65,12 @@
                         &rarr;</button>
                 </div>
 
+                <!-- NEW: small status row -->
+                <div class="mb-2 flex items-center gap-3 text-xs">
+                    <span v-if="isLoading" class="text-gray-500">Loading availability…</span> <!-- NEW -->
+                    <span v-if="error" class="text-red-600">{{ error }}</span> <!-- NEW -->
+                </div>
+
                 <!-- Week View -->
                 <div class="grid grid-cols-7 gap-2 text-center text-sm text-gray-600 font-semibold mb-2">
                     <div v-for="day in days" :key="day.date" class="py-2">
@@ -102,13 +107,13 @@ import { computed, ref, onMounted } from 'vue'
 const route = useRoute()
 
 const blockOneData = {
-  image:
-    "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  title: "Meraki Art Studio",
-  tagline: "",
-  description: "",
-  contentPlacement: "center",
-  height: "h-[200px] md:h-[400px]",
+    image:
+        "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Meraki Art Studio",
+    tagline: "",
+    description: "",
+    contentPlacement: "center",
+    height: "h-[200px] md:h-[400px]",
 };
 
 // Map route.query directly to a reactive computed object
@@ -130,6 +135,10 @@ const selectedSubtype = computed(() => ({
 const currentWeekOffset = ref(0)
 const slots = ref({})
 const days = ref([])
+
+// NEW: loading + error state
+const isLoading = ref(false)   // NEW
+const error = ref('')          // NEW
 
 const getWeekDays = (offset = 0) => {
     const today = new Date()
@@ -153,13 +162,28 @@ const currentWeekRange = computed(() => {
     return `${days.value[0].date} — ${days.value[6].date}`
 })
 
-const fetchSlots = () => {
+// NEW: replace dummy data with real FreeBusy fetch
+const fetchSlots = async () => {                // NEW (made async)
     days.value = getWeekDays(currentWeekOffset.value)
-    // Dummy data — integrate with Google Calendar API here
-    slots.value = {
-        [days.value[3].date]: ['19:00', '19:30', '20:00'],
-        [days.value[5].date]: ['19:00', '19:30', '20:00']
+    isLoading.value = true                      // NEW
+    error.value = ''                            // NEW
+    try {
+        // NEW: compute ISO range for the visible week
+        const startISO = new Date(`${days.value[0].date}T00:00:00.000Z`).toISOString()  // NEW
+        const endISO = new Date(`${days.value[6].date}T23:59:59.999Z`).toISOString()  // NEW
+
+        // NEW: call Nuxt server route that wraps Google FreeBusy and returns open 30-min slots
+        const { data } = await $fetch(`/api/calendar`, { params: { start: startISO, end: endISO } }) // NEW
+        slots.value = (data && data.slots) ? data.slots : {}   // NEW
+    } catch (e) {
+        console.error(e)
+        error.value = 'Could not load availability. Please try again.'  // NEW
+        slots.value = {}                                                // NEW
+    } finally {
+        isLoading.value = false                                         // NEW
     }
+
+    // (Old dummy data removed; now using live data)                // NEW
 }
 
 const nextWeek = () => {
