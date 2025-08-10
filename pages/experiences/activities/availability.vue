@@ -57,11 +57,11 @@
 
             <!-- Calendar Navigation -->
             <div class="bg-gray-50 p-4 rounded-lg mb-4">
-                <div class="flex items-center justify-between mb-4">
-                    <button @click="prevWeek" class="text-[#447C9D] font-medium hover:underline">&larr; Prev
+                <div class="flex flex-col items-center md:flex-row md:items-center md:justify-between space-y-2 md:space-y-0 mb-4">
+                    <button @click="prevWeek" class="w-auto text-center md:text-left text-[#447C9D] font-medium hover:underline">&larr; Prev
                         Week</button>
-                    <div class="font-semibold text-gray-700">{{ currentWeekRange }}</div>
-                    <button @click="nextWeek" class="text-[#447C9D] font-medium hover:underline">Next Week
+                    <div class="w-full md:w-auto font-semibold text-gray-700 text-center">{{ currentWeekRange }}</div>
+                    <button @click="nextWeek" class="w-auto text-center md:text-right text-[#447C9D] font-medium hover:underline">Next Week
                         &rarr;</button>
                 </div>
 
@@ -100,7 +100,6 @@
 </template>
 
 <script setup>
-console.log('✅ availability.vue loaded', useRoute().query)
 import { useRoute } from 'vue-router'
 import { computed, ref, onMounted } from 'vue'
 
