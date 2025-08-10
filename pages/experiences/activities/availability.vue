@@ -71,17 +71,36 @@
                     <span v-if="error" class="text-red-600">{{ error }}</span> <!-- NEW -->
                 </div>
 
-                <!-- Week View -->
-                <div class="grid grid-cols-7 gap-2 text-center text-sm text-gray-600 font-semibold mb-2">
-                    <div v-for="day in days" :key="day.date" class="py-2">
-                        {{ day.label }}<br />{{ day.date }}
+                <!-- Week View: Desktop (7 columns) -->
+                <div class="hidden md:block">
+                    <div class="grid grid-cols-7 gap-2 text-center text-sm text-gray-600 font-semibold mb-2">
+                        <div v-for="day in days" :key="day.date" class="py-2">
+                            {{ day.label }}<br />{{ day.date }}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-7 gap-2">
+                        <div v-for="day in days" :key="day.date" class="text-center space-y-2">
+                            <div v-if="slots[day.date]?.length">
+                                <button v-for="time in slots[day.date]" :key="time"
+                                    class="bg-purple-100 text-[#447C9D] font-medium px-2 py-1 rounded hover:bg-purple-200 text-xs w-full">
+                                    {{ time }}
+                                </button>
+                            </div>
+                            <p v-else class="text-xs text-gray-400 italic">–</p>
+                        </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-7 gap-2">
-                    <div v-for="day in days" :key="day.date" class="text-center space-y-2">
-                        <div v-if="slots[day.date]?.length">
+
+                <!-- Week View: Mobile (stacked days) -->
+                <div class="md:hidden space-y-3">
+                    <div v-for="day in days" :key="day.date" class="border border-gray-200 rounded-lg p-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="font-semibold text-gray-700">{{ day.label }}</div>
+                            <div class="text-xs text-gray-500">{{ day.date }}</div>
+                        </div>
+                        <div v-if="slots[day.date]?.length" class="space-y-2">
                             <button v-for="time in slots[day.date]" :key="time"
-                                class="bg-purple-100 text-[#447C9D] font-medium px-2 py-1 rounded hover:bg-purple-200 text-xs w-full">
+                                class="bg-purple-100 text-[#447C9D] font-medium px-3 py-1 rounded hover:bg-purple-200 text-xs w-full text-center">
                                 {{ time }}
                             </button>
                         </div>
