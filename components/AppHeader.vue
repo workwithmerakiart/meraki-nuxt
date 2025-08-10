@@ -332,19 +332,19 @@ watch(
             <div class="w-1/2 space-y-4 md:space-y-6">
               <div v-for="(item, index) in navigation" :key="index" @mouseenter="hoveredIndex = index"
                 @touchstart.prevent="hoveredIndex = index"
-                class="group text-4xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading">
+                class="group text-3xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading">
 
                 <!-- ⭐ CHANGED -->
                 <NuxtLink :to="item.to" class="outline-text block transition-all duration-300"
-                  :class="hoveredIndex === index ? 'text-white' : 'text-gray-500'" @click.prevent="navigate(item.to)">
+                  :class="hoveredIndex === index ? 'text-white active' : 'text-gray-500'" @click.prevent="navigate(item.to)">
                   {{ item.label }}
                 </NuxtLink>
               </div>
             </div>
-            <div class="w-1/2 pl-8 md:pl-16 space-y-2 pt-6">
+            <div class="w-1/2 pl-8 md:pl-16 space-y-2">
               <div v-if="navigationStyle.hoveredItem && navigationStyle.hoveredItem.children" class="submenu-list">
                 <div v-for="(child, cIndex) in navigationStyle.hoveredItem.children" :key="cIndex"
-                  class="sublink group relative text-xl md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out py-2 cursor-pointer">
+                  class="sublink group relative text-xl md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out mb-2 cursor-pointer">
                   <!-- ⭐ CHANGED -->
                   <NuxtLink :to="child.to" @click.prevent="navigate(child.to)" class="block">
                     {{ child.label }}
@@ -457,11 +457,12 @@ watch(
 
 .outline-text {
   color: transparent;
-  -webkit-text-stroke: 1.5px #ffffff75;
-  transition: color 0.3s ease, -webkit-text-stroke-color 0.3s ease;
+  -webkit-text-stroke: 0.5px #ffffff75;
+  transition: color 0.3s ease-in-out, -webkit-text-stroke-color 0.3s ease-in-out;
+  font-family: 'Inter', sans-serif;
 }
 
-.outline-text:hover {
+.outline-text.active {
   color: white;
   -webkit-text-stroke-color: white;
 }
@@ -471,15 +472,15 @@ watch(
   padding-left: 0;
   border-left: none;
   overflow: hidden;
-  font-size: 1.8rem;
   line-height: 1.4;
+  font-family: 'Inter', sans-serif;
 }
 
 .sublink a {
   display: block;
   text-decoration: none;
   color: inherit;
-  padding: 12px 0;
+  padding: 0;
   min-height: 44px;
   /* for touch targets */
   transition: padding-left 0.3s ease;
