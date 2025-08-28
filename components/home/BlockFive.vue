@@ -47,32 +47,32 @@ export default {
     return {
       images: [
         {
-          src: "https://wildpainthouse.com/public/assets/images/pendulumart.jpg",
+          src: "/images/block5/activities_neon_art_zone.webp",
           alt: "Abstract art",
           hoverText: "Explore",
         },
         {
-          src: "https://wildpainthouse.com/public/assets/images/splat_1.jpg",
+          src: "/images/block5/activities_hero.webp",
           alt: "People enjoying the vibe",
           hoverText: "Immerse",
         },
         {
-          src: "https://wildpainthouse.com/public/assets/images/graffiti_outdoor_freestyle.jpg",
+          src: "/images/block5/activities_decoden.webp",
           alt: "Person painting",
           hoverText: "Create",
         },
         {
-          src: "https://wildpainthouse.com/public/uploads/gallery/home_img5_croped_1676013347.jpg",
+          src: "/images/block5/activities_other_diy.webp",
           alt: "Outdoor art space",
           hoverText: "Discover",
         },
         {
-          src: "https://wildpainthouse.com/public/uploads/gallery/home_img5_croped_1676013347.jpg",
+          src: "/images/block5/activities_neon_slime.webp",
           alt: "Circular paint splatter art",
           hoverText: "Design",
         },
         {
-          src: "https://wildpainthouse.com/public/uploads/gallery/home_img5_croped_1676013347.jpg",
+          src: "/images/block5/afterschool_hero.webp",
           alt: "Colorful sculptures",
           hoverText: "Inspire",
         },

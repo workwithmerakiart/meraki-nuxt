@@ -61,42 +61,42 @@ const cardWidth = ref('40vw')
 const scrollWidth = ref(0)
 const products = ref([
   {
-    image: 'https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop',
+    image: '/images/block3_events.webp',
     title: 'Events',
     tag: 'Upcoming',
     tagColor: 'bg-gray-900',
     link: '/events'
   },
   {
-    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2340&auto=format&fit=crop',
+    image: '/images/block3_workshops.webp',
     title: 'Workshops',
     tag: 'Upcoming',
     tagColor: 'bg-gray-900',
     link: '/workshops'
   },
   {
-    image: 'https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop',
+    image: '/images/block3_activities.webp',
     title: "Activities",
     tag: 'Recommended',
     tagColor: 'bg-gray-900',
     link: '/activities'
   },
   {
-    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2340&auto=format&fit=crop',
+    image: '/images/block3_courses.webp',
     title: 'Courses',
     tag: 'Must Buy',
     tagColor: 'bg-gray-900',
     link: '/courses'
   },
   {
-    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2340&auto=format&fit=crop',
+    image: '/images/block3_afterschool.webp',
     title: 'Afterschool Classes',
     tag: 'Must Try',
     tagColor: 'bg-gray-900',
     link: '/experiences/afterschool'
   },
   {
-    image: 'https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop',
+    image: '/images/block3_shop.webp',
     title: 'Shop',
     tag: 'Offer Expiring Soon',
     tagColor: 'bg-gray-900',

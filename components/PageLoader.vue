@@ -21,7 +21,7 @@ onMounted(() => {
 
   const startAnimation = () => {
     gsap.to(img, {
-      duration: 3,
+      duration: 1,
       ease: 'power1.inOut',
       scale: 1.15,
       yoyo: true,

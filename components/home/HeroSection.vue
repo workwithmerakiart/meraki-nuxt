@@ -83,7 +83,7 @@ const slides = [
     cta: "",
     link: "",
     video:
-      "https://stream.mux.com/At01p00A01Zf6jXjio6HapAkDvnzExSpdGh3gkJ7C2OiPU/high.mp4",
+      "/videos/hero_main.mp4",
   },
   {
     title: "Events",
@@ -93,7 +93,7 @@ const slides = [
     cta: "Book Now",
     link: "/experiences/events",
     video:
-      "https://stream.mux.com/SDte3KxHZW00kXTI2bjFQvamHDl00An1c1SMzEsGLOXZM/high.mp4",
+      "/videos/hero_events.mp4",
   },
   {
     title: "Workshops",
@@ -104,7 +104,7 @@ const slides = [
     cta: "Book Now",
     link: "/experiences/workshops",
     image:
-      "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "/images/hero_workshops.webp",
   },
   {
     title: "Courses",
@@ -112,7 +112,7 @@ const slides = [
     cta: "Buy Now",
     link: "/experiences/courses",
     video:
-      "https://stream.mux.com/At01p00A01Zf6jXjio6HapAkDvnzExSpdGh3gkJ7C2OiPU/high.mp4",
+      "/videos/hero_courses.mp4",
   },
   {
     title: "Activities",
@@ -120,7 +120,7 @@ const slides = [
     cta: "Book Now",
     link: "/experiences/activities",
     image:
-      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "/images/hero_activities.webp",
   },
   {
     title: "Shop",
@@ -129,7 +129,7 @@ const slides = [
     cta: "Shop Now",
     link: "/shop",
     image:
-      "https://images.unsplash.com/photo-1496092607007-ca127e0b6a10?q=80&w=2410&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB3eHFwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "/images/hero_shop.webp",
   },
 ];
 </script>
