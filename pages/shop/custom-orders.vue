@@ -2,7 +2,7 @@
   <section class="bg-[#f9f3eb] text-black font-sans">
     <!-- Hero Image -->
     <div class="w-full h-[300px] md:h-[500px] overflow-hidden">
-      <img src="/images/products/meraki-hero.avif" alt="Custom Orders Hero" class="w-full h-full object-cover" />
+      <img src="/images/custom/custom_hero.webp" alt="Custom Orders Hero" class="w-full h-full object-cover" />
     </div>
 
     <!-- Page Intro -->
@@ -121,13 +121,13 @@ const customOrders = ref([
     id: 1,
     title: 'Floral Resin Sculptures',
     description: 'Preserve special moments (like bridal bouquets) in elegant resin art.',
-    image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif'
+    image: '/images/custom/custom_flora.webp'
   },
   {
     id: 2,
     title: 'Large-Scale Canvas Art',
     description: 'Made-to-measure paintings for homes, offices, and interiors.',
-    image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif'
+    image: '/images/custom/custom_large_scale.webp'
   },
   {
     id: 3,

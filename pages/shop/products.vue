@@ -2,7 +2,7 @@
   <section class="bg-white min-h-screen">
     <!-- Hero Image -->
     <div class="w-full h-[300px] md:h-[500px] overflow-hidden">
-      <img src="/images/products/meraki-hero.avif" alt="Meraki Hero Banner" class="w-full h-full object-cover" />
+      <img src="/images/shop/shop_hero.webp" alt="Meraki Hero Banner" class="w-full h-full object-cover" />
     </div>
 
     <!-- Heading -->
@@ -119,18 +119,18 @@ const priceRange = ref(maxPrice)
 
 const allProducts = ref([
   // Starter Kits
-  { id: 1, title: 'Starter Kit', price: 555, category: 'Starter Kits', image: '/images/products/3be4b9_7eaf42e6ec794c1482e3bf408f682199~mv2.avif' },
-  { id: 2, title: 'Color Kit', price: 750, category: 'Starter Kits', image: '/images/products/3be4b9_7eaf42e6ec794c1482e3bf408f682199~mv2.avif' },
+  { id: 1, title: 'Starter Kit', price: 555, category: 'Starter Kits', image: '/images/shop/shop_starter_kit.webp' },
+  { id: 2, title: 'Color Kit', price: 750, category: 'Starter Kits', image: '/images/shop/shop_color_kit.webp' },
 
   // DIY Kits
-  { id: 3, title: 'Resin Agate Floral Kit', price: 325, category: 'DIY Kits', image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif' },
-  { id: 4, title: 'Resin Dried Flower Kit', price: 325, category: 'DIY Kits', image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif' },
-  { id: 5, title: 'Resin Agate Geode Kit', price: 400, category: 'DIY Kits', image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif' },
-  { id: 6, title: 'Resin Art Starter Box', price: 350, category: 'DIY Kits', image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif' },
-  { id: 7, title: 'Premium DIY Art Kit', price: 450, category: 'DIY Kits', image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif' },
-  { id: 8, title: 'Creative DIY Bundle', price: 380, category: 'DIY Kits', image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif' },
-  { id: 9, title: 'DIY Resin Gift Pack', price: 300, category: 'DIY Kits', image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif' },
-  { id: 10, title: 'Complete DIY Set', price: 420, category: 'DIY Kits', image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif' }
+  { id: 3, title: 'Resin Agate Floral Kit', price: 325, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
+  { id: 4, title: 'Resin Dried Flower Kit', price: 325, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
+  { id: 5, title: 'Resin Agate Geode Kit', price: 400, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
+  { id: 6, title: 'Resin Art Starter Box', price: 350, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
+  { id: 7, title: 'Premium DIY Art Kit', price: 450, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
+  { id: 8, title: 'Creative DIY Bundle', price: 380, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
+  { id: 9, title: 'DIY Resin Gift Pack', price: 300, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
+  { id: 10, title: 'Complete DIY Set', price: 420, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
 ])
 
 

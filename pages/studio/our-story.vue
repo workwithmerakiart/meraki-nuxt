@@ -3,7 +3,7 @@
 
     <!-- Hero Block -->
     <div class="relative w-full h-[300px] md:h-[500px] overflow-hidden">
-      <img src="/images/products/meraki-hero.avif" alt="Our Story Hero" class="w-full h-full object-cover" />
+      <img src="/images/story/story_hero.webp" alt="Our Story Hero" class="w-full h-full object-cover" />
       <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white px-4">
         <h1 class="text-3xl md:text-5xl font-bold uppercase">Our Story</h1>
         <p class="max-w-2xl mt-4 text-base md:text-lg">
@@ -24,7 +24,7 @@
         </p>
       </div>
       <div class="md:w-1/2">
-        <img src="/images/hero-courses.jpg" alt="Meraki Studio" class="w-full rounded-lg shadow" />
+        <img src="/images/story/story_block2.webp" alt="Meraki Studio" class="w-full rounded-lg shadow" />
       </div>
     </div>
 
@@ -96,15 +96,15 @@ import Carousel from '~/components/Carousel.vue'
 import Testimonials from '~/components/Testimonials.vue'
 
 const team = ref([
-  { id: 1, name: 'Kajol Vaswani', role: 'Creative Director & Co-Founder', description: 'Blends modern and traditional techniques for signature pieces.', image: '/images/team/Kajol.png' },
-  { id: 2, name: 'Pooja Vaswani', role: 'Co-Founder', description: 'Ensures smooth operations and a welcoming space for artists.', image: '/images/team/Pooja.jpg' },
-  { id: 3, name: 'Neetu', role: 'Managing Director', description: 'Expert in preserving delicate elements in timeless resin art.', image: '/images/team/meera.jpg' },
-  { id: 4, name: 'Kenneth', role: 'Front Desk Coordinator', description: 'Creates bespoke large-scale paintings for interiors.', image: '/images/team/arjun.jpg' },
-  { id: 5, name: 'Kalyani', role: 'Artist', description: 'Drives vision and quality of all Meraki custom projects.', image: '/images/team/Kalyani.jpg' },
+  { id: 1, name: 'Kajol Vaswani', role: 'Creative Director & Co-Founder', description: 'Blends modern and traditional techniques for signature pieces.', image: '/images/story/story_kajol.webp' },
+  { id: 2, name: 'Pooja Vaswani', role: 'Co-Founder', description: 'Ensures smooth operations and a welcoming space for artists.', image: '/images/story/story_pooja.webp' },
+  { id: 3, name: 'Neetu', role: 'Managing Director', description: 'Expert in preserving delicate elements in timeless resin art.', image: '/images/story/story_neetu.webp' },
+  { id: 4, name: 'Kenneth', role: 'Front Desk Coordinator', description: 'Creates bespoke large-scale paintings for interiors.', image: '/images/story/story_kenneth.webp' },
+  { id: 5, name: 'Kalyani', role: 'Artist', description: 'Drives vision and quality of all Meraki custom projects.', image: '/images/story/story_kalyani.webp' },
   { id: 6, name: 'Patrica', role: 'Party Host & Social Media Specialist', description: 'Helps businesses create memorable custom gift solutions.', image: '/images/team/Patrica.jpg' },
-  { id: 7, name: 'Nono', role: 'Neon Master', description: 'Designs impactful murals and 3D installations.', image: '/images/team/Nono.jpg' },
-  { id: 8, name: 'Ali', role: 'Barista', description: 'Coordinates material sourcing and quality assurance.', image: '/images/team/vikas.jpg' },
-  { id: 9, name: 'Shiv', role: 'Cleaning Operator', description: 'Ensures every order is customized and delivered seamlessly.', image: '/images/team/anika.jpg' }
+  { id: 7, name: 'Nono', role: 'Neon Master', description: 'Designs impactful murals and 3D installations.', image: '/images/story/story_nono.webp' },
+  { id: 8, name: 'Ali', role: 'Barista', description: 'Coordinates material sourcing and quality assurance.', image: '/images/story/story_ali.webp' },
+  { id: 9, name: 'Shiv', role: 'Cleaning Operator', description: 'Ensures every order is customized and delivered seamlessly.', image: '/images/story/story_shiv.webp' }
 ])
 </script>
 

@@ -32,11 +32,11 @@
         <div class="text-right text-base leading-6">
           <p>
             Email:
-            <a href="mailto:hi@popupgrocer.com" class="underline"
-              >hi@popupgrocer.com</a
+            <a href="mailto:hello@merakiartstudio.ae" class="underline"
+              >hello@merakiartstudio.ae</a
             >
           </p>
-          <p>Text: 929-6000-PUG</p>
+          <p>Call: +971 50 852 3600</p>
         </div>
       </div>
     </footer>

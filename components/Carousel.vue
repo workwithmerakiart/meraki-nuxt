@@ -12,8 +12,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 const images = [
-    '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif', '/images/products/3be4b9_7eaf42e6ec794c1482e3bf408f682199~mv2.avif', '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif', '/images/products/3be4b9_7eaf42e6ec794c1482e3bf408f682199~mv2.avif', '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif', '/images/products/3be4b9_7eaf42e6ec794c1482e3bf408f682199~mv2.avif', '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif', '/images/products/3be4b9_7eaf42e6ec794c1482e3bf408f682199~mv2.avif',
-    '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif', '/images/products/3be4b9_7eaf42e6ec794c1482e3bf408f682199~mv2.avif'
+    '/images/custom/custom_large_scale.webp', '/images/hero_workshops.webp', '/images/activities/resin/activities_resin_beach_painting.webp', '/images/activities/resin/activities_resin_clock_with_rings.webp', '/images/activities/activities_block3.webp', '/images/shop/shop_hero.webp', '/images/hero_activities.webp', '/images/afterschool/afterschool_hero.webp',
+    '/images/events/events_hero.webp', '/images/courses/courses_hero.webp','/images/courses/courses_block2.webp','/images/story/story_block2.webp'
 ]
 const currentSlide = ref(0)
 let interval

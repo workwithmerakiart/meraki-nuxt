@@ -2,7 +2,7 @@
   <section class="bg-[#f9f3eb]">
     <!-- Hero Image -->
     <div class="relative w-full h-[300px] md:h-[500px] overflow-hidden">
-      <img src="/images/products/meraki-hero.avif" alt="Contact Us Hero" class="w-full h-full object-cover" />
+      <img src="/images/story/story_hero.webp" alt="Contact Us Hero" class="w-full h-full object-cover" />
       <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white px-4">
         <h1 class="text-3xl md:text-5xl font-bold uppercase">Contact Us</h1>
         <p class="max-w-2xl mt-4 text-base md:text-lg">
