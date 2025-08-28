@@ -19,7 +19,7 @@ import {
 
 const blockOneData = {
   image:
-    "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "/images/events/events_hero.webp",
   title: "Events",
   description:
     "At Meraki, every event is thoughtfully curated to feel personal, joyful, and beautifully designed for the crème de la crème of Dubai.",
@@ -27,7 +27,7 @@ const blockOneData = {
 
 const blockTwoData = {
   image:
-    "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "/images/events/events_block2.webp",
   title: "Why Choose Art-Filled Events?",
   description:
     "Art brings people together—and at Meraki, every event becomes a memorable experience. From birthdays to corporate activations, we offer curated, creative celebrations filled with color, connection, and joy right here in Dubai.",

@@ -25,7 +25,7 @@ import {
 
 const blockOneData = {
   image:
-    "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "/images/workshops/workshops_block2.webp",
   title: "Workshops",
   description:
     "Meraki Art Studio offers Dubai’s most thoughtfully curated workshops and courses.",
@@ -33,7 +33,7 @@ const blockOneData = {
 
 const blockTwoData = {
   image:
-    "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "/images/workshops/workshops_block2.webp",
   title: "",
   description:
     "Whether you’re seeking a fun outing or building mastery, every experience is hands-on, inspiring, and curated to help you unlock your artistic potential. Choose from one-time sessions perfect for tourists, families, and friends looking for memorable fun, or embark on multi-day courses tailored for aspiring artists ready to deepen their skills. Every workshop is guided by passionate mentors, using premium materials.",

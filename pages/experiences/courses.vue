@@ -31,7 +31,7 @@ import {
 
 const blockOneData = {
   image:
-    "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "/images/courses/courses_hero.webp",
   title: "Courses",
   description:
     "Our curated art courses are immersive journeys designed to help you grow your skills with intention and style. From mastering resin techniques to exploring the foundations of fine art, every course offers hands-on learning, premium materials, and personal guidance in our Dubai studio.",
@@ -39,7 +39,7 @@ const blockOneData = {
 
 const blockTwoData = {
   image:
-    "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "/images/courses/courses_block2.webp",
   title: "",
   description:
     "At Meraki, courses are artfully designed experiences that combine expert instruction, quality materials, and a welcoming space. Each multi-day course is tailored for artists and enthusiasts ready to deepen their craft, with private sessions that ensure personal attention and flexibility. Complete your journey with beautiful take-home pieces and a Certificate of Completion to celebrate your achievement.",
@@ -52,19 +52,19 @@ const coursesData = [
       {
         badge: "Courses",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "/images/courses/courses_resin_basic.webp",
         description: "Resin Basics Course",
       },
       {
         badge: "Courses",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "/images/courses/courses_resin_advance.webp",
         description: "Resin Advanced Course",
       },
       {
         badge: "Courses",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "/images/courses/courses_resin_advance.webp",
         description: "Resin River Table Course",
       },
     ],
@@ -75,7 +75,7 @@ const coursesData = [
       {
         badge: "Courses",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "/images/courses/courses_sculpture.webp",
         description: "Russian Floral Sculpture Course",
       },
     ],
