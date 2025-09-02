@@ -4,13 +4,19 @@
     <!-- Hero Block -->
     <div class="relative w-full h-[300px] md:h-[500px] overflow-hidden">
       <img src="/images/story/story_hero.webp" alt="Our Story Hero" class="w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white px-4">
+
+      <!-- changed line ↓ -->
+      <div class="absolute inset-0 bg-black/40 flex flex-col items-center text-center text-white px-4
+           justify-end md:justify-center
+           pb-6 sm:pb-10
+           pt-[calc(env(safe-area-inset-top)+64px)] md:pt-0">
         <h1 class="text-3xl md:text-5xl font-bold uppercase">Our Story</h1>
         <p class="max-w-2xl mt-4 text-base md:text-lg">
           We believe every creation tells a story—crafted with intention, color, and heart at Meraki Art Studio.
         </p>
       </div>
     </div>
+
 
     <!-- Block Two: Intro -->
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 py-12 px-4">
@@ -44,7 +50,8 @@
 
     <!-- Block Four: Our Team -->
     <div class="max-w-6xl mx-auto py-12 px-4">
-      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 text-[#dd4912]">The Source of Our Strength is Our People</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 text-[#dd4912]">The Source of Our Strength is Our
+        People</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
         <div v-for="member in team" :key="member.id"
           class="bg-[f9f3eb] rounded-lg overflow-hidden shadow hover:shadow-lg transition">
