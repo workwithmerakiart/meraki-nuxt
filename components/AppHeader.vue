@@ -66,6 +66,10 @@ const navigation = [
     ],
   },
   {
+    label: "Matter DXB",
+    to: "/matter-by-meraki",
+  },
+  {
     label: "Community",
     to: "/community",
     children: [
@@ -203,7 +207,7 @@ onMounted(async () => {
       const mod = await import("gsap/MorphSVGPlugin");
       const MorphSVGPlugin = mod.default || mod.MorphSVGPlugin;
       if (MorphSVGPlugin) gsap.registerPlugin(MorphSVGPlugin);
-    } catch {}
+    } catch { }
 
     window.addEventListener("scroll", onScroll);
     window.addEventListener("resize", animateLogoAndHamburger);
@@ -348,38 +352,19 @@ watch(
 </script>
 
 <template>
-  <header
-    id="site-header"
-    class="header fixed top-0 left-0 w-full z-50 transition-all duration-300"
-    :class="{
-      'bg-white': (isScrolled || isOpen) && !showLightHeader,
-      'bg-transparent': showLightHeader, // ⭐ add
-    }"
-  >
+  <header id="site-header" class="header fixed top-0 left-0 w-full z-50 transition-all duration-300" :class="{
+    'bg-white': (isScrolled || isOpen) && !showLightHeader,
+    'bg-transparent': showLightHeader, // ⭐ add
+  }">
     <div class="flex items-center justify-between px-8 lg:px-16 h-20">
-      <NuxtLink
-        to="/"
-        class="text-white font-bold text-xl flex items-center h-full z-50"
-      >
-        <img
-          ref="logoRef"
-          class="h-12 sm:h-16 md:h-24"
-          :src="'/images/meraki-logo-black.png'"
-          :class="{
-            'filter-white': showLightHeader || !isScrolled, // ⭐ changed: prefer white when hero under header
-            'filter-black': !showLightHeader && isScrolled,
-          }"
-          style="transition: filter 0.3s ease"
-          alt="Logo"
-        />
+      <NuxtLink to="/" class="text-white font-bold text-xl flex items-center h-full z-50">
+        <img ref="logoRef" class="h-12 sm:h-16 md:h-24" :src="'/images/meraki-logo-black.png'" :class="{
+          'filter-white': showLightHeader || !isScrolled, // ⭐ changed: prefer white when hero under header
+          'filter-black': !showLightHeader && isScrolled,
+        }" style="transition: filter 0.3s ease" alt="Logo" />
       </NuxtLink>
-      <a
-        ref="hamburgerRef"
-        href="javascript:void(0)"
-        @click="toggleMenu"
-        class="hamburger z-50"
-        :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }"
-      >
+      <a ref="hamburgerRef" href="javascript:void(0)" @click="toggleMenu" class="hamburger z-50"
+        :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
@@ -387,63 +372,43 @@ watch(
     </div>
 
     <ClientOnly>
-      <canvas
-        v-if="isOpen"
-        ref="canvas"
-        class="fixed inset-0 w-full h-full pointer-events-auto z-0"
-      />
+      <canvas v-if="isOpen" ref="canvas" class="fixed inset-0 w-full h-full pointer-events-auto z-0" />
     </ClientOnly>
 
     <transition name="slide-fade">
-      <div
-        v-if="isOpen"
-        class="pointer-events-none flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12 relative z-10"
-      >
+      <div v-if="isOpen"
+        class="pointer-events-none flex flex-1 overflow-y-auto px-8 py-8 lg:px-16 lg:py-12 relative z-10">
         <div ref="menuContainer" class="pointer-events-auto flex flex-1">
           <div class="flex flex-1">
             <div class="w-1/2 space-y-4 md:space-y-6">
-              <div
-                v-for="(item, index) in navigation"
-                :key="index"
-                @mouseenter="hoveredIndex = index"
+              <div v-for="(item, index) in navigation" :key="index" @mouseenter="hoveredIndex = index"
                 @touchstart.prevent="hoveredIndex = index"
-                class="group text-2xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading"
-              >
+                class="group text-2xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading">
                 <!-- ⭐ CHANGED -->
-                <NuxtLink
-                  :to="item.to"
-                  class="outline-text block transition-all duration-300"
-                  :class="
-                    hoveredIndex === index
-                      ? 'text-white active'
-                      : 'text-gray-500'
-                  "
-                  @click.prevent="navigate(item.to)"
-                >
+                <NuxtLink :to="item.to" class="outline-text block transition-all duration-300" :class="hoveredIndex === index
+                  ? 'text-white active'
+                  : 'text-gray-500'
+                  " @click.prevent="navigate(item.to)">
                   {{ item.label }}
+                  <!-- ⭐ ADDED THIS PART ⭐ -->
+                  <span v-if="item.label === 'Matter DXB'"
+                    class="ml-2 text-[10px] font-medium bg-[#DD4912] text-white px-2 py-[2px] rounded-full align-middle tracking-wide">
+                    Interior
+                  </span>
+                  <!-- ⭐ END ADDED PART ⭐ -->
                 </NuxtLink>
               </div>
             </div>
             <div class="w-1/2 pl-8 md:pl-16 space-y-2">
-              <div
-                v-if="
-                  navigationStyle.hoveredItem &&
-                  navigationStyle.hoveredItem.children
-                "
-                class="submenu-list"
-              >
-                <div
-                  v-for="(child, cIndex) in navigationStyle.hoveredItem
-                    .children"
-                  :key="cIndex"
-                  class="sublink group relative text-lg md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out mb-7 cursor-pointer"
-                >
+              <div v-if="
+                navigationStyle.hoveredItem &&
+                navigationStyle.hoveredItem.children
+              " class="submenu-list">
+                <div v-for="(child, cIndex) in navigationStyle.hoveredItem
+                  .children" :key="cIndex"
+                  class="sublink group relative text-lg md:text-2xl text-gray-300 hover:text-white transition-all duration-300 ease-out mb-7 cursor-pointer">
                   <!-- ⭐ CHANGED -->
-                  <NuxtLink
-                    :to="child.to"
-                    @click.prevent="navigate(child.to)"
-                    class="block"
-                  >
+                  <NuxtLink :to="child.to" @click.prevent="navigate(child.to)" class="block">
                     {{ child.label }}
                   </NuxtLink>
                 </div>
@@ -551,12 +516,16 @@ watch(
 }
 
 .outline-text {
-  color: transparent; /* No fill initially */
-  -webkit-text-stroke: 0.5px #ffffff75; /* Outline stays */
+  color: transparent;
+  /* No fill initially */
+  -webkit-text-stroke: 0.5px #ffffff75;
+  /* Outline stays */
   background: linear-gradient(to right, white 0%, white 100%);
   background-repeat: no-repeat;
-  background-size: 0% 100%; /* Start with no fill horizontally */
-  background-position: left; /* Fill will grow from left to right */
+  background-size: 0% 100%;
+  /* Start with no fill horizontally */
+  background-position: left;
+  /* Fill will grow from left to right */
   -webkit-background-clip: text;
   background-clip: text;
   transition: background-size 0.7s ease-in-out;
@@ -565,7 +534,8 @@ watch(
 }
 
 .outline-text.active {
-  background-size: 100% 100%; /* Fill expands fully */
+  background-size: 100% 100%;
+  /* Fill expands fully */
 }
 
 .sublink a {
@@ -629,6 +599,8 @@ watch(
 /* When header is transparent, we want white hamburger lines by default */
 :global(header.bg-transparent) .hamburger-line {
   background: #fff;
-} /* ⭐ add */
+}
+
+/* ⭐ add */
 /* Existing styles below unchanged */
 </style>
