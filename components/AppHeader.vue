@@ -66,16 +66,16 @@ const navigation = [
     ],
   },
   {
-    label: "Matter DXB",
-    to: "/matter-by-meraki",
-  },
-  {
     label: "Community",
     to: "/community",
     children: [
       { label: "Blogs", to: "/community/blogs" },
       { label: "Lookbook", to: "/community/lookbook" },
     ],
+  },
+  {
+    label: "Matter DXB",
+    to: "/matterdxb",
   },
   {
     label: "About",
