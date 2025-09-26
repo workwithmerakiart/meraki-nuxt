@@ -12,14 +12,13 @@
       </div>
     </div>
 
-    <!-- Block Two: Latest Posts (first 4) -->
     <div class="max-w-7xl mx-auto py-16 px-6">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <article v-for="post in firstFour" :key="post.slug"
-          class="group rounded-2xl overflow-hidden bg-white shadow-lg transition-transform duration-300 flex flex-col min-h-[500px]">
+          class="group rounded-2xl overflow-hidden bg-white shadow-lg transition-transform duration-300 flex flex-col min-h-[520px]">
 
-          <!-- Image -->
-          <div class="relative h-64 overflow-hidden">
+          <!-- Image with 3:2 aspect ratio -->
+          <div class="relative aspect-[3/2] overflow-hidden">
             <img :src="post.image" :alt="post.title"
               class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105 brightness-50 group-hover:brightness-100" />
             <div
