@@ -61,7 +61,7 @@ const cardWidth = ref('40vw')
 const scrollWidth = ref(0)
 const products = ref([
   {
-    image: '/images/block3_events.webp',
+    image: '/images/events/block3.webp',
     title: 'Events',
     tag: 'Upcoming',
     tagColor: 'bg-gray-900',
@@ -103,7 +103,7 @@ const products = ref([
     link: '/shop'
   },
   {
-    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2340&auto=format&fit=crop',
+    image: '/images/blogs/blog2/06.webp',
     title: 'Blogs',
     tag: 'Trending',
     tagColor: 'bg-gray-900',
