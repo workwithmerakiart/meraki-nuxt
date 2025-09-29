@@ -14,7 +14,7 @@
 
     <div class="max-w-7xl mx-auto py-16 px-6">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <article v-for="post in firstFour" :key="post.slug"
+        <article v-for="post in posts" :key="post.slug"
           class="group rounded-2xl overflow-hidden bg-white shadow-lg transition-transform duration-300 flex flex-col min-h-[520px]">
 
           <!-- Image with 3:2 aspect ratio -->
@@ -34,7 +34,7 @@
               <p class="text-base text-gray-700 mt-4 line-clamp-4">{{ post.excerpt }}</p>
             </div>
             <div class="mt-6">
-              <NuxtLink :to="`/blogs/${post.slug}`"
+              <NuxtLink :to="`/community/blogs/${post.slug}`"
                 class="inline-flex items-center gap-2 text-[#dd4912] font-medium hover:underline">
                 Read More
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -59,36 +59,41 @@ import { computed, ref } from 'vue'
 
 const posts = ref([
   {
-    slug: 'luxury-interior-trends-2025',
-    title: '7 Luxury Interior Design Trends that will be leading in 2025',
-    excerpt: 'From warm timber palettes to soft curves and artisanal details—here are the top movements shaping luxury spaces this year.',
-    image: '/images/story/story_hero.webp',
+    slug: 'how-art-helps-kids-grow-beyond-the-canvas',
+    title: 'How Art Helps Kids Grow Beyond the Canvas',
+    excerpt: 'Art activities help children build emotional strength, motor skills, confidence, and communication through hands-on creative learning.',
+    image: '/images/blogs/blog1/01.webp',
     date: '2025-09-03'
   },
   {
-    slug: 'day-in-life-interior-designer',
-    title: 'A Day in the Life of an Interior Designer',
-    excerpt: 'Walk through briefs, moodboards, material libraries and site co-ordination—the creative routine behind the craft.',
-    image: '/images/story/story_hero.webp',
+    slug: 'inside-the-resin-room-tips-from-our-artists',
+    title: 'Inside the resin room: Tips from our artists',
+    excerpt: 'Practical guidance on resin art with tips from artists in Dubai, covering tools, safety, and classes for beginners and experienced creators.',
+    image: '/images/blogs/blog2/01.webp',
     date: '2025-09-01'
   },
   {
-    slug: 'top-5-signature-projects',
-    title: 'Curating the Art of Space: Top 5 Signature Projects',
-    excerpt: 'A closer look at five spaces that balance comfort, craft and quiet luxury through thoughtful detailing.',
-    image: '/images/story/story_hero.webp',
+    slug: 'throwing-a-creative-birthday-party-heres-what-you-need-to-know',
+    title: 'Throwing a Creative Birthday Party? Here’s What You Need to Know',
+    excerpt: 'Plan a kids art birthday party in Dubai with hands-on activities, fun workshops, and a checklist to make creative celebrations easy to organise.',
+    image: '/images/blogs/blog3/01.webp',
     date: '2025-08-28'
   },
   {
-    slug: 'designing-for-all-senses',
-    title: 'Designing for All Senses',
-    excerpt: 'How scent, sound, texture and light come together to create immersive environments you feel—not just see.',
-    image: '/images/story/story_hero.webp',
+    slug: 'top-5-diy-projects-you-can-try-this-weekend',
+    title: 'Top 5 DIY Art Projects You Can Try This Weekend',
+    excerpt: 'Turn weekends into mini art festivals with 5 DIY projects using Dubai art supplies. Create useful crafts with a splash of colour and a dose of imagination.',
+    image: '/images/blogs/blog4/01.webp',
     date: '2025-08-21'
+  },
+  {
+    slug: 'artist-spotlight-the-story-behind-the-dubai-art-studio',
+    title: 'Artist Spotlight: The Story Behind the Dubai Art Studio',
+    excerpt: 'Meet the artists behind our Dubai art studio. Discover their story, creative journey, and the vision that shapes our workshops and experiences.',
+    image: '/images/blogs/blog5/01.webp',
+    date: '2025-09-29'
   }
 ])
-
-const firstFour = computed(() => posts.value.slice(0, 4))
 
 function formatDate(iso: string) {
   try {
