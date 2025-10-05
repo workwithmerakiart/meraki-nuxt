@@ -62,7 +62,7 @@ const navigation = [
     to: "/studio",
     children: [
       { label: "Our Story", to: "/studio/our-story" },
-      { label: "Partner with us", to: "/studio/partner-with-us" },
+      { label: "Franchise", to: "/studio/franchise" },
     ],
   },
   {

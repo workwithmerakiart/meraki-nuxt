@@ -1,13 +1,13 @@
 <script setup>
 defineProps({
-    heading: { type: String, default: 'Partner With Us' },
+    heading: { type: String, default: 'Franchise' },
     subheading: {
         type: String,
         default:
             'Build a profitable, purpose-led creative franchise with Meraki — training, playbooks, and ongoing brand support included.',
     },
     image: { type: String, default: '/images/story/story_hero.webp' },
-    alt: { type: String, default: 'Partner With Us Hero' },
+    alt: { type: String, default: 'Franchise Hero' },
 })
 </script>
 

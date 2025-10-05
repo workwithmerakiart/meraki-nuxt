@@ -8,11 +8,62 @@
     <!-- Page Intro -->
     <div class="max-w-4xl mx-auto px-4 py-10 text-center">
       <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight">
-        Custom Orders
+        Custom Orders at Meraki
       </h2>
       <p class="mt-4 text-base sm:text-lg text-gray-700">
-        Every order is thoughtfully designed, color-coordinated, and beautifully finished.
+        From one-of-a-kind keepsakes to large-scale art installations, we specialize in bringing your ideas to life. Every custom order is a creative collaboration between your vision and our craft.
       </p>
+    </div>
+
+    <!-- What we customize (refined, blended layout) -->
+    <div class="max-w-6xl mx-auto px-4 pt-2 pb-10">
+      <div class="rounded-2xl bg-white/60 backdrop-blur border border-black/5 shadow-sm p-6 md:p-10">
+        <div class="text-center mb-6 md:mb-8">
+          <h3 class="text-2xl md:text-3xl font-bold text-black">What we customize</h3>
+        </div>
+
+        <!-- Feature grid -->
+        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
+          <li class="flex items-start gap-3 p-3 md:p-4 rounded-lg bg-white/70 border border-black/5">
+            <span class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#447c9d]/10 text-[#447c9d]">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M9 12.75 11.25 15 15 9.75"/><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm0 1.5a8.25 8.25 0 1 0 0 16.5 8.25 8.25 0 0 0 0-16.5Z" clip-rule="evenodd"/></svg>
+            </span>
+            <span class="text-[#1a1a1a] text-base md:text-lg font-medium">Floral Resin Sculptures</span>
+          </li>
+
+          <li class="flex items-start gap-3 p-3 md:p-4 rounded-lg bg-white/70 border border-black/5">
+            <span class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#447c9d]/10 text-[#447c9d]">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M9 12.75 11.25 15 15 9.75"/><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm0 1.5a8.25 8.25 0 1 0 0 16.5 8.25 8.25 0 0 0 0-16.5Z" clip-rule="evenodd"/></svg>
+            </span>
+            <span class="text-[#1a1a1a] text-base md:text-lg font-medium">Large-Scale Canvas Art</span>
+          </li>
+
+          <li class="flex items-start gap-3 p-3 md:p-4 rounded-lg bg-white/70 border border-black/5">
+            <span class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#447c9d]/10 text-[#447c9d]">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M9 12.75 11.25 15 15 9.75"/><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm0 1.5a8.25 8.25 0 1 0 0 16.5 8.25 8.25 0 0 0 0-16.5Z" clip-rule="evenodd"/></svg>
+            </span>
+            <span class="text-[#1a1a1a] text-base md:text-lg font-medium">Corporate & Event Gifting</span>
+          </li>
+
+          <li class="flex items-start gap-3 p-3 md:p-4 rounded-lg bg-white/70 border border-black/5">
+            <span class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#447c9d]/10 text-[#447c9d]">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M9 12.75 11.25 15 15 9.75"/><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm0 1.5a8.25 8.25 0 1 0 0 16.5 8.25 8.25 0 0 0 0-16.5Z" clip-rule="evenodd"/></svg>
+            </span>
+            <span class="text-[#1a1a1a] text-base md:text-lg font-medium">Resin Décor Sets</span>
+          </li>
+
+          <li class="flex items-start gap-3 p-3 md:p-4 rounded-lg bg-white/70 border border-black/5 sm:col-span-2 lg:col-span-1">
+            <span class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#447c9d]/10 text-[#447c9d]">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M9 12.75 11.25 15 15 9.75"/><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm0 1.5a8.25 8.25 0 1 0 0 16.5 8.25 8.25 0 0 0 0-16.5Z" clip-rule="evenodd"/></svg>
+            </span>
+            <span class="text-[#1a1a1a] text-base md:text-lg font-medium">Installations & Murals</span>
+          </li>
+        </ul>
+
+        <p class="mt-6 md:mt-8 text-center text-gray-700 text-sm md:text-base">
+          Every order is thoughtfully designed, color-coordinated, and beautifully finished.
+        </p>
+      </div>
     </div>
 
     <!-- Alternating Product Blocks -->

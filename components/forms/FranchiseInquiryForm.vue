@@ -12,7 +12,7 @@ const form = ref({
     email: '',
     desired_market: '',
     referral: '',
-    source: 'partner-with-us', // optional meta
+    source: 'franchise', // optional meta
 })
 
 const sending = ref(false)
@@ -40,7 +40,7 @@ async function submit() {
 
         sent.value = true
         // reset
-        form.value = { name: '', mobile: '', email: '', desired_market: '', referral: '', source: 'partner-with-us' }
+        form.value = { name: '', mobile: '', email: '', desired_market: '', referral: '', source: 'franchise' }
     } catch (e) {
         error.value = 'Something went wrong. Please try again.'
     } finally {
