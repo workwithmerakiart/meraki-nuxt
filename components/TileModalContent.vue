@@ -6,7 +6,12 @@
         <!-- LEFT COLUMN -->
         <div>
           <p class="uppercase text-sm tracking-widest text-gray-600 mb-2">Workshops</p>
-          <h1 class="text-3xl md:text-4xl font-bold mb-6 text-black">{{ title }}</h1>
+          <h1 class="text-3xl md:text-4xl font-bold mb-2 text-black">{{ title }}</h1>
+          <!-- price under title -->
+          <div v-if="price" class="mb-6 flex items-center gap-2 text-[16px] font-semibold text-black">
+            <span>{{ typeof price === 'number' ? `AED ${price}` : price }}</span>
+            <span v-if="vat" class="text-sm text-gray-600">+ VAT</span>
+          </div>
 
           <!-- Meta -->
           <div class="space-y-4 mb-6 text-[16px]">
@@ -25,7 +30,8 @@
           </div>
 
           <!-- Button -->
-          <button class="bg-black text-white text-[13px] font-semibold uppercase px-4 py-2 tracking-wide hover:bg-[#333]">
+          <button
+            class="bg-black text-white text-[13px] font-semibold uppercase px-4 py-2 tracking-wide hover:bg-[#333]">
             {{ registerText }}
           </button>
         </div>
@@ -55,6 +61,9 @@ defineProps({
   dates: String,
   time: String,
   location: String,
+  price: [String, Number],
+  vat: { type: Boolean, default: false },
+  vatValue: { type: [Number, String], default: 0 },
   registerText: {
     type: String,
     default: 'Register',

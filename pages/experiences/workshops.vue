@@ -3,16 +3,10 @@
     <ExperiencesBlockOne v-bind="blockOneData" />
     <ExperiencesBlockTwo v-bind="blockTwoData" />
     <div class="pt-5 pb-8">
-      <ImageTilesBlock
-        v-for="(workshopsSection, index) in workshopsData"
-        :key="index"
-        :title="workshopsSection.title"
-        :tiles="workshopsSection.sections"
-      />
+      <ImageTilesBlock v-for="(workshopsSection, index) in workshopsData" :key="index" :title="workshopsSection.title"
+        :tiles="workshopsSection.sections" />
     </div>
-    <EventBlock v-bind="eventBlockData" />
-    <ImageStackBlock :image-stack-data="imageStackData" />
-    <ExperiencesWorkshopsInquiryForm />
+    <WorkshopsCtaBlock />
   </div>
 </template>
 
@@ -22,11 +16,13 @@ import {
   ClockIcon,
   MapPinIcon,
 } from "@heroicons/vue/24/outline";
+import WorkshopsCtaBlock from '~/components/WorkshopsCtaBlock.vue'
 
 const blockOneData = {
   image:
     "/images/workshops/workshops_block2.webp",
   title: "Workshops",
+  tagline: "Create, Explore, Evolve.",
   description:
     "Meraki Art Studio offers Dubai’s most thoughtfully curated workshops and courses.",
 };
@@ -41,175 +37,213 @@ const blockTwoData = {
 
 const workshopsData = [
   {
-    title: "Workshop Section One",
+    title: "Our Workshops",
     sections: [
       {
         badge: "WORKSHOPS",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Family Workshops",
+          "/images/workshops/1.webp",
+        title: "Creative Mornings @ Meraki",
+        price: "",
+        vat: true,
+        vatValue: 5,
         sections: [
           {
             icon: CalendarDaysIcon,
-            text: "Sat 10 May – Sun 26 October 2025",
+            text: "Every Thursday",
           },
           {
             icon: ClockIcon,
-            text: "11.15 am – 12.45 pm",
+            text: "10:30 AM – 12:30 PM",
           },
           {
             icon: MapPinIcon,
-            text: "Menorca",
+            text: "Meraki Art Studio",
           },
         ],
         modal: true,
         modalContent: {
-          title: "Family Workshops",
-          dates: "Sat 10 May - Sun 26 October 2025",
-          time: "11:15 am - 12:45 pm",
-          location: "Menorca",
+          title: "Creative Mornings @ Meraki",
+          dates: "Every Thursday",
+          time: "10:30 AM – 12:30 PM",
+          location: "Meraki Art Studio",
+          price: "",
+          vat: true,
+          vatValue: 5,
           registerText: "Register",
           imageSrc:
-            "https://media.hauserwirth.com/asset/e2f6292e-a9d2-4e10-ab07-b8231c6447d5/web-hires-jpg-72dpi/24-07-13_H-W-4.jpg",
+            "/images/workshops/1.webp",
           imageCaption:
-            "Family Workshops at Hauser & Wirth Menorca. Photo: Mateu Carles",
+            "Creative Mornings @ Meraki. Photo: Meraki Art Studio",
           content:
-            "<p>A range of workshops to engage the whole family, with activities relating to Mika Rottenberg’s exhibition 'Vibrant Matter'. Lasting a maximum of an hour and a half, families will discover the art on Illa del Rei.</p><p>All children should be accompanied by an adult. Ages 5 and up.</p><p><strong>10 May - 19 June</strong><br>Saturdays at 11:15 am</p><p><strong>23 June - 6 September</strong><br>Fridays and Saturdays at 11:15 am</p><p><strong>7 September - 26 October</strong><br>Saturdays at 11:15 am</p><p>We suggest booking in advance here.</p>",
+            "<p>Mornings Made Meaningful</p>",
         },
       },
       {
-        badge: "TOURS",
+        badge: "WORKSHOPS",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Exhibition Guided Tour",
+          "/images/workshops/2.webp",
+        title: "Moon Texture Art",
+        price: "325 AED",
+        vat: true,
+        vatValue: 5,
         sections: [
           {
             icon: CalendarDaysIcon,
-            text: "Sat 10 May – Sun 26 October 2025",
+            text: "From 4 September 2025",
           },
           {
             icon: ClockIcon,
-            text: "12.15 – 1.15 pm",
+            text: "10:30 AM – 12:30 PM",
           },
           {
             icon: MapPinIcon,
-            text: "Menorca",
+            text: "Meraki Art Studio",
           },
         ],
         modal: true,
         modalContent: {
-          title: "Family Workshops",
-          dates: "Sat 10 May - Sun 26 October 2025",
-          time: "11:15 am - 12:45 pm",
-          location: "Menorca",
+          title: "Moon Texture Art",
+          dates: "From 4 September 2025",
+          time: "10:30 AM – 12:30 PM",
+          location: "Meraki Art Studio",
+          price: "325 AED",
+          vat: true,
+          vatValue: 5,
           registerText: "Register",
           imageSrc:
-            "https://media.hauserwirth.com/asset/e2f6292e-a9d2-4e10-ab07-b8231c6447d5/web-hires-jpg-72dpi/24-07-13_H-W-4.jpg",
+            "/images/workshops/2.webp",
           imageCaption:
-            "Family Workshops at Hauser & Wirth Menorca. Photo: Mateu Carles",
+            "Moon Texture Art. Photo: Meraki Art Studio",
           content:
-            "<p>A range of workshops to engage the whole family, with activities relating to Mika Rottenberg’s exhibition 'Vibrant Matter'. Lasting a maximum of an hour and a half, families will discover the art on Illa del Rei.</p><p>All children should be accompanied by an adult. Ages 5 and up.</p><p><strong>10 May - 19 June</strong><br>Saturdays at 11:15 am</p><p><strong>23 June - 6 September</strong><br>Fridays and Saturdays at 11:15 am</p><p><strong>7 September - 26 October</strong><br>Saturdays at 11:15 am</p><p>We suggest booking in advance here.</p>",
+            "<p>Create your own moon-textured masterpiece.</p>",
         },
       },
       {
-        badge: "MUSIC",
+        badge: "WORKSHOPS",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Sunday Concerts",
+          "/images/workshops/3.webp",
+        title: "Paint & Sip",
+        price: "150 AED",
+        vat: true,
+        vatValue: 5,
         sections: [
           {
             icon: CalendarDaysIcon,
-            text: "Sun 18 May – Sun 26 October 2025",
+            text: "From 4 September 2025",
           },
           {
             icon: ClockIcon,
-            text: "12.30 – 1.30 pm",
+            text: "10:30 AM – 12:30 PM",
           },
           {
             icon: MapPinIcon,
-            text: "Menorca",
+            text: "Meraki Art Studio",
           },
         ],
         modal: true,
         modalContent: {
-          title: "Family Workshops",
-          dates: "Sat 10 May - Sun 26 October 2025",
-          time: "11:15 am - 12:45 pm",
-          location: "Menorca",
+          title: "Paint & Sip",
+          dates: "From 4 September 2025",
+          time: "10:30 AM – 12:30 PM",
+          location: "Meraki Art Studio",
+          price: "150 AED",
+          vat: true,
+          vatValue: 5,
           registerText: "Register",
           imageSrc:
-            "https://media.hauserwirth.com/asset/e2f6292e-a9d2-4e10-ab07-b8231c6447d5/web-hires-jpg-72dpi/24-07-13_H-W-4.jpg",
+            "/images/workshops/3.webp",
           imageCaption:
-            "Family Workshops at Hauser & Wirth Menorca. Photo: Mateu Carles",
+            "Paint & Sip. Photo: Meraki Art Studio",
           content:
-            "<p>A range of workshops to engage the whole family, with activities relating to Mika Rottenberg’s exhibition 'Vibrant Matter'. Lasting a maximum of an hour and a half, families will discover the art on Illa del Rei.</p><p>All children should be accompanied by an adult. Ages 5 and up.</p><p><strong>10 May - 19 June</strong><br>Saturdays at 11:15 am</p><p><strong>23 June - 6 September</strong><br>Fridays and Saturdays at 11:15 am</p><p><strong>7 September - 26 October</strong><br>Saturdays at 11:15 am</p><p>We suggest booking in advance here.</p>",
+            "<p>Relax with brushes, brews & colors.</p>",
         },
       },
     ],
   },
   {
-    title: "Workshop Section Two",
+    title: "",
     sections: [
       {
         badge: "WORKSHOPS",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Family Workshops",
+          "/images/workshops/4.webp",
+        title: "Perfume Making",
+        price: "195 AED",
+        vat: true,
+        vatValue: 5,
         sections: [
           {
             icon: CalendarDaysIcon,
-            text: "Sat 10 May – Sun 26 October 2025",
+            text: "From 18 September 2025",
           },
           {
             icon: ClockIcon,
-            text: "11.15 am – 12.45 pm",
+            text: "10:30 AM – 12:30 PM",
           },
           {
             icon: MapPinIcon,
-            text: "Menorca",
+            text: "Meraki Art Studio",
           },
         ],
+        modal: true,
+        modalContent: {
+          title: "Perfume Making",
+          dates: "From 18 September 2025",
+          time: "10:30 AM – 12:30 PM",
+          location: "Meraki Art Studio",
+          price: "195 AED",
+          vat: true,
+          vatValue: 5,
+          registerText: "Register",
+          imageSrc:
+            "/images/workshops/1.webp",
+          imageCaption:
+            "Perfume Making. Photo: Meraki Art Studio",
+          content:
+            "<p>Blend your own personalized fragrance.</p>",
+        },
       },
       {
-        badge: "TOURS",
+        badge: "WORKSHOPS",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Exhibition Guided Tour",
+          "/images/workshops/5.webp",
+        title: "Cold Process Soap Making",
+        price: "475 AED",
+        vat: true,
+        vatValue: 5,
         sections: [
           {
             icon: CalendarDaysIcon,
-            text: "Sat 10 May – Sun 26 October 2025",
+            text: "From 25 September 2025",
           },
           {
             icon: ClockIcon,
-            text: "12.15 – 1.15 pm",
+            text: "10:30 AM – 12:30 PM",
           },
           {
             icon: MapPinIcon,
-            text: "Menorca",
+            text: "Meraki Art Studio",
           },
         ],
-      },
-      {
-        badge: "MUSIC",
-        image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Sunday Concerts",
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Sun 18 May – Sun 26 October 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "12.30 – 1.30 pm",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Menorca",
-          },
-        ],
-      },
+        modal: true,
+        modalContent: {
+          title: "Cold Process Soap Making",
+          dates: "From 25 September 2025",
+          time: "10:30 AM – 12:30 PM",
+          location: "Meraki Art Studio",
+          price: "475 AED",
+          vat: true,
+          vatValue: 5,
+          registerText: "Register",
+          imageSrc:
+            "/images/workshops/1.webp",
+          imageCaption:
+            "Creative Mornings @ Meraki. Photo: Meraki Art Studio",
+          content:
+            "<p>Handcraft natural soaps with soothing scents.</p>",
+        },
+      }
     ],
   },
 ];

@@ -178,6 +178,7 @@
 const blockOneData = {
   image: "/images/events/events_hero.webp",
   title: "Events",
+  tagline: "Celebrate with creativity. Host with heart.",
   description:
     "At Meraki, every event is thoughtfully curated to feel personal, joyful, and beautifully designed for the crème de la crème of Dubai.",
 }
