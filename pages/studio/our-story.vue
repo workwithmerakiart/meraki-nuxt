@@ -108,7 +108,7 @@ const team = ref([
   { id: 3, name: 'Neetu', role: 'Managing Director', description: 'Expert in preserving delicate elements in timeless resin art.', image: '/images/story/story_neetu.webp' },
   { id: 4, name: 'Kenneth', role: 'Front Desk Coordinator', description: 'Creates bespoke large-scale paintings for interiors.', image: '/images/story/story_kenneth.webp' },
   { id: 5, name: 'Kalyani', role: 'Artist', description: 'Drives vision and quality of all Meraki custom projects.', image: '/images/story/story_kalyani.webp' },
-  { id: 6, name: 'Patrica', role: 'Party Host & Social Media Specialist', description: 'Helps businesses create memorable custom gift solutions.', image: '/images/team/Patrica.jpg' },
+  { id: 6, name: 'Maria', role: 'Party Host & Social Media Specialist', description: 'Helps businesses create memorable custom gift solutions.', image: '/images/activities/maria.jpeg' },
   { id: 7, name: 'Nono', role: 'Neon Master', description: 'Designs impactful murals and 3D installations.', image: '/images/story/story_nono.webp' },
   { id: 8, name: 'Ali', role: 'Barista', description: 'Coordinates material sourcing and quality assurance.', image: '/images/story/story_ali.webp' },
   { id: 9, name: 'Shiv', role: 'Cleaning Operator', description: 'Ensures every order is customized and delivered seamlessly.', image: '/images/story/story_shiv.webp' }

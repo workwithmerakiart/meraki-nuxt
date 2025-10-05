@@ -3,11 +3,10 @@
     <!-- Section Heading -->
     <div class="max-w-screen-2xl 2xl:max-w-[2560px] mx-auto text-center mb-12">
       <h2 class="text-4xl md:text-5xl font-extrabold text-[#dd4912] mb-4 hero-slider-headings">
-        Meraki Art Studio: What's Brewing Now
+        Curated Creative Experiences
       </h2>
       <p class="text-black max-w-3xl mx-auto text-lg md:text-xl hero-slider-subheadings font-light">
-        There's a heck of a lot of stuff out there. We've sorted through it and
-        rounded up the most exciting new items from independents.
+        Curated art experiences for every mood, age, and group—find the perfect creative fit.
       </p>
     </div>
     <!-- Carousel Container with Arrows Only -->

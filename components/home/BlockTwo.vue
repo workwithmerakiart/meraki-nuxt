@@ -6,9 +6,9 @@
             <div
                 class="w-full md:w-1/2 flex flex-col items-center md:items-start justify-center gap-6 fraunces-font text-center md:text-left">
                 <!-- Artistic Splash Colors GIF from Giphy -->
-                <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif"
-                    alt="Splash Colors Artistic Animation"
-                    class="w-60 sm:w-72 md:w-80 lg:w-[320px] rounded-lg shadow-lg transition-all duration-300" />
+                <video src="/videos/meraki-intro.mp4" autoplay loop muted playsinline class="w-72 sm:w-80 md:w-[420px] lg:w-[480px] rounded-lg shadow-lg transition-all duration-300 max-w-full h-auto">
+                    Your browser does not support the video tag.
+                </video>
 
                 <h2
                     class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold block-two-headings leading-snug text-[#447C9D] max-w-md text-center">
@@ -20,18 +20,10 @@
             </div>
 
             <!-- Right Column: Text Content -->
-            <div class="w-full md:w-1/2 max-w-lg text-[#1A1A1A] text-lg space-y-6 fraunces-font font-normal">
-                <p class="text-[#dd4912]">
-                    <strong>Does this sound like you?</strong>
+            <div class="w-full md:w-1/2 max-w-2xl text-[#1A1A1A] text-lg space-y-6 fraunces-font font-normal text-justify">
+                <p class="list-disc list-inside space-y-3 inter-font font-light">
+                    Meraki is a Dubai-born creative studio where art, joy, and community come together in every experience. Founded in 2018 by Kay and Pooh, two passionate artists who turned a dream into one of Dubai’s most vibrant art destinations, Meraki was built on the belief that creativity heals, connects, and inspires. Our studio offers hands-on workshops, immersive courses, walk-in activities, and curated events—welcoming artists, hobbyists, families, art connoisseurs and corporate teams alike. We’re home to a curated shop of quality materials, custom orders, and local artistry, all designed to support your creative journey. We celebrate Dubai’s thriving art scene and share the stories that make our community unique. Meraki is a safe, joyful space for self-expression, connection, and personal growth.
                 </p>
-                <ul class="list-disc list-inside space-y-3 inter-font font-light">
-                    <li>Mindful place cultivating spiritual and soulful experiences</li>
-                    <li>Trauma-informed, heart-opening, grass-fed vibe</li>
-                    <li>Passionate about sustainability and plant-based needs</li>
-                    <li>Holistic, inclusive, accepting all identities</li>
-                    <li>Healing through creative expression and connection</li>
-                    <li>Seeking peaceful, meaningful community experiences</li>
-                </ul>
             </div>
         </div>
     </section>

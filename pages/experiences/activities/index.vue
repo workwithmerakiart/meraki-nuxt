@@ -58,7 +58,7 @@ const activities = [
       {
         id: "1.1",
         title: "Neon Art Attack",
-        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        image: "/images/activities/neon-art-attack.webp",
         description: "Splash, flick & throw neon paint in full-body suits.",
         price: "AED 155",
         vatIncluded: false,
@@ -93,7 +93,7 @@ const activities = [
       {
         id: "1.4",
         title: "Neon Fluid Art",
-        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        image: "/images/activities/neon-fluid-art.jpg",
         description: "Pour and swirl your own neon canvas masterpiece.",
         duration: "~45–60 mins",
         bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!",
@@ -353,14 +353,14 @@ const activities = [
   {
     id: 5,
     name: "Beauty Blend",
-    image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+    image: "/images/activities/beauty-blend.webp",
     shortDescription: "Make it cute. Make it scented. Make it you!",
     modal: true,
     subtypes: [
       {
         id: "5.1",
         title: "Candle Making",
-        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        image: "/images/activities/beauty-blend.webp",
         description: "Craft your own aromatic candle.",
         price: "AED 250",
         vatIncluded: true,
@@ -369,7 +369,7 @@ const activities = [
       {
         id: "5.2",
         title: "Soap Making",
-        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        image: "/images/activities/soap-making.webp",
         description: "Customize and create beautiful handmade soaps.",
         price: "AED 175",
         vatIncluded: true,
@@ -378,7 +378,7 @@ const activities = [
       {
         id: "5.3",
         title: "Bath Bomb",
-        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        image: "/images/activities/bath-bomb.jpeg",
         description: "Fizz up your bath time with personalized bombs.",
         price: "AED 125",
         vatIncluded: true,
@@ -440,7 +440,7 @@ const activities = [
       {
         id: "6.4",
         title: "Regular Slime",
-        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        image: "/images/activities/regular-slime.jpg",
         description: "Classic slime-making fun with unlimited squish!",
         price: "AED 65",
         duration: "30 mins",
@@ -450,7 +450,7 @@ const activities = [
       {
         id: "6.5",
         title: "Bear Stuffing",
-        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        image: "/images/activities/bear-stuffing.jpg",
         description: "Stuff your very own plushie bear.",
         price: "AED 160",
         duration: "30 mins",
@@ -490,7 +490,7 @@ const activities = [
       {
         id: "6.9",
         title: "Tote Bag Painting",
-        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        image: "/images/activities/tote-bag.jpg",
         description: "Design your own custom canvas tote bag.",
         price: "AED 175",
         duration: "1.5 hours",
@@ -500,7 +500,7 @@ const activities = [
       {
         id: "6.10",
         title: "Pot Painting",
-        image: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop",
+        image: "/images/activities/pot-painting.webp",
         description: "Paint cute and quirky patterns on your very own pot.",
         price: "AED 125",
         duration: "1.5 hours",

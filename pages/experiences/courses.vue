@@ -10,15 +10,6 @@
         :tiles="courseSection.sections"
       />
     </div>
-    <div class="pt-5 pb-8">
-      <ImageTilesBlock
-        v-for="(workshopsSection, index) in workshopsData"
-        :key="index"
-        :title="workshopsSection.title"
-        :tiles="workshopsSection.sections"
-      />
-    </div>
-    <ImageStackBlock :image-stack-data="imageStackData" />
   </div>
 </template>
 
@@ -86,25 +77,25 @@ const coursesData = [
       {
         badge: "Courses",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "/images/activities/fine-art.webp",
         description: "Basics of Drawing",
       },
       {
         badge: "Courses",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "/images/activities/fine-art.webp",
         description: "Acrylic Painting",
       },
       {
         badge: "Courses",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "/images/activities/fine-art.webp",
         description: "Watercolor Painting",
       },
       {
         badge: "Courses",
         image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "/images/activities/fine-art.webp",
         description: "Oil Painting",
       },
     ],

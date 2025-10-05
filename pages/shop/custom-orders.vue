@@ -133,19 +133,19 @@ const customOrders = ref([
     id: 3,
     title: 'Corporate & Event Gifting',
     description: 'Bulk orders of resin coasters, trays, and keepsakes for 50–500+ pieces.',
-    image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif'
+    image: '/images/activities/corporate.webp'
   },
   {
     id: 4,
     title: 'Resin Décor Sets',
     description: 'Personalized trays, coasters, clocks, and wall art collections.',
-    image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif'
+    image: '/images/activities/resin-decor.avif'
   },
   {
     id: 5,
     title: 'Installations & Murals',
     description: 'Custom-designed for showrooms, cafés, salons, and creative spaces.',
-    image: '/images/products/3be4b9_947e2eba7be54daa9e0ad8916dc17305~mv2.avif'
+    image: '/images/activities/murals.webp'
   }
 ])
 </script>
