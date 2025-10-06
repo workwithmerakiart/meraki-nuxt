@@ -6,7 +6,7 @@
       <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center text-white px-4">
         <h1 class="text-3xl md:text-5xl font-bold uppercase">Contact Us</h1>
         <p class="max-w-2xl mt-4 text-base md:text-lg">
-          Let’s bring your story to life. Reach out for custom art or collaboration.
+          Have a question, need help with a booking, or want to visit the studio? We’d love to hear from you.
         </p>
       </div>
     </div>
@@ -15,8 +15,8 @@
     <div class="max-w-6xl mx-auto py-12 px-4 grid md:grid-cols-2 gap-8">
       <!-- Form -->
       <div class="bg-white shadow rounded-lg p-6">
-        <h2 class="text-2xl font-bold text-[#447c9d] mb-2">Get in Touch</h2>
-        <p class="text-gray-700 mb-6">We’d love to hear about your project idea or question.</p>
+        <h2 class="text-2xl font-bold text-[#447c9d] mb-2">Let’s connect & create together</h2>
+        <p class="text-gray-700 mb-6">Have a question, need help with a booking, or want to visit the studio? We’d love to hear from you.</p>
         <form @submit.prevent="submit">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -87,7 +87,7 @@
         <div>
           <h2 class="text-2xl font-bold mb-4">Address</h2>
           <p class="mb-2">Meraki Art Studio</p>
-          <p>40, Goshi Warehouse Village</p>
+          <p>40, Goshi Warehouse Village, St 22</p>
           <p>Al Quoz 3, Dubai</p>
           <p class="mb-6">United Arab Emirates</p>
           <a href="https://www.google.com/maps/search/?api=1&query=Meraki+Art+%26+Design+Studio,+Al+Quoz+-+Al+Quoz+Industrial+Area+3+-+Dubai"
@@ -98,7 +98,7 @@
 
           <!-- Opening Hours -->
           <div class="mt-4 text-sm space-y-1">
-            <div class="font-semibold mb-1">Opening Hours:</div>
+            <div class="font-semibold mb-1">Studio Hours:</div>
             <div class="grid grid-cols-2 gap-x-6">
               <div v-for="(time, day) in timings" :key="day" class="contents">
                 <span class="font-medium  ">{{ day }}</span>
@@ -111,6 +111,7 @@
 
           <div class="border-t border-gray-500 my-4"></div>
           <div class="mb-4">
+            <p class="mb-1 font-semibold">Get in touch</p>
             <p class="mb-1 font-semibold">Phone:</p>
             <p>
               <a href="tel:+971508523600" class="underline hover:text-[#447c9d]">
@@ -137,6 +138,13 @@
         width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
         referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow"></iframe>
     </div>
+    <transition name="fade">
+      <div v-if="toastMessage" 
+           :class="['fixed top-6 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white text-sm font-medium transition-all duration-500', 
+                    toastType === 'success' ? 'bg-green-600' : 'bg-red-600']">
+        {{ toastMessage }}
+      </div>
+    </transition>
   </section>
 </template>
 
@@ -152,14 +160,17 @@ const designation = ref('')
 const message = ref('')
 const purpose = ref('')
 
+const toastMessage = ref('')
+const toastType = ref('')
+
 const timings = {
-  MON: '14:00-22:00',
-  TUE: '14:00-22:00',
-  WED: '14:00-22:00',
-  THU: '14:00-22:00',
-  FRI: '14:00-22:00',
-  SAT: '10:00-22:00',
-  SUN: '10:00-22:00'
+  MON: 'Closed',
+  TUE: '12:00-19:00',
+  WED: '10:00-19:00',
+  THU: '10:00-19:00',
+  FRI: '10:00-19:00',
+  SAT: '10:00-19:00',
+  SUN: '10:00-19:00'
 }
 
 const reset = () => {
@@ -173,8 +184,46 @@ const reset = () => {
   purpose.value = ''
 }
 
+const showToast = (message, type = 'success') => {
+  toastMessage.value = message
+  toastType.value = type
+  setTimeout(() => {
+    toastMessage.value = ''
+  }, 5000)
+}
+
 const submit = () => {
-  alert('Form submitted! Thank you.')
+  // Basic validation for required fields
+  if (
+    !firstName.value.trim() ||
+    !lastName.value.trim() ||
+    !email.value.trim() ||
+    !phone.value.trim() ||
+    !message.value.trim() ||
+    !purpose.value.trim()
+  ) {
+    showToast('Please fill out all required fields.', 'error')
+    return
+  }
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const phoneRegex = /^[0-9]{7,15}$/
+  
+  if (!emailRegex.test(email.value) || !phoneRegex.test(phone.value)) {
+    showToast('Please enter a valid email address and phone number.', 'error')
+    return
+  }
+  
+  showToast('We’ll get back to you as soon as we can!', 'success')
   reset()
 }
 </script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+</style>
