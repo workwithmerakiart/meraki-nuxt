@@ -5,11 +5,11 @@
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
         <!-- LEFT COLUMN -->
         <div>
-          <p class="uppercase text-sm tracking-widest text-gray-600 mb-2">Workshops</p>
+          <p class="uppercase text-sm tracking-widest text-gray-600 mb-2">{{ categoryLabel }}</p>
           <h1 class="text-3xl md:text-4xl font-bold mb-2 text-black">{{ title }}</h1>
           <!-- price under title -->
-          <div v-if="price" class="mb-6 flex items-center gap-2 text-[16px] font-semibold text-black">
-            <span>{{ typeof price === 'number' ? `AED ${price}` : price }}</span>
+          <div v-if="displayPrice" class="mb-6 flex items-center gap-2 text-[16px] font-semibold text-black">
+            <span>{{ displayPrice }}</span>
             <span v-if="vat" class="text-sm text-gray-600">+ VAT</span>
           </div>
 
@@ -29,8 +29,16 @@
             </div>
           </div>
 
+          <div v-if="hasVariants" class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Choose sessions</label>
+            <select v-model="selectedKey" class="w-full border rounded px-3 py-2 text-sm bg-white">
+              <option v-for="v in variants" :key="v.key" :value="v.key">{{ v.label }}</option>
+            </select>
+          </div>
+
           <!-- Button -->
           <button
+            @click="handleEnroll"
             class="bg-black text-white text-[13px] font-semibold uppercase px-4 py-2 tracking-wide hover:bg-[#333]">
             {{ registerText }}
           </button>
@@ -54,9 +62,26 @@
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
 import { CalendarIcon, ClockIcon, MapPinIcon } from '@heroicons/vue/24/outline';
 
-defineProps({
+const {
+  title,
+  dates,
+  time,
+  location,
+  price,
+  vat,
+  vatValue,
+  registerText,
+  imageSrc,
+  imageCaption,
+  content,
+  categoryLabel,
+  variants,
+  defaultVariantKey,
+  checkoutPayload,
+} = defineProps({
   title: String,
   dates: String,
   time: String,
@@ -71,11 +96,62 @@ defineProps({
   imageSrc: String,
   imageCaption: String,
   content: String,
+  categoryLabel: { type: String, default: 'Workshops' },
+  variants: { type: Array, default: () => [] },
+  defaultVariantKey: { type: String, default: '' },
+  checkoutPayload: { type: Object, default: () => ({}) },
 });
 
 const calendarIcon = CalendarIcon;
 const clockIcon = ClockIcon;
 const locationIcon = MapPinIcon;
+
+// Variants logic (backwards-compatible)
+const hasVariants = computed(() => Array.isArray(variants) && variants.length > 0)
+const selectedKey = ref(hasVariants.value ? (defaultVariantKey || (variants[0] && variants[0].key) || '') : '')
+const selectedVariant = computed(() => {
+  if (!hasVariants.value) return null
+  return variants.find(v => v.key === selectedKey.value) || variants[0]
+})
+
+// Display price: prefer variant price if variants exist, else use provided price
+const displayPrice = computed(() => {
+  if (hasVariants.value && selectedVariant.value) {
+    const p = selectedVariant.value.unitAmount
+    return typeof p === 'number' ? `AED ${p}` : String(p || '')
+  }
+  if (typeof price === 'number') return `AED ${price}`
+  return price || ''
+})
+
+// Compose payload for checkout (do not mutate incoming prop)
+const payload = computed(() => {
+  const base = checkoutPayload || {}
+  // Always include variants, image, and a human-readable price for downstream pages
+  const shared = {
+    ...base,
+    title: base.title || title,
+    variants,
+    imageSrc,
+    displayPrice: displayPrice.value,
+  }
+
+  if (hasVariants.value && selectedVariant.value) {
+    return {
+      ...shared,
+      variantKey: selectedVariant.value.key,
+      sku: selectedVariant.value.sku || base.sku,
+      unitAmount: selectedVariant.value.unitAmount,
+    }
+  }
+  return shared
+})
+
+// Emit updated payload when user clicks Enroll
+const emit = defineEmits(['enroll'])
+const handleEnroll = () => {
+  emit('enroll', payload.value)
+}
 </script>
 
 <style scoped>

@@ -83,7 +83,7 @@
       </div>
 
       <!-- Address -->
-      <div class="bg-[#1d1d1d] text-white shadow rounded-lg p-6 flex flex-col justify-between">
+      <div class="bg-[#FC8EAC] text-white shadow rounded-lg p-6 flex flex-col justify-between">
         <div>
           <h2 class="text-2xl font-bold mb-4">Address</h2>
           <p class="mb-2">Meraki Art Studio</p>
@@ -92,7 +92,7 @@
           <p class="mb-6">United Arab Emirates</p>
           <a href="https://www.google.com/maps/search/?api=1&query=Meraki+Art+%26+Design+Studio,+Al+Quoz+-+Al+Quoz+Industrial+Area+3+-+Dubai"
             target="_blank" rel="noopener noreferrer"
-            class="inline-block mt-2 text-[#447c9d] underline hover:text-white transition">
+            class="inline-block mt-2 text-[#000000] underline hover:text-white transition">
             Get Directions
           </a>
 

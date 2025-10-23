@@ -5,10 +5,9 @@
             <!-- Left Column: Heading + Illustration -->
             <div
                 class="w-full md:w-1/2 flex flex-col items-center md:items-start justify-center gap-6 fraunces-font text-center md:text-left">
-                <!-- Artistic Splash Colors GIF from Giphy -->
-                <video src="/videos/meraki-intro.mp4" autoplay loop muted playsinline class="w-72 sm:w-80 md:w-[420px] lg:w-[480px] rounded-lg shadow-lg transition-all duration-300 max-w-full h-auto">
-                    Your browser does not support the video tag.
-                </video>
+                <!-- Artistic Splash Colors Image -->
+                <img src="/images/story/story_hero.webp" alt="Meraki Art Studio — splash of color"
+                    class="w-72 sm:w-80 md:w-[420px] lg:w-[480px] rounded-lg shadow-lg transition-all duration-300 max-w-full h-auto" />
 
                 <h2
                     class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold block-two-headings leading-snug text-[#447C9D] max-w-md text-center">
@@ -20,9 +19,18 @@
             </div>
 
             <!-- Right Column: Text Content -->
-            <div class="w-full md:w-1/2 max-w-2xl text-[#1A1A1A] text-lg space-y-6 fraunces-font font-normal text-justify">
+            <div
+                class="w-full md:w-1/2 max-w-2xl text-[#1A1A1A] text-lg space-y-6 fraunces-font font-normal text-justify">
                 <p class="list-disc list-inside space-y-3 inter-font font-light">
-                    Meraki is a Dubai-born creative studio where art, joy, and community come together in every experience. Founded in 2018 by Kay and Pooh, two passionate artists who turned a dream into one of Dubai’s most vibrant art destinations, Meraki was built on the belief that creativity heals, connects, and inspires. Our studio offers hands-on workshops, immersive courses, walk-in activities, and curated events—welcoming artists, hobbyists, families, art connoisseurs and corporate teams alike. We’re home to a curated shop of quality materials, custom orders, and local artistry, all designed to support your creative journey. We celebrate Dubai’s thriving art scene and share the stories that make our community unique. Meraki is a safe, joyful space for self-expression, connection, and personal growth.
+                    Meraki is a Dubai-born creative studio where art, joy, and community come together in every
+                    experience. Founded in 2018 by Kay and Pooh, two passionate artists who turned a dream into one of
+                    Dubai’s most vibrant art destinations, Meraki was built on the belief that creativity heals,
+                    connects, and inspires. Our studio offers hands-on workshops, immersive courses, walk-in activities,
+                    and curated events—welcoming artists, hobbyists, families, art connoisseurs and corporate teams
+                    alike. We’re home to a curated shop of quality materials, custom orders, and local artistry, all
+                    designed to support your creative journey. We celebrate Dubai’s thriving art scene and share the
+                    stories that make our community unique. Meraki is a safe, joyful space for self-expression,
+                    connection, and personal growth.
                 </p>
             </div>
         </div>

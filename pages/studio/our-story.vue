@@ -39,10 +39,10 @@
     </div>
 
     <!-- Block Three: Mission -->
-    <div class="bg-[f9f3eb] py-12 px-4">
+    <div class="bg-[#f9f3eb] py-12 px-4">
       <div class="max-w-4xl mx-auto text-center">
         <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-[#dd4912]">What we offer</h2>
-        <p class="text-gray-700 leading-relaxed max-w-3xl mx-auto">
+        <div class="text-gray-700 leading-relaxed max-w-3xl mx-auto">
         <ul class="text-gray-700 leading-relaxed max-w-3xl mx-auto text-left list-disc list-inside space-y-2">
           <li>Neon Slime & Bear Creations – Unforgettable fun for all ages</li>
           <li>Resin, Jesmonite & Fluid Art – Explore luxury materials in guided workshops</li>
@@ -50,7 +50,7 @@
           <li>Birthday Parties & Events – Make milestones memorable with art</li>
         </ul>
 
-        </p>
+        </div>
       </div>
     </div>
 
@@ -73,7 +73,7 @@
         people - Meet the Meraki Family</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
         <div v-for="member in team" :key="member.id"
-          class="bg-[f9f3eb] rounded-lg overflow-hidden shadow hover:shadow-lg transition">
+          class="bg-[#f9f3eb] rounded-lg overflow-hidden shadow hover:shadow-lg transition">
           <div class="overflow-hidden">
             <img :src="member.image" :alt="member.name"
               class="w-full h-48 object-cover transform hover:scale-105 transition duration-300" />
@@ -88,7 +88,7 @@
     </div>
 
     <!-- Block Five: Image Carousel -->
-    <div class="bg-[f9f3eb] py-12 px-4">
+    <div class="bg-[#f9f3eb] py-12 px-4">
       <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 text-[#dd4912]">Our Work in Focus</h2>
       <Carousel />
     </div>
@@ -103,7 +103,7 @@
 
 
     <!-- Block Seven: Mission Repeat -->
-    <div class="bg-[f9f3eb] py-12 px-4">
+    <div class="bg-[#f9f3eb] py-12 px-4">
       <div class="max-w-4xl mx-auto text-center">
         <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-[#dd4912]">Art with purpose</h2>
         <p class="text-gray-700 leading-relaxed max-w-3xl mx-auto mb-6">

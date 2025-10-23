@@ -4,7 +4,7 @@
     <ExperiencesBlockTwo v-bind="blockTwoData" />
     <div class="pt-5 pb-8">
       <ImageTilesBlock v-for="(workshopsSection, index) in workshopsData" :key="index" :title="workshopsSection.title"
-        :tiles="workshopsSection.sections" />
+        :tiles="workshopsSection.sections" categoryLabel="WORKSHOPS" />
     </div>
     <WorkshopsCtaBlock />
   </div>
