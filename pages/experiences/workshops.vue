@@ -244,6 +244,92 @@ const workshopsData = [
             "<p>Handcraft natural soaps with soothing scents.</p>",
         },
       }
+      , {
+        badge: "WORKSHOPS",
+        image: "/images/shop/oct1.jpeg",
+        title: "Witch’s Brew Candle Workshop",
+        price: "275 AED",
+        vat: true,
+        vatValue: 5,
+        sections: [
+          {
+            icon: CalendarDaysIcon,
+            text: "Thursday, 30 October 2025",
+          },
+          {
+            icon: ClockIcon,
+            text: "10:30 AM – 12:00 PM",
+          },
+          {
+            icon: MapPinIcon,
+            text: "Meraki Art Studio",
+          },
+        ],
+        modal: true,
+        modalContent: {
+          title: "Witch’s Brew Candle Workshop",
+          dates: "Thursday, 30 October 2025",
+          time: "10:30 AM – 12:00 PM",
+          location: "Meraki Art Studio",
+          price: "275 AED",
+          vat: true,
+          vatValue: 5,
+          registerText: "Register",
+          imageSrc: "/images/shop/oct1.jpeg",
+          imageCaption: "Witch’s Brew Candle Workshop at Meraki Art Studio",
+          content: `
+            <p>Make spooky-scented candles in mini cauldron jars with black wax, gold shimmer, and magical Halloween scents like Midnight Amber, Smoky Vanilla, and Pumpkin Spice.</p>
+            <ul>
+              <li>Add crystal toppings & glitter dust</li>
+              <li>Label your potion “No. 9”</li>
+              <li>Halloween special drink included</li>
+            </ul>
+          `,
+        },
+      }
+      , {
+        badge: "WORKSHOPS",
+        image: "/images/shop/oct2.jpeg",
+        title: "Kids Halloween Workshop",
+        price: "150 AED",
+        vat: true,
+        vatValue: 5,
+        sections: [
+          {
+            icon: CalendarDaysIcon,
+            text: "Friday, 31 October 2025",
+          },
+          {
+            icon: ClockIcon,
+            text: "3:30 PM – 5:30 PM",
+          },
+          {
+            icon: MapPinIcon,
+            text: "Meraki Art Studio",
+          },
+        ],
+        modal: true,
+        modalContent: {
+          title: "Kids Halloween Workshop",
+          dates: "Friday, 31 October 2025",
+          time: "3:30 PM – 5:30 PM",
+          location: "Meraki Art Studio",
+          price: "150 AED",
+          vat: true,
+          vatValue: 5,
+          registerText: "Register",
+          imageSrc: "/images/shop/oct2.jpeg",
+          imageCaption: "Kids Halloween Workshop at Meraki Art Studio",
+          content: `
+            <p>A fun-filled Halloween afternoon featuring Glow Slime + Mini Pumpkin Painting.</p>
+            <ul>
+              <li>Guided slime making with glow effects</li>
+              <li>Paint your own mini pumpkin</li>
+              <li>Halloween special drink included</li>
+            </ul>
+          `,
+        },
+      }
     ],
   },
 ];

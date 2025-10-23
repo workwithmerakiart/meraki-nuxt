@@ -131,6 +131,15 @@ const allProducts = ref([
   { id: 8, title: 'Creative DIY Bundle', price: 380, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
   { id: 9, title: 'DIY Resin Gift Pack', price: 300, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
   { id: 10, title: 'Complete DIY Set', price: 420, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
+  , { id: 11, title: 'Resin Clock Kit', price: 350, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
+  , { id: 12, title: 'Resin Table Kit', price: 525, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
+  , { id: 13, title: 'Resin Cheeseboard Kit', price: 350, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
+  , { id: 14, title: 'Resin Agate Coaster Kit', price: 325, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
+  , { id: 15, title: 'MDF Resin Coaster Kit', price: 250, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
+  , { id: 16, title: 'Fluid Art Kit — Medium Bear', price: 150, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
+  , { id: 17, title: 'Fluid Art Labubu', price: 175, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
+  , { id: 18, title: 'Fluid Art Bunny', price: 160, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
+  , { id: 19, title: 'Fluid Art Bear Phone Holder', price: 75, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
 ])
 
 
