@@ -84,10 +84,14 @@
 
                                 </div>
 
-                                <!-- Right Column: Image -->
+                                <!-- Right Column: Image (uniform landscape) -->
                                 <div class="w-full lg:w-1/2">
-                                    <img :src="subtype.image || activity.image" :alt="subtype.title"
-                                        class="h-full w-full object-cover" />
+                                  <div class="relative landscape overflow-hidden bg-gray-200">
+                                    <img
+                                      :src="subtype.image || activity.image"
+                                      :alt="subtype.title"
+                                      class="absolute inset-0 w-full h-full object-cover object-center" />
+                                  </div>
                                 </div>
                             </div>
 
@@ -223,5 +227,28 @@ onBeforeUnmount(() => {
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+}
+
+/* Uniform landscape frame for all subtype images */
+.landscape {
+  aspect-ratio: 4 / 3; /* taller frame: same width, more height */
+}
+
+/* Fallback for browsers without aspect-ratio support */
+@supports not (aspect-ratio: 4 / 3) {
+  .landscape { position: relative; }
+  .landscape::before {
+    content: "";
+    display: block;
+    padding-top: 75%; /* 4:3 */
+  }
+  .landscape > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
 }
 </style>

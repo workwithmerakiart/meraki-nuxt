@@ -8,8 +8,13 @@
           <div class="absolute inset-0 w-full h-full">
             <video v-if="slide.video" :src="slide.video" autoplay muted loop playsinline
               class="w-full h-full object-cover"></video>
-            <div v-else class="w-full h-full bg-cover bg-center" :style="{ backgroundImage: `url(${slide.image})` }">
-            </div>
+            <template v-else>
+              <!-- If slide requests rotation, render an <img> we can rotate -->
+              <img v-if="slide.rotate90" :src="slide.image" alt="" class="rotated-90-cover" />
+              <!-- Otherwise keep using a background div -->
+              <div v-else class="w-full h-full bg-cover bg-center" :style="{ backgroundImage: `url(${slide.image})` }">
+              </div>
+            </template>
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
           </div>
 
@@ -129,7 +134,7 @@ const slides = [
     cta: "Shop Now",
     link: "/shop",
     image:
-      "/images/hero_shop.webp",
+      "/images/block3_shop.webp",
   },
 ];
 </script>
