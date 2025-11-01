@@ -100,12 +100,108 @@
         </div>
       </div>
     </div>
+
+    <div
+      @click="openGiftModal()"
+      @keydown.enter.prevent="openGiftModal()"
+      @keydown.space.prevent="openGiftModal()"
+      role="button"
+      tabindex="0"
+      aria-label="Open gift card"
+      v-if="isGiftVisible && !isGiftModalOpen"
+      class="fixed right-4 sm:right-6 md:right-8 top-[70vh] sm:top-[68vh] md:top-[62vh] z-[9999] cursor-pointer select-none group">
+      <div class="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28">
+        <span
+          class="absolute -top-2 -right-2 w-5 h-5 text-[10px] leading-none flex items-center justify-center rounded-full bg-red-500 text-white font-bold hover:bg-red-600"
+          role="button"
+          aria-label="Hide gift for 10 seconds"
+          @click.stop="hideGift()"
+        >
+          ✕
+        </span>
+        <!-- Hover callout tooltip -->
+        <div
+          class="absolute right-full mr-2 top-1/2 -translate-y-1/2 whitespace-nowrap rounded bg-black text-white text-xs px-2 py-1 shadow opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-100 pointer-events-none">
+          Wanna gift a voucher?
+        </div>
+        <ClientOnly>
+          <DotLottieVue
+            :autoplay="true"
+            :loop="true"
+            src="https://lottie.host/645b1fdc-e4ca-4142-a3fb-5018e0724918/Aa96DsHjXL.lottie"
+            style="width: 100%; height: 100%" />
+        </ClientOnly>
+      </div>
+    </div>
+
+    <!-- Gift Card Modal -->
+    <transition name="fade">
+      <div v-if="isGiftModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/50" @click="closeGiftModal()"></div>
+        <!-- Dialog: portrait on mobile, landscape on desktop -->
+        <div class="relative z-10 w-[92vw] max-w-md md:max-w-3xl lg:max-w-4xl bg-white rounded-lg shadow-xl border border-black">
+          <button @click="closeGiftModal()" aria-label="Close"
+            class="absolute top-3 right-3 text-black hover:opacity-70">✕</button>
+
+          <!-- Content wrapper switches from column (portrait) to row (landscape) -->
+          <div class="p-5 md:p-6 lg:p-8 flex flex-col md:flex-row md:items-stretch gap-4 md:gap-6">
+            <!-- Media: portrait aspect on mobile, landscape aspect on desktop -->
+            <div class="w-full md:w-1/2">
+              <div class="overflow-hidden rounded aspect-[3/4] md:aspect-[16/9]">
+                <img :src="giftProduct?.image" :alt="giftProduct?.title" class="w-full h-full object-cover" />
+              </div>
+            </div>
+
+            <!-- Details -->
+            <div class="w-full md:w-1/2 flex flex-col">
+              <h3 class="text-xl md:text-2xl font-semibold text-black">{{ giftProduct?.title }}</h3>
+              <p class="text-sm md:text-base text-black mt-2">AED {{ effectiveGiftAmount }}</p>
+              <div class="mt-3 mb-4 flex items-center gap-2 flex-wrap">
+                <button
+                  v-for="a in presetGiftAmounts"
+                  :key="a"
+                  type="button"
+                  @click="choosePresetAmount(a)"
+                  class="px-3 py-1.5 text-xs md:text-sm border rounded transition"
+                  :class="selectedGiftAmount === a && (!customGiftAmount || Number(customGiftAmount) <= 0) ? 'border-black bg-black text-white' : 'border-black text-black hover:bg-black hover:text-white'">
+                  AED {{ a }}
+                </button>
+
+                <div class="flex items-center border border-black rounded px-2 py-1.5 text-xs md:text-sm">
+                  <span class="mr-1">AED</span>
+                  <input
+                    type="number"
+                    min="10"
+                    max="1000"
+                    step="1"
+                    inputmode="numeric"
+                    placeholder="Enter Custom Value"
+                    v-model="customGiftAmount"
+                    class="w-36 md:w-48 lg:w-56 bg-transparent focus:outline-none"
+                    @input="onCustomAmountInput"
+                  />
+                </div>
+              </div>
+              <p v-if="isCustomInvalid" class="-mt-2 mb-3 text-xs text-red-600">Please use an amount from AED 10 to AED 1,000</p>
+              <p class="text-xs md:text-sm text-black/70 mb-4">Send a little splash of creativity. Choose an amount and let them pick their favourite Meraki experience or kit.</p>
+              <button
+                :data-amount="effectiveGiftAmount"
+                class="mt-auto w-full border border-black text-black hover:bg-[#447c9d] hover:text-white transition rounded py-2 text-sm md:text-base">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </section>
 </template>
 
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 
 const categoryExpanded = ref(true)
 const priceExpanded = ref(true)
@@ -140,12 +236,83 @@ const allProducts = ref([
   , { id: 17, title: 'Fluid Art Labubu', price: 175, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
   , { id: 18, title: 'Fluid Art Bunny', price: 160, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
   , { id: 19, title: 'Fluid Art Bear Phone Holder', price: 75, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
+
+  // Gift Card (always available via floating button)
+  , { id: 20, title: 'Meraki Gift Card', price: 199, category: 'Gift', image: '/images/shop/meraki-gift-card.webp' },
 ])
 
 
 const visibleProducts = ref([])
 const itemsPerLoad = 6
 const isLoading = ref(false)
+const isGiftModalOpen = ref(false)
+
+// Gift card amount selection
+const presetGiftAmounts = [100, 250, 500, 1000]
+const selectedGiftAmount = ref(presetGiftAmounts[0])
+const customGiftAmount = ref('')
+
+const effectiveGiftAmount = computed(() => {
+  const raw = customGiftAmount.value
+  if (raw !== '' && raw !== null) {
+    const val = Number(raw)
+    if (Number.isFinite(val) && val >= 10 && val <= 1000) {
+      return Math.round(val)
+    }
+  }
+  return selectedGiftAmount.value
+})
+
+function choosePresetAmount(a) {
+  selectedGiftAmount.value = a
+  customGiftAmount.value = ''
+}
+
+function onCustomAmountInput(e) {
+  customGiftAmount.value = e?.target?.value ?? ''
+  if (customGiftAmount.value !== '') {
+    selectedGiftAmount.value = null
+  }
+}
+
+const isCustomInvalid = computed(() => {
+  if (customGiftAmount.value === '' || customGiftAmount.value === null) return false
+  const val = Number(customGiftAmount.value)
+  return !(Number.isFinite(val) && val >= 10 && val <= 1000)
+})
+
+const isGiftVisible = ref(true)
+let giftHideTimer = null
+
+function hideGift(durationMs = 10000) {
+  isGiftVisible.value = false
+  try { localStorage.setItem('giftHidden', 'true') } catch {}
+  if (giftHideTimer) clearTimeout(giftHideTimer)
+  giftHideTimer = setTimeout(() => {
+    isGiftVisible.value = true
+    try { localStorage.removeItem('giftHidden') } catch {}
+    giftHideTimer = null
+  }, durationMs)
+}
+
+onMounted(() => {
+  try {
+    if (localStorage.getItem('giftHidden') === 'true') {
+      isGiftVisible.value = false
+      if (giftHideTimer) clearTimeout(giftHideTimer)
+      giftHideTimer = setTimeout(() => {
+        isGiftVisible.value = true
+        try { localStorage.removeItem('giftHidden') } catch {}
+        giftHideTimer = null
+      }, 10000)
+    }
+  } catch {}
+})
+
+onBeforeUnmount(() => {
+  if (giftHideTimer) clearTimeout(giftHideTimer)
+})
+const giftProduct = computed(() => allProducts.value.find(p => p.category === 'Gift' || p.title === 'Meraki Gift Card'))
 let offset = 0
 
 const filteredVisibleProducts = computed(() => {
@@ -194,6 +361,14 @@ function handleScroll() {
   if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
     loadMore()
   }
+}
+
+function openGiftModal() {
+  isGiftModalOpen.value = true
+}
+
+function closeGiftModal() {
+  isGiftModalOpen.value = false
 }
 
 function buttonClass(cat) {

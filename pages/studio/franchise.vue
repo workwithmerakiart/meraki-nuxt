@@ -18,13 +18,13 @@ import FranchiseInquiryForm from '@/components/forms/FranchiseInquiryForm.vue'
       image="/images/story/story_hero.webp" alt="Meraki Partner Hero" />
 
     <!-- Blocks 2–4: alternating rails -->
-    <div class="mx-auto max-w-7xl px-6 sm:px-8 py-12 sm:py-16 lg:py-20 space-y-16">
+    <div class="mx-auto max-w-7xl px-3 sm:px-5 py-6 sm:py-8 lg:py-10 space-y-0">
 
       <!-- Block 2: text left / image right -->
-      <TextLeftImageRight eyebrow="Franchise Advantage" heading="Why franchise with us?"
+      <TextLeftImageRight class="rail-tight rail-gap" eyebrow="Franchise Advantage" heading="Why franchise with us?"
         :image-src="'/images/story/story_pooja.webp'" :image-alt="'Why franchise with us image'" :bleed-to-right="true">
-        <div class="mt-4 text-base/7 sm:text-lg/8 text-neutral-700">
-          <ul class="space-y-4">
+        <div class="mt-2 text-base/7 sm:text-lg/7 text-neutral-700">
+          <ul class="space-y-1.5 pl-4">
             <li>
               <span class="font-medium text-neutral-900">Proven Business Model</span>
               <span class="block">Refined through years of experience in Dubai</span>
@@ -54,11 +54,11 @@ import FranchiseInquiryForm from '@/components/forms/FranchiseInquiryForm.vue'
       </TextLeftImageRight>
 
       <!-- Block 3: image left / text right -->
-      <ImageLeftTextRight heading="Ideal franchise partners" :image-src="'/images/shop/shop_color_kit.webp'"
-        :image-alt="'Ideal partners image'" :left-width-pct="30">
-        <div class="mt-4 text-base/7 sm:text-lg/8 text-neutral-700">
+      <ImageLeftTextRight class="rail-tight mt-6 sm:mt-8 mb-4" heading="Ideal franchise partners" :image-src="'/images/shop/shop_color_kit.webp'"
+        :image-alt="'Ideal partners image'" :left-width-pct="44">
+        <div class="mt-2 text-base/6 sm:text-lg/6 text-neutral-700">
           <p class="mb-3">We’re looking for individuals who are:</p>
-          <ul class="list-disc pl-5 space-y-2">
+          <ul class="list-disc pl-4 space-y-1">
             <li>Passionate about creativity and education</li>
             <li>Driven to run a customer-focused, community-oriented business</li>
             <li>Interested in owning a high-potential business with purpose</li>
@@ -67,10 +67,10 @@ import FranchiseInquiryForm from '@/components/forms/FranchiseInquiryForm.vue'
       </ImageLeftTextRight>
 
       <!-- Block 4: text left / image right -->
-      <TextLeftImageRight heading="What you get" :image-src="'/images/courses/courses_block2.webp'"
+      <TextLeftImageRight class="rail-tight rail-gap" heading="What you get" :image-src="'/images/courses/courses_block2.webp'"
         :image-alt="'What you get image'" :bleed-to-right="true">
-        <div class="mt-4 text-base/7 sm:text-lg/8 text-neutral-700">
-          <ul class="list-disc pl-5 space-y-2">
+        <div class="mt-2 text-base/6 sm:text-lg/6 text-neutral-700">
+          <ul class="list-disc pl-4 space-y-1">
             <li>Licensing &amp; rights to the Meraki brand in your region</li>
             <li>Launch &amp; training support (on-site or virtual)</li>
             <li>Operational playbook + booking systems</li>
@@ -83,10 +83,10 @@ import FranchiseInquiryForm from '@/components/forms/FranchiseInquiryForm.vue'
 
     <!-- Block 5: Franchise form -->
     <section class="bg-[var(--meraki-cream)]">
-      <div class="mx-auto max-w-7xl px-6 sm:px-8 py-12 sm:py-16">
-        <div class="max-w-3xl mx-auto text-center">
-          <h3 class="text-2xl sm:text-3xl font-semibold tracking-tight">Let’s start the conversation</h3>
-          <p class="mt-3 text-neutral-700">
+      <div class="mx-auto max-w-7xl px-3 sm:px-5 py-6 sm:py-8">
+        <div class="max-w-2xl mx-auto text-center">
+          <h3 class="text-xl sm:text-2xl font-semibold tracking-tight">Let’s start the conversation</h3>
+          <p class="mt-1.5 text-neutral-700">
             Mail us at
             <a href="mailto:franchise@merakiartstudio.ae"
               class="underline decoration-[var(--meraki-primary)] hover:text-[var(--meraki-primary)]">
@@ -107,4 +107,10 @@ import FranchiseInquiryForm from '@/components/forms/FranchiseInquiryForm.vue'
 .body-text {
   font-family: 'Inter', sans-serif;
 }
+
+/* Collapse vertical whitespace on rail blocks */
+.rail-tight { padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; border: 0 !important; }
+/* Optional gap below selected rails */
+.rail-gap { margin-bottom: 1rem !important; }
+@media (min-width: 640px) { .rail-gap { margin-bottom: 1.5rem !important; } }
 </style>
