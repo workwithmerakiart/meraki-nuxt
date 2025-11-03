@@ -36,6 +36,14 @@ const submenuChildren = ref([]);
 const logoRef = ref(null);
 const hamburgerRef = ref(null);
 
+// Desktop submenu lock to prevent accidental parent switches while cursor is over the right column
+const submenuLocked = ref(false)
+// Set hovered index only when not locked (keeps current parent active while traversing to submenu)
+function setHovered(idx) {
+  if (submenuLocked.value) return
+  hoveredIndex.value = idx
+}
+
 const navigation = [
   { label: "Home", to: "/" },
   {
@@ -95,6 +103,7 @@ const toggleMenu = () => {
   isOpen.value = !isOpen.value;
   if (!isOpen.value) {
     hoveredIndex.value = -1;
+    submenuLocked.value = false; // ensure lock is cleared when closing
   }
 };
 
@@ -234,6 +243,7 @@ onBeforeUnmount(() => {
 watch(
   () => isOpen.value,
   async (open) => {
+    submenuLocked.value = false; // reset lock every time drawer toggles
     await nextTick();
     navigationHeadings.value = [
       ...document.querySelectorAll(".navigation-heading"),
@@ -345,6 +355,7 @@ watch(
         fluidInstance = null;
       }
       unlockBodyScroll();
+      submenuLocked.value = false;
       hoveredIndex.value = -1;
     }
   }
@@ -381,14 +392,13 @@ watch(
         <div ref="menuContainer" class="pointer-events-auto flex flex-1">
           <div class="flex flex-1">
             <div class="w-1/2 space-y-4 md:space-y-6">
-              <div v-for="(item, index) in navigation" :key="index" @mouseenter="hoveredIndex = index"
-                @touchstart.prevent="hoveredIndex = index"
+              <div v-for="(item, index) in navigation" :key="index"
                 class="group text-2xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading">
                 <!-- ⭐ CHANGED -->
-                <NuxtLink :to="item.to" class="outline-text block transition-all duration-300" :class="hoveredIndex === index
+                <NuxtLink :to="item.to" class="outline-text inline-block px-2 py-1 transition-all duration-300" :class="hoveredIndex === index
                   ? 'text-white active'
                   : 'text-gray-500'
-                  " @click.prevent="navigate(item.to)">
+                  " @mouseenter="setHovered(index)" @focus="setHovered(index)" @touchstart.prevent="setHovered(index)" @click.prevent="navigate(item.to)">
                   {{ item.label }}
                   <!-- ⭐ ADDED THIS PART ⭐ -->
                   <span v-if="item.label === 'Matter DXB'"
@@ -399,7 +409,7 @@ watch(
                 </NuxtLink>
               </div>
             </div>
-            <div class="w-1/2 pl-8 md:pl-16 space-y-2">
+            <div class="w-1/2 pl-8 md:pl-16 space-y-2" @mouseenter="submenuLocked = true" @mouseleave="submenuLocked = false">
               <div v-if="
                 navigationStyle.hoveredItem &&
                 navigationStyle.hoveredItem.children

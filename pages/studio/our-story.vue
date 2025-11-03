@@ -12,8 +12,8 @@
            pt-[calc(env(safe-area-inset-top)+64px)] md:pt-0">
         <h1 class="text-3xl md:text-5xl font-bold uppercase">Our Story</h1>
         <p class="max-w-2xl mt-4 text-base md:text-lg">
-          Welcome to Meraki Art Studio—where creativity meets joy, and every experience is a masterpiece. We believe
-          every creation tells a story—crafted with intention, color, and heart at Meraki Art Studio.
+          Welcome to Meraki Art Studio, where creativity meets joy, and every experience is a masterpiece. We believe
+          every creation tells a story, crafted with intention, color, and heart at Meraki Art Studio.
         </p>
       </div>
     </div>
@@ -24,10 +24,10 @@
       <div class="md:w-1/2 text-center md:text-left">
         <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-[#dd4912]">Meet the founders – Kay & Pooh</h2>
         <p class="text-gray-700 leading-relaxed">
-          In 2018, two passionate souls—Kay and Pooh—turned their love for art into a dream called Meraki Art Studio.
+          In 2018, two passionate souls, Kay and Pooh, turned their love for art into a dream called Meraki Art Studio.
           What started as a small, heartfelt project has blossomed into one of Dubai’s most vibrant art destinations.
           Fueled by creativity, courage, and a deep belief in the healing power of self-expression, Kay and Pooh built
-          more than a studio—they built a community. Today, Meraki Art Studio welcomes people from all walks of life to
+          more than a studio, they built a community. Today, Meraki Art Studio welcomes people from all walks of life to
           discover joy, connection, and a touch of magic through art.
           Their journey is proof that when you create with love, the world shows up to join you.
 
@@ -40,30 +40,25 @@
 
     <!-- Block Three: Mission -->
     <div class="bg-[#f9f3eb] py-12 px-4">
-      <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-[#dd4912]">What we offer</h2>
-        <div class="text-gray-700 leading-relaxed max-w-3xl mx-auto">
-        <ul class="text-gray-700 leading-relaxed max-w-3xl mx-auto text-left list-disc list-inside space-y-2">
-          <li>Neon Slime & Bear Creations – Unforgettable fun for all ages</li>
-          <li>Resin, Jesmonite & Fluid Art – Explore luxury materials in guided workshops</li>
-          <li>Corporate Team Building – Bond over creativity in inspiring settings</li>
-          <li>Birthday Parties & Events – Make milestones memorable with art</li>
-        </ul>
-
+      <div class="max-w-7xl mx-auto px-2">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-[#dd4912] text-center">What we offer</h2>
+        <div class="md:grid md:grid-cols-12 md:gap-8">
+          <p class="text-gray-700 leading-relaxed text-justify md:col-start-1 md:col-span-12 xl:col-span-12">
+            At Meraki Art Studio in Dubai, we host playful Neon Slime & Bear Creations for all ages alongside premium Resin, Jesmonite and Fluid Art workshops. Whether you are a first‑time creator or a seasoned hobbyist, our artists guide you step by step, with materials included and a relaxed, welcoming vibe. We also design private experiences, from corporate team‑building sessions that spark collaboration to birthday parties and milestone events that feel personal and memorable — so every visit blends learning, laughter, and a keepsake you will love to take home.
+          </p>
         </div>
       </div>
     </div>
 
     <!-- New Block: Why choose Meraki -->
     <div class="bg-[#f9f3eb] py-12 px-4">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-[#dd4912] text-center">Why choose Meraki</h2>
-        <ul class="text-gray-700 leading-relaxed max-w-3xl mx-auto list-disc list-inside space-y-2 text-left">
-          <li>Art experiences tailored to every age & skill level</li>
-          <li>A safe, vibrant, and therapeutic space for expression</li>
-          <li>Hosted by passionate creatives who guide with care</li>
-          <li>Located in the heart of Dubai’s cultural scene</li>
-        </ul>
+      <div class="max-w-7xl mx-auto px-2">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-[#dd4912] text-center">Why choose Meraki</h2>
+        <div class="md:grid md:grid-cols-12 md:gap-8">
+          <p class="text-gray-700 leading-relaxed text-justify md:col-start-1 md:col-span-12 xl:col-span-12">
+            At Meraki, every visit is thoughtfully tailored to your age and skill level, so beginners feel supported and returning makers stay challenged. The studio is a safe, vibrant space where you can slow down, express yourself, and create with confidence, guided by warm, passionate artists who care about the experience as much as the outcome. Nestled in the heart of Dubai’s cultural scene, Meraki brings people together through creativity, balancing technique with joy so you leave with a piece you are proud of and memories that last.
+          </p>
+        </div>
       </div>
     </div>
 
@@ -130,14 +125,14 @@ import Carousel from '~/components/Carousel.vue'
 import Testimonials from '~/components/Testimonials.vue'
 
 const team = ref([
-  { id: 1, name: 'Kajol', role: 'Creative Director & Co-Founder', description: 'The soul behind every creative detail—Kajol infuses the studio with imagination and purpose.', image: '/images/story/story_kajol.webp' },
+  { id: 1, name: 'Kajol', role: 'Creative Director & Co-Founder', description: 'The soul behind every creative detail, Kajol infuses the studio with imagination and purpose.', image: '/images/story/story_kajol.webp' },
   { id: 2, name: 'Pooja', role: 'Co-Founder', description: 'Visionary at heart, she’s one half of the duo that dreamed this studio into existence.', image: '/images/story/story_pooja.webp' },
   { id: 3, name: 'Neetu', role: 'Managing Director', description: 'The calm in the creative storm. Neetu ensures everything runs smoother than a resin pour.', image: '/images/story/story_neetu.webp' },
   { id: 4, name: 'Kenneth', role: 'Front Desk Coordinator', description: 'Your warmest welcome starts here. Kenneth is the friendly face behind the front desk.', image: '/images/story/story_kenneth.webp' },
   { id: 5, name: 'Kalyani', role: 'Artist', description: 'From canvas to neon, Kalyani helps guests turn artistic jitters into pure confidence.', image: '/images/story/story_kalyani.webp' },
-  { id: 6, name: 'Maria', role: 'Party Host & Social Media Specialist', description: 'The life of the party and the feed—Maria makes every event sparkle online and off.', image: '/images/activities/maria.jpeg' },
+  { id: 6, name: 'Maria', role: 'Party Host & Social Media Specialist', description: 'The life of the party and the feed, Maria makes every event sparkle online and off.', image: '/images/activities/maria.jpeg' },
   { id: 7, name: 'Nono', role: 'Neon Master', description: 'If it glows, Nono’s involved. She brings bright energy (literally).', image: '/images/story/story_nono.webp' },
-  { id: 8, name: 'Ali', role: 'Barista', description: 'Fueling creativity one cup at a time—art always tastes better with great coffee.', image: '/images/story/story_ali.webp' },
+  { id: 8, name: 'Ali', role: 'Barista', description: 'Fueling creativity one cup at a time, art always tastes better with great coffee.', image: '/images/story/story_ali.webp' },
   { id: 9, name: 'Shiv', role: 'Cleaning Operator', description: 'The unsung hero of the studio, keeping our space fresh, clean, and chaos-free.', image: '/images/story/story_shiv.webp' }
 ])
 </script>

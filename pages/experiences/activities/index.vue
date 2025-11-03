@@ -136,33 +136,18 @@ const activities = [
       },
       {
         id: "2.3",
-        title: "Acrylic Tray (13x26 cm)",
-        image: "/images/activities/resin/activities_resin_acrylic_tray_1326.webp",
-        description: "Customize a sleek rectangular acrylic tray with resin art.",
-        price: "AED 200",
-        vatIncluded: true,
-        bottomNote: "Functional and fabulous — your art becomes a lifestyle piece!"
+        title: "Acrylic Tray",
+        image: "/images/activities/resin/activities_resin_acrylic_tray_2030.webp",
+        description: "Customize an acrylic tray with resin art in your preferred size.",
+        bottomNote: "Functional and fabulous — your art becomes a lifestyle piece!",
+        variants: [
+          { name: "13x26 cm", price: "AED 200", vatIncluded: true },
+          { name: "20x20 cm", price: "AED 275", vatIncluded: true },
+          { name: "20x30 cm", price: "AED 350", vatIncluded: true }
+        ]
       },
       {
         id: "2.4",
-        title: "Acrylic Tray (20x20 cm)",
-        image: "/images/activities/resin/activities_resin_acrylic_tray_2020.webp",
-        description: "Square-shaped tray ideal for modern resin designs.",
-        price: "AED 275",
-        vatIncluded: true,
-        bottomNote: "Perfect for gifting or keeping your trinkets stylishly sorted."
-      },
-      {
-        id: "2.5",
-        title: "Acrylic Tray (20x30 cm)",
-        image: "/images/activities/resin/activities_resin_acrylic_tray_2030.webp",
-        description: "Larger tray option for elaborate resin effects.",
-        price: "AED 350",
-        vatIncluded: true,
-        bottomNote: "Unleash more creativity with a larger working surface."
-      },
-      {
-        id: "2.6",
         title: "Clock (30 cm dia)",
         image: "/images/activities/resin/activities_resin_clock.webp",
         description: "Create a round resin wall clock — artistic and functional.",
@@ -171,7 +156,7 @@ const activities = [
         bottomNote: "Design a piece of time you’ll love watching!"
       },
       {
-        id: "2.7",
+        id: "2.5",
         title: "Clock with Rings (40 cm dia)",
         image: "/images/activities/resin/activities_resin_clock_with_rings.webp",
         description: "Stylish wall clock with intricate resin ring detailing.",
@@ -180,7 +165,7 @@ const activities = [
         bottomNote: "Go big and bold with layered resin textures."
       },
       {
-        id: "2.8",
+        id: "2.6",
         title: "Cheeseboard",
         image: "/images/activities/resin/activities_resin_cheeseboard.webp",
         description: "Decorate a wood and resin cheeseboard for serving in style.",
@@ -189,7 +174,7 @@ const activities = [
         bottomNote: "Serve up style with your own handmade resin cheeseboard."
       },
       {
-        id: "2.9",
+        id: "2.7",
         title: "Beach Painting",
         image: "/images/activities/resin/activities_resin_beach_painting.webp",
         description: "Create dreamy ocean waves using beach-inspired resin art.",
@@ -198,7 +183,7 @@ const activities = [
         bottomNote: "Bring the calm of the coast to your canvas."
       },
       {
-        id: "2.10",
+        id: "2.8",
         title: "Book Cover",
         image: "/images/activities/resin/activities_resin_book_cover.webp",
         description: "Customize a hardback book cover with resin textures.",
@@ -207,7 +192,7 @@ const activities = [
         bottomNote: "Turn reading into a resin masterpiece."
       },
       {
-        id: "2.11",
+        id: "2.9",
         title: "Bookmark",
         image: "/images/activities/resin/activities_resin_bookmark.webp",
         description: "Make a glossy, colorful bookmark to mark your reads.",
@@ -216,7 +201,7 @@ const activities = [
         bottomNote: "Short, sweet, and stunning — a quick win for all ages."
       },
       {
-        id: "2.12",
+        id: "2.10",
         title: "Keychains",
         image: "/images/activities/resin/activities_resin_keychains.webp",
         description: "Craft your own mini resin keychains with initials or glitter.",

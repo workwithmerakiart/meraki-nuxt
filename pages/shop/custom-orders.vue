@@ -83,6 +83,12 @@
       </div>
     </div>
 
+    <!-- Block Five: Image Carousel -->
+    <div class="bg-[#f9f3eb] py-12 px-4">
+      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 text-[#dd4912]">Your Stories, Our Craft</h2>
+      <Carousel :images="pastProjects" />
+    </div>
+
     <!-- CTA Section -->
     <div class="max-w-3xl mx-auto px-4 py-12 text-center space-y-4">
       <h3 class="text-2xl sm:text-3xl font-bold">💌 Ready to Create Something Special?</h3>
@@ -163,7 +169,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const showModal = ref(false)
 
@@ -199,6 +205,21 @@ const customOrders = ref([
     image: '/images/activities/murals.webp'
   }
 ])
+
+const pastProjects = [
+  '/images/custom/custom_large_scale.webp',
+  '/images/hero_workshops.webp',
+  '/images/activities/resin/activities_resin_beach_painting.webp',
+  '/images/activities/resin/activities_resin_clock_with_rings.webp',
+  '/images/activities/activities_block3.webp',
+  '/images/shop/shop_hero.webp',
+  '/images/hero_activities.webp',
+  '/images/afterschool/afterschool_hero.webp',
+  '/images/events/events_hero.webp',
+  '/images/courses/courses_hero.webp',
+  '/images/courses/courses_block2.webp',
+  '/images/story/story_block2.webp'
+]
 </script>
 
 <style scoped>
