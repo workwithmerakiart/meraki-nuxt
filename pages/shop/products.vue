@@ -257,6 +257,7 @@ function addProductToCart(product) {
     currency: 'AED',
     vat: true,
     vatValue: 5,
+    vatIncluded: false, // 👈 explicit: prices shown here are net (ex-VAT)
   }, 1)
 
   if (process.client) {

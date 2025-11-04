@@ -145,12 +145,31 @@ function lineTotals(it: CartItem) {
 }
 
 // -----------------------------
+// Promotions (simple in-file DB; move to CMS later if needed)
+// -----------------------------
+// type: 'percent' -> value is percent (e.g., 10 => 10%)
+// type: 'amount'  -> value is AED amount (e.g., 25 => AED 25)
+const PROMO_DB = [
+  { code: 'SAVE10', type: 'percent' as const, value: 10, active: true },
+  { code: 'WELCOME25', type: 'amount' as const, value: 25, active: true },
+  // Example of SKU-scoped code:
+  // { code: 'COURSE5', type: 'percent' as const, value: 5, active: true, appliesTo: ['COURSE-RESIN-BASIC'] },
+]
+
+function findPromo(code?: string | null) {
+  if (!code) return null
+  const c = String(code).trim().toUpperCase()
+  return PROMO_DB.find(p => p.active && p.code.toUpperCase() === c) || null
+}
+// -----------------------------
 // Store
 // -----------------------------
 export const useCartStore = defineStore('cart', {
   // 1) State
   state: () => ({
     items: [] as CartItem[],
+    promoCode: null as string | null,
+    note: '' as string,
   }),
 
   // 2) Getters
@@ -163,6 +182,39 @@ export const useCartStore = defineStore('cart', {
     currency: (s): string => (s.items[0]?.currency ?? 'AED'),
     // Detailed lines (useful for order summaries/checkout)
     linesDetailed: (s) => s.items.map(it => ({ ...it, ...lineTotals(it) })),
+
+    // Discount amount applied on ex-VAT subtotal
+    discountExVat(): number {
+      const promo = findPromo(this.promoCode)
+      if (!promo) return 0
+
+      const base = this.subtotalExVat || 0
+      if (base <= 0) return 0
+
+      let discount = 0
+      if (promo.type === 'percent') discount = base * (promo.value / 100)
+      else discount = promo.value
+
+      // Clamp to base (no negative taxable amount)
+      return Math.min(discount, base)
+    },
+
+    // VAT after applying discount proportionally across eligible base
+    vatTotalAfterDiscount(): number {
+      const base = this.subtotalExVat || 0
+      if (base <= 0) return 0
+      const d = this.discountExVat
+      const ratio = Math.max(0, (base - d) / base)
+      return this.vatTotal * ratio
+    },
+
+    // Final total after discount + recalculated VAT
+    totalAfterDiscount(): number {
+      const base = this.subtotalExVat || 0
+      const d = this.discountExVat
+      const vat = this.vatTotalAfterDiscount
+      return Math.max(0, base - d) + vat
+    },
   },
 
   // 3) Actions
@@ -256,6 +308,24 @@ export const useCartStore = defineStore('cart', {
     },
     clear() {
       this.items = []
+    },
+
+    // Promotions
+    applyPromo(code: string): { ok: boolean; message?: string } {
+      const promo = findPromo(code)
+      if (!promo) {
+        return { ok: false, message: 'Invalid promo code' }
+      }
+      this.promoCode = promo.code
+      return { ok: true }
+    },
+    clearPromo() {
+      this.promoCode = null
+    },
+
+    // Optional cart note (persists)
+    setNote(note: string) {
+      this.note = note || ''
     },
 
     // Utilities
