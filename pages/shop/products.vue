@@ -82,7 +82,7 @@
               <div class="p-4 flex flex-col flex-1">
                 <h3 class="text-sm font-semibold text-black mb-1">{{ product.title }}</h3>
                 <span class="text-xs text-black font-light mb-3">AED {{ product.price }}</span>
-                <button
+                <button @click="addProductToCart(product)"
                   class="mt-auto border border-black text-black hover:bg-[#447c9d] hover:text-white transition rounded py-2 text-sm">
                   Add to Cart
                 </button>
@@ -101,22 +101,13 @@
       </div>
     </div>
 
-    <div
-      @click="openGiftModal()"
-      @keydown.enter.prevent="openGiftModal()"
-      @keydown.space.prevent="openGiftModal()"
-      role="button"
-      tabindex="0"
-      aria-label="Open gift card"
-      v-if="isGiftVisible && !isGiftModalOpen"
+    <div @click="openGiftModal()" @keydown.enter.prevent="openGiftModal()" @keydown.space.prevent="openGiftModal()"
+      role="button" tabindex="0" aria-label="Open gift card" v-if="isGiftVisible && !isGiftModalOpen"
       class="fixed right-4 sm:right-6 md:right-8 top-[70vh] sm:top-[68vh] md:top-[62vh] z-[9999] cursor-pointer select-none group">
       <div class="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28">
         <span
           class="absolute -top-2 -right-2 w-5 h-5 text-[10px] leading-none flex items-center justify-center rounded-full bg-red-500 text-white font-bold hover:bg-red-600"
-          role="button"
-          aria-label="Hide gift for 10 seconds"
-          @click.stop="hideGift()"
-        >
+          role="button" aria-label="Hide gift for 10 seconds" @click.stop="hideGift()">
           ✕
         </span>
         <!-- Hover callout tooltip -->
@@ -125,9 +116,7 @@
           Wanna gift a voucher?
         </div>
         <ClientOnly>
-          <DotLottieVue
-            :autoplay="true"
-            :loop="true"
+          <DotLottieVue :autoplay="true" :loop="true"
             src="https://lottie.host/645b1fdc-e4ca-4142-a3fb-5018e0724918/Aa96DsHjXL.lottie"
             style="width: 100%; height: 100%" />
         </ClientOnly>
@@ -140,7 +129,8 @@
         <!-- Backdrop -->
         <div class="absolute inset-0 bg-black/50" @click="closeGiftModal()"></div>
         <!-- Dialog: portrait on mobile, landscape on desktop -->
-        <div class="relative z-10 w-[92vw] max-w-md md:max-w-3xl lg:max-w-4xl bg-white rounded-lg shadow-xl border border-black">
+        <div
+          class="relative z-10 w-[92vw] max-w-md md:max-w-3xl lg:max-w-4xl bg-white rounded-lg shadow-xl border border-black">
           <button @click="closeGiftModal()" aria-label="Close"
             class="absolute top-3 right-3 text-black hover:opacity-70">✕</button>
 
@@ -158,11 +148,7 @@
               <h3 class="text-xl md:text-2xl font-semibold text-black">{{ giftProduct?.title }}</h3>
               <p class="text-sm md:text-base text-black mt-2">AED {{ effectiveGiftAmount }}</p>
               <div class="mt-3 mb-4 flex items-center gap-2 flex-wrap">
-                <button
-                  v-for="a in presetGiftAmounts"
-                  :key="a"
-                  type="button"
-                  @click="choosePresetAmount(a)"
+                <button v-for="a in presetGiftAmounts" :key="a" type="button" @click="choosePresetAmount(a)"
                   class="px-3 py-1.5 text-xs md:text-sm border rounded transition"
                   :class="selectedGiftAmount === a && (!customGiftAmount || Number(customGiftAmount) <= 0) ? 'border-black bg-black text-white' : 'border-black text-black hover:bg-black hover:text-white'">
                   AED {{ a }}
@@ -170,23 +156,16 @@
 
                 <div class="flex items-center border border-black rounded px-2 py-1.5 text-xs md:text-sm">
                   <span class="mr-1">AED</span>
-                  <input
-                    type="number"
-                    min="10"
-                    max="1000"
-                    step="1"
-                    inputmode="numeric"
-                    placeholder="Enter Custom Value"
-                    v-model="customGiftAmount"
-                    class="w-36 md:w-48 lg:w-56 bg-transparent focus:outline-none"
-                    @input="onCustomAmountInput"
-                  />
+                  <input type="number" min="10" max="1000" step="1" inputmode="numeric" placeholder="Enter Custom Value"
+                    v-model="customGiftAmount" class="w-36 md:w-48 lg:w-56 bg-transparent focus:outline-none"
+                    @input="onCustomAmountInput" />
                 </div>
               </div>
-              <p v-if="isCustomInvalid" class="-mt-2 mb-3 text-xs text-red-600">Please use an amount from AED 10 to AED 1,000</p>
-              <p class="text-xs md:text-sm text-black/70 mb-4">Send a little splash of creativity. Choose an amount and let them pick their favourite Meraki experience or kit.</p>
-              <button
-                :data-amount="effectiveGiftAmount"
+              <p v-if="isCustomInvalid" class="-mt-2 mb-3 text-xs text-red-600">Please use an amount from AED 10 to AED
+                1,000</p>
+              <p class="text-xs md:text-sm text-black/70 mb-4">Send a little splash of creativity. Choose an amount and
+                let them pick their favourite Meraki experience or kit.</p>
+              <button :data-amount="effectiveGiftAmount" @click="addGiftCardToCart()"
                 class="mt-auto w-full border border-black text-black hover:bg-[#447c9d] hover:text-white transition rounded py-2 text-sm md:text-base">
                 Add to Cart
               </button>
@@ -201,6 +180,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useCartStore } from '~/stores/cart'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 
 const categoryExpanded = ref(true)
@@ -246,6 +226,7 @@ const visibleProducts = ref([])
 const itemsPerLoad = 6
 const isLoading = ref(false)
 const isGiftModalOpen = ref(false)
+const cartStore = useCartStore()
 
 // Gift card amount selection
 const presetGiftAmounts = [100, 250, 500, 1000]
@@ -262,6 +243,51 @@ const effectiveGiftAmount = computed(() => {
   }
   return selectedGiftAmount.value
 })
+
+// --- Cart wiring ---
+function addProductToCart(product) {
+  // Default VAT behavior: enabled true, 5%
+  cartStore.add({
+    type: 'product',
+    id: product.id,
+    sku: product.id,
+    title: product.title,
+    image: product.image,
+    priceMajor: Number(product.price) || 0,
+    currency: 'AED',
+    vat: true,
+    vatValue: 5,
+  }, 1)
+
+  if (process.client) {
+    window.dispatchEvent(new CustomEvent('open-cart'))
+  }
+}
+
+function addGiftCardToCart() {
+  const gp = giftProduct.value || { id: 'GIFT', title: 'Meraki Gift Card', image: '/images/shop/meraki-gift-card.webp' }
+  const amount = Number(effectiveGiftAmount.value) || 0
+  if (!amount) return
+
+  // Gift cards are typically not taxed; set vat: false explicitly
+  cartStore.add({
+    type: 'product',
+    id: gp.id,
+    sku: 'GIFT',
+    title: gp.title,
+    image: gp.image,
+    priceMajor: amount,
+    currency: 'AED',
+    vat: false,
+    variantKey: `gift-${amount}`,
+    meta: { kind: 'gift-card' },
+  }, 1)
+
+  closeGiftModal()
+  if (process.client) {
+    window.dispatchEvent(new CustomEvent('open-cart'))
+  }
+}
 
 function choosePresetAmount(a) {
   selectedGiftAmount.value = a
@@ -286,11 +312,11 @@ let giftHideTimer = null
 
 function hideGift(durationMs = 10000) {
   isGiftVisible.value = false
-  try { localStorage.setItem('giftHidden', 'true') } catch {}
+  try { localStorage.setItem('giftHidden', 'true') } catch { }
   if (giftHideTimer) clearTimeout(giftHideTimer)
   giftHideTimer = setTimeout(() => {
     isGiftVisible.value = true
-    try { localStorage.removeItem('giftHidden') } catch {}
+    try { localStorage.removeItem('giftHidden') } catch { }
     giftHideTimer = null
   }, durationMs)
 }
@@ -302,11 +328,11 @@ onMounted(() => {
       if (giftHideTimer) clearTimeout(giftHideTimer)
       giftHideTimer = setTimeout(() => {
         isGiftVisible.value = true
-        try { localStorage.removeItem('giftHidden') } catch {}
+        try { localStorage.removeItem('giftHidden') } catch { }
         giftHideTimer = null
       }, 10000)
     }
-  } catch {}
+  } catch { }
 })
 
 onBeforeUnmount(() => {

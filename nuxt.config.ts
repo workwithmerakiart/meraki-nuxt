@@ -11,7 +11,7 @@ export default defineNuxtConfig({
       tailwindcss(),
     ],
   },
-  modules: ['@nuxtjs/google-fonts', '@oku-ui/motion/nuxt'],
+  modules: ['@nuxtjs/google-fonts', '@oku-ui/motion/nuxt', '@pinia/nuxt'],
   // @ts-expect-error: Google Fonts config not typed by default
   googleFonts: {
     families: {

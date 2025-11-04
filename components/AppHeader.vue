@@ -9,9 +9,33 @@ import {
 } from "vue";
 import { gsap } from "gsap"; // ✅ named import
 import { useRouter, useRoute } from "vue-router"; // ⭐ ADDED
+import { useCartStore } from '~/stores/cart'
+import GlobalCartDrawer from '~/components/GlobalCartDrawer.vue'
 
 const router = useRouter(); // ⭐ ADDED
 const route = useRoute();
+
+const cart = useCartStore();
+const cartCount = computed(() => (cart?.count ?? 0));
+const cartBtnRef = ref(null);
+const isIconLight = computed(() => showLightHeader.value || !isScrolled.value);
+
+const openCartFromHeader = () => { if (process.client) window.dispatchEvent(new CustomEvent('open-cart')); };
+
+// Show cart icon only on specific sections (and their child routes)
+const CART_ALLOWED_PREFIXES = [
+  '/experiences/workshops',
+  '/experiences/courses',
+  '/experiences/activities',
+  '/shop/products',
+];
+
+const showCartIcon = computed(() => {
+  // normalize by removing trailing slash (but keep root '/')
+  let p = route.path;
+  if (p.length > 1 && p.endsWith('/')) p = p.replace(/\/+$/, '');
+  return CART_ALLOWED_PREFIXES.some(prefix => p === prefix || p.startsWith(prefix + '/'));
+});
 
 // NOTE: don't statically import MorphSVGPlugin on the server.
 // We'll register it on the client after mount.
@@ -374,12 +398,38 @@ watch(
           'filter-black': !showLightHeader && isScrolled,
         }" style="transition: filter 0.3s ease" alt="Logo" />
       </NuxtLink>
-      <a ref="hamburgerRef" href="javascript:void(0)" @click="toggleMenu" class="hamburger z-50"
-        :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }">
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-      </a>
+      <!-- Right controls: Cart + Hamburger grouped -->
+      <div class="flex items-center z-50">
+        <!-- Cart Button -->
+        <button
+          v-if="showCartIcon"
+          ref="cartBtnRef"
+          @click="openCartFromHeader"
+          aria-label="Open cart"
+          class="relative focus:outline-none cart-btn mr-3 sm:mr-4 md:mr-5 lg:mr-6"
+        >
+          <!-- Bag Icon -->
+          <svg
+            class="w-7 h-7 md:w-8 md:h-8"
+            :class="isIconLight ? 'cart-icon--light' : 'cart-icon--dark'"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d="M6 7V6a6 6 0 1 1 12 0v1h1.25c.41 0 .75.34.75.75V21a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7.75c0-.41.34-.75.75-.75H6zm2 0h8V6a4 4 0 1 0-8 0v1z"/>
+          </svg>
+          <!-- Count Badge (always visible, shows 0 by default) -->
+          <span class="cart-badge">{{ cartCount }}</span>
+        </button>
+
+        <!-- Hamburger Button (unchanged ref and classes) -->
+        <a ref="hamburgerRef" href="javascript:void(0)" @click="toggleMenu" class="hamburger"
+           :class="{ 'is-scrolled': isScrolled && !isOpen, 'is-open': isOpen }">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </a>
+      </div>
     </div>
 
     <ClientOnly>
@@ -428,7 +478,8 @@ watch(
         </div>
       </div>
     </transition>
-  </header>
+</header>
+    <GlobalCartDrawer />
 </template>
 
 <style scoped>
@@ -610,6 +661,29 @@ watch(
 :global(header.bg-transparent) .hamburger-line {
   background: #fff;
 }
+
+.cart-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+  font-weight: 700;
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+}
+.cart-icon--light { color: #fff; }
+.cart-icon--dark { color: #000; }
+
+/* When header is transparent, keep badge visible with white border */
+:global(header.bg-transparent) .cart-badge { background: #000; color: #fff; border-color: #000; }
 
 /* ⭐ add */
 /* Existing styles below unchanged */
