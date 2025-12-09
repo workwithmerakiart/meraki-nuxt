@@ -4,26 +4,25 @@
             Let the magic slide into the DMs.
         </h2>
 
-        <InstagramFeed class="mt-10" />
+        <div class="mt-10 max-w-5xl mx-auto">
+            <InstagramFeed />
+        </div>
 
         <div class="mt-10 text-center">
-            <button @click="navigateToInstagram"
-                class="border border-black px-6 py-3 text-sm uppercase tracking-widest font-semibold text-black rounded-full hover:bg-[#DD4912] hover:text-white transform hover:scale-105 transition-all duration-300">
+            <a
+                href="https://www.instagram.com/merakistudio_dubai"
+                target="_blank"
+                rel="noopener"
+                class="inline-block border border-black px-6 py-3 text-sm uppercase tracking-widest font-semibold text-black rounded-full hover:bg-[#DD4912] hover:text-white transform hover:scale-105 transition-all duration-300"
+            >
                 Follow us on Instagram
-            </button>
+            </a>
         </div>
 
 
     </section>
 </template>
 
-<script setup>
-import InstagramFeed from '@/components/InstagramFeed.vue'
-
-const navigateToInstagram = () => {
-    window.open('https://www.instagram.com/merakistudio_dubai', '_blank')
-}
-</script>
 
 <style scoped>
 .header-font {

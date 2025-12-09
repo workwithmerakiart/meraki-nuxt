@@ -1,33 +1,12 @@
 <template>
     <!-- ⭐ removed inline paddingTop/marginTop so hero can merge with transparent header -->
     <!-- ⭐ added top padding directly in hero height for spacing -->
-    <div class="bg-white">
+    <div class="bg-[#F9F3EB]">
         <!-- HERO -->
-        <section class="relative overflow-hidden">
-            <div class="relative w-full h-[70svh] md:h-[76vh] lg:h-[72vh] pt-[calc(var(--header-h,6rem)+2rem)]"
-                :style="heroBgStyle" ref="heroRef">
-                <!-- overlay -->
-                <div class="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/35"></div>
-
-                <!-- content -->
-                <div class="absolute inset-0 flex items-end md:items-center">
-                    <div class="px-6 md:px-10 lg:px-16 w-full">
-                        <div class="max-w-5xl text-white">
-                            <h1 ref="heroTitle" class="text-4xl md:text-6xl font-extrabold tracking-tight mb-5">
-                                Kids Art Programs
-                            </h1>
-
-                            <div ref="badgeWrap" class="grid gap-3 max-w-4xl">
-                                <div v-for="(line, i) in hero.badgeLines" :key="i"
-                                    class="inline-flex items-center rounded-2xl bg-white/15 backdrop-blur px-4 py-2 text-sm md:text-base">
-                                    <span class="mr-2">🎨</span>{{ line }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- HERO (shared PartnerHero like franchise.vue) -->
+        <PartnerHero heading="Kids Art Programs"
+            subheading="From guided term classes to immersive holiday camps, Meraki Art Studio offers enriching, hands-on art programs that inspire young minds to explore, express, and evolve through creativity."
+            image="/images/afterschool/afterschool_hero.webp" alt="Kids Art Programs at Meraki Art Studio" />
 
         <!-- SECTION: Art Classes -->
         <section id="classes" class="px-6 md:px-10 lg:px-16 py-16">
@@ -77,43 +56,112 @@
         </section>
 
         <!-- SECTION: Holiday Camps -->
-        <section id="camps" class="px-6 md:px-10 lg:px-16 py-16 bg-gray-50">
-            <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10 items-start">
-                <div class="order-1 lg:order-2">
-                    <h2 ref="campsTitle" class="text-3xl md:text-4xl font-bold mb-3">🌟 Holiday Art Camps</h2>
-                    <p ref="campsSub" class="text-lg text-gray-700 mb-4">When School’s Out, Art Comes Alive</p>
-                    <p ref="campsBody" class="text-gray-600 mb-6">
-                        Our Holiday Camps offer a colorful escape where kids can explore, imagine, and create freely.
-                        From
-                        paint-splashed canvases to sculpted crafts and group masterpieces, each day is an adventure
-                        through
-                        artistic expression.
-                    </p>
+        <section id="camps" class="px-6 md:px-10 lg:px-16 py-16 bg-[#F9F3EB]">
+            <div class="max-w-7xl mx-auto space-y-8">
+                <div class="grid lg:grid-cols-2 gap-10 items-start">
+                    <!-- Left: all descriptive copy -->
+                    <div>
+                        <h2 ref="campsTitle" class="text-3xl md:text-4xl font-bold mb-3">🌟 Holiday Art Camps</h2>
+                        <p ref="campsSub" class="text-lg text-gray-700 mb-4">When School’s Out, Art Comes Alive</p>
+                        <p ref="campsBody" class="text-gray-600 mb-6">
+                            Our Holiday Camps offer a colorful escape where kids can explore, imagine, and create
+                            freely.
+                            From
+                            paint-splashed canvases to sculpted crafts and group masterpieces, each day is an adventure
+                            through
+                            artistic expression.
+                        </p>
 
-                    <ul ref="campsList" class="space-y-2 text-gray-700 mb-6">
-                        <li v-for="b in camps.bullets" :key="b">• {{ b }}</li>
-                    </ul>
+                        <div ref="campsList" class="space-y-4 text-gray-700 mb-6">
+                            <div>
+                                <h3 class="text-sm font-semibold tracking-wide text-gray-500 mb-1 uppercase">
+                                    Camp details
+                                </h3>
+                                <ul class="space-y-1">
+                                    <li v-for="item in camps.details" :key="`detail-${item}`">• {{ item }}</li>
+                                </ul>
+                            </div>
 
-                    <div ref="campsNote"
-                        class="rounded-xl border border-dashed border-gray-300 p-4 text-sm text-gray-600 mb-6">
-                        🎉 Spaces are limited—secure your child's spot for a joyful, creative holiday break.
+                            <div>
+                                <h3 class="text-sm font-semibold tracking-wide text-gray-500 mb-1 uppercase">
+                                    Themes
+                                </h3>
+                                <ul class="space-y-1">
+                                    <li v-for="item in camps.themes" :key="`theme-${item}`">• {{ item }}</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-sm font-semibold tracking-wide text-gray-500 mb-1 uppercase">
+                                    Prices
+                                </h3>
+                                <ul class="space-y-1">
+                                    <li v-for="item in camps.prices" :key="`price-${item}`">• {{ item }}</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div ref="campsNote"
+                            class="rounded-xl border border-dashed border-gray-300 p-4 text-sm text-gray-600 mb-6">
+                            🎉 Spaces are limited—secure your child's spot for a joyful, creative holiday break.
+                        </div>
                     </div>
 
+                    <!-- Right: static Holiday Art Camps cover image -->
+                    <div class="order-2 rounded-3xl border border-gray-200 bg-white overflow-hidden">
+                        <div class="relative min-h-[280px] sm:min-h-[360px] lg:min-h-[520px] overflow-hidden">
+                            <img src="/images/afterschool/camps/holiday-art-camps.jpeg"
+                                alt="Holiday Art Camps at Meraki Art Studio" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Full-width slider: camp themes + rotating images -->
+                <div ref="gfxCamps" class="rounded-3xl border border-gray-200 bg-white overflow-hidden">
+                    <div class="grid md:grid-cols-2 h-full">
+                        <!-- Left: taller image block -->
+                        <div class="relative min-h-[280px] sm:min-h-[360px] lg:min-h-[520px] overflow-hidden">
+                            <transition name="fade" mode="out-in">
+                                <img :key="activeCampIndex" :src="campsGallery[activeCampIndex].img"
+                                    :alt="campsGallery[activeCampIndex].title" class="w-full h-full object-cover" />
+                            </transition>
+
+                            <div
+                                class="absolute inset-x-4 bottom-4 rounded-xl bg-black/60 px-4 py-2 backdrop-blur-[2px]">
+                                <p class="text-base sm:text-lg font-semibold text-white">
+                                    {{ campsGallery[activeCampIndex].title }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Right: camp themes list, synced with image -->
+                        <div class="bg-[#F7F0E6] px-6 sm:px-8 py-6 sm:py-8 flex flex-col justify-center">
+                            <p class="text-xs font-semibold tracking-wide text-gray-500 mb-3 uppercase">
+                                Camp themes
+                            </p>
+                            <p class="text-sm text-gray-600 mb-4">
+                                Each week has its own story. Hover or tap to explore the themes.
+                            </p>
+
+                            <div class="space-y-2">
+                                <button v-for="(item, idx) in campsGallery" :key="item.key" type="button"
+                                    class="w-full text-left rounded-xl border px-3 py-2 text-sm sm:text-base transition"
+                                    :class="idx === activeCampIndex
+                                        ? 'bg-black text-white border-black'
+                                        : 'bg-white text-gray-800 border-gray-300 hover:border-black/70'
+                                        " @mouseenter="setActiveCamp(idx)" @focus="setActiveCamp(idx)"
+                                    @click="setActiveCamp(idx)">
+                                    {{ item.title }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6">
                     <button ref="campsCta" type="button"
                         class="inline-flex items-center rounded-2xl px-5 py-3 text-base font-semibold border border-black text-black hover:bg-black hover:text-white transition"
                         @click="openForm('Holiday Art Camps')">
                         View Camp Schedule & Register
                     </button>
-                </div>
-
-                <!-- Graphic tile grid -->
-                <div ref="gfxCamps" class="order-2 lg:order-1">
-                    <div class="rounded-3xl border border-gray-200 bg-white p-5">
-                        <div class="grid grid-cols-6 gap-2">
-                            <div v-for="i in 24" :key="`camps-${i}`" class="aspect-square rounded-xl"
-                                :class="i % 4 === 0 ? 'bg-pink-100' : i % 3 === 0 ? 'bg-yellow-100' : 'bg-sky-100'" />
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -121,9 +169,11 @@
         <!-- REGISTRATION MODAL -->
         <Teleport to="body">
             <transition name="fade">
-                <div v-if="formOpen" class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 px-4 py-8 overflow-y-auto"
+                <div v-if="formOpen"
+                    class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 px-4 py-8 overflow-y-auto"
                     role="dialog" aria-modal="true">
-                    <div class="w-full max-w-2xl md:max-w-[700px] rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 flex flex-col max-h-[85vh]">
+                    <div
+                        class="w-full max-w-2xl md:max-w-[700px] rounded-2xl bg-white shadow-2xl ring-1 ring-black/5 flex flex-col max-h-[85vh]">
                         <div class="flex items-center justify-between px-6 py-4 border-b">
                             <div>
                                 <h3 class="text-xl font-bold">📝 Registration Form</h3>
@@ -217,19 +267,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { gsap } from 'gsap'
-
-/* -------------------------
-   Content (arrays)
-------------------------- */
-const hero = {
-    imageUrl: '/images/afterschool/afterschool_hero.webp', // put a real image here (public/)
-    badgeLines: [
-        'Creative Journeys for Young Artists—All Year Round',
-        'From guided term classes to immersive holiday camps, Meraki Art Studio offers enriching, hands-on art programs that inspire young minds to explore, express, and evolve through creativity.'
-    ]
-}
+import PartnerHero from '@/components/partners/PartnerHero.vue'
 
 const classes = {
     principles: [
@@ -250,13 +290,55 @@ const classes = {
 }
 
 const camps = {
-    bullets: [
-        'Designed for ages 5–11',
-        'Half-day camp sessions',
-        'Guided by professional artists',
-        'Themed creative projects daily',
-        'All materials and supplies included',
+    details: [
+        'Monday to Friday',
+        '10:30 AM to 2:00 PM',
+        'Ages 5–10 years',
+        'Includes all art materials, snacks, and a certificate',
+        'Choose daily, weekly, or all 3 weeks',
     ],
+    themes: [
+        'Week 1 (Dec 8–12): Dream, Design & Discover',
+        'Week 2 (Dec 15–19): Holidays Around the World',
+        'Week 3 (Dec 22–26): Creative Countdown to 2026',
+    ],
+    prices: [
+        '1 Day – AED 295 + VAT',
+        '1 Week – AED 1,350 + VAT',
+        '2 Weeks – AED 2,600 + VAT',
+        '3 Weeks – AED 3,800 + VAT',
+    ],
+}
+
+const campsGallery = [
+    {
+        key: 'holiday-main',
+        title: 'Holiday Art Camps',
+        img: '/images/afterschool/camps/holiday-art-camps.jpeg', // update to your actual file name
+    },
+    {
+        key: 'week-1',
+        title: 'Dream, Design & Discover',
+        img: '/images/afterschool/camps/week1.png', // update to your actual file name
+    },
+    {
+        key: 'week-2',
+        title: 'Holidays Around the World',
+        img: '/images/afterschool/camps/week2.png', // update to your actual file name
+    },
+    {
+        key: 'week-3',
+        title: 'Creative Countdown to 2026',
+        img: '/images/afterschool/camps/week3.png', // update to your actual file name
+    },
+]
+
+const activeCampIndex = ref(0)
+let campTimer = null
+
+function setActiveCamp(i) {
+    if (i < 0 || i >= campsGallery.length) return
+    activeCampIndex.value = i
 }
 
 /* -------------------------
@@ -289,28 +371,8 @@ function submit() {
 }
 
 /* -------------------------
-   Hero background (fallback)
-------------------------- */
-const heroBgStyle = computed(() => {
-    const url = hero.imageUrl || ''
-    if (!url) {
-        // soft gradient fallback
-        return { background: 'linear-gradient(135deg, #ffe08a 0%, #cde7ff 100%)' }
-    }
-    return {
-        backgroundImage: `linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.25)), url('${url}')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-    }
-})
-
-/* -------------------------
    Animations (client only)
 ------------------------- */
-const heroRef = ref(null)
-const heroTitle = ref(null)
-const badgeWrap = ref(null)
-
 const classesTitle = ref(null)
 const classesSub = ref(null)
 const classesIntro = ref(null)
@@ -329,10 +391,8 @@ const gfxCamps = ref(null)
 
 onMounted(() => {
     if (!process.client) return
-    const fadeUp = (el, d = 0) => gsap.fromTo(el, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .8, ease: 'power3.out', delay: d })
-
-    fadeUp(heroTitle.value, .05)
-    if (badgeWrap.value) gsap.fromTo(badgeWrap.value.children, { y: 12, opacity: 0 }, { y: 0, opacity: 1, stagger: .08, duration: .7, ease: 'power3.out', delay: .15 })
+    const fadeUp = (el, d = 0) =>
+        gsap.fromTo(el, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .8, ease: 'power3.out', delay: d })
 
     // Classes
     fadeUp(classesTitle.value, .05)
@@ -351,10 +411,30 @@ onMounted(() => {
     fadeUp(campsNote.value, .28)
     fadeUp(campsCta.value, .34)
     gsap.fromTo(gfxCamps.value, { scale: .96, opacity: 0 }, { scale: 1, opacity: 1, duration: .7, ease: 'power2.out', delay: .2 })
+
+    // Auto-rotate camp themes / images
+    campTimer = setInterval(() => {
+        activeCampIndex.value =
+            (activeCampIndex.value + 1) % campsGallery.length
+    }, 6000)
+})
+
+onBeforeUnmount(() => {
+    if (campTimer) clearInterval(campTimer)
 })
 </script>
 
 <style scoped>
+/* Make the main site header transparent on this page, so the hero image sits behind it.
+   We target common header selectors and override both background and background-color. */
+:deep(header),
+:deep(#site-header),
+:deep(.site-header) {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Existing fade transition for modal */
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity .25s ease;

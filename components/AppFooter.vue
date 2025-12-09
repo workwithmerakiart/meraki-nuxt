@@ -70,12 +70,12 @@
             </div>
             <div>© {{ currentYear }} Meraki Art Studio. All rights reserved.</div>
             <div class="max-w-3xl mx-auto px-4 text-black">
-                Site Crafted and Managed by SS Communications<br>
+                Site Crafted and Managed by BoldSubtle<br>
                 For support or inquiries, contact us at
-                <a href="mailto:hellosscommunications@gmail.com"
-                    class="underline hover:text-black-500">hellosscommunications@gmail.com</a>
+                <a href="mailto:hello@boldsubtle.com"
+                    class="underline hover:text-black-500">hello@boldsubtle.com</a>
                 |
-                <a href="tel:+917303262306" class="hover:text-black-500">+91-7303262306</a>
+                <a href="tel:+917303262306" class="hover:text-black-500">+44 (0)75 5471 9985, +91 (0)7303 2623 06</a>
             </div>
         </div>
     </footer>

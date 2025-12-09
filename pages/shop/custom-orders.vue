@@ -208,17 +208,18 @@ const customOrders = ref([
 
 const pastProjects = [
   '/images/custom/custom_large_scale.webp',
-  '/images/hero_workshops.webp',
-  '/images/activities/resin/activities_resin_beach_painting.webp',
-  '/images/activities/resin/activities_resin_clock_with_rings.webp',
-  '/images/activities/activities_block3.webp',
-  '/images/shop/shop_hero.webp',
-  '/images/hero_activities.webp',
-  '/images/afterschool/afterschool_hero.webp',
-  '/images/events/events_hero.webp',
-  '/images/courses/courses_hero.webp',
-  '/images/courses/courses_block2.webp',
-  '/images/story/story_block2.webp'
+  '/images/custom/custom_flora.webp',
+  '/images/custom/1.jpeg',
+  '/images/custom/2.jpeg',
+  '/images/custom/3.jpeg',
+  '/images/custom/4.jpeg',
+  '/images/custom/5.jpeg',
+  '/images/custom/6.jpeg',
+  '/images/custom/7.jpeg',
+  '/images/custom/8.jpeg',
+  '/images/custom/9.jpeg',
+  '/images/custom/10.jpeg',
+  '/images/custom/11.jpeg'
 ]
 </script>
 

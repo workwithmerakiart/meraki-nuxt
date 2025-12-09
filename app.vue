@@ -19,6 +19,15 @@ import { onMounted } from "vue";
 import { useRouter } from "#app"; // <-- change here
 import { usePageLoader } from "~/composables/usePageLoader";
 
+useHead({
+  script: [
+    {
+      src: "https://elfsightcdn.com/platform.js",
+      async: true,
+    },
+  ],
+});
+
 const { startLoading, finishLoading } = usePageLoader();
 const router = useRouter();
 

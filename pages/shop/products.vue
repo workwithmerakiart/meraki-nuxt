@@ -75,8 +75,13 @@
             <div v-for="product in filteredVisibleProducts" :key="product.id"
               class="bg-white border border-black rounded overflow-hidden flex flex-col hover:shadow-md transition">
               <div class="aspect-square overflow-hidden">
-                <img v-if="product.image" :src="product.image" :alt="product.title"
-                  class="w-full h-full object-cover" />
+                <img
+                  v-if="product.image"
+                  :src="product.image"
+                  :alt="product.title"
+                  class="w-full h-full object-cover"
+                  :class="product.category === 'Gift' ? 'object-top' : ''"
+                />
                 <div v-else class="text-gray-400 text-sm">No Image</div>
               </div>
               <div class="p-4 flex flex-col flex-1">
@@ -139,7 +144,11 @@
             <!-- Media: portrait aspect on mobile, landscape aspect on desktop -->
             <div class="w-full md:w-1/2">
               <div class="overflow-hidden rounded aspect-[3/4] md:aspect-[16/9]">
-                <img :src="giftProduct?.image" :alt="giftProduct?.title" class="w-full h-full object-cover" />
+                <img
+                  :src="giftProduct?.image"
+                  :alt="giftProduct?.title"
+                  class="w-full h-full object-cover object-top"
+                />
               </div>
             </div>
 
@@ -218,7 +227,7 @@ const allProducts = ref([
   , { id: 19, title: 'Fluid Art Bear Phone Holder', price: 75, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
 
   // Gift Card (always available via floating button)
-  , { id: 20, title: 'Meraki Gift Card', price: 199, category: 'Gift', image: '/images/shop/meraki-gift-card.webp' },
+  , { id: 20, title: 'Meraki Gift Card', price: 100, category: 'Gift', image: '/images/shop/meraki-gift-card-new.webp' },
 ])
 
 
@@ -266,7 +275,7 @@ function addProductToCart(product) {
 }
 
 function addGiftCardToCart() {
-  const gp = giftProduct.value || { id: 'GIFT', title: 'Meraki Gift Card', image: '/images/shop/meraki-gift-card.webp' }
+  const gp = giftProduct.value || { id: 'GIFT', title: 'Meraki Gift Card', image: '/images/shop/meraki-gift-card-new.webp' }
   const amount = Number(effectiveGiftAmount.value) || 0
   if (!amount) return
 

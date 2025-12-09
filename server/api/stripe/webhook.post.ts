@@ -60,6 +60,7 @@ export default defineEventHandler(async (event) => {
           lines: lineItems.data.map(li => ({
             description: li.description,
             qty: li.quantity,
+            newQty: li.quantity,
             amount_total: li.amount_total,
             amount_subtotal: li.amount_subtotal,
             taxes: li.taxes,
