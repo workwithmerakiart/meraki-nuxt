@@ -7,7 +7,7 @@ const props = defineProps({
     imageAlt: { type: String, default: '' },
     ctaLabel: { type: String, default: '' },
     ctaHref: { type: String, default: '#' },
-    bleedToRight: { type: Boolean, default: true }, // image flush with right viewport on md+
+    bleedToRight: { type: Boolean, default: false }, // opt-in: image flush with right viewport on md+
 })
 </script>
 
@@ -33,11 +33,13 @@ const props = defineProps({
                 </div>
             </div>
 
-            <!-- Image (bleeds to right on md+) -->
+            <!-- Image (optional bleed to right on md+) -->
             <div class="md:col-span-6 md:pl-4">
                 <div :class="[
-                    'relative h-72 sm:h-96 md:h-[28rem] overflow-hidden rounded-2xl md:rounded-l-2xl md:rounded-r-none',
-                    bleedToRight ? 'bleed-right md:rounded-r-none' : ''
+                    'relative h-72 sm:h-96 md:h-[28rem] overflow-hidden',
+                    bleedToRight
+                        ? 'rounded-2xl md:rounded-l-2xl md:rounded-r-none bleed-right'
+                        : 'rounded-2xl'
                 ]">
                     <img :src="imageSrc" :alt="imageAlt" class="absolute inset-0 h-full w-full object-cover"
                         loading="lazy" decoding="async" />

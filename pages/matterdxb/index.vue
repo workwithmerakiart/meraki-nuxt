@@ -1,6 +1,7 @@
 <!-- pages/matter-by-meraki/index.vue -->
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import Carousel from '@/components/Carousel.vue'
 
 let io // single IntersectionObserver instance
 
@@ -29,6 +30,36 @@ onBeforeUnmount(() => { if (io) io.disconnect() })
 
 // Subtle parallax for hero ornaments (JS only)
 const hero = ref(null)
+
+// Images for Matter DXB carousel
+const matterdxbImages = [
+    '/images/matterdxb/2.webp',
+    '/images/matterdxb/4.webp',
+    '/images/matterdxb/4f.webp',
+    '/images/matterdxb/11.webp',
+    '/images/matterdxb/11f.webp',
+    '/images/matterdxb/15f.webp',
+    '/images/matterdxb/DC4.webp',
+    '/images/matterdxb/DC6.webp',
+    '/images/matterdxb/DC7.webp',
+    '/images/matterdxb/DH1.webp',
+    '/images/matterdxb/DH2.webp',
+    '/images/matterdxb/DH3.webp',
+    '/images/matterdxb/DH10.webp',
+    '/images/matterdxb/ET3.webp',
+    '/images/matterdxb/ET7.webp',
+    '/images/matterdxb/ET19.webp',
+    '/images/matterdxb/ET24.webp',
+    '/images/matterdxb/EX3.webp',
+    '/images/matterdxb/EX4.webp',
+    '/images/matterdxb/EX9.webp',
+    '/images/matterdxb/VL4.webp',
+    '/images/matterdxb/VL5.webp',
+    '/images/matterdxb/VL8.webp',
+    '/images/matterdxb/WH221.webp',
+    '/images/matterdxb/WI4.webp',
+    '/images/matterdxb/WI10.webp'
+]
 </script>
 
 
@@ -275,7 +306,7 @@ const hero = ref(null)
                     Our Work in Focus
                 </h3>
                 <div data-reveal="up" data-delay="120">
-                    <Carousel />
+                    <Carousel :images="matterdxbImages" :delay="3000" :pauseOnHover="true" />
                 </div>
             </div>
         </section>

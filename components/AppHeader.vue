@@ -442,21 +442,44 @@ watch(
         <div ref="menuContainer" class="pointer-events-auto flex flex-1">
           <div class="flex flex-1">
             <div class="w-1/2 space-y-4 md:space-y-6">
-              <div v-for="(item, index) in navigation" :key="index"
-                class="group text-2xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading">
-                <!-- ⭐ CHANGED -->
-                <NuxtLink :to="item.to" class="outline-text inline-block px-2 py-1 transition-all duration-300" :class="hoveredIndex === index
-                  ? 'text-white active'
-                  : 'text-gray-500'
-                  " @mouseenter="setHovered(index)" @focus="setHovered(index)" @touchstart.prevent="setHovered(index)" @click.prevent="navigate(item.to)">
+              <div
+                v-for="(item, index) in navigation"
+                :key="index"
+                class="group text-2xl md:text-5xl font-semibold tracking-tight cursor-pointer navigation-heading"
+              >
+                <!-- Parent WITHOUT children: clickable link -->
+                <NuxtLink
+                  v-if="!item.children || !item.children.length"
+                  :to="item.to"
+                  class="outline-text inline-block px-2 py-1 transition-all duration-300"
+                  :class="hoveredIndex === index ? 'text-white active' : 'text-gray-500'"
+                  @mouseenter="setHovered(index)"
+                  @focus="setHovered(index)"
+                  @touchstart.prevent="setHovered(index)"
+                  @click.prevent="navigate(item.to)"
+                >
                   {{ item.label }}
-                  <!-- ⭐ ADDED THIS PART ⭐ -->
-                  <span v-if="item.label === 'Matter DXB'"
-                    class="ml-2 text-[10px] font-medium bg-[#DD4912] text-white px-2 py-[2px] rounded-full align-middle tracking-wide">
+                  <span
+                    v-if="item.label === 'Matter DXB'"
+                    class="ml-2 text-[10px] font-medium bg-[#DD4912] text-white px-2 py-[2px] rounded-full align-middle tracking-wide"
+                  >
                     Interior
                   </span>
-                  <!-- ⭐ END ADDED PART ⭐ -->
                 </NuxtLink>
+
+                <!-- Parent WITH children: non-clickable label (no navigation) -->
+                <button
+                  v-else
+                  type="button"
+                  class="outline-text inline-block px-2 py-1 transition-all duration-300 text-left"
+                  :class="hoveredIndex === index ? 'text-white active' : 'text-gray-500'"
+                  @mouseenter="setHovered(index)"
+                  @focus="setHovered(index)"
+                  @touchstart.prevent="setHovered(index)"
+                  @click.prevent="setHovered(index)"
+                >
+                  {{ item.label }}
+                </button>
               </div>
             </div>
             <div class="w-1/2 pl-8 md:pl-16 space-y-2" @mouseenter="submenuLocked = true" @mouseleave="submenuLocked = false">

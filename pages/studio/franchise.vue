@@ -22,7 +22,7 @@ import FranchiseInquiryForm from '@/components/forms/FranchiseInquiryForm.vue'
 
       <!-- Block 2: text left / image right -->
       <TextLeftImageRight class="rail-tight rail-gap" eyebrow="Franchise Advantage" heading="Why franchise with us?"
-        :image-src="'/images/story/story_pooja.webp'" :image-alt="'Why franchise with us image'" :bleed-to-right="true">
+        :image-src="'/images/story/story_pooja.webp'" :image-alt="'Why franchise with us image'">
         <div class="mt-2 text-base/7 sm:text-lg/7 text-neutral-700">
           <ul class="space-y-1.5 pl-4">
             <li>
@@ -68,7 +68,7 @@ import FranchiseInquiryForm from '@/components/forms/FranchiseInquiryForm.vue'
 
       <!-- Block 4: text left / image right -->
       <TextLeftImageRight class="rail-tight rail-gap" heading="What you get" :image-src="'/images/courses/courses_block2.webp'"
-        :image-alt="'What you get image'" :bleed-to-right="true">
+        :image-alt="'What you get image'">
         <div class="mt-2 text-base/6 sm:text-lg/6 text-neutral-700">
           <ul class="list-disc pl-4 space-y-1">
             <li>Licensing &amp; rights to the Meraki brand in your region</li>
@@ -103,14 +103,40 @@ import FranchiseInquiryForm from '@/components/forms/FranchiseInquiryForm.vue'
   </section>
 </template>
 
+
 <style scoped>
 .body-text {
   font-family: 'Inter', sans-serif;
 }
 
 /* Collapse vertical whitespace on rail blocks */
-.rail-tight { padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; border: 0 !important; }
+.rail-tight {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border: 0 !important;
+}
+
 /* Optional gap below selected rails */
-.rail-gap { margin-bottom: 1rem !important; }
-@media (min-width: 640px) { .rail-gap { margin-bottom: 1.5rem !important; } }
+.rail-gap {
+  margin-bottom: 1rem !important;
+}
+
+@media (min-width: 640px) {
+  .rail-gap {
+    margin-bottom: 1.5rem !important;
+  }
+}
+
+/* Prevent TextLeftImageRight images from touching the right edge on this page */
+:deep(.rail-tight img) {
+  margin-right: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  :deep(.rail-tight img) {
+    margin-right: 1.5rem;
+  }
+}
 </style>
