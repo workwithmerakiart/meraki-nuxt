@@ -110,7 +110,7 @@
                     <!-- Right: static Holiday Art Camps cover image -->
                     <div class="order-2 rounded-3xl border border-gray-200 bg-white overflow-hidden">
                         <div class="relative min-h-[280px] sm:min-h-[360px] lg:min-h-[520px] overflow-hidden">
-                            <img src="/images/afterschool/camps/holiday-art-camps.jpeg"
+                            <img src="/images/afterschool/camps/holiday-art-camps.png"
                                 alt="Holiday Art Camps at Meraki Art Studio" class="w-full h-full object-cover" />
                         </div>
                     </div>
@@ -314,7 +314,7 @@ const campsGallery = [
     {
         key: 'holiday-main',
         title: 'Holiday Art Camps',
-        img: '/images/afterschool/camps/holiday-art-camps.jpeg', // update to your actual file name
+        img: '/images/afterschool/camps/holiday-art-camps.png', // update to your actual file name
     },
     {
         key: 'week-1',
