@@ -1,4 +1,5 @@
 import Stripe from 'stripe'
+import { getRequestURL } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const cfg = useRuntimeConfig()
@@ -19,6 +20,44 @@ export default defineEventHandler(async (event) => {
   if (!lines.length) {
     setResponseStatus(event, 400)
     return { error: 'No line items' }
+  }
+
+  // Fallback base URL from request (useful in dev if cfg.appBaseUrl is not set)
+  const reqUrl = getRequestURL(event)
+  const appBaseUrl = cfg.appBaseUrl || `${reqUrl.protocol}//${reqUrl.host}`
+
+  // Stripe requires absolute URLs for redirect URLs and product images.
+  function toAbsoluteUrl(input: any): string | null {
+    const s = String(input || '').trim()
+    if (!s) return null
+
+    // Reject data/blob URLs (Stripe expects fetchable public URLs)
+    if (s.startsWith('data:') || s.startsWith('blob:')) return null
+
+    let u: URL
+
+    // If already absolute, parse it
+    try {
+      u = new URL(s)
+    } catch {
+      // Otherwise treat as path relative to appBaseUrl
+      try {
+        const path = s.startsWith('/') ? s : `/${s}`
+        u = new URL(path, appBaseUrl)
+      } catch {
+        return null
+      }
+    }
+
+    // Only allow http/https
+    if (u.protocol !== 'https:' && u.protocol !== 'http:') return null
+
+    // Stripe product images should be publicly reachable. In dev you'll often have localhost paths,
+    // which will fail or be blocked—omit them.
+    const host = (u.hostname || '').toLowerCase()
+    if (host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local')) return null
+
+    return u.toString()
   }
 
   const currency = 'AED'
@@ -64,7 +103,10 @@ export default defineEventHandler(async (event) => {
         tax_behavior: 'exclusive',
         product_data: {
           name: String(l.title || l.sku || 'Item'),
-          images: l.image ? [String(l.image)] : undefined,
+          images: (() => {
+            const img = toAbsoluteUrl(l.image)
+            return img ? [img] : undefined
+          })(),
           metadata: {
             sku: String(l.sku ?? l.id ?? ''),
             type: String(l.type ?? ''),
@@ -79,12 +121,15 @@ export default defineEventHandler(async (event) => {
 
   const line_items = lines.map(toLineItem)
 
-  // Map your promo codes to Stripe coupon IDs (create once per env in Dashboard)
+  // Optional: map your promo codes to Stripe coupon IDs (must exist in Stripe Dashboard)
+  // If these IDs don't exist, Stripe will throw "No such coupon".
   const COUPON_MAP: Record<string, string> = {
-    SAVE10: 'coupon_SAVE10',
-    WELCOME25: 'coupon_WELCOME25',
+    // Example:
+    // SAVE10: 'SAVE10',
+    // WELCOME25: 'WELCOME25',
   }
-  const discounts = promoCode && COUPON_MAP[promoCode] ? [{ coupon: COUPON_MAP[promoCode] }] : undefined
+  const couponId = promoCode && COUPON_MAP[promoCode]
+  const discounts = couponId ? [{ coupon: couponId }] : undefined
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -95,15 +140,19 @@ export default defineEventHandler(async (event) => {
       billing_address_collection: 'auto',
       phone_number_collection: { enabled: true },
       customer_creation: 'if_required',
-      success_url: `${cfg.appBaseUrl}/order/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${cfg.appBaseUrl}/cart`,
+      success_url: new URL(`/order/success?session_id={CHECKOUT_SESSION_ID}`, appBaseUrl).toString(),
+      cancel_url: new URL(`/order/failed?session_id={CHECKOUT_SESSION_ID}`, appBaseUrl).toString(),
       metadata: { note },
     })
 
     return { url: session.url }
   } catch (err: any) {
-    console.error('Stripe session error:', err?.message || err)
+    const msg = err?.message || String(err)
+    // Log full error for server console
+    console.error('Stripe session error:', msg, err)
     setResponseStatus(event, 500)
-    return { error: 'Unable to create checkout session' }
+
+    // Never leak internal error details to the client
+    return { error: 'Unable to start payment right now. Please try again in a moment.' }
   }
 })

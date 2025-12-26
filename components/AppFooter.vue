@@ -14,7 +14,7 @@
                 <a href="https://www.google.com/maps/search/?api=1&query=Meraki+Art+%26+Design+Studio,+Al+Quoz+-+Al+Quoz+Industrial+Area+3+-+Dubai"
                     target="_blank" rel="noopener noreferrer"
                     class="text-black-500 font-semibold inline-flex items-center gap-1 text-sm app-footer-subheading">
-                    <i class="fa-solid fa-location-arrow"></i> Get Direction
+                    <i class="fa-solid fa-location-arrow"></i> Get Directions
                 </a>
                 <div class="space-y-2 text-sm app-footer-subheading">
                     <a href="tel:+971508523600" class="flex items-center gap-2 hover:text-black-500">

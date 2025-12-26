@@ -20,36 +20,53 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm mb-1">Name *</label>
-                <input v-model="form.name" @blur="touched.name = true" type="text" class="w-full border rounded px-3 py-2" />
-                <p v-if="touched.name && !nameValid" class="mt-1 text-xs text-red-600">Enter your full name (letters, spaces, ' and - only).</p>
+                <input v-model="form.name" @blur="touched.name = true" type="text"
+                  class="w-full border rounded px-3 py-2" />
+                <p v-if="touched.name && !nameValid" class="mt-1 text-xs text-red-600">Enter your full name (letters,
+                  spaces, ' and - only).</p>
               </div>
               <div>
                 <label class="block text-sm mb-1">Email *</label>
-                <input v-model="form.email" @blur="touched.email = true" type="email" class="w-full border rounded px-3 py-2" />
-                <p v-if="touched.email && !emailValid" class="mt-1 text-xs text-red-600">Enter a valid email address.</p>
+                <input v-model="form.email" @blur="touched.email = true" type="email"
+                  class="w-full border rounded px-3 py-2" />
+                <p v-if="touched.email && !emailValid" class="mt-1 text-xs text-red-600">Enter a valid email address.
+                </p>
               </div>
             </div>
 
             <div>
               <label class="block text-sm mb-1">Phone Number *</label>
-              <input v-model="form.phone" @blur="touched.phone = true" type="tel" class="w-full border rounded px-3 py-2" />
-              <p v-if="touched.phone && !phoneValid" class="mt-1 text-xs text-red-600">Enter a valid phone number (7+ digits).</p>
+
+              <div class="flex w-full gap-3">
+                <!-- Country picker (flag + dial code only) -->
+                <div class="w-40 md:w-44 flex-shrink-0">
+                  <VueTelInput v-model="countryModel" :defaultCountry="selectedCountryIso2" :autoDefaultCountry="true"
+                    :validCharactersOnly="true" :autoFormat="false" :mode="'international'"
+                    :dropdownOptions="{ showFlags: true, showDialCodeInSelection: true, showSearchBox: true }"
+                    :inputOptions="{ placeholder: '', autocomplete: 'off', readonly: true }" class="w-full country-only"
+                    @blur="touched.phone = true" @country-changed="onCountryChanged" />
+                </div>
+
+                <!-- National digits (validated separately) -->
+                <div class="flex-1">
+                  <input v-model="phoneNational" @blur="touched.phone = true" type="tel" inputmode="numeric"
+                    autocomplete="tel-national" class="w-full border rounded px-3 py-2"
+                    :placeholder="phonePlaceholder" />
+                </div>
+              </div>
+
+              <p v-if="touched.phone && !phoneValid" class="mt-1 text-xs text-red-600">
+                Enter a valid phone number ({{ minDigits }}–{{ maxDigits }} digits).
+              </p>
             </div>
 
             <div class="mt-2 flex items-center gap-3">
-              <button
-                type="button"
-                @click="continueToStripe"
-                :disabled="submitting || !allValid"
-                :class="['px-6 py-3 rounded font-medium transition-colors', (submitting || !allValid) ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-black text-white hover:bg-white hover:text-black border border-black']"
-              >
+              <button type="button" @click="continueToStripe" :disabled="submitting || !allValid"
+                :class="['px-6 py-3 rounded font-medium transition-colors', (submitting || !allValid) ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-black text-white hover:bg-white hover:text-black border border-black']">
                 {{ submitting ? 'Processing…' : 'Continue' }}
               </button>
-              <button
-                type="button"
-                @click="goBack"
-                class="px-6 py-3 rounded font-medium transition-colors border border-black bg-white text-black hover:bg-black hover:text-white"
-              >
+              <button type="button" @click="goBack"
+                class="px-6 py-3 rounded font-medium transition-colors border border-black bg-white text-black hover:bg-black hover:text-white">
                 Back
               </button>
             </div>
@@ -75,7 +92,8 @@
                   <div class="text-sm text-gray-800 whitespace-nowrap">Qty {{ l.qty }} • {{ money(l.priceMajor) }}</div>
                 </li>
               </ul>
-              <p v-if="promoCode" class="mt-2 text-xs text-green-700">Promo applied: <span class="font-medium">{{ promoCode }}</span></p>
+              <p v-if="promoCode" class="mt-2 text-xs text-green-600">Promo applied: <span class="font-medium">{{
+                promoCode }}</span></p>
             </div>
 
             <div class="pt-1 border-t"></div>
@@ -86,7 +104,7 @@
                 <span>Subtotal</span>
                 <span>{{ money(subtotalExVat) }}</span>
               </div>
-              <div v-if="discountExVat > 0" class="flex justify-between text-sm py-1">
+              <div v-if="discountExVat > 0" class="flex justify-between text-sm py-1 text-green-600">
                 <span>Discount<span v-if="promoCode"> ({{ promoCode }})</span></span>
                 <span>-{{ money(discountExVat) }}</span>
               </div>
@@ -107,11 +125,23 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useCartStore } from '~/stores/cart'
+import { VueTelInput } from 'vue-tel-input'
+import 'vue-tel-input/vue-tel-input.css'
 
 const route = useRoute()
+
+useHead({
+  bodyAttrs: {
+    class: 'page-checkout',
+  },
+})
+
 const router = useRouter()
+const cart = useCartStore()
+
 function goBack() {
   try {
     if (typeof window !== 'undefined' && window.history && window.history.length > 1) {
@@ -124,14 +154,44 @@ function goBack() {
   }
 }
 
-// TODO(lead-capture): flip to true when your Sheets endpoint is ready
-const BEACON_ENABLED = false
-const BEACON_URL = '/api/forms/checkout' // server endpoint that will forward to Google Sheets
+// Google Sheets webhook configuration
+const BEACON_ENABLED = true
+const BEACON_URL = 'https://script.google.com/macros/s/AKfycbx9ofgbLM83CrMFaIkkY1VnkKnFpmibeBkn_cYyTN-Ug3gmOKRadhgJedWFlFDv3eAL/exec'
 
-// --- Parse payload from cart
-const raw = route.query.payload ? decodeURIComponent(String(route.query.payload)) : '{}'
+// --- Parse payload from cart (or fall back to Pinia store)
+const raw = route.query.payload ? decodeURIComponent(String(route.query.payload)) : null
 let parsed
-try { parsed = JSON.parse(raw) } catch { parsed = {} }
+try { parsed = raw ? JSON.parse(raw) : {} } catch { parsed = {} }
+
+// If user lands on /checkout without payload, build from cart store
+if (!Array.isArray(parsed?.lines) || parsed.lines.length === 0) {
+  const anyCart = cart
+  parsed = {
+    currency: anyCart.currency || 'AED',
+    promoCode: anyCart.promoCode || null,
+    note: anyCart.note ?? '',
+    lines: (anyCart.linesDetailed || []).map((l) => ({
+      id: l.id,
+      sku: l.sku,
+      title: l.title,
+      image: l.image,
+      type: l.type,
+      qty: l.qty,
+      priceMajor: l.priceMajor,
+      vatEnabled: l.vatEnabled,
+      vatIncluded: l.vatIncluded,
+      vatRate: l.vatRate,
+      variantKey: l.variantKey,
+    })),
+    totals: {
+      subtotalExVat: Number(anyCart.subtotalExVat || 0),
+      discountExVat: Number(anyCart.discountExVat || 0),
+      vat: Number(anyCart.vatTotalAfterDiscount ?? anyCart.vatTotal ?? 0),
+      total: Number(anyCart.totalAfterDiscount ?? anyCart.total ?? 0),
+    },
+    ts: Date.now(),
+  }
+}
 
 const currencyCode = parsed.currency || 'AED'
 const promoCode = parsed.promoCode || null
@@ -166,7 +226,6 @@ const vatTotal = computed(() => {
   const sub = subtotalExVat.value
   if (sub <= 0) return 0
   const disc = discountExVat.value
-  // allocate discount across lines proportionally
   let allocated = 0
   return round2(lines.reduce((sum, l, idx) => {
     const ln = lineNet(l)
@@ -186,86 +245,165 @@ function money(n) { return `${currencyCode} ${Number(n || 0).toFixed(2)}` }
 
 // --- Form
 const form = reactive({ name: '', email: '', phone: '' })
-const touched = reactive({ name: false, email: false, phone: false })
+
+// Phone: use vue-tel-input ONLY for country picker (flag + dial code)
+const countryModel = ref('')
+const selectedCountryIso2 = ref('AE')
+
+// User-entered national digits ONLY (no country code)
+const phoneNational = ref('')
+
+// Structured parts for Sheets + Stripe metadata
+const phoneParts = reactive({
+  iso2: 'AE',
+  countryCode: '+971',
+  phone: '',
+  phoneFull: '',
+})
+
+// Per-country digit rules (extend as needed)
+const minDigitsByIso2 = { AE: 9 }
+const maxDigitsByIso2 = { AE: 9 }
+
+const minDigits = computed(() => minDigitsByIso2[selectedCountryIso2.value] ?? 8)
+const maxDigits = computed(() => maxDigitsByIso2[selectedCountryIso2.value] ?? 15)
+
+const phonePlaceholder = computed(() =>
+  selectedCountryIso2.value === 'AE' ? 'e.g. 55 507 1234' : 'Phone number'
+)
+
+function syncPhoneParts() {
+  const dialDigits = String(phoneParts.countryCode || '').replace(/\D/g, '')
+  const nationalDigits = String(phoneNational.value || '').replace(/\D/g, '')
+  phoneParts.phone = nationalDigits
+  phoneParts.phoneFull = dialDigits && nationalDigits ? `+${dialDigits}${nationalDigits}` : ''
+}
+
+function onCountryChanged(country) {
+  if (!country) return
+
+  const iso2 = String(country?.iso2 || 'AE').toUpperCase()
+  const dial = String(country?.dialCode || '971').replace(/\D/g, '')
+
+  selectedCountryIso2.value = iso2
+  phoneParts.iso2 = iso2
+  phoneParts.countryCode = dial ? `+${dial}` : ''
+
+  syncPhoneParts()
+}
+
+// Watch phoneNational for changes and sync
+watch(phoneNational, () => {
+  syncPhoneParts()
+})
+
+const phoneValid = computed(() => {
+  const digits = String(phoneNational.value || '').replace(/\D/g, '')
+  if (!digits) return false
+  return digits.length >= minDigits.value && digits.length <= maxDigits.value
+})
+
 const nameRe = /^[A-Za-z\u00C0-\u024F' -]{2,}$/
 const emailRe = /.+@.+\..+/
-const phoneRe = /^[0-9+()\-\s]{6,20}$/
 
 const nameValid = computed(() => nameRe.test(String(form.name || '').trim()))
 const emailValid = computed(() => emailRe.test(String(form.email || '').trim()))
-const phoneValid = computed(() => {
-  const raw = String(form.phone || '').trim()
-  if (!phoneRe.test(raw)) return false
-  const digits = raw.replace(/\D/g, '')
-  return digits.length >= 7
-})
 const allValid = computed(() => nameValid.value && emailValid.value && phoneValid.value)
+
+const touched = reactive({ name: false, email: false, phone: false })
 
 const notice = ''
 const submitting = ref(false)
 const errorMsg = ref(null)
 const errorText = computed(() => (typeof errorMsg.value === 'string' ? errorMsg.value : ''))
 
-
 function submitLeadFireAndForget() {
-  if (!BEACON_ENABLED) return // TODO: enable when SHEET_WEBHOOK_URL is configured server-side
+  if (!BEACON_ENABLED) return
+
   try {
     const payload = {
       name: form.name,
       email: form.email,
-      phone: form.phone,
+      countryCode: phoneParts.countryCode || '',
+      phone: phoneParts.phone || '',
+      phoneFull: phoneParts.phoneFull || '',
       promoCode: promoCode || '',
       currency: currencyCode,
+
+      // ✅ FIX: Send totals as an object (matching what the script expects)
       totals: {
         subtotalExVat: subtotalExVat.value,
         discountExVat: discountExVat.value,
         vat: vatTotal.value,
-        total: totalGross.value,
+        total: totalGross.value,           // ← This is what the script reads
       },
-      lines,
+
+      // ✅ FIX: Send lines array (matching what the script expects)
+      lines: lines.map(l => ({
+        title: l.title,
+        qty: l.qty,
+        priceMajor: l.priceMajor
+      })),
+
+      // ✅ FIX: Send cart timestamp
       cartTs: parsed.ts || Date.now(),
+      ts: Date.now(),                      // ← Backup timestamp field
+
       source: 'cart-checkout',
     }
 
-    // Prefer sendBeacon so redirect to Stripe doesn't cancel this request
+    // Use sendBeacon for reliability during page navigation
     if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
-      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' })
+      const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=UTF-8' })
       navigator.sendBeacon(BEACON_URL, blob)
     } else {
-      // Fallback, non-blocking
+      // Fallback for older browsers
       fetch(BEACON_URL, {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        mode: 'no-cors',
         body: JSON.stringify(payload),
         keepalive: true,
-      }).catch(() => {})
+      }).catch(() => { })
     }
   } catch (e) {
-    // Never block payment flow due to lead capture errors
     console.warn('lead capture (beacon) failed', e)
   }
 }
 
+
 async function continueToStripe() {
   errorMsg.value = null
   if (submitting.value) return
-  touched.name = true; touched.email = true; touched.phone = true
+
+  touched.name = true
+  touched.email = true
+  touched.phone = true
+
   if (!allValid.value) {
     errorMsg.value = 'Please provide a valid name, email, and phone number.'
     return
   }
 
   submitting.value = true
+
   try {
-    // Non-blocking lead capture (TODO: enable by setting BEACON_ENABLED=true and backend Sheets webhook)
+    // Keep legacy form.phone in sync
+    form.phone = String(phoneParts.phoneFull || '')
+
+    // Non-blocking lead capture BEFORE Stripe redirect
     submitLeadFireAndForget()
 
-    // Minimal metadata for aftercare / Google Sheet
+    // Small delay to ensure beacon is queued
+    await new Promise(resolve => setTimeout(resolve, 100))
+
+    // Minimal metadata for Stripe
     const meta = {
       source: 'cart-checkout',
       name: form.name,
       email: form.email,
-      phone: form.phone,
+      phone: String(phoneParts.phoneFull || ''),
+      countryCode: phoneParts.countryCode || '',
+      phoneNational: phoneParts.phone || '',
       promoCode: promoCode || '',
       cartTs: parsed.ts || Date.now(),
     }
@@ -292,4 +430,102 @@ async function continueToStripe() {
     submitting.value = false
   }
 }
+
+// Initialize phone parts on mount
+onMounted(() => {
+  syncPhoneParts()
+})
 </script>
+
+<style>
+/* Make vue-tel-input match existing inputs */
+:deep(.vue-tel-input) {
+  border: 1px solid #000;
+  border-radius: 0.375rem;
+  background: #fff;
+  padding: 0;
+  min-height: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Left dropdown (flag + dial code) */
+:deep(.vue-tel-input .vti__dropdown) {
+  border-right: 1px solid #00000022;
+  padding: 0 0.75rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Right input */
+:deep(.vue-tel-input input) {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  padding: 0 0.75rem;
+  height: 100%;
+  line-height: 1.5rem;
+  box-sizing: border-box;
+}
+
+:deep(.vue-tel-input .vti__input) {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Country-only mode: hide the internal input */
+:deep(.country-only.vue-tel-input .vti__input) {
+  display: none !important;
+}
+
+:deep(.vue-tel-input:focus-within) {
+  outline: 2px solid rgba(37, 99, 235, 0.25);
+  outline-offset: 0px;
+}
+
+/* Page-specific header theme overrides */
+body.page-checkout header,
+body.page-checkout header * {
+  color: #000 !important;
+}
+
+body.page-checkout header svg,
+body.page-checkout header svg * {
+  fill: #000 !important;
+  stroke: #000 !important;
+}
+
+body.page-checkout header a[href="/"] img,
+body.page-checkout header a[href="/"] picture img,
+body.page-checkout header [class*="logo"] img,
+body.page-checkout header [id*="logo"] img {
+  filter: brightness(0) !important;
+}
+
+body.page-checkout header button span,
+body.page-checkout header button i,
+body.page-checkout header [class*="hamburger"] span,
+body.page-checkout header [class*="burger"] span,
+body.page-checkout header [class*="menu"] span {
+  background-color: #000 !important;
+  border-color: #000 !important;
+}
+
+body.page-checkout header [class*="hamburger"]::before,
+body.page-checkout header [class*="hamburger"]::after,
+body.page-checkout header [class*="burger"]::before,
+body.page-checkout header [class*="burger"]::after {
+  background-color: #000 !important;
+  border-color: #000 !important;
+}
+
+body.page-checkout header {
+  background: transparent !important;
+}
+</style>

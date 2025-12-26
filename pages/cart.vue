@@ -49,9 +49,19 @@
                                     <button v-if="hasPromoApplied" @click="onClearPromo"
                                         class="px-3 py-2 text-sm border border-black rounded">Clear</button>
                                 </div>
-                                <p v-if="promoMessage"
-                                    :class="['text-xs mt-1', promoMessageType === 'error' ? 'text-red-600' : 'text-black/70']">
-                                    {{ promoMessage }}</p>
+                                <p
+                                  v-if="promoMessage"
+                                  :class="[
+                                    'text-xs mt-1',
+                                    promoMessageType === 'success'
+                                      ? 'text-green-600'
+                                      : promoMessageType === 'error'
+                                        ? 'text-red-600'
+                                        : 'text-black/70'
+                                  ]"
+                                >
+                                  {{ promoMessage }}
+                                </p>
                             </div>
 
                             <div>
@@ -79,7 +89,7 @@
                     <div class="flex justify-between text-sm">
                         <span>Subtotal</span><span>{{ money(subtotalExVat) }}</span>
                     </div>
-                    <div v-if="discountExVatEff > 0" class="flex justify-between text-sm">
+                    <div v-if="discountExVatEff > 0" class="flex justify-between text-sm text-green-600">
                         <span>Discount ({{ promoCodeEff }})</span><span>-{{ money(discountExVatEff) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
@@ -112,6 +122,13 @@
 definePageMeta({ ssr: false })
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useHead } from '#imports'
+
+useHead({
+  bodyAttrs: {
+    class: 'page-cart',
+  },
+})
 
 function round2(n: number) { return Math.round((Number(n) + Number.EPSILON) * 100) / 100 }
 
@@ -306,3 +323,49 @@ async function checkoutNow() {
   }
 }
 </script>
+<style>
+/* Page-specific header theme overrides (force black logo + hamburger) */
+body.page-cart header,
+body.page-cart header * {
+  color: #000 !important;
+}
+
+/* SVG icons (hamburger as svg) */
+body.page-cart header svg,
+body.page-cart header svg * {
+  fill: #000 !important;
+  stroke: #000 !important;
+}
+
+/* Logo as an <img> (common for white PNG/SVG-in-img). Make it black */
+body.page-cart header a[href="/"] img,
+body.page-cart header a[href="/"] picture img,
+body.page-cart header [class*="logo"] img,
+body.page-cart header [id*="logo"] img {
+  filter: brightness(0) !important;
+}
+
+/* Hamburger built from spans/divs */
+body.page-cart header button span,
+body.page-cart header button i,
+body.page-cart header [class*="hamburger"] span,
+body.page-cart header [class*="burger"] span,
+body.page-cart header [class*="menu"] span {
+  background-color: #000 !important;
+  border-color: #000 !important;
+}
+
+/* Some hamburger implementations use pseudo elements */
+body.page-cart header [class*="hamburger"]::before,
+body.page-cart header [class*="hamburger"]::after,
+body.page-cart header [class*="burger"]::before,
+body.page-cart header [class*="burger"]::after {
+  background-color: #000 !important;
+  border-color: #000 !important;
+}
+
+/* If your header uses a transparent background, keep it readable on this page */
+body.page-cart header {
+  background: transparent !important;
+}
+</style>

@@ -1,4 +1,5 @@
 import Stripe from 'stripe'
+import { getHeader, readRawBody } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const cfg = useRuntimeConfig()
@@ -14,8 +15,14 @@ export default defineEventHandler(async (event) => {
   // Stripe requires the raw request body (unparsed)
   const sig = getHeader(event, 'stripe-signature') || ''
   const raw = await readRawBody(event)
-  const bodyBuffer =
-    typeof raw === 'string' ? Buffer.from(raw) : raw ? Buffer.from(raw as any) : Buffer.from('')
+  const bodyBuffer = Buffer.isBuffer(raw)
+    ? raw
+    : Buffer.from(typeof raw === 'string' ? raw : '')
+
+  if (!sig || bodyBuffer.length === 0) {
+    setResponseStatus(event, 400)
+    return { error: 'Missing Stripe signature/body' }
+  }
 
   let evt: Stripe.Event
   try {
@@ -28,6 +35,22 @@ export default defineEventHandler(async (event) => {
   // Utility: structure minimal order-ish log lines for Netlify logs (replace with real persistence)
   function log(obj: any) {
     try { console.log(JSON.stringify(obj)) } catch { console.log(obj) }
+  }
+
+  // Minimal persistence so the success page can be verified via a session-status endpoint later.
+  // NOTE: In serverless production (Netlify), you will likely swap this to a DB/Redis.
+  const storage = useStorage('data')
+
+  async function persistSession(sessionId: string, patch: any) {
+    if (!sessionId) return
+    const key = `stripe:session:${sessionId}`
+    const prev = (await storage.getItem<any>(key)) || {}
+    await storage.setItem(key, {
+      ...prev,
+      ...patch,
+      session_id: sessionId,
+      updatedAt: Date.now(),
+    })
   }
 
   try {
@@ -67,6 +90,18 @@ export default defineEventHandler(async (event) => {
           })),
           note,
         })
+
+        // Persist authoritative confirmation
+        await persistSession(session.id, {
+          status: 'paid',
+          type: evt.type,
+          payment_status: session.payment_status,
+          amount_total: session.amount_total,
+          currency: session.currency,
+          customer_email: session.customer_details?.email,
+          customer_phone: session.customer_details?.phone,
+          payment_intent: paymentIntentId,
+        })
         break
       }
 
@@ -102,6 +137,18 @@ export default defineEventHandler(async (event) => {
           payment_intent: paymentIntentId,
           error: piError,
         })
+
+        await persistSession(session.id, {
+          status: 'failed',
+          type: evt.type,
+          payment_status: session.payment_status,
+          amount_total: session.amount_total,
+          currency: session.currency,
+          customer_email: session.customer_details?.email,
+          customer_phone: session.customer_details?.phone,
+          payment_intent: paymentIntentId,
+          error: piError,
+        })
         break
       }
 
@@ -112,6 +159,15 @@ export default defineEventHandler(async (event) => {
           status: 'expired',
           type: evt.type,
           session_id: session.id,
+          payment_status: session.payment_status,
+          amount_total: session.amount_total,
+          currency: session.currency,
+          customer_email: session.customer_details?.email,
+        })
+
+        await persistSession(session.id, {
+          status: 'expired',
+          type: evt.type,
           payment_status: session.payment_status,
           amount_total: session.amount_total,
           currency: session.currency,
