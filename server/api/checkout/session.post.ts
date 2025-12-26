@@ -61,7 +61,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const currency = 'AED'
-  // const taxRateId = cfg.stripeTaxRateId || ''
+  const taxRateId = cfg.stripeTaxRateId || cfg.stripeTaxRateAe5Excl || ''
 
   // Identify gift card lines and force them to be non-taxable regardless of client flags
   function isGiftLine(l: any) {
@@ -71,17 +71,16 @@ export default defineEventHandler(async (event) => {
     return t.includes('gift') || sku.startsWith('GIFT') || /gift\s*card/.test(title)
   }
 
-  // Check if any line should be taxable; if yes but we lack a tax rate ID, abort to avoid mismatched totals
-  // const anyTaxable = lines.some((l: any) => {
-  //   if (isGiftLine(l)) return false
-  //   if (l.vatEnabled === false) return false
-  //   const rate = Number(l.vatRate ?? l.vatValue ?? 5)
-  //   return Number.isFinite(rate) && rate > 0
-  // })
-  // if (anyTaxable && !taxRateId) {
-  //   setResponseStatus(event, 503)
-  //   return { error: 'VAT tax rate not configured' }
-  // }
+  const anyTaxable = lines.some((l: any) => {
+    if (isGiftLine(l)) return false
+    if (l.vatEnabled === false) return false
+    const rate = Number(l.vatRate ?? l.vatValue ?? 5)
+    return Number.isFinite(rate) && rate > 0
+  })
+  if (anyTaxable && !taxRateId) {
+    setResponseStatus(event, 503)
+    return { error: 'VAT tax rate not configured' }
+  }
 
   // Recompute unit NET from flags; always send EXCLUSIVE to Stripe and attach tax rate when taxable
   function toLineItem(l: any) {
@@ -116,7 +115,7 @@ export default defineEventHandler(async (event) => {
         },
       },
       quantity: qty,
-      // tax_rates: effectiveRate > 0 ? [taxRateId] : [],
+      tax_rates: effectiveRate > 0 ? [taxRateId] : [],
     }
   }
 
@@ -138,7 +137,6 @@ export default defineEventHandler(async (event) => {
       line_items,
       discounts,
       allow_promotion_codes: true,
-      automatic_tax: { enabled: true },
       billing_address_collection: 'required',
       phone_number_collection: { enabled: true },
       customer_creation: 'if_required',
