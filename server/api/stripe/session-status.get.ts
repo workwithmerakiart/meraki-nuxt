@@ -19,9 +19,15 @@ export default defineEventHandler(async (event) => {
   }
 
   // 1) Best-effort: read what the webhook may have persisted.
-  // IMPORTANT: On Netlify/serverless this storage is not durable, so treat as cache only.
+  // IMPORTANT: On Netlify/serverless this storage is not durable, and may not even exist.
   const storage = useStorage('data')
-  const cached = await storage.getItem<any>(`stripe:session:${sessionId}`)
+  let cached: any = null
+  try {
+    cached = await storage.getItem<any>(`stripe:session:${sessionId}`)
+  } catch {
+    cached = null
+  }
+
   if (cached?.status) {
     const status = normalizeStatus(cached.status)
     return {
@@ -41,10 +47,11 @@ export default defineEventHandler(async (event) => {
 
   // 2) Authoritative: ask Stripe directly.
   const cfg = useRuntimeConfig()
-  // On Netlify, server runtime env vars are exposed via process.env; runtimeConfig may not include them unless mapped.
+
+  // On Netlify, server runtime env vars are available on process.env inside Functions.
+  // runtimeConfig may or may not include them depending on your nuxt.config mapping.
   const secretKey =
     (cfg as any).stripeSecretKey ||
-    (cfg as any).STRIPE_SECRET_KEY ||
     (process.env.STRIPE_SECRET_KEY as string | undefined) ||
     (process.env.stripeSecretKey as string | undefined) ||
     ''
@@ -54,8 +61,9 @@ export default defineEventHandler(async (event) => {
     return {
       ok: false,
       status: 'pending' as const,
+      session_id: sessionId,
       message:
-        'Stripe secret key is missing at runtime. On Netlify, set STRIPE_SECRET_KEY for Functions/Runtime scopes (not only Build).',
+        'Stripe secret key is missing at runtime. On Netlify, set STRIPE_SECRET_KEY with Functions/Runtime scope for the active deploy context.',
     }
   }
 
@@ -71,25 +79,28 @@ export default defineEventHandler(async (event) => {
     if (s.status === 'expired') {
       status = 'expired'
     } else if (s.payment_status === 'paid' || s.payment_status === 'no_payment_required') {
-      // Card + most instant methods resolve to paid here
       status = 'paid'
     } else if (s.status === 'complete') {
-      // Completed session but not paid yet (e.g. async methods) => pending, not failed
+      // Completed session but not paid yet (e.g. async methods)
       status = 'pending'
     } else {
       status = 'pending'
     }
 
-    // Best-effort cache (may not persist on serverless)
-    await storage.setItem(`stripe:session:${sessionId}`, {
-      status,
-      session_id: sessionId,
-      updatedAt: Date.now(),
-      payment_status: s.payment_status || null,
-      amount_total: s.amount_total ?? null,
-      currency: s.currency || null,
-      customer_email: s.customer_details?.email || null,
-    })
+    // Best-effort cache (never break prod if this fails)
+    try {
+      await storage.setItem(`stripe:session:${sessionId}`, {
+        status,
+        session_id: sessionId,
+        updatedAt: Date.now(),
+        payment_status: s.payment_status || null,
+        amount_total: s.amount_total ?? null,
+        currency: s.currency || null,
+        customer_email: s.customer_details?.email || null,
+      })
+    } catch {
+      // ignore cache errors on serverless
+    }
 
     return {
       ok: true,
@@ -107,16 +118,16 @@ export default defineEventHandler(async (event) => {
       },
     }
   } catch (err: any) {
-    // Do NOT silently return pending — surface why Stripe lookup failed.
+    // Don’t throw a hard error for the UI; return pending with a message.
     const msg = String(err?.message || err)
-    setResponseStatus(event, 502)
+    setResponseStatus(event, 200)
     return {
       ok: false,
       status: 'pending' as const,
       session_id: sessionId,
       message: `Stripe session lookup failed: ${msg}`,
       hint:
-        'If this works locally but not on Netlify, you are almost certainly using the wrong key (live vs test) or the secret key is not available to Functions. Make sure the Test secret is set on Netlify Deploy Preview/Branch contexts, and Live secret is set on Production context.',
+        'If this works locally but not on Netlify, you may be using the wrong Stripe key (live vs test) or STRIPE_SECRET_KEY is not available to Functions for this deploy context.',
     }
   }
 })
