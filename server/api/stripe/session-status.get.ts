@@ -41,7 +41,13 @@ export default defineEventHandler(async (event) => {
 
   // 2) Authoritative: ask Stripe directly.
   const cfg = useRuntimeConfig()
-  const secretKey = (cfg as any).stripeSecretKey || (cfg as any).STRIPE_SECRET_KEY || ''
+  // On Netlify, server runtime env vars are exposed via process.env; runtimeConfig may not include them unless mapped.
+  const secretKey =
+    (cfg as any).stripeSecretKey ||
+    (cfg as any).STRIPE_SECRET_KEY ||
+    (process.env.STRIPE_SECRET_KEY as string | undefined) ||
+    (process.env.stripeSecretKey as string | undefined) ||
+    ''
 
   if (!secretKey) {
     setResponseStatus(event, 503)
@@ -49,7 +55,7 @@ export default defineEventHandler(async (event) => {
       ok: false,
       status: 'pending' as const,
       message:
-        'Stripe secret key is missing in runtime config. Ensure STRIPE_SECRET_KEY is set for Netlify *Functions/Runtime* scopes (not only Build).',
+        'Stripe secret key is missing at runtime. On Netlify, set STRIPE_SECRET_KEY for Functions/Runtime scopes (not only Build).',
     }
   }
 
@@ -62,9 +68,17 @@ export default defineEventHandler(async (event) => {
     // - payment_status: 'paid' | 'unpaid' | 'no_payment_required'
     let status: SessionStatus = 'pending'
 
-    if (s.status === 'expired') status = 'expired'
-    else if (s.payment_status === 'paid') status = 'paid'
-    else if (s.status === 'complete' && s.payment_status !== 'paid') status = 'failed'
+    if (s.status === 'expired') {
+      status = 'expired'
+    } else if (s.payment_status === 'paid' || s.payment_status === 'no_payment_required') {
+      // Card + most instant methods resolve to paid here
+      status = 'paid'
+    } else if (s.status === 'complete') {
+      // Completed session but not paid yet (e.g. async methods) => pending, not failed
+      status = 'pending'
+    } else {
+      status = 'pending'
+    }
 
     // Best-effort cache (may not persist on serverless)
     await storage.setItem(`stripe:session:${sessionId}`, {
@@ -84,10 +98,12 @@ export default defineEventHandler(async (event) => {
       updatedAt: Date.now(),
       source: 'stripe-api',
       meta: {
+        stripe_status: (s as any).status || null,
         payment_status: s.payment_status || null,
         amount_total: s.amount_total ?? null,
         currency: s.currency || null,
         customer_email: s.customer_details?.email || null,
+        livemode: (s as any).livemode ?? null,
       },
     }
   } catch (err: any) {
