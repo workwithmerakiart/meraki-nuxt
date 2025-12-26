@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     return { error: 'Payments not configured' }
   }
 
-  const stripe = new Stripe(cfg.stripeSecretKey, { apiVersion: '2024-06-20' })
+  const stripe = new Stripe(cfg.stripeSecretKey, { apiVersion: '2024-11-20.acacia' })
 
   const body = await readBody(event)
   const lines = Array.isArray(body?.lines) ? body.lines : []
