@@ -25,6 +25,11 @@
                                 <h3 class="text-sm font-semibold text-black truncate">{{ it.title }}</h3>
                                 <p class="text-xs text-black/70 mt-0.5">{{ money(it.priceMajor) }}</p>
 
+                                <p v-if="it.type === 'activity' && (it.meta?.slotStartISO || it.meta?.selectedSlotISO)"
+                                    class="text-xs text-black/70 mt-1">
+                                    {{ formatDubaiSlot(it.meta) }}
+                                </p>
+
                                 <div class="mt-2 flex items-center gap-2">
                                     <button class="px-2 border border-black" @click="dec(it.key)"
                                         aria-label="Decrease">–</button>
@@ -43,24 +48,22 @@
                                     promo code</button>
                                 <div v-if="showPromo" class="mt-2 flex gap-2">
                                     <input v-model="promoInput" type="text" inputmode="text" placeholder="e.g., SAVE10"
-                                        class="flex-1 border border-black rounded px-3 py-2 text-sm" @keyup.enter="onApplyPromo" />
+                                        class="flex-1 border border-black rounded px-3 py-2 text-sm"
+                                        @keyup.enter="onApplyPromo" />
                                     <button @click="onApplyPromo"
                                         class="px-4 py-2 text-sm border border-black bg-black text-white rounded">Apply</button>
                                     <button v-if="hasPromoApplied" @click="onClearPromo"
                                         class="px-3 py-2 text-sm border border-black rounded">Clear</button>
                                 </div>
-                                <p
-                                  v-if="promoMessage"
-                                  :class="[
+                                <p v-if="promoMessage" :class="[
                                     'text-xs mt-1',
                                     promoMessageType === 'success'
-                                      ? 'text-green-600'
-                                      : promoMessageType === 'error'
-                                        ? 'text-red-600'
-                                        : 'text-black/70'
-                                  ]"
-                                >
-                                  {{ promoMessage }}
+                                        ? 'text-green-600'
+                                        : promoMessageType === 'error'
+                                            ? 'text-red-600'
+                                            : 'text-black/70'
+                                ]">
+                                    {{ promoMessage }}
                                 </p>
                             </div>
 
@@ -100,16 +103,15 @@
                     </div>
 
                     <button type="button" @click="checkoutNow" :disabled="lines.length === 0 || submitting"
-                            :aria-busy="submitting ? 'true' : 'false'"
-                            :class="[
-                              'block w-full text-center mt-3 border border-black rounded py-2 text-sm transition-colors',
-                              (lines.length === 0)
+                        :aria-busy="submitting ? 'true' : 'false'" :class="[
+                            'block w-full text-center mt-3 border border-black rounded py-2 text-sm transition-colors',
+                            (lines.length === 0)
                                 ? 'bg-black text-white opacity-50 cursor-not-allowed'
                                 : (submitting
                                     ? 'bg-white text-black cursor-wait'
                                     : 'bg-black text-white hover:bg-white hover:text-black')
-                            ]">
-                      {{ submitting ? 'Processing…' : 'Checkout' }}
+                        ]">
+                        {{ submitting ? 'Processing…' : 'Checkout' }}
                     </button>
                     <p v-if="submitError" class="mt-2 text-xs text-red-600">{{ submitError }}</p>
                 </aside>
@@ -125,9 +127,9 @@ import { useRouter } from 'vue-router'
 import { useHead } from '#imports'
 
 useHead({
-  bodyAttrs: {
-    class: 'page-cart',
-  },
+    bodyAttrs: {
+        class: 'page-cart',
+    },
 })
 
 function round2(n: number) { return Math.round((Number(n) + Number.EPSILON) * 100) / 100 }
@@ -249,6 +251,34 @@ function money(n: unknown) {
     return `${currency.value} ${v.toFixed(2)}`
 }
 
+function formatDubaiSlot(meta: any) {
+    const startISO = meta?.slotStartISO || meta?.selectedSlotISO
+    const endISO = meta?.slotEndISO || meta?.selectedSlotEndISO
+    if (!startISO) return ''
+
+    const s = new Date(startISO)
+    const e = endISO ? new Date(endISO) : null
+
+    const dateFmt = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Dubai',
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+    })
+
+    const timeFmt = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Dubai',
+        hour: 'numeric',
+        minute: '2-digit',
+    })
+
+    const dateLabel = dateFmt.format(s)
+    const startLabel = timeFmt.format(s)
+    const endLabel = e ? timeFmt.format(e) : ''
+
+    return endLabel ? `${dateLabel} • ${startLabel} – ${endLabel} (Dubai)` : `${dateLabel} • ${startLabel} (Dubai)`
+}
+
 function inc(key: string) { cart.increment(key) }
 function dec(key: string) { cart.decrement(key) }
 function remove(key: string) { cart.remove(key) }
@@ -268,73 +298,77 @@ const submitError = ref('')
 const MIN_SPIN_MS = 800
 
 function normalizePromoCode() {
-  return (promoCodeEff.value || '').trim().toUpperCase() || null
+    return (promoCodeEff.value || '').trim().toUpperCase() || null
 }
 
 function buildCheckoutPayload() {
-  const linePayload = lines.value.map((l: any) => ({
-    id: l.id,
-    sku: l.sku,
-    title: l.title,
-    image: l.image,
-    type: l.type,
-    qty: l.qty,
-    priceMajor: l.priceMajor,      // unit price in major units (AED)
-    vatEnabled: l.vatEnabled,
-    vatIncluded: l.vatIncluded,
-    vatRate: l.vatRate,
-    variantKey: l.variantKey,
-  }))
-  return {
-    currency: currency.value || 'AED',
-    lines: linePayload,
-    promoCode: normalizePromoCode(),
-    note: cart.note ?? '',
-    totals: {
-      subtotalExVat: subtotalExVat.value || 0,
-      discountExVat: discountExVatEff.value || 0,
-      vat: vatEff.value || 0,
-      total: totalEff.value || 0,
-    },
-    // Timestamp for idempotency/debug
-    ts: Date.now(),
-  }
+    const linePayload = lines.value.map((l: any) => ({
+        id: l.id,
+        sku: l.sku,
+        title: l.title,
+        image: l.image,
+        type: l.type,
+        qty: l.qty,
+        priceMajor: l.priceMajor,      // unit price in major units (AED)
+        vatEnabled: l.vatEnabled,
+        vatIncluded: l.vatIncluded,
+        vatRate: l.vatRate,
+        variantKey: l.variantKey,
+
+        // ✅ keep meta (required for activity slot booking)
+        meta: l.meta || {},
+    }))
+    return {
+        currency: currency.value || 'AED',
+        flowType: cart.items.find((i) => i?.meta?.flowType)?.meta?.flowType || 'Experiences',
+        lines: linePayload,
+        promoCode: normalizePromoCode(),
+        note: cart.note ?? '',
+        totals: {
+            subtotalExVat: subtotalExVat.value || 0,
+            discountExVat: discountExVatEff.value || 0,
+            vat: vatEff.value || 0,
+            total: totalEff.value || 0,
+        },
+        // Timestamp for idempotency/debug
+        ts: Date.now(),
+    }
 }
 
 async function checkoutNow() {
-  submitError.value = ''
-  if (!lines.value.length || submitting.value) return
-  submitting.value = true
-  const started = Date.now()
-  try {
-    const payload = buildCheckoutPayload()
-    const q = encodeURIComponent(JSON.stringify(payload))
-    await router.push({ path: '/checkout', query: { payload: q } })
-    return
-  } catch (e: any) {
-    console.error('checkoutNow route error', e)
-    const msg = typeof e?.message === 'string' ? e.message : 'Could not open checkout. Please try again.'
-    submitError.value = msg
-  } finally {
-    const elapsed = Date.now() - started
-    const wait = Math.max(0, MIN_SPIN_MS - elapsed)
-    if (wait) await new Promise(r => setTimeout(r, wait))
-    submitting.value = false
-  }
+    submitError.value = ''
+    if (!lines.value.length || submitting.value) return
+    submitting.value = true
+    const started = Date.now()
+    try {
+        const payload = buildCheckoutPayload()
+        const q = encodeURIComponent(JSON.stringify(payload))
+        await router.push({ path: '/checkout', query: { payload: q } })
+        return
+    } catch (e: any) {
+        console.error('checkoutNow route error', e)
+        const msg = typeof e?.message === 'string' ? e.message : 'Could not open checkout. Please try again.'
+        submitError.value = msg
+    } finally {
+        const elapsed = Date.now() - started
+        const wait = Math.max(0, MIN_SPIN_MS - elapsed)
+        if (wait) await new Promise(r => setTimeout(r, wait))
+        submitting.value = false
+    }
 }
 </script>
 <style>
 /* Page-specific header theme overrides (force black logo + hamburger) */
 body.page-cart header,
 body.page-cart header * {
-  color: #000 !important;
+    color: #000 !important;
 }
 
 /* SVG icons (hamburger as svg) */
 body.page-cart header svg,
 body.page-cart header svg * {
-  fill: #000 !important;
-  stroke: #000 !important;
+    fill: #000 !important;
+    stroke: #000 !important;
 }
 
 /* Logo as an <img> (common for white PNG/SVG-in-img). Make it black */
@@ -342,7 +376,7 @@ body.page-cart header a[href="/"] img,
 body.page-cart header a[href="/"] picture img,
 body.page-cart header [class*="logo"] img,
 body.page-cart header [id*="logo"] img {
-  filter: brightness(0) !important;
+    filter: brightness(0) !important;
 }
 
 /* Hamburger built from spans/divs */
@@ -351,8 +385,8 @@ body.page-cart header button i,
 body.page-cart header [class*="hamburger"] span,
 body.page-cart header [class*="burger"] span,
 body.page-cart header [class*="menu"] span {
-  background-color: #000 !important;
-  border-color: #000 !important;
+    background-color: #000 !important;
+    border-color: #000 !important;
 }
 
 /* Some hamburger implementations use pseudo elements */
@@ -360,12 +394,12 @@ body.page-cart header [class*="hamburger"]::before,
 body.page-cart header [class*="hamburger"]::after,
 body.page-cart header [class*="burger"]::before,
 body.page-cart header [class*="burger"]::after {
-  background-color: #000 !important;
-  border-color: #000 !important;
+    background-color: #000 !important;
+    border-color: #000 !important;
 }
 
 /* If your header uses a transparent background, keep it readable on this page */
 body.page-cart header {
-  background: transparent !important;
+    background: transparent !important;
 }
 </style>

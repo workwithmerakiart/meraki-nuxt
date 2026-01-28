@@ -34,6 +34,7 @@ export default defineEventHandler(async (event) => {
       ok: true,
       status,
       session_id: cached.session_id || sessionId,
+      orderRef: cached.orderRef || null,
       updatedAt: cached.updatedAt || null,
       source: 'webhook-cache',
       meta: {
@@ -70,6 +71,7 @@ export default defineEventHandler(async (event) => {
   try {
     const stripe = new Stripe(String(secretKey), { apiVersion: '2024-06-20' })
     const s = await stripe.checkout.sessions.retrieve(sessionId)
+    const orderRef = (s.client_reference_id as string) || (s.metadata as any)?.orderRef || null
 
     // Stripe session fields:
     // - status: 'open' | 'complete' | 'expired'
@@ -92,6 +94,7 @@ export default defineEventHandler(async (event) => {
       await storage.setItem(`stripe:session:${sessionId}`, {
         status,
         session_id: sessionId,
+        orderRef,
         updatedAt: Date.now(),
         payment_status: s.payment_status || null,
         amount_total: s.amount_total ?? null,
@@ -106,6 +109,7 @@ export default defineEventHandler(async (event) => {
       ok: true,
       status,
       session_id: sessionId,
+      orderRef,
       updatedAt: Date.now(),
       source: 'stripe-api',
       meta: {

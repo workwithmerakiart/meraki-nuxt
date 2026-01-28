@@ -84,10 +84,10 @@ const activities = [
         duration: "30 mins",
         bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!",
         variants: [
-          { name: "Keychain", price: "AED 40", vatIncluded: true },
-          { name: "Small", price: "AED 140", vatIncluded: true },
-          { name: "Medium", price: "AED 195", vatIncluded: true },
-          { name: "Large", price: "AED 275", vatIncluded: true }
+          { name: "Keychain", price: "AED 40", vatIncluded: false },
+          { name: "Small", price: "AED 140", vatIncluded: false },
+          { name: "Medium", price: "AED 195", vatIncluded: false },
+          { name: "Large", price: "AED 275", vatIncluded: false }
         ]
       },
       {
@@ -98,11 +98,11 @@ const activities = [
         duration: "~45–60 mins",
         bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!",
         variants: [
-          { name: "30x25 cm", price: "AED 140", vatIncluded: true },
-          { name: "40x50 cm", price: "AED 185", vatIncluded: true },
-          { name: "60x60 cm", price: "AED 310", vatIncluded: true },
-          { name: "60x90 cm", price: "AED 375", vatIncluded: true },
-          { name: "75x100 cm", price: "AED 525", vatIncluded: true }
+          { name: "30x25 cm", price: "AED 140", vatIncluded: false },
+          { name: "40x50 cm", price: "AED 185", vatIncluded: false },
+          { name: "60x60 cm", price: "AED 310", vatIncluded: false },
+          { name: "60x90 cm", price: "AED 375", vatIncluded: false },
+          { name: "75x100 cm", price: "AED 525", vatIncluded: false }
         ]
       }
     ]
@@ -121,8 +121,8 @@ const activities = [
         description: "Create glossy MDF resin coasters in your choice of set size.",
         bottomNote: "Get started with resin on a small canvas. Easy, fun, and stylish!",
         variants: [
-          { name: "Set of 2", price: "AED 175", vatIncluded: true },
-          { name: "Set of 4", price: "AED 250", vatIncluded: true }
+          { name: "Set of 2", price: "AED 175", vatIncluded: false },
+          { name: "Set of 4", price: "AED 250", vatIncluded: false }
         ]
       },
       {
@@ -131,7 +131,7 @@ const activities = [
         image: "/images/activities/resin/activities_resin_agate_coasters.webp",
         description: "Elegant, crystal-like agate coasters made with resin.",
         price: "AED 300",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Craft beautiful faux-agate pieces perfect for gifting."
       },
       {
@@ -141,9 +141,9 @@ const activities = [
         description: "Customize an acrylic tray with resin art in your preferred size.",
         bottomNote: "Functional and fabulous — your art becomes a lifestyle piece!",
         variants: [
-          { name: "13x26 cm", price: "AED 200", vatIncluded: true },
-          { name: "20x20 cm", price: "AED 275", vatIncluded: true },
-          { name: "20x30 cm", price: "AED 350", vatIncluded: true }
+          { name: "13x26 cm", price: "AED 200", vatIncluded: false },
+          { name: "20x20 cm", price: "AED 275", vatIncluded: false },
+          { name: "20x30 cm", price: "AED 350", vatIncluded: false }
         ]
       },
       {
@@ -152,7 +152,7 @@ const activities = [
         image: "/images/activities/resin/activities_resin_clock.webp",
         description: "Create a round resin wall clock — artistic and functional.",
         price: "AED 275",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Design a piece of time you’ll love watching!"
       },
       {
@@ -161,7 +161,7 @@ const activities = [
         image: "/images/activities/resin/activities_resin_clock_with_rings.webp",
         description: "Stylish wall clock with intricate resin ring detailing.",
         price: "AED 500",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Go big and bold with layered resin textures."
       },
       {
@@ -170,7 +170,7 @@ const activities = [
         image: "/images/activities/resin/activities_resin_cheeseboard.webp",
         description: "Decorate a wood and resin cheeseboard for serving in style.",
         price: "AED 350",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Serve up style with your own handmade resin cheeseboard."
       },
       {
@@ -179,7 +179,7 @@ const activities = [
         image: "/images/activities/resin/activities_resin_beach_painting.webp",
         description: "Create dreamy ocean waves using beach-inspired resin art.",
         price: "AED 425",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Bring the calm of the coast to your canvas."
       },
       {
@@ -188,7 +188,7 @@ const activities = [
         image: "/images/activities/resin/activities_resin_book_cover.webp",
         description: "Customize a hardback book cover with resin textures.",
         price: "AED 200",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Turn reading into a resin masterpiece."
       },
       {
@@ -197,7 +197,7 @@ const activities = [
         image: "/images/activities/resin/activities_resin_bookmark.webp",
         description: "Make a glossy, colorful bookmark to mark your reads.",
         price: "AED 25",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Short, sweet, and stunning — a quick win for all ages."
       },
       {
@@ -206,7 +206,7 @@ const activities = [
         image: "/images/activities/resin/activities_resin_keychains.webp",
         description: "Craft your own mini resin keychains with initials or glitter.",
         price: "AED 35",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Small but stylish. Great for gifts or personal flair."
       }
     ]
@@ -224,7 +224,7 @@ const activities = [
         image: "/images/activities/jesmonite/activities_jesmonite_tray.webp",
         description: "Craft your own minimalistic tray with unique textures.",
         price: "AED 150",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Perfect for keys, candles, or just aesthetic organization."
       },
       {
@@ -233,7 +233,7 @@ const activities = [
         image: "/images/activities/jesmonite/activities_jesmonite_coasters.webp",
         description: "Pour and pigment your own pair of stylish coasters.",
         price: "AED 125",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "A simple yet impactful addition to any space."
       },
       {
@@ -242,7 +242,7 @@ const activities = [
         image: "/images/activities/jesmonite/activities_jesmonite_pot.webp",
         description: "Make your own chic jesmonite pot for plants or storage.",
         price: "AED 150",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Smooth finish, modern shape, and 100% handmade by you."
       },
       {
@@ -251,7 +251,7 @@ const activities = [
         image: "/images/activities/jesmonite/activities_jesmonite_tray+coasters.webp",
         description: "Create a matching set — ideal for home styling.",
         price: "AED 250",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Looks even better when you say you made it yourself."
       },
       {
@@ -260,7 +260,7 @@ const activities = [
         image: "/images/activities/jesmonite/activities_jesmonite_moroccan_tray.webp",
         description: "Design a textured statement tray with Moroccan inspiration.",
         price: "AED 450",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "A bold centrepiece handcrafted in your unique colour palette."
       }
     ]
@@ -278,7 +278,7 @@ const activities = [
         image: "/images/activities/decoden/activities_decoden_phonecase.webp",
         description: "Design your dream kawaii phone case.",
         price: "AED 85",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Turn your phone into a cute masterpiece!"
       },
       {
@@ -287,7 +287,7 @@ const activities = [
         image: "/images/activities/decoden/activities_decoden_mirror.webp",
         description: "Decorate your mirror with charms and whipped clay.",
         price: "AED 150",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Every glance will sparkle with your custom flair!"
       },
       {
@@ -296,7 +296,7 @@ const activities = [
         image: "/images/activities/decoden/activities_decoden_hand_mirror.webp",
         description: "Add a pop of kawaii to your hand mirror.",
         price: "AED 85",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Perfect for glam on the go."
       },
       {
@@ -305,7 +305,7 @@ const activities = [
         image: "/images/activities/decoden/activities_decoden_mini_hair_brush.webp",
         description: "Small but packed with personality!",
         price: "AED 35",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Let your style shine through even in the tiniest details."
       },
       {
@@ -314,7 +314,7 @@ const activities = [
         image: "/images/activities/decoden/activities_decoden_hair_brush.webp",
         description: "Make every stroke magical.",
         price: "AED 65",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Style meets cuteness overload!"
       },
       {
@@ -323,7 +323,7 @@ const activities = [
         image: "/images/activities/decoden/activities_decoden_jewellery_box.webp",
         description: "Store your treasures in a box full of charm.",
         price: "AED 185",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Cute on the outside, precious on the inside."
       }
     ]
@@ -341,7 +341,7 @@ const activities = [
         image: "/images/activities/beauty-blend.webp",
         description: "Craft your own aromatic candle.",
         price: "AED 250",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "From wick to wax — pour your personality into a candle!"
       },
       {
@@ -350,7 +350,7 @@ const activities = [
         image: "/images/activities/soap-making.webp",
         description: "Customize and create beautiful handmade soaps.",
         price: "AED 175",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Clean, fun, and totally custom — your soap, your vibe!"
       },
       {
@@ -359,7 +359,7 @@ const activities = [
         image: "/images/activities/bath-bomb.jpeg",
         description: "Fizz up your bath time with personalized bombs.",
         price: "AED 125",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Scented fizzies made by you — soak, relax, repeat."
       }
     ]
@@ -379,10 +379,10 @@ const activities = [
         duration: "30 mins",
         bottomNote: "Craft a timeless keepsake with your personal touch.",
         variants: [
-          { name: "Keychain", price: "AED 35", vatIncluded: true },
-          { name: "Small", price: "AED 125", vatIncluded: true },
-          { name: "Medium", price: "AED 160", vatIncluded: true },
-          { name: "Large", price: "AED 270", vatIncluded: true }
+          { name: "Keychain", price: "AED 35", vatIncluded: false },
+          { name: "Small", price: "AED 125", vatIncluded: false },
+          { name: "Medium", price: "AED 160", vatIncluded: false },
+          { name: "Large", price: "AED 270", vatIncluded: false }
         ]
       },
       {
@@ -393,11 +393,11 @@ const activities = [
         duration: "~45 mins",
         bottomNote: "Create soothing, flowy masterpieces without the neon splash.",
         variants: [
-          { name: "30x25 cm", price: "AED 125", vatIncluded: true },
-          { name: "40x50 cm", price: "AED 160", vatIncluded: true },
-          { name: "60x60 cm", price: "AED 270", vatIncluded: true },
-          { name: "60x90 cm", price: "AED 325", vatIncluded: true },
-          { name: "75x100 cm", price: "AED 450", vatIncluded: true }
+          { name: "30x25 cm", price: "AED 125", vatIncluded: false },
+          { name: "40x50 cm", price: "AED 160", vatIncluded: false },
+          { name: "60x60 cm", price: "AED 270", vatIncluded: false },
+          { name: "60x90 cm", price: "AED 325", vatIncluded: false },
+          { name: "75x100 cm", price: "AED 450", vatIncluded: false }
         ]
       },
       {
@@ -408,11 +408,11 @@ const activities = [
         duration: "All day access",
         bottomNote: "A freestyle painting space to bring your imagination to life.",
         variants: [
-          { name: "30x25 cm", price: "AED 85", vatIncluded: true },
-          { name: "40x50 cm", price: "AED 155", vatIncluded: true },
-          { name: "60x60 cm", price: "AED 200", vatIncluded: true },
-          { name: "60x90 cm", price: "AED 325", vatIncluded: true },
-          { name: "75x100 cm", price: "AED 460", vatIncluded: true }
+          { name: "30x25 cm", price: "AED 85", vatIncluded: false },
+          { name: "40x50 cm", price: "AED 155", vatIncluded: false },
+          { name: "60x60 cm", price: "AED 200", vatIncluded: false },
+          { name: "60x90 cm", price: "AED 325", vatIncluded: false },
+          { name: "75x100 cm", price: "AED 460", vatIncluded: false }
         ]
       },
       {
@@ -422,7 +422,7 @@ const activities = [
         description: "Classic slime-making fun with unlimited squish!",
         price: "AED 65",
         duration: "30 mins",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Stretch, swirl, and squish your own perfect slime mix."
       },
       {
@@ -432,7 +432,7 @@ const activities = [
         description: "Stuff your very own plushie bear.",
         price: "AED 160",
         duration: "30 mins",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Create a furry friend that’s uniquely yours!"
       },
       {
@@ -442,7 +442,7 @@ const activities = [
         description: "Sculpt stunningly realistic florals from clay.",
         price: "AED 600",
         duration: "3 hours",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Master intricate flower-making techniques in this elegant session."
       },
       {
@@ -452,7 +452,7 @@ const activities = [
         description: "Add dimension and style to your art using texture mediums.",
         price: "AED 275",
         duration: "2 hours",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Bold strokes and textured depth — a feast for your walls."
       },
       {
@@ -462,7 +462,7 @@ const activities = [
         description: "Sculpt and paint elevated textures for a 3D effect.",
         price: "AED 325",
         duration: "2 hours",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Sculptural artistry that truly pops!"
       },
       {
@@ -472,7 +472,7 @@ const activities = [
         description: "Design your own custom canvas tote bag.",
         price: "AED 175",
         duration: "1.5 hours",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Wear your art wherever you go."
       },
       {
@@ -482,7 +482,7 @@ const activities = [
         description: "Paint cute and quirky patterns on your very own pot.",
         price: "AED 125",
         duration: "1.5 hours",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "The perfect addition to your window sill or balcony garden."
       },
       {
@@ -492,7 +492,7 @@ const activities = [
         description: "Unleash your creativity on fabric with vibrant colors.",
         price: "AED 200",
         duration: "2 hours",
-        vatIncluded: true,
+        vatIncluded: false,
         bottomNote: "Perfect for statement pieces or handmade gifts."
       }
     ]

@@ -10,3 +10,9 @@
 body {
     background: #F9F3EB;
 }
+
+/* Rotate Color Kit image everywhere it is used */
+img[src$="/images/shop/shop_color_kit.webp"],
+img[src$="shop_color_kit.webp"] {
+  transform: rotate(90deg);
+}

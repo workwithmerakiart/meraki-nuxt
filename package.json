@@ -34,6 +34,7 @@
     "nuxt-icon": "^1.0.0-beta.7",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.7.1",
+    "resend": "^6.9.1",
     "stripe": "^20.1.0",
     "swiper": "^11.2.8",
     "tailwindcss": "^4.1.8",

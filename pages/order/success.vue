@@ -29,6 +29,10 @@
               <div class="min-w-0">
                 <p class="text-xs uppercase tracking-wider text-black/60">Reference</p>
                 <p class="mt-1 font-mono text-xs sm:text-sm text-black break-all">{{ sessionId || '—' }}</p>
+
+                <p class="mt-3 text-xs uppercase tracking-wider text-black/60">Order ID</p>
+                <p class="mt-1 font-mono text-xs sm:text-sm text-black break-all">{{ orderRef || '—' }}</p>
+
                 <p v-if="amountText" class="mt-2 text-xs text-black/70">Total: <span class="font-medium text-black">{{ amountText }}</span></p>
               </div>
               <button
@@ -93,6 +97,7 @@ const route = useRoute()
 const copied = ref(false)
 
 const sessionId = computed(() => String(route.query.session_id || '').trim())
+const orderRef = ref('')
 
 useHead({
   bodyAttrs: {
@@ -153,6 +158,7 @@ async function fetchStatusOnce() {
 
     const status = String(res?.status || 'pending')
     meta.value = res?.meta || null
+    orderRef.value = String(res?.orderRef || res?.meta?.orderRef || '')
 
     if (status === 'paid') uiState.value = 'paid'
     else if (status === 'failed') uiState.value = 'failed'

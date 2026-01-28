@@ -3,13 +3,8 @@
     <ExperiencesBlockOne v-bind="blockOneData" />
     <ExperiencesBlockTwo v-bind="blockTwoData" />
     <div class="pt-5 pb-8">
-      <ImageTilesBlock
-        v-for="(courseSection, index) in coursesData"
-        :key="index"
-        :title="courseSection.title"
-        :tiles="courseSection.sections"
-        categoryLabel="COURSES"
-      />
+      <ImageTilesBlock v-for="(courseSection, index) in coursesData" :key="index" :title="courseSection.title"
+        :tiles="courseSection.sections" categoryLabel="COURSES" @add-to-cart="addCourseToCart" />
     </div>
   </div>
 </template>
@@ -20,6 +15,7 @@ import {
   ClockIcon,
   MapPinIcon,
 } from "@heroicons/vue/24/outline";
+import { useCartStore } from '~/stores/cart'
 
 const blockOneData = {
   image:
@@ -104,7 +100,7 @@ const coursesData = [
           price: "AED 1500",
           vat: true,
           vatValue: 5,
-          registerText: "Enroll",
+          registerText: "Add to Cart",
           imageSrc: "/images/courses/courses_resin_basic.webp",
           imageCaption: "Resin Basics Course at Meraki Art Studio",
           content: `
@@ -212,7 +208,7 @@ const coursesData = [
           price: "AED 1800",
           vat: true,
           vatValue: 5,
-          registerText: "Enroll",
+          registerText: "Add to Cart",
           imageSrc: "/images/courses/courses_resin_advance.webp",
           imageCaption: "Advanced Resin Course at Meraki Art Studio",
           content: `
@@ -318,7 +314,7 @@ const coursesData = [
           price: "From AED 2400",
           vat: true,
           vatValue: 5,
-          registerText: "Enroll",
+          registerText: "Add to Cart",
           imageSrc: "/images/courses/courses_resin_advance.webp",
           imageCaption: "Epoxy River Table Workshop at Meraki Art Studio",
           content: `
@@ -390,7 +386,7 @@ const coursesData = [
         sessions: 1,
         totalDurationMin: 240, // 11 AM – 3 PM
         durationMin: 240,
-        sessionsMeta: [ { day: 1, label: "Daily", durationMin: 240 } ],
+        sessionsMeta: [{ day: 1, label: "Daily", durationMin: 240 }],
         minTickets: 1,
         maxTickets: 10,
         location: "Meraki Art Studio",
@@ -429,7 +425,7 @@ const coursesData = [
           price: "AED 2250",
           vat: true,
           vatValue: 5,
-          registerText: "Enroll",
+          registerText: "Add to Cart",
           imageSrc: "/images/courses/courses_sculpture.webp",
           imageCaption: "Floral Sculpture Masterclass at Meraki Art Studio",
           content: `
@@ -509,7 +505,7 @@ const coursesData = [
           price: "AED 1260 – 1825",
           vat: true,
           vatValue: 5,
-          registerText: "Enroll",
+          registerText: "Add to Cart",
           imageSrc: "/images/activities/fine-art.webp",
           imageCaption: "Basics of Drawing at Meraki Art Studio",
           variants: [
@@ -588,7 +584,7 @@ const coursesData = [
           price: "AED 1260 – 1825",
           vat: true,
           vatValue: 5,
-          registerText: "Enroll",
+          registerText: "Add to Cart",
           imageSrc: "/images/activities/fine-art.webp",
           imageCaption: "Acrylic Painting at Meraki Art Studio",
           variants: [
@@ -667,7 +663,7 @@ const coursesData = [
           price: "AED 1260 – 1825",
           vat: true,
           vatValue: 5,
-          registerText: "Enroll",
+          registerText: "Add to Cart",
           imageSrc: "/images/activities/fine-art.webp",
           imageCaption: "Watercolor Painting at Meraki Art Studio",
           variants: [
@@ -746,7 +742,7 @@ const coursesData = [
           price: "AED 1260 – 1825",
           vat: true,
           vatValue: 5,
-          registerText: "Enroll",
+          registerText: "Add to Cart",
           imageSrc: "/images/activities/fine-art.webp",
           imageCaption: "Oil Painting at Meraki Art Studio",
           variants: [
@@ -786,224 +782,45 @@ const coursesData = [
   },
 ]
 
-const workshopsData = [
-  {
-    title: "Workshop Section One",
-    sections: [
-      {
-        badge: "WORKSHOPS",
-        image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Family Workshops",
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Sat 10 May – Sun 26 October 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "11.15 am – 12.45 pm",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Menorca",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Family Workshops",
-          dates: "Sat 10 May - Sun 26 October 2025",
-          time: "11:15 am - 12:45 pm",
-          location: "Menorca",
-          registerText: "Register",
-          imageSrc:
-            "https://media.hauserwirth.com/asset/e2f6292e-a9d2-4e10-ab07-b8231c6447d5/web-hires-jpg-72dpi/24-07-13_H-W-4.jpg",
-          imageCaption:
-            "Family Workshops at Hauser & Wirth Menorca. Photo: Mateu Carles",
-          content:
-            "<p>A range of workshops to engage the whole family, with activities relating to Mika Rottenberg’s exhibition 'Vibrant Matter'. Lasting a maximum of an hour and a half, families will discover the art on Illa del Rei.</p><p>All children should be accompanied by an adult. Ages 5 and up.</p><p><strong>10 May - 19 June</strong><br>Saturdays at 11:15 am</p><p><strong>23 June - 6 September</strong><br>Fridays and Saturdays at 11:15 am</p><p><strong>7 September - 26 October</strong><br>Saturdays at 11:15 am</p><p>We suggest booking in advance here.</p>",
-        },
-      },
-      {
-        badge: "TOURS",
-        image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Exhibition Guided Tour",
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Sat 10 May – Sun 26 October 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "12.15 – 1.15 pm",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Menorca",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Family Workshops",
-          dates: "Sat 10 May - Sun 26 October 2025",
-          time: "11:15 am - 12:45 pm",
-          location: "Menorca",
-          registerText: "Register",
-          imageSrc:
-            "https://media.hauserwirth.com/asset/e2f6292e-a9d2-4e10-ab07-b8231c6447d5/web-hires-jpg-72dpi/24-07-13_H-W-4.jpg",
-          imageCaption:
-            "Family Workshops at Hauser & Wirth Menorca. Photo: Mateu Carles",
-          content:
-            "<p>A range of workshops to engage the whole family, with activities relating to Mika Rottenberg’s exhibition 'Vibrant Matter'. Lasting a maximum of an hour and a half, families will discover the art on Illa del Rei.</p><p>All children should be accompanied by an adult. Ages 5 and up.</p><p><strong>10 May - 19 June</strong><br>Saturdays at 11:15 am</p><p><strong>23 June - 6 September</strong><br>Fridays and Saturdays at 11:15 am</p><p><strong>7 September - 26 October</strong><br>Saturdays at 11:15 am</p><p>We suggest booking in advance here.</p>",
-        },
-      },
-      {
-        badge: "MUSIC",
-        image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Sunday Concerts",
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Sun 18 May – Sun 26 October 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "12.30 – 1.30 pm",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Menorca",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Family Workshops",
-          dates: "Sat 10 May - Sun 26 October 2025",
-          time: "11:15 am - 12:45 pm",
-          location: "Menorca",
-          registerText: "Register",
-          imageSrc:
-            "https://media.hauserwirth.com/asset/e2f6292e-a9d2-4e10-ab07-b8231c6447d5/web-hires-jpg-72dpi/24-07-13_H-W-4.jpg",
-          imageCaption:
-            "Family Workshops at Hauser & Wirth Menorca. Photo: Mateu Carles",
-          content:
-            "<p>A range of workshops to engage the whole family, with activities relating to Mika Rottenberg’s exhibition 'Vibrant Matter'. Lasting a maximum of an hour and a half, families will discover the art on Illa del Rei.</p><p>All children should be accompanied by an adult. Ages 5 and up.</p><p><strong>10 May - 19 June</strong><br>Saturdays at 11:15 am</p><p><strong>23 June - 6 September</strong><br>Fridays and Saturdays at 11:15 am</p><p><strong>7 September - 26 October</strong><br>Saturdays at 11:15 am</p><p>We suggest booking in advance here.</p>",
-        },
-      },
-    ],
-  },
-  {
-    title: "Workshop Section Two",
-    sections: [
-      {
-        badge: "WORKSHOPS",
-        image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Family Workshops",
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Sat 10 May – Sun 26 October 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "11.15 am – 12.45 pm",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Menorca",
-          },
-        ],
-      },
-      {
-        badge: "TOURS",
-        image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Exhibition Guided Tour",
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Sat 10 May – Sun 26 October 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "12.15 – 1.15 pm",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Menorca",
-          },
-        ],
-      },
-      {
-        badge: "MUSIC",
-        image:
-          "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        title: "Sunday Concerts",
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Sun 18 May – Sun 26 October 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "12.30 – 1.30 pm",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Menorca",
-          },
-        ],
-      },
-    ],
-  },
-];
 
-const imageStackData = {
-  title: "The Pop Up Grocer Fund",
-  description: [
-    "Every store pays it forward. We contribute a portion of total product sales to our Fund, through which we further support founders—those that are under-resourced and underrepresented—and their creations, with a combination of cash and services.",
-    "Are you a founder that qualifies?",
-  ],
-  button: "Apply for The Fund",
-  imageStack: [
-    {
-      badge: ["Leanne Viola", "Whims"],
-      image:
-        "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&h=500&fit=crop",
+const cartStore = useCartStore()
+
+function addCourseToCart(payload) {
+  // payload comes from ImageTilesBlock emit (see component patch). We support both tile + checkoutPayload shapes.
+  const sku = payload?.sku || payload?.product?.sku || payload?.checkoutPayload?.sku
+  const title = payload?.title || payload?.product?.name || payload?.checkoutPayload?.title || 'Course'
+  const currency = payload?.currency || payload?.product?.currency || payload?.checkoutPayload?.currency || 'AED'
+  const unitAmount = Number(payload?.unitAmount ?? payload?.product?.unitAmount ?? payload?.checkoutPayload?.unitAmount ?? payload?.priceMajor ?? 0)
+  const image = payload?.image || payload?.imageSrc || payload?.modalContent?.imageSrc || payload?.checkoutPayload?.image || payload?.productImage
+
+  if (!sku || !unitAmount) return
+
+  cartStore.add({
+    type: 'course',
+    id: sku,
+    sku,
+    title,
+    image,
+    priceMajor: unitAmount,
+    currency,
+    vat: true,
+    vatValue: 5,
+    vatIncluded: false,
+    variantKey: payload?.variantKey || payload?.defaultVariantKey || payload?.checkoutPayload?.variantKey || null,
+    meta: {
+      flowType: 'Courses',
+      kind: 'course',
+      sessions: payload?.sessions || payload?.checkoutPayload?.sessions,
+      totalDurationMin: payload?.totalDurationMin || payload?.checkoutPayload?.totalDurationMin,
+      sessionDurationsMin: payload?.sessionDurationsMin || payload?.checkoutPayload?.sessionDurationsMin,
+      minTickets: payload?.minTickets || payload?.checkoutPayload?.minTickets,
+      maxTickets: payload?.maxTickets || payload?.checkoutPayload?.maxTickets,
+      takeHome: payload?.takeHome || payload?.checkoutPayload?.takeHome,
     },
-    {
-      badge: ["John Smith", "GreenTech"],
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop",
-    },
-    {
-      badge: ["Sarah Johnson", "EcoStart"],
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=500&fit=crop",
-    },
-    {
-      badge: ["Carlos Diaz", "Urban Earth"],
-      image:
-        "https://images.unsplash.com/photo-1623366302587-b38b1ddaefd9?w=400&h=500&fit=crop",
-    },
-    {
-      badge: ["Mina Patel", "FreshRise"],
-      image:
-        "https://images.unsplash.com/photo-1635995554625-6c1deba1732e?w=400&h=500&fit=crop",
-    },
-    {
-      badge: ["Olivia Brown", "Bright & Co"],
-      image:
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=500&fit=crop",
-    },
-    {
-      badge: ["Ravi Kumar", "SpiceBloom"],
-      image:
-        "https://plus.unsplash.com/premium_photo-1689539137236-b68e436248de?w=400&h=500&fit=crop",
-    },
-  ],
-};
+  }, 1)
+
+  if (process.client) {
+    window.dispatchEvent(new CustomEvent('open-cart'))
+  }
+}
 </script>

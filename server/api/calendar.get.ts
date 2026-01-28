@@ -1,5 +1,6 @@
-// File: server/api/calendar.get.ts  // NEW
-import { google } from 'googleapis' // NEW
+// File: server/api/calendar.get.ts
+import { google } from 'googleapis'
+import { getQuery, createError } from 'h3'
 
 export default defineEventHandler(async (event) => { // NEW
   const query = getQuery(event) as { start?: string; end?: string } // NEW
@@ -26,49 +27,80 @@ export default defineEventHandler(async (event) => { // NEW
   const calendar = google.calendar({ version: 'v3', auth }) // NEW
 
   // FreeBusy to get busy blocks for the week                   // NEW
-  const fb = await calendar.freebusy.query({                   // NEW
+  const fb = await calendar.freebusy.query({
     requestBody: {
       timeMin: new Date(query.start).toISOString(),
       timeMax: new Date(query.end).toISOString(),
-      timeZone: 'UTC',
+      timeZone: 'Asia/Dubai',
       items: [{ id: CALENDAR_ID }],
     },
-  }) // NEW
+  })
 
   const busy = (fb.data.calendars?.[CALENDAR_ID]?.busy || []) as { start: string; end: string }[] // NEW
 
   // Build 30-min availability by subtracting busy from daily window // NEW
-  const SLOT_START = process.env.SLOT_START || '10:00' // NEW
-  const SLOT_END = process.env.SLOT_END || '21:00'     // NEW
-  const STEP = Number(process.env.SLOT_INTERVAL || 30) // NEW
+  const STEP = Number(process.env.SLOT_INTERVAL || 30)
 
-  const byDate: Record<string, string[]> = {} // NEW
-  const start = new Date(query.start) // NEW
-  const end = new Date(query.end)     // NEW
+// Studio hours (Dubai)
+// Mon closed; Tue 12–19; Wed–Sun 10–19
+const STUDIO_HOURS: Record<number, { open?: string; close?: string }> = {
+  1: {}, // Mon closed
+  2: { open: '12:00', close: '19:00' }, // Tue
+  3: { open: '10:00', close: '19:00' }, // Wed
+  4: { open: '10:00', close: '19:00' }, // Thu
+  5: { open: '10:00', close: '19:00' }, // Fri
+  6: { open: '10:00', close: '19:00' }, // Sat
+  0: { open: '10:00', close: '19:00' }, // Sun
+}
+
+  const byDate: Record<string, string[]> = {}
+  const start = new Date(query.start)
+  const end = new Date(query.end)
+  // Normalize to UTC midnight for safe day iteration
+  const startDay = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()))
+  const endDay = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate()))
 
   const toMinutes = (t: string) => { const [h, m] = t.split(':').map(Number); return h * 60 + m } // NEW
   const toTime = (mins: number) => { const h = String(Math.floor(mins/60)).padStart(2,'0'); const m = String(mins%60).padStart(2,'0'); return `${h}:${m}` } // NEW
 
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) { // NEW
-    const dateStr = d.toISOString().split('T')[0] // NEW
-    const dayStart = toMinutes(SLOT_START) // NEW
-    const dayEnd = toMinutes(SLOT_END)     // NEW
+  for (let d = new Date(startDay); d <= endDay; d.setUTCDate(d.getUTCDate() + 1)) {
+    // Use Dubai date key to match frontend ymdDubai()
+const parts = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Dubai',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}).formatToParts(d)
+const y = parts.find(p => p.type === 'year')?.value
+const mo = parts.find(p => p.type === 'month')?.value
+const da = parts.find(p => p.type === 'day')?.value
+const dateStr = `${y}-${mo}-${da}`
 
-    const dayBusy = busy.filter(b => b.start.startsWith(dateStr) || b.end.startsWith(dateStr)) // NEW
-    const daySlots: string[] = [] // NEW
+// Determine weekday in Dubai
+const weekday = new Date(`${dateStr}T00:00:00+04:00`).getDay()
+const hours = STUDIO_HOURS[weekday] || {}
+const daySlots: string[] = []
 
-    for (let m = dayStart; m < dayEnd; m += STEP) { // NEW
-      const slotStart = new Date(`${dateStr}T${toTime(m)}:00Z`).getTime() // NEW
-      const slotEnd = slotStart + STEP * 60 * 1000                         // NEW
-      const overlaps = dayBusy.some(b => {                                 // NEW
-        const bs = new Date(b.start).getTime()                             // NEW
-        const be = new Date(b.end).getTime()                               // NEW
-        return slotStart < be && slotEnd > bs                              // NEW
-      })                                                                   // NEW
-      if (!overlaps) daySlots.push(toTime(m))                              // NEW
-    }                                                                       // NEW
-    byDate[dateStr] = daySlots                                              // NEW
-  }                                                                         // NEW
+// Closed day
+if (!hours.open || !hours.close) {
+  byDate[dateStr] = []
+  continue
+}
 
-  return { data: { slots: byDate } } // NEW
+const dayStart = toMinutes(hours.open)
+const dayEnd = toMinutes(hours.close)
+    for (let m = dayStart; m < dayEnd; m += STEP) {
+      const slotStart = new Date(`${dateStr}T${toTime(m)}:00+04:00`).getTime()
+      const slotEnd = slotStart + STEP * 60 * 1000
+      const overlaps = busy.some(b => {
+        const bs = new Date(b.start).getTime()
+        const be = new Date(b.end).getTime()
+        return slotStart < be && slotEnd > bs
+      })
+      if (!overlaps) daySlots.push(toTime(m))
+    }
+    byDate[dateStr] = daySlots
+  }
+
+  return { slots: byDate }
 }) // NEW

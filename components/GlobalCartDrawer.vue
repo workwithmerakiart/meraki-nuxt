@@ -20,6 +20,35 @@ function money(n: unknown) {
   return `${currency.value} ${v.toFixed(2)}`
 }
 
+function formatDubaiSlot(meta: any) {
+  const startISO = meta?.slotStartISO || meta?.selectedSlotISO
+  const endISO = meta?.slotEndISO || meta?.selectedSlotEndISO
+  if (!startISO) return ''
+
+  const s = new Date(startISO)
+  const e = endISO ? new Date(endISO) : null
+
+  const dateFmt = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Dubai',
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  })
+  const timeFmt = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Dubai',
+    hour: 'numeric',
+    minute: '2-digit',
+  })
+
+  const dateLabel = dateFmt.format(s)
+  const startLabel = timeFmt.format(s)
+  const endLabel = e ? timeFmt.format(e) : ''
+
+  return endLabel
+    ? `${dateLabel} • ${startLabel} – ${endLabel} (Dubai)`
+    : `${dateLabel} • ${startLabel} (Dubai)`
+}
+
 function buildCheckoutPayload() {
   const anyCart = cart as any
 
@@ -35,6 +64,8 @@ function buildCheckoutPayload() {
     vatIncluded: l.vatIncluded,
     vatRate: l.vatRate,
     variantKey: l.variantKey,
+    // ✅ preserve meta (activity slotStartISO/slotEndISO live here)
+    meta: l.meta || {},
   }))
 
   const subtotalExVatVal = Number(anyCart.subtotalExVat || 0)
@@ -45,7 +76,7 @@ function buildCheckoutPayload() {
   return {
     currency: anyCart.currency || 'AED',
     lines: linePayload,
-    promoCode: anyCart.promoCode || null,
+    promoCode: String(anyCart.promoCode || '').trim().toUpperCase() || null,
     note: anyCart.note ?? '',
     totals: {
       subtotalExVat: subtotalExVatVal,
@@ -104,6 +135,12 @@ onBeforeUnmount(() => {
             <div class="flex-1 min-w-0">
               <h4 class="text-sm font-semibold text-black truncate">{{ line.title }}</h4>
               <p class="text-xs text-black/70 mt-0.5">{{ money(line.priceMajor) }}</p>
+              <p
+                v-if="line.type === 'activity' && line.meta && (line.meta.slotStartISO || line.meta.selectedSlotISO)"
+                class="text-xs text-black/70 mt-1"
+              >
+                {{ formatDubaiSlot(line.meta) }}
+              </p>
               <div class="mt-2 flex items-center gap-2">
                 <button class="px-2 border border-black" @click="dec(line.key)" aria-label="Decrease">–</button>
                 <span class="text-sm w-6 text-center" aria-live="polite">{{ line.qty }}</span>

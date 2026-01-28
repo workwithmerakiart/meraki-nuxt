@@ -87,6 +87,10 @@
                     </div>
                     <div class="min-w-0">
                       <p class="text-sm font-medium truncate">{{ l.title }}</p>
+                      <p v-if="l.type === 'activity' && getSlotStartISO(l) && getSlotEndISO(l)"
+                        class="mt-0.5 text-xs text-gray-500">
+                        {{ formatSlot(getSlotStartISO(l), getSlotEndISO(l)) }}
+                      </p>
                     </div>
                   </div>
                   <div class="text-sm text-gray-800 whitespace-nowrap">Qty {{ l.qty }} • {{ money(l.priceMajor) }}</div>
@@ -156,7 +160,7 @@ function goBack() {
 
 // Google Sheets webhook configuration
 const BEACON_ENABLED = true
-const BEACON_URL = 'https://script.google.com/macros/s/AKfycbx9ofgbLM83CrMFaIkkY1VnkKnFpmibeBkn_cYyTN-Ug3gmOKRadhgJedWFlFDv3eAL/exec'
+const BEACON_URL = 'https://script.google.com/macros/s/AKfycby3n05j4B8M4c2_6ee1P4HYyh-OH4AtVGt-cK6bZqtkTuDJ6_jp03SbgRA4E4AxfqRP/exec'
 
 // --- Parse payload from cart (or fall back to Pinia store)
 const raw = route.query.payload ? decodeURIComponent(String(route.query.payload)) : null
@@ -182,6 +186,7 @@ if (!Array.isArray(parsed?.lines) || parsed.lines.length === 0) {
       vatIncluded: l.vatIncluded,
       vatRate: l.vatRate,
       variantKey: l.variantKey,
+      meta: l.meta || {},
     })),
     totals: {
       subtotalExVat: Number(anyCart.subtotalExVat || 0),
@@ -242,6 +247,40 @@ const vatTotal = computed(() => {
 const totalGross = computed(() => round2(Math.max(0, subtotalExVat.value - discountExVat.value) + vatTotal.value))
 
 function money(n) { return `${currencyCode} ${Number(n || 0).toFixed(2)}` }
+
+function getSlotStartISO(l) {
+  return l?.meta?.slotStartISO || l?.meta?.selectedSlotISO || l?.slotStartISO || l?.selectedSlotISO || ''
+}
+function getSlotEndISO(l) {
+  return l?.meta?.slotEndISO || l?.meta?.selectedSlotEndISO || l?.slotEndISO || l?.selectedSlotEndISO || ''
+}
+
+function formatSlot(startISO, endISO) {
+  try {
+    const optsDate = {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'Asia/Dubai',
+    }
+    const optsTime = {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'Asia/Dubai',
+    }
+
+    const start = new Date(startISO)
+    const end = new Date(endISO)
+
+    const dateLabel = start.toLocaleDateString('en-US', optsDate)
+    const startTime = start.toLocaleTimeString('en-US', optsTime)
+    const endTime = end.toLocaleTimeString('en-US', optsTime)
+
+    return `${dateLabel} • ${startTime} – ${endTime} (Dubai)`
+  } catch {
+    return ''
+  }
+}
 
 // --- Form
 const form = reactive({ name: '', email: '', phone: '' })
@@ -317,12 +356,18 @@ const submitting = ref(false)
 const errorMsg = ref(null)
 const errorText = computed(() => (typeof errorMsg.value === 'string' ? errorMsg.value : ''))
 
-function submitLeadFireAndForget() {
+//FlowType for individual tracking
+const flowType = computed(() =>
+  String(route.query.flowType || parsed?.flowType || 'Experiences')
+)
+
+function submitLeadFireAndForget(orderRef = '') {
   if (!BEACON_ENABLED) return
 
   try {
     const payload = {
       name: form.name,
+      orderRef: String(orderRef || ''),
       email: form.email,
       countryCode: phoneParts.countryCode || '',
       phone: phoneParts.phone || '',
@@ -338,11 +383,17 @@ function submitLeadFireAndForget() {
         total: totalGross.value,           // ← This is what the script reads
       },
 
-      // ✅ FIX: Send lines array (matching what the script expects)
+      // ✅ Send lines array (extended for activity slot support; safe for other flows)
       lines: lines.map(l => ({
+        type: l.type || '',
         title: l.title,
+        sku: l.sku || '',
         qty: l.qty,
-        priceMajor: l.priceMajor
+        priceMajor: l.priceMajor,
+
+        // Only activities will have slot meta
+        slotStartISO: l.type === 'activity' ? (l.meta?.slotStartISO || '') : '',
+        slotEndISO: l.type === 'activity' ? (l.meta?.slotEndISO || '') : '',
       })),
 
       // ✅ FIX: Send cart timestamp
@@ -350,6 +401,7 @@ function submitLeadFireAndForget() {
       ts: Date.now(),                      // ← Backup timestamp field
 
       source: 'cart-checkout',
+      flowType: flowType.value,
     }
 
     // Use sendBeacon for reliability during page navigation
@@ -390,9 +442,6 @@ async function continueToStripe() {
     // Keep legacy form.phone in sync
     form.phone = String(phoneParts.phoneFull || '')
 
-    // Non-blocking lead capture BEFORE Stripe redirect
-    submitLeadFireAndForget()
-
     // Small delay to ensure beacon is queued
     await new Promise(resolve => setTimeout(resolve, 100))
 
@@ -416,6 +465,12 @@ async function continueToStripe() {
         note: JSON.stringify(meta),
       },
     })
+
+    // Send to Google Sheet with Order ID (orderRef) before redirect
+    try {
+      submitLeadFireAndForget(res?.orderRef || '')
+      await new Promise(r => setTimeout(r, 120)) // give beacon a moment
+    } catch { }
 
     if (res && res.url) {
       window.location.href = res.url
