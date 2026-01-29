@@ -160,7 +160,7 @@ function goBack() {
 
 // Google Sheets webhook configuration
 const BEACON_ENABLED = true
-const BEACON_URL = 'https://script.google.com/macros/s/AKfycby3n05j4B8M4c2_6ee1P4HYyh-OH4AtVGt-cK6bZqtkTuDJ6_jp03SbgRA4E4AxfqRP/exec'
+const BEACON_URL = 'https://script.google.com/macros/s/AKfycbwf5Z7ZVgG6H42qRyK3yrxvwD4r_uiyZBvUNt6QkiBfOZUMbhel4rhlkdUdOi__iRl4/exec'
 
 // --- Parse payload from cart (or fall back to Pinia store)
 const raw = route.query.payload ? decodeURIComponent(String(route.query.payload)) : null

@@ -48,14 +48,25 @@
                 <p class="text-sm text-black app-footer-subheading">
                     Join our newsletter and be the first to know about our latest news and promotions.
                 </p>
-                <form class="flex flex-col sm:flex-row border border-black rounded overflow-hidden w-full">
-                    <input type="email" placeholder="Enter Your Email"
-                        class="flex-1 min-w-0 px-3 py-2 bg-transparent text-black placeholder-black-400 focus:outline-none app-footer-subheading" />
-                    <button type="submit"
-                        class="shrink-0 bg-black text-white px-4 py-2 uppercase text-sm font-semibold transition hover:bg-white hover:text-black">
-                        Submit
+                <form @submit.prevent="onNewsletterSubmit" class="flex flex-col sm:flex-row border border-black rounded overflow-hidden w-full">
+                    <input
+                        v-model="newsletterEmail"
+                        type="email"
+                        required
+                        placeholder="Enter Your Email"
+                        class="flex-1 min-w-0 px-3 py-2 bg-transparent text-black placeholder-black-400 focus:outline-none app-footer-subheading"
+                    />
+                    <button
+                        type="submit"
+                        :disabled="newsletterSubmitting || !newsletterEmail"
+                        class="shrink-0 bg-black text-white px-4 py-2 uppercase text-sm font-semibold transition hover:bg-white hover:text-black disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {{ newsletterSubmitting ? 'Sending…' : 'Submit' }}
                     </button>
                 </form>
+                <p v-if="newsletterMsg" class="text-xs mt-2 app-footer-subheading" :class="newsletterOk ? 'text-green-700' : 'text-red-700'">
+                  {{ newsletterMsg }}
+                </p>
             </div>
         </div>
 
@@ -82,6 +93,46 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const newsletterEmail = ref('')
+const newsletterSubmitting = ref(false)
+const newsletterMsg = ref('')
+const newsletterOk = ref(false)
+
+async function onNewsletterSubmit() {
+  newsletterMsg.value = ''
+  newsletterOk.value = false
+
+  const email = String(newsletterEmail.value || '').trim()
+  if (!email) return
+
+  newsletterSubmitting.value = true
+  try {
+    await $fetch('/api/newsletter/subscribe', {
+      method: 'POST',
+      body: {
+        email,
+        source: 'footer-newsletter',
+      },
+    })
+    newsletterOk.value = true
+    newsletterMsg.value = 'Thanks — you’re on the list.'
+    newsletterEmail.value = ''
+  } catch (e) {
+    const err = e
+    console.warn('[newsletter] subscribe failed', err)
+
+    // Nuxt $fetch often returns structured errors under err.data
+    const apiMsg = String(err?.data?.error || err?.data?.message || err?.message || '').trim()
+
+    newsletterOk.value = false
+    newsletterMsg.value = apiMsg ? apiMsg : 'Could not subscribe right now. Please try again.'
+  } finally {
+    newsletterSubmitting.value = false
+  }
+}
+
 const currentYear = new Date().getFullYear()
 
 const sitemap = [

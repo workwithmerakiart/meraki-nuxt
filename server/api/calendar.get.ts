@@ -3,7 +3,7 @@ import { google } from 'googleapis'
 import { getQuery, createError } from 'h3'
 
 export default defineEventHandler(async (event) => { // NEW
-  const query = getQuery(event) as { start?: string; end?: string } // NEW
+  const query = getQuery(event) as { start?: string; end?: string; sku?: string; subtypeId?: string; capacity?: string } // NEW
   if (!query.start || !query.end) { // NEW
     throw createError({ statusCode: 400, statusMessage: 'Missing start/end' }) // NEW
   } // NEW
@@ -38,7 +38,51 @@ export default defineEventHandler(async (event) => { // NEW
 
   const busy = (fb.data.calendars?.[CALENDAR_ID]?.busy || []) as { start: string; end: string }[] // NEW
 
-  // Build 30-min availability by subtracting busy from daily window // NEW
+  // --- Exclusive activity logic for Neon Art Attack (subtypeId === '1.1')
+  // Robust detection: sometimes subtypeId is not present in query; fall back to sku/title.
+  const qSubtypeId = String(query.subtypeId || '').trim()
+  const qSku = String(query.sku || '').trim().toLowerCase()
+  const isExclusive = qSubtypeId === '1.1' || qSku === 'neon art attack'
+  let anyEventsBusy: { start: string; end: string }[] = []
+  if (isExclusive) {
+    // Fetch all events (including transparent) in the range
+    const eventsRes = await calendar.events.list({
+      calendarId: CALENDAR_ID,
+      timeMin: new Date(query.start).toISOString(),
+      timeMax: new Date(query.end).toISOString(),
+      singleEvents: true,
+      orderBy: 'startTime',
+      showDeleted: false,
+      // Include transparent events by default since we do not filter by transparency here
+    })
+    const events = eventsRes.data.items || []
+    anyEventsBusy = events.map(e => {
+      // Normalize start/end from dateTime or date
+      const start = e.start?.dateTime || e.start?.date
+      const end = e.end?.dateTime || e.end?.date
+      return { start, end }
+    }).filter(e => e.start && e.end) as { start: string; end: string }[]
+  }
+
+  // --- Upstash counters for capacity-based booking (optional)
+  const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL
+  const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN
+
+  async function upstash(cmd: any[]) {
+    if (!UPSTASH_URL || !UPSTASH_TOKEN) return { result: null }
+    const r = await fetch(UPSTASH_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${UPSTASH_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(cmd),
+    })
+    const j = await r.json().catch(() => ({}))
+    if (!r.ok) throw new Error(`Upstash error ${r.status}`)
+    return j
+  }
+
   const STEP = Number(process.env.SLOT_INTERVAL || 30)
 
 // Studio hours (Dubai)
@@ -51,6 +95,22 @@ const STUDIO_HOURS: Record<number, { open?: string; close?: string }> = {
   5: { open: '10:00', close: '19:00' }, // Fri
   6: { open: '10:00', close: '19:00' }, // Sat
   0: { open: '10:00', close: '19:00' }, // Sun
+}
+
+// Capacity rules (per slot)
+const sku = String(query.sku || '').trim() || 'activity'
+const subtypeId = String(query.subtypeId || '').trim()
+
+// Neon Art Attack (subtype 1.1) is exclusive and should be treated as capacity 1.
+// Other activities default to configured capacity.
+const DEFAULT_ACTIVITY_CAPACITY = Number(process.env.DEFAULT_ACTIVITY_CAPACITY || 12)
+const capacityFromQuery = Number(query.capacity || 0)
+const capacity = subtypeId === '1.1'
+  ? 1
+  : (Number.isFinite(capacityFromQuery) && capacityFromQuery > 0 ? capacityFromQuery : DEFAULT_ACTIVITY_CAPACITY)
+
+function slotKey(startISO: string, endISO: string) {
+  return `cap:${sku}:${startISO}:${endISO}`
 }
 
   const byDate: Record<string, string[]> = {}
@@ -80,6 +140,7 @@ const dateStr = `${y}-${mo}-${da}`
 const weekday = new Date(`${dateStr}T00:00:00+04:00`).getDay()
 const hours = STUDIO_HOURS[weekday] || {}
 const daySlots: string[] = []
+const daySlotWindows: Array<{ hhmm: string; startISO: string; endISO: string }> = []
 
 // Closed day
 if (!hours.open || !hours.close) {
@@ -92,14 +153,45 @@ const dayEnd = toMinutes(hours.close)
     for (let m = dayStart; m < dayEnd; m += STEP) {
       const slotStart = new Date(`${dateStr}T${toTime(m)}:00+04:00`).getTime()
       const slotEnd = slotStart + STEP * 60 * 1000
-      const overlaps = busy.some(b => {
+      const overlapsFreeBusy = busy.some(b => {
         const bs = new Date(b.start).getTime()
         const be = new Date(b.end).getTime()
         return slotStart < be && slotEnd > bs
       })
-      if (!overlaps) daySlots.push(toTime(m))
+      const overlapsAnyEvent = isExclusive && anyEventsBusy.some(b => {
+        const bs = new Date(b.start).getTime()
+        const be = new Date(b.end).getTime()
+        return slotStart < be && slotEnd > bs
+      })
+      const overlaps = overlapsFreeBusy || overlapsAnyEvent
+      if (!overlaps) {
+        const hhmm = toTime(m)
+        const startISO = new Date(`${dateStr}T${hhmm}:00+04:00`).toISOString()
+        const endISO = new Date(new Date(`${dateStr}T${hhmm}:00+04:00`).getTime() + STEP * 60 * 1000).toISOString()
+        daySlots.push(hhmm)
+        daySlotWindows.push({ hhmm, startISO, endISO })
+      }
     }
-    byDate[dateStr] = daySlots
+    // Capacity filtering (only if Upstash is configured and we have a sku)
+    try {
+      if (UPSTASH_URL && UPSTASH_TOKEN && capacity > 0 && daySlotWindows.length) {
+        const keys = daySlotWindows.map(w => slotKey(w.startISO, w.endISO))
+        const mget = await upstash(['MGET', ...keys])
+        const vals: any[] = Array.isArray(mget?.result) ? mget.result : []
+
+        const allowed = daySlotWindows.filter((w, idx) => {
+          const booked = Number(vals[idx] || 0)
+          return booked < capacity
+        }).map(w => w.hhmm)
+
+        byDate[dateStr] = allowed
+      } else {
+        byDate[dateStr] = daySlots
+      }
+    } catch {
+      // If counter lookup fails, fall back to FreeBusy-only availability
+      byDate[dateStr] = daySlots
+    }
   }
 
   return { slots: byDate }

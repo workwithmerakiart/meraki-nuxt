@@ -29,6 +29,7 @@ export default defineNuxtConfig({
     // Public (safe for browser)
     public: {
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY || '',
+      newsletterBeaconUrl: process.env.NUXT_PUBLIC_NEWSLETTER_BEACON_URL || '',
     },
   },
 

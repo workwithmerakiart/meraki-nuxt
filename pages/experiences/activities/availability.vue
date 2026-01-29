@@ -379,7 +379,18 @@ async function fetchWeekFor(date) {
         const startISO = weekStart.toISOString()
         const endISO = weekEnd.toISOString()
 
-        const res = await $fetch('/api/calendar', { query: { start: startISO, end: endISO } })
+        // Pass activity identity to the API so capacity counters are scoped per activity
+        const sku = String(route.query.sku || route.query.id || route.query.title || 'activity')
+        const subtypeId = String(route.query.subtypeId || route.query.subtype || '')
+
+        const res = await $fetch('/api/calendar', {
+          query: {
+            start: startISO,
+            end: endISO,
+            sku,
+            subtypeId,
+          },
+        })
         const got = res?.slots ?? {}
         if (got && typeof got === 'object') {
             slotsMap.value = { ...slotsMap.value, ...got }

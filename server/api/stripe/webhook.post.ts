@@ -45,6 +45,14 @@ export default defineEventHandler(async (event) => {
     await upstash(['SET', key, JSON.stringify(data), 'EX', ORDER_TTL])
   }
 
+  function capKey(sku: string, startISO: string, endISO: string) {
+    return `cap:${sku}:${startISO}:${endISO}`
+  }
+
+  function capLockKey(orderRef: string, sku: string, startISO: string, endISO: string) {
+    return `caplock:${orderRef}:${sku}:${startISO}:${endISO}`
+  }
+
   // --- Google Calendar (block slots after payment success)
   const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID
   const CLIENT_EMAIL = process.env.GOOGLE_SERVICE_EMAIL
@@ -62,7 +70,7 @@ export default defineEventHandler(async (event) => {
 
   const gcal = canWriteCalendar ? google.calendar({ version: 'v3', auth: gAuth as any }) : null
 
-  async function blockCalendarSlot(args: { title: string; startISO: string; endISO: string; orderRef: string; sku?: string; qty?: number }) {
+  async function blockCalendarSlot(args: { title: string; startISO: string; endISO: string; orderRef: string; sku?: string; qty?: number; busyBlock?: boolean }) {
     if (!gcal || !CALENDAR_ID) return ''
     const inserted = await gcal.events.insert({
       calendarId: CALENDAR_ID,
@@ -71,6 +79,9 @@ export default defineEventHandler(async (event) => {
         description: `orderRef=${args.orderRef} sku=${args.sku || ''} qty=${args.qty || 1}`,
         start: { dateTime: args.startISO, timeZone: 'Asia/Dubai' },
         end: { dateTime: args.endISO, timeZone: 'Asia/Dubai' },
+        // Neon Art Attack is exclusive and should block the time window for ALL activities.
+        // Other activity bookings are capacity-based and should not block FreeBusy.
+        transparency: args.busyBlock ? 'opaque' : 'transparent',
       },
     })
     return inserted?.data?.id || ''
@@ -220,7 +231,7 @@ export default defineEventHandler(async (event) => {
                     continue
                   }
 
-                  const fingerprint = `${String(l.sku || l.title || '')}|${startISO}|${endISO}`
+                  const fingerprint = `${orderRef}|${String(l.sku || l.title || '')}|${startISO}|${endISO}`
                   const already = order.calendarEvents.some((x: any) => x?.fingerprint === fingerprint)
                   if (already) {
                     log({ level: 'info', msg: 'Calendar event already created (skip)', orderRef, fingerprint })
@@ -229,6 +240,35 @@ export default defineEventHandler(async (event) => {
 
                   try {
                     log({ level: 'info', msg: 'Calendar insert attempt', orderRef, title: l?.title, startISO, endISO })
+                    const subtypeId = String(l?.meta?.subtypeId || l?.meta?.subtype || '')
+                    const titleLower = String(l?.title || '').toLowerCase()
+                    const skuLower = String(l?.sku || '').toLowerCase()
+                    const isNeonArtAttack = subtypeId === '1.1' || titleLower === 'neon art attack' || skuLower === 'neon art attack'
+
+                    // Capacity counters (Upstash) — only for non-exclusive activities.
+                    // Idempotent per orderRef via a lock key so webhook retries don't double count.
+                    try {
+                      if (!isNeonArtAttack) {
+                        const skuForCap = String(l?.sku || l?.title || 'activity')
+                        const qtyForCap = Math.max(1, Number(l?.qty || 1))
+                        const lock = capLockKey(orderRef, skuForCap, String(startISO), String(endISO))
+
+                        // SETNX lock; if already set, skip increment
+                        const setnx = await upstash(['SET', lock, '1', 'NX', 'EX', ORDER_TTL])
+                        const didLock = Boolean(setnx?.result === 'OK')
+
+                        if (didLock) {
+                          const counter = capKey(skuForCap, String(startISO), String(endISO))
+                          await upstash(['INCRBY', counter, String(qtyForCap)])
+                          log({ level: 'info', msg: 'Capacity counter incremented', orderRef, sku: skuForCap, qty: qtyForCap, startISO, endISO })
+                        } else {
+                          log({ level: 'info', msg: 'Capacity counter already incremented (skip)', orderRef, sku: skuForCap, startISO, endISO })
+                        }
+                      }
+                    } catch (e) {
+                      console.error('Capacity counter increment failed', e)
+                    }
+
                     const eventId = await blockCalendarSlot({
                       title: String(l.title || 'Activity'),
                       startISO: String(startISO),
@@ -236,6 +276,7 @@ export default defineEventHandler(async (event) => {
                       orderRef,
                       sku: String(l.sku || ''),
                       qty: Number(l.qty || 1),
+                      busyBlock: isNeonArtAttack,
                     })
 
                     if (eventId) {
