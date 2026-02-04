@@ -60,10 +60,10 @@ const activities = [
         title: "Neon Art Attack",
         image: "/images/activities/neon-art-attack.webp",
         description: "Splash, flick & throw neon paint in full-body suits.",
-        price: "AED 155",
+        price: "AED 165",
         vatIncluded: false,
         duration: "~45 mins",
-        minTickets: 3,
+        minTickets: 2,
         bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!"
       },
       {
