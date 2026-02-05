@@ -528,8 +528,8 @@ const blockBetweenOneAndTwoData = {
 
 const bookActivitiesContent = {
   heading: "Ready for happy-time?",
-  body: "Swipe through a mix of our favorite activities. Book your session or walk in — we’ll have your station ready.",
-  highlights: ["All materials included", "Guided sessions", "Suitable for all ages"],
+  body: "Swipe through a mix of our favorite activities. You can book and pay online in a few clicks — or reserve your spot now and pay at the studio when you arrive.",
+  highlights: ["All materials included", "Guided sessions", "Suitable for all ages", "Pay at studio"],
   ctaText: "Book Your Session Now",
 
   // NEWLY ADDED

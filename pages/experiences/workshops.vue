@@ -10,7 +10,7 @@
         @add-to-cart="addWorkshopToCart"
       />
     </div>
-    <WorkshopsCtaBlock />
+    <WorkshopsCtaBlock :beacon-url="workshopsBeaconUrl" />
   </div>
 </template>
 
@@ -22,7 +22,16 @@ import {
 } from "@heroicons/vue/24/outline";
 import { useCartStore } from '~/stores/cart'
 import { computed } from 'vue'
+import { useRuntimeConfig } from '#imports'
 import WorkshopsCtaBlock from '~/components/WorkshopsCtaBlock.vue'
+
+const workshopsBeaconUrl = computed(() => {
+  try {
+    return String(useRuntimeConfig().public?.workshopsBeaconUrl || '').trim()
+  } catch {
+    return ''
+  }
+})
 
 const blockOneData = {
   image:

@@ -40,8 +40,37 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Phone<span
                   class="text-red-500">*</span></label>
-              <input v-model="phone" required
-                class="w-full border-b border-[#447c9d] focus:outline-none focus:border-black py-1 bg-transparent" />
+
+              <div class="flex w-full gap-2 overflow-hidden items-end">
+                <!-- Country picker (flag + dial code only) -->
+                <div class="w-20 md:w-24 flex-shrink-0">
+                  <VueTelInput
+                    v-model="countryModel"
+                    :defaultCountry="selectedCountryIso2"
+                    :autoDefaultCountry="true"
+                    :validCharactersOnly="true"
+                    :autoFormat="false"
+                    :mode="'international'"
+                    :dropdownOptions="{ showFlags: true, showDialCodeInSelection: true, showSearchBox: true }"
+                    :inputOptions="{ placeholder: '', autocomplete: 'off', readonly: true }"
+                    class="w-full country-only"
+                    @country-changed="onCountryChanged"
+                  />
+                </div>
+
+                <!-- National digits -->
+                <div class="flex-1 min-w-0">
+                  <input
+                    v-model="phoneNational"
+                    required
+                    type="tel"
+                    inputmode="numeric"
+                    autocomplete="tel-national"
+                    :placeholder="phonePlaceholder"
+                    class="w-full border-b border-[#447c9d] focus:outline-none focus:border-black py-1 bg-transparent"
+                  />
+                </div>
+              </div>
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
@@ -73,11 +102,36 @@
             </select>
           </div>
 
-          <div class="mt-6 flex gap-4">
-            <button type="submit"
-              class="bg-[#447c9d] text-white px-4 py-2 rounded hover:bg-black transition">Submit</button>
-            <button type="button" @click="reset"
-              class="border border-[#447c9d] text-[#447c9d] px-4 py-2 rounded hover:bg-[#447c9d] hover:text-white transition">Clear</button>
+          <!-- Spacing wrapper so the gap above buttons is consistent (with or without toast) -->
+          <div class="mt-6">
+            <!-- Inline toast (shows just above the buttons) -->
+            <transition name="fade">
+              <p
+                v-if="toastMessage"
+                :class="[
+                  'mb-3 text-sm font-medium',
+                  toastType === 'success' ? 'text-green-700' : 'text-red-600'
+                ]"
+              >
+                {{ toastMessage }}
+              </p>
+            </transition>
+
+            <div class="flex gap-4">
+              <button
+                type="submit"
+                class="bg-[#447c9d] text-white px-4 py-2 rounded hover:bg-black transition"
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                @click="reset"
+                class="border border-[#447c9d] text-[#447c9d] px-4 py-2 rounded hover:bg-[#447c9d] hover:text-white transition"
+              >
+                Clear
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -138,27 +192,68 @@
         width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
         referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow"></iframe>
     </div>
-    <transition name="fade">
-      <div v-if="toastMessage" 
-           :class="['fixed top-6 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white text-sm font-medium transition-all duration-500', 
-                    toastType === 'success' ? 'bg-green-600' : 'bg-red-600']">
-        {{ toastMessage }}
-      </div>
-    </transition>
   </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRuntimeConfig } from '#imports'
+import { VueTelInput } from 'vue-tel-input'
+import 'vue-tel-input/vue-tel-input.css'
 
 const firstName = ref('')
 const lastName = ref('')
 const email = ref('')
-const phone = ref('')
 const company = ref('')
 const designation = ref('')
 const message = ref('')
 const purpose = ref('')
+
+// Phone: country picker + national digits
+const countryModel = ref('')
+const selectedCountryIso2 = ref('AE') // default UAE
+const phoneNational = ref('')
+
+const phoneParts = ref({
+  iso2: 'AE',
+  countryCode: '+971',
+  phone: ''
+})
+
+const minDigitsByIso2 = { AE: 9 }
+const maxDigitsByIso2 = { AE: 9 }
+
+const minDigits = computed(() => minDigitsByIso2[selectedCountryIso2.value] ?? 7)
+const maxDigits = computed(() => maxDigitsByIso2[selectedCountryIso2.value] ?? 15)
+
+const phonePlaceholder = computed(() =>
+  selectedCountryIso2.value === 'AE' ? 'e.g. 55 507 1234' : 'Phone number'
+)
+
+function syncPhoneParts() {
+  const nationalDigits = String(phoneNational.value || '').replace(/\D/g, '')
+  phoneParts.value = {
+    ...phoneParts.value,
+    phone: nationalDigits
+  }
+}
+
+function onCountryChanged(country) {
+  if (!country) return
+  const iso2 = String(country?.iso2 || 'AE').toUpperCase()
+  const dial = String(country?.dialCode || '971').replace(/\D/g, '')
+
+  selectedCountryIso2.value = iso2
+  phoneParts.value = {
+    ...phoneParts.value,
+    iso2,
+    countryCode: dial ? `+${dial}` : ''
+  }
+
+  syncPhoneParts()
+}
+
+watch(phoneNational, () => syncPhoneParts())
 
 const toastMessage = ref('')
 const toastType = ref('')
@@ -177,11 +272,12 @@ const reset = () => {
   firstName.value = ''
   lastName.value = ''
   email.value = ''
-  phone.value = ''
+  phoneNational.value = ''
   company.value = ''
   designation.value = ''
   message.value = ''
   purpose.value = ''
+  syncPhoneParts()
 }
 
 const showToast = (message, type = 'success') => {
@@ -189,34 +285,93 @@ const showToast = (message, type = 'success') => {
   toastType.value = type
   setTimeout(() => {
     toastMessage.value = ''
-  }, 5000)
+  }, 6000)
 }
 
-const submit = () => {
+function getBeaconUrl() {
+  // Prefer runtimeConfig, but allow env var fallback
+  const cfg = useRuntimeConfig()
+  return String(cfg.public?.contactBeaconUrl || process.env.NUXT_PUBLIC_CONTACT_BEACON_URL || '').trim()
+}
+
+const submit = async () => {
   // Basic validation for required fields
   if (
     !firstName.value.trim() ||
     !lastName.value.trim() ||
     !email.value.trim() ||
-    !phone.value.trim() ||
+    !phoneNational.value.trim() ||
     !message.value.trim() ||
     !purpose.value.trim()
   ) {
     showToast('Please fill out all required fields.', 'error')
     return
   }
-  
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  const phoneRegex = /^[0-9]{7,15}$/
-  
-  if (!emailRegex.test(email.value) || !phoneRegex.test(phone.value)) {
-    showToast('Please enter a valid email address and phone number.', 'error')
+  if (!emailRegex.test(email.value)) {
+    showToast('Please enter a valid email address.', 'error')
     return
   }
-  
-  showToast('We’ll get back to you as soon as we can!', 'success')
-  reset()
+
+  // phone: digits-only length check (country aware)
+  const digits = String(phoneNational.value || '').replace(/\D/g, '')
+  if (digits.length < minDigits.value || digits.length > maxDigits.value) {
+    showToast(`Please enter a valid phone number (${minDigits.value}–${maxDigits.value} digits).`, 'error')
+    return
+  }
+
+  const url = getBeaconUrl()
+  if (!url) {
+    showToast('Contact form is not configured yet.', 'error')
+    return
+  }
+
+  // make sure phoneParts is up to date
+  syncPhoneParts()
+
+  const payload = {
+    kind: 'contact',
+    source: 'contact-us',
+    ts: Date.now(),
+
+    firstName: firstName.value.trim(),
+    lastName: lastName.value.trim(),
+    email: email.value.trim(),
+
+    countryCode: String(phoneParts.value.countryCode || '').trim(), // e.g. +971
+    phone: String(phoneParts.value.phone || '').trim(), // digits only
+
+    companyName: company.value.trim(),
+    designation: designation.value.trim(),
+    message: message.value.trim(),
+    purpose: purpose.value.trim()
+  }
+
+  try {
+    if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=UTF-8' })
+      navigator.sendBeacon(url, blob)
+    } else {
+      await fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(payload),
+        keepalive: true
+      })
+    }
+
+    showToast('Thanks! We would reach out to you soon.', 'success')
+    // Keep the values visible after submit; user can hit Clear if they want.
+  } catch (e) {
+    console.warn('contact beacon failed', e)
+    showToast('Could not submit right now. Please try again.', 'error')
+  }
 }
+
+onMounted(() => {
+  syncPhoneParts()
+})
 </script>
 
 <style scoped>
@@ -225,5 +380,67 @@ const submit = () => {
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+/* Make vue-tel-input match existing inputs */
+:deep(.vue-tel-input) {
+  border: 0;
+  border-bottom: 1px solid #447c9d;
+  border-radius: 0;
+  background: transparent;
+  min-height: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+:deep(.vue-tel-input .vti__dropdown) {
+  max-width: 100%;
+  width: 100%;
+  padding: 0 0.25rem 0 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Slightly tighten the dial-code text so it fits inside the smaller picker */
+:deep(.vue-tel-input .vti__selection) {
+  font-size: 0.85rem;
+}
+
+:deep(.vue-tel-input .vti__flag) {
+  margin-right: 0.25rem;
+}
+
+:deep(.vue-tel-input input) {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  padding: 0;
+  height: 100%;
+  line-height: 1.5rem;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+:deep(.vue-tel-input .vti__input) {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Country-only mode: hide the internal input (we use our own phone input) */
+:deep(.country-only.vue-tel-input .vti__input) {
+  display: none !important;
+}
+
+/* Ensure dropdown renders above page */
+:deep(.vti__dropdown-list) {
+  z-index: 9999 !important;
 }
 </style>

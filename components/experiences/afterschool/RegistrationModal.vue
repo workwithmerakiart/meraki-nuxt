@@ -91,7 +91,7 @@
                             </p>
                             <button type="submit"
                                 class="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-base font-semibold bg-black text-white hover:opacity-90 transition">
-                                Submit Registration
+                                Checkout
                             </button>
                         </div>
                     </form>

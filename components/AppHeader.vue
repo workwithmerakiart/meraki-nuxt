@@ -28,6 +28,7 @@ const CART_ALLOWED_PREFIXES = [
   '/experiences/courses',
   '/experiences/activities',
   '/shop/products',
+  '/experiences/afterschool',
 ];
 
 const showCartIcon = computed(() => {

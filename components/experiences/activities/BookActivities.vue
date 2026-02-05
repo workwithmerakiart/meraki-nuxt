@@ -22,8 +22,13 @@
         </div>
 
         <!-- Booking Modal -->
-        <ActivitiesForm v-if="showModal" :products="productOptions" @close="showModal = false"
-            @submitted="showModal = false" />
+        <ActivitiesForm
+            v-if="showModal"
+            :products="productOptions"
+            source="activities-inquiry"
+            @close="showModal = false"
+            @submitted="showModal = false"
+        />
     </section>
 </template>
 

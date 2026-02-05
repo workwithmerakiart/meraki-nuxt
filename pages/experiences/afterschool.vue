@@ -186,35 +186,71 @@
                         <form class="p-5 md:p-6 space-y-6 overflow-y-auto" @submit.prevent="submit">
                             <input type="hidden" v-model="form.program" />
 
+                            <!-- Holiday Camp Package (only for Holiday Art Camps) -->
+                            <div v-if="form.program === 'Holiday Art Camps'" class="border-b border-gray-200 pb-6">
+                                <h4 class="text-lg font-semibold mb-3">🏕️ Holiday Camp Package</h4>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Select Package <span
+                                        class="text-red-600">*</span></label>
+                                <select v-model="form.campPackageKey" required
+                                    class="w-full rounded-xl border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black/60 focus:border-black/60">
+                                    <option disabled value="">Select a package</option>
+                                    <option v-for="pkg in holidayCampPackages" :key="pkg.key" :value="pkg.key">
+                                        {{ pkg.label }}
+                                    </option>
+                                </select>
+                                <p v-if="campPackageError" class="mt-2 text-sm text-red-600">{{ campPackageError }}</p>
+                            </div>
+
                             <div class="grid md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Child’s Full Name
-                                        *</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Child’s Full Name <span
+                                            class="text-red-600">*</span></label>
                                     <input v-model="form.childName" required type="text"
                                         class="w-full rounded-xl border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black/60 focus:border-black/60" />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Child’s Age *</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Child’s Age <span
+                                            class="text-red-600">*</span></label>
                                     <input v-model="form.childAge" required type="number" min="1"
                                         class="w-full rounded-xl border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black/60 focus:border-black/60" />
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Parent/Guardian Name
-                                        *</label>
+                                        <span class="text-red-600">*</span></label>
                                     <input v-model="form.parentName" required type="text"
                                         class="w-full rounded-xl border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black/60 focus:border-black/60" />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Parent Email *</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Parent Email <span
+                                            class="text-red-600">*</span></label>
                                     <input v-model="form.parentEmail" required type="email"
                                         class="w-full rounded-xl border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black/60 focus:border-black/60" />
                                 </div>
 
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-                                    <input v-model="form.phone" required type="tel"
-                                        class="w-full rounded-xl border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black/60 focus:border-black/60" />
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number <span
+                                            class="text-red-600">*</span></label>
+
+                                    <div class="flex w-full gap-3">
+                                        <!-- Country picker (flag + dial code only) -->
+                                        <div class="w-40 md:w-44 flex-shrink-0">
+                                            <VueTelInput v-model="countryModel" :defaultCountry="selectedCountryIso2"
+                                                :autoDefaultCountry="true" :validCharactersOnly="true"
+                                                :autoFormat="false" :mode="'international'"
+                                                :dropdownOptions="{ showFlags: true, showDialCodeInSelection: true, showSearchBox: true }"
+                                                :inputOptions="{ placeholder: '', autocomplete: 'off', readonly: true }"
+                                                class="w-full country-only" @country-changed="onCountryChanged" />
+                                        </div>
+
+                                        <!-- National digits (wider input) -->
+                                        <div class="flex-1">
+                                            <input v-model="phoneNational" required type="tel" inputmode="numeric"
+                                                autocomplete="tel-national" :placeholder="phonePlaceholder"
+                                                class="w-full h-11 rounded-xl border border-gray-300 px-4 focus:outline-none focus:ring-1 focus:ring-black/60 focus:border-black/60" />
+                                        </div>
+                                    </div>
+                                    <p v-if="phoneError" class="mt-2 text-sm text-red-600">{{ phoneError }}</p>
                                 </div>
                             </div>
 
@@ -244,20 +280,27 @@
                             </div>
 
                             <div class="flex items-center justify-between gap-4">
-                                <p class="text-sm text-gray-500">🎨 Thank you! We’ll be in touch to confirm your child’s
-                                    spot.</p>
-                                <button type="submit"
-                                    class="inline-flex items-center rounded-2xl px-5 py-2.5 text-sm md:text-base font-semibold bg-black text-white hover:opacity-90 transition">
-                                    Submit Registration
+                                <span></span>
+                                <button type="submit" :disabled="isAdding" :class="[
+                                    'relative overflow-hidden inline-flex items-center justify-center rounded-2xl px-5 py-2.5 text-sm md:text-base font-semibold border border-black disabled:opacity-60 disabled:cursor-not-allowed',
+                                    addedToCart ? 'bg-black text-white' : 'bg-white text-black'
+                                ]">
+                                    <!-- fill layer -->
+                                    <span
+                                      class="absolute inset-0 bg-black transition-transform duration-[2000ms] ease-linear"
+                                      :style="{ transform: isAdding ? 'translateX(0%)' : 'translateX(-100%)' }"
+                                      aria-hidden="true"
+                                    ></span>
+
+                                    <!-- label -->
+                                    <span
+                                      class="relative z-10"
+                                      :class="(addedToCart || isAdding) ? 'text-white' : 'text-black'"
+                                    >
+                                        {{ addedToCart ? 'Checkout' : (isAdding ? 'Adding…' : 'Add to Cart') }}
+                                    </span>
                                 </button>
                             </div>
-
-                            <transition name="fade">
-                                <div v-if="submitted"
-                                    class="mt-4 rounded-xl bg-green-50 border border-green-200 p-4 text-green-800">
-                                    Thanks! Your registration has been received. We’ll contact you shortly.
-                                </div>
-                            </transition>
                         </form>
                     </div>
                 </div>
@@ -267,9 +310,60 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, reactive, computed, watch } from 'vue'
+import { useRuntimeConfig } from '#imports'
+import { useRouter } from 'vue-router'
+import { useCartStore } from '~/stores/cart'
 import { gsap } from 'gsap'
 import PartnerHero from '@/components/partners/PartnerHero.vue'
+import { VueTelInput } from 'vue-tel-input'
+import 'vue-tel-input/vue-tel-input.css'
+
+const router = useRouter()
+const cart = useCartStore()
+
+const runtimeConfig = useRuntimeConfig()
+const getAfterSchoolBeaconUrl = () =>
+    String(process.env.NUXT_PUBLIC_AFTER_SCHOOL_BEACON_URL || runtimeConfig.public?.afterSchoolBeaconUrl || '').trim()
+
+function fireAfterSchoolBeacon(payload) {
+    const url = getAfterSchoolBeaconUrl()
+    if (!url) return
+
+    try {
+        if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
+            const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=UTF-8' })
+            navigator.sendBeacon(url, blob)
+        } else {
+            fetch(url, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(payload),
+                keepalive: true,
+            }).catch(() => { })
+        }
+    } catch (_) {
+        // swallow errors (non-blocking)
+    }
+}
+
+function persistCheckoutPrefill(prefill) {
+    if (!process.client) return
+    try {
+        localStorage.setItem('meraki_checkout_prefill', JSON.stringify(prefill || {}))
+        window.dispatchEvent(new CustomEvent('meraki:checkout:prefill', { detail: prefill || {} }))
+    } catch (_) {
+        // ignore
+    }
+
+    // If your Pinia cart store supports prefill, use it (non-breaking)
+    try {
+        const maybeFns = [cart?.setCheckoutPrefill, cart?.setPrefill, cart?.setCustomerPrefill].filter((fn) => typeof fn === 'function')
+        if (maybeFns.length) maybeFns[0](prefill || {})
+    } catch (_) {
+        // ignore
+    }
+}
 
 const classes = {
     principles: [
@@ -345,8 +439,48 @@ function setActiveCamp(i) {
    Modal state
 ------------------------- */
 const formOpen = ref(false)
+// Holiday camp packages (scalable: edit here whenever camps/prices change)
+const holidayCampPackages = [
+    {
+        title: '1 Day Art Camp',
+        key: '1-day',
+        duration: '1 Day',
+        price: 295,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+    {
+        title: '1 Week Art Camp',
+        key: '1-week',
+        duration: '1 Week',
+        price: 1350,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+    {
+        title: '2 Weeks Art Camp',
+        key: '2-weeks',
+        duration: '2 Weeks',
+        price: 2600,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+    {
+        title: '3 Weeks Art Camp',
+        key: '3-weeks',
+        duration: '3 Weeks',
+        price: 3800,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+].map((p) => ({
+    ...p,
+    label: `${p.duration} – ${p.currency} ${p.price.toLocaleString()} + VAT`,
+}))
+
 const form = ref({
     program: '',
+    campPackageKey: '',
     childName: '',
     childAge: '',
     parentName: '',
@@ -356,18 +490,276 @@ const form = ref({
     conditionNotes: '',
     notes: ''
 })
-const submitted = ref(false)
+const submitted = ref(false) // kept for backward compatibility, but no longer used in UI
+const addedToCart = ref(false)
+const isAdding = ref(false)
+const campPackageError = ref('')
+const phoneError = ref('')
+
+// Phone: vue-tel-input used ONLY for country picker (flag + dial code)
+const countryModel = ref('')
+const selectedCountryIso2 = ref('AE')
+const phoneNational = ref('')
+
+const phoneParts = reactive({
+    iso2: 'AE',
+    countryCode: '+971',
+    phone: '',
+})
+
+const minDigitsByIso2 = { AE: 9 }
+const maxDigitsByIso2 = { AE: 9 }
+
+const minDigits = computed(() => minDigitsByIso2[selectedCountryIso2.value] ?? 6)
+const maxDigits = computed(() => maxDigitsByIso2[selectedCountryIso2.value] ?? 15)
+
+const phonePlaceholder = computed(() => (selectedCountryIso2.value === 'AE' ? 'e.g. 55 507 1234' : 'Phone number'))
+
+function syncPhoneParts() {
+    const nationalDigits = String(phoneNational.value || '').replace(/\D/g, '')
+    phoneParts.phone = nationalDigits
+}
+
+function onCountryChanged(country) {
+    if (!country) return
+    const iso2 = String(country?.iso2 || 'AE').toUpperCase()
+    const dial = String(country?.dialCode || '971').replace(/\D/g, '')
+
+    selectedCountryIso2.value = iso2
+    phoneParts.iso2 = iso2
+    phoneParts.countryCode = dial ? `+${dial}` : ''
+    syncPhoneParts()
+}
+
+watch(phoneNational, () => syncPhoneParts())
 
 function openForm(program) {
+    // reset state on open
+    submitted.value = false
+    addedToCart.value = false
+    campPackageError.value = ''
+    phoneError.value = ''
+
     form.value.program = program
+    form.value.campPackageKey = ''
+
+    // Reset phone inputs (but keep default country)
+    phoneNational.value = ''
+    syncPhoneParts()
+
     formOpen.value = true
 }
-function submit() {
-    submitted.value = true
+
+async function submit() {
+    // If already added, go straight to checkout
+    if (addedToCart.value) {
+        try {
+            router.push('/checkout')
+        } catch {
+            if (process.client) window.location.href = '/checkout'
+        }
+        return
+    }
+
+    // Prevent rapid clicks while adding
+    if (isAdding.value) return
+
+    campPackageError.value = ''
+    phoneError.value = ''
+
+    // If this is Holiday Art Camps, package selection is required
+    if (form.value.program === 'Holiday Art Camps' && !form.value.campPackageKey) {
+        campPackageError.value = 'Please select a holiday camp package.'
+        return
+    }
+
+    const isHolidayCamp = form.value.program === 'Holiday Art Camps'
+    const pkg = isHolidayCamp
+        ? holidayCampPackages.find(p => p.key === form.value.campPackageKey)
+        : null
+
+    // Sync phone parts and validate phone digits
+    syncPhoneParts()
+    const phoneDigits = String(phoneParts.phone || '').replace(/\D/g, '')
+    if (!phoneDigits || phoneDigits.length < minDigits.value || phoneDigits.length > maxDigits.value) {
+        phoneError.value = `Please enter a valid phone number (${minDigits.value}–${maxDigits.value} digits).`
+        return
+    }
+
+    // Start the 2s fill animation immediately for user feedback
+    isAdding.value = true
+
+    // ---- Fire beacon submission (Google Sheet)
+    // Sheet columns:
+    // Package | Child’s Full Name | Child’s Age | Parent/Guardian Name | Parent Email | Country Code | Phone | Health & Safety | Notes | Source | Timestamp
+    const packageLabel = (isHolidayCamp && pkg) ? String(pkg.label || '').trim() : String(form.value.program || '').trim()
+
+    const healthSafety = (String(form.value.hasConditions || 'no') === 'yes')
+        ? `Yes: ${String(form.value.conditionNotes || '').trim()}`
+        : 'No allergies/conditions'
+
+    const beaconPayload = {
+        kind: 'afterschool',
+        source: 'afterschool-registration',
+        ts: Date.now(),
+
+        // Mapped fields for the sheet
+        package: packageLabel,
+        childName: String(form.value.childName || '').trim(),
+        childAge: String(form.value.childAge || '').trim(),
+        parentName: String(form.value.parentName || '').trim(),
+        parentEmail: String(form.value.parentEmail || '').trim(),
+        countryCode: String(phoneParts.countryCode || '').trim(),
+        phone: String(phoneParts.phone || '').trim(),
+        healthSafety,
+        notes: String(form.value.notes || '').trim(),
+    }
+
+    // Async submission: sendBeacon resolves immediately; fetch path is awaited.
+    await (async () => {
+        const url = getAfterSchoolBeaconUrl()
+        if (!url) return
+
+        try {
+            if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
+                const blob = new Blob([JSON.stringify(beaconPayload)], { type: 'text/plain;charset=UTF-8' })
+                navigator.sendBeacon(url, blob)
+                return
+            }
+
+            await fetch(url, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(beaconPayload),
+                keepalive: true,
+            })
+        } catch (_) {
+            // non-blocking on purpose
+        }
+    })()
+
+    // ---- Store checkout prefill so checkout.vue can auto-populate
+    persistCheckoutPrefill({
+        name: String(form.value.parentName || '').trim(),
+        email: String(form.value.parentEmail || '').trim(),
+        countryCode: phoneParts.countryCode,
+        phone: phoneParts.phone,
+        // optional extra context
+        childName: form.value.childName,
+        childAge: form.value.childAge,
+        program: form.value.program,
+        campPackageKey: form.value.campPackageKey || '',
+        packageLabel: (isHolidayCamp && pkg) ? pkg.label : '',
+    })
+
+    // Use package title as the purchasable line title (so it survives everywhere like price)
+    const lineTitle = isHolidayCamp && pkg
+        ? `${form.value.program} • ${pkg.title}`
+        : form.value.program
+
+    const lineItem = {
+        // Try to match your existing cart schema as closely as possible
+        type: 'kids-program',
+        sku: isHolidayCamp && pkg ? `kids-holiday-camp-${pkg.key}` : `kids-program-${String(form.value.program || '').toLowerCase().replace(/\s+/g, '-')}`,
+        title: lineTitle,
+        image: '/images/afterschool/afterschool_hero.webp',
+        qty: 1,
+
+        // Price only makes sense for Holiday Camps (these are paid packages)
+        priceMajor: isHolidayCamp && pkg ? Number(pkg.price || 0) : 0,
+        currency: isHolidayCamp && pkg ? pkg.currency : 'AED',
+
+        // UAE VAT (if your store uses these fields)
+        vatEnabled: isHolidayCamp,
+        vatIncluded: isHolidayCamp && pkg ? Boolean(pkg.vatIncluded) : false,
+        vatRate: isHolidayCamp ? 5 : 0,
+
+        // Keep your structured package data (incl. title)
+        meta: {
+            program: form.value.program,
+            package: pkg
+                ? {
+                    title: pkg.title,
+                    key: pkg.key,
+                    duration: pkg.duration,
+                    price: pkg.price,
+                    currency: pkg.currency,
+                    vatIncluded: pkg.vatIncluded,
+                    label: pkg.label,
+                }
+                : null,
+
+            // Useful metadata for follow-up
+            childName: form.value.childName,
+            childAge: form.value.childAge,
+            parentName: form.value.parentName,
+            parentEmail: form.value.parentEmail,
+            countryCode: phoneParts.countryCode,
+            phone: phoneParts.phone,
+            hasConditions: form.value.hasConditions,
+            conditionNotes: form.value.conditionNotes,
+            notes: form.value.notes,
+            checkoutPrefill: {
+                name: form.value.parentName,
+                email: form.value.parentEmail,
+                countryCode: phoneParts.countryCode,
+                phone: phoneParts.phone,
+                childName: form.value.childName,
+                childAge: form.value.childAge,
+            },
+        },
+        addedAt: Date.now(),
+    }
+
+    // ---- Add to cart (prefer Pinia store, fallback to localStorage)
+    let added = false
+
+    // Try common store method names without breaking if they don't exist
+    try {
+        const maybeAddFns = [
+            cart?.addLine,
+            cart?.add,
+            cart?.addItem,
+            cart?.addToCart,
+            cart?.addProduct,
+        ].filter((fn) => typeof fn === 'function')
+
+        if (maybeAddFns.length) {
+            // use the first available method
+            maybeAddFns[0](lineItem)
+            added = true
+        }
+    } catch (e) {
+        console.warn('Pinia cart add failed, falling back to localStorage', e)
+    }
+
+    if (!added && process.client) {
+        try {
+            const key = 'meraki_cart'
+            const existing = JSON.parse(localStorage.getItem(key) || '[]')
+            const next = Array.isArray(existing) ? existing : []
+            next.push(lineItem)
+            localStorage.setItem(key, JSON.stringify(next))
+
+            window.dispatchEvent(new CustomEvent('meraki:cart:add', { detail: lineItem }))
+            added = true
+        } catch (e) {
+            console.warn('Could not persist cart item', e)
+        }
+    }
+
+    if (!added) {
+        // If nothing worked, stop animation and don't flip UI state
+        isAdding.value = false
+        campPackageError.value = 'Could not add to cart. Please try again.'
+        return
+    }
+
+    // Finish the 2s fill animation, then switch to Checkout
     setTimeout(() => {
-        submitted.value = false
-        formOpen.value = false
-    }, 1200)
+        addedToCart.value = true
+        isAdding.value = false
+    }, 2000)
 }
 
 /* -------------------------
@@ -443,5 +835,68 @@ onBeforeUnmount(() => {
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+}
+
+/* Make vue-tel-input match existing inputs */
+:deep(.vue-tel-input) {
+    border: 1px solid #d1d5db;
+    /* gray-300 */
+    border-radius: 0.75rem;
+    /* rounded-xl */
+    background: #fff;
+    padding: 0;
+    min-height: 2.75rem;
+    height: 2.75rem;
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+:deep(.vue-tel-input:focus-within) {
+    outline: 2px solid rgba(0, 0, 0, 0.18);
+    outline-offset: 0px;
+}
+
+/* Left dropdown (flag + dial code) */
+:deep(.vue-tel-input .vti__dropdown) {
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 0 0.75rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Right input */
+:deep(.vue-tel-input input) {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    width: 100%;
+    padding: 0 0.75rem;
+    height: 100%;
+    line-height: 1.5rem;
+    box-sizing: border-box;
+}
+
+:deep(.vue-tel-input .vti__input) {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Country-only mode: hide the internal input */
+:deep(.country-only.vue-tel-input .vti__input) {
+    display: none !important;
+}
+
+/* Ensure dropdown list appears above modal */
+:deep(.vti__dropdown-list) {
+    z-index: 9999 !important;
+}
+
+/* Match the phone digits input height with the country picker */
+input[autocomplete="tel-national"] {
+    height: 2.75rem;
 }
 </style>

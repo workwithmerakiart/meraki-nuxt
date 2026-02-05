@@ -97,7 +97,7 @@ import FranchiseInquiryForm from '@/components/forms/FranchiseInquiryForm.vue'
         </div>
 
         <!-- Replace the endpoint with your Apps Script Web App URL -->
-        <FranchiseInquiryForm endpoint="https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec" />
+        <FranchiseInquiryForm/>
       </div>
     </section>
   </section>

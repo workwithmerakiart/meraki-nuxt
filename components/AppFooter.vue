@@ -81,7 +81,15 @@
             </div>
             <div>© {{ currentYear }} Meraki Art Studio. All rights reserved.</div>
             <div class="max-w-3xl mx-auto px-4 text-black">
-                Site Crafted and Managed by BoldSubtle<br>
+                Site Crafted and Managed by
+                <a
+                  href="https://www.boldsubtle.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="hover:text-black-500 font-medium"
+                >
+                  BoldSubtle
+                </a><br>
                 For support or inquiries, contact us at
                 <a href="mailto:hello@boldsubtle.com"
                     class="underline hover:text-black-500">hello@boldsubtle.com</a>
@@ -117,7 +125,7 @@ async function onNewsletterSubmit() {
       },
     })
     newsletterOk.value = true
-    newsletterMsg.value = 'Thanks — you’re on the list.'
+    newsletterMsg.value = 'Thanks - you’re on the list.'
     newsletterEmail.value = ''
   } catch (e) {
     const err = e

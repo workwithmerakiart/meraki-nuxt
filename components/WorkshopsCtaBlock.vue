@@ -56,8 +56,38 @@
                             <label class="block text-left text-sm font-medium text-gray-700 mb-1">
                                 Phone Number*
                             </label>
-                            <input v-model.trim="form.phone" type="tel" required
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#DD4912]" />
+
+                            <div class="flex w-full gap-3">
+                                <!-- Country picker (flag + dial code only) -->
+                                <div class="w-44 md:w-52 flex-shrink-0">
+                                    <VueTelInput
+                                      v-model="countryModel"
+                                      :defaultCountry="selectedCountryIso2"
+                                      :autoDefaultCountry="true"
+                                      :validCharactersOnly="true"
+                                      :autoFormat="false"
+                                      :mode="'international'"
+                                      :dropdownOptions="{ showFlags: true, showDialCodeInSelection: true, showSearchBox: true }"
+                                      :inputOptions="{ placeholder: '', autocomplete: 'off', readonly: true }"
+                                      class="w-full country-only"
+                                      @country-changed="onCountryChanged"
+                                    />
+                                </div>
+
+                                <!-- National digits -->
+                                <div class="flex-1">
+                                    <input
+                                      v-model.trim="phoneNational"
+                                      type="tel"
+                                      inputmode="numeric"
+                                      autocomplete="tel-national"
+                                      required
+                                      class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#DD4912]"
+                                      :placeholder="phonePlaceholder"
+                                    />
+                                </div>
+                            </div>
+
                             <p v-if="errors.phone" class="mt-1 text-xs text-red-600">{{ errors.phone }}</p>
                         </div>
 
@@ -81,116 +111,189 @@
               aria-live="polite"
             >
               <span v-if="toast.type === 'success'">✅ Form submitted successfully! We will reach out to you soon.</span>
-              <span v-else>⚠️ Something went wrong. Please try again later.</span>
+              <span v-else>⚠️ {{ toast.msg || 'Something went wrong. Please try again later.' }}</span>
             </div>
         </Transition>
     </section>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, reactive, watch, onMounted } from 'vue'
+import { useRuntimeConfig } from '#imports'
+import { VueTelInput } from 'vue-tel-input'
+import 'vue-tel-input/vue-tel-input.css'
 
-/**
- * === Google Forms wiring (no external config) ===
- * Replace the URL and entry IDs with your actual Google Form "formResponse" endpoint + field entry IDs.
- * How to get entry IDs:
- *  - Open your Google Form (live view) > right-click > View page source
- *  - Search for "entry." patterns next to your fields
- */
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/REPLACE_ME/formResponse';
-const ENTRY_NAME = 'entry.REPLACE_NAME_ID';
-const ENTRY_EMAIL = 'entry.REPLACE_EMAIL_ID';
-const ENTRY_PHONE = 'entry.REPLACE_PHONE_ID';
+const cfg = useRuntimeConfig()
 
-const showForm = ref(false);
-const loading = ref(false);
+// Resolve URL at call-time (prevents stale/empty value during hydration)
+const getBeaconUrl = () => String(cfg.public?.workshopsBeaconUrl || '').trim()
 
-// Toast state: { visible: boolean, type: 'success' | 'error' }
-const toast = ref({ visible: false, type: 'success' });
+const showForm = ref(false)
+const loading = ref(false)
+
+// Toast state: { visible: boolean, type: 'success' | 'error', msg?: string }
+const toast = ref({ visible: false, type: 'success', msg: '' })
 
 // Field-level validation errors
-const errors = ref({ name: '', email: '', phone: '' });
+const errors = ref({ name: '', email: '', phone: '' })
 
 const form = ref({
   name: '',
   email: '',
+})
+
+// --- Phone: use vue-tel-input ONLY for country picker (flag + dial code)
+const countryModel = ref('')
+const selectedCountryIso2 = ref('AE')
+const phoneNational = ref('')
+
+const phoneParts = reactive({
+  iso2: 'AE',
+  countryCode: '+971',
   phone: '',
-});
+  phoneFull: '',
+})
+
+// Per-country digit rules (extend as needed)
+const minDigitsByIso2 = { AE: 9 }
+const maxDigitsByIso2 = { AE: 9 }
+
+const minDigits = computed(() => minDigitsByIso2[selectedCountryIso2.value] ?? 7)
+const maxDigits = computed(() => maxDigitsByIso2[selectedCountryIso2.value] ?? 15)
+
+const phonePlaceholder = computed(() =>
+  selectedCountryIso2.value === 'AE' ? 'e.g. 55 507 1234' : 'Phone number'
+)
+
+function syncPhoneParts() {
+  const dialDigits = String(phoneParts.countryCode || '').replace(/\D/g, '')
+  const nationalDigits = String(phoneNational.value || '').replace(/\D/g, '')
+  phoneParts.phone = nationalDigits
+  phoneParts.phoneFull = dialDigits && nationalDigits ? `+${dialDigits}${nationalDigits}` : ''
+}
+
+function onCountryChanged(country) {
+  if (!country) return
+  const iso2 = String(country?.iso2 || 'AE').toUpperCase()
+  const dial = String(country?.dialCode || '971').replace(/\D/g, '')
+
+  selectedCountryIso2.value = iso2
+  phoneParts.iso2 = iso2
+  phoneParts.countryCode = dial ? `+${dial}` : ''
+  syncPhoneParts()
+}
+
+watch(phoneNational, () => syncPhoneParts())
+
+const openForm = () => {
+  showForm.value = true
+  errors.value = { name: '', email: '', phone: '' }
+}
+
+const closeForm = () => {
+  showForm.value = false
+}
 
 const validate = () => {
-  errors.value = { name: '', email: '', phone: '' };
-  let ok = true;
+  errors.value = { name: '', email: '', phone: '' }
+  let ok = true
 
   // Name: required, at least 2 chars
   if (!form.value.name || form.value.name.trim().length < 2) {
-    errors.value.name = 'Please enter your full name.';
-    ok = false;
+    errors.value.name = 'Please enter your full name.'
+    ok = false
   }
 
   // Email: basic pattern
-  const email = form.value.email?.trim() || '';
-  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const email = form.value.email?.trim() || ''
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRe.test(email)) {
-    errors.value.email = 'Please enter a valid email address.';
-    ok = false;
+    errors.value.email = 'Please enter a valid email address.'
+    ok = false
   }
 
-  // Phone: required, min 7 digits (allow spaces, +, -)
-  const phone = form.value.phone?.trim() || '';
-  const digits = phone.replace(/[^0-9]/g, '');
-  if (digits.length < 7) {
-    errors.value.phone = 'Please enter a valid phone number.';
-    ok = false;
+  // Phone: min digits (country dependent)
+  const digits = String(phoneNational.value || '').replace(/[^0-9]/g, '')
+  if (digits.length < minDigits.value || digits.length > maxDigits.value) {
+    errors.value.phone = `Please enter a valid phone number (${minDigits.value}–${maxDigits.value} digits).`
+    ok = false
   }
 
-  return ok;
-};
+  return ok
+}
 
-const openForm = () => {
-  showForm.value = true;
-  errors.value = { name: '', email: '', phone: '' };
-};
+function showToast(type, msg = '') {
+  toast.value = { visible: true, type, msg }
+  setTimeout(() => {
+    toast.value.visible = false
+  }, 5000)
+}
 
-const closeForm = () => {
-    showForm.value = false;
-};
+async function handleSubmit() {
+  if (!validate()) return
 
-const handleSubmit = async () => {
-  if (!validate()) return;
+  const url = getBeaconUrl()
+  if (!url) {
+    showToast('error', 'Workshops is not configured yet.')
+    return
+  }
 
   try {
-    loading.value = true;
+    loading.value = true
 
-    const fd = new FormData();
-    fd.append(ENTRY_NAME,  form.value.name.trim());
-    fd.append(ENTRY_EMAIL, form.value.email.trim());
-    fd.append(ENTRY_PHONE, form.value.phone.trim());
+    // Ensure phone parts are in sync
+    syncPhoneParts()
 
-    // NOTE: Using no-cors; network success will resolve, but response is opaque.
-    await fetch(GOOGLE_FORM_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: fd,
-    });
+    const payload = {
+      name: String(form.value.name || '').trim(),
+      email: String(form.value.email || '').trim(),
 
-    // Consider resolved request as success (cannot read opaque response)
-    showForm.value = false;
+      // Sheet expects this column as "Currency Code" (we store dial code like +971)
+      // Prefix with apostrophe so Google Sheets keeps the leading '+'
+      currencyCode: phoneParts.countryCode || '',
 
-    // Show success toast
-    toast.value = { visible: true, type: 'success' };
-    setTimeout(() => { toast.value.visible = false; }, 5000);
+
+      // Keep these for potential future use / debugging
+      countryCode: phoneParts.countryCode || '',
+      phone: phoneParts.phone || '',
+      phoneFull: phoneParts.phoneFull || '',
+
+      ts: Date.now(),
+      source: 'workshops-cta',
+    }
+
+    // Prefer sendBeacon for reliability
+    if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=UTF-8' })
+      navigator.sendBeacon(url, blob)
+    } else {
+      // Avoid CORS preflight (Apps Script often doesn't handle OPTIONS)
+      await fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(payload),
+        keepalive: true,
+      })
+    }
+
+    showForm.value = false
+    showToast('success')
 
     // Reset
-    form.value = { name: '', email: '', phone: '' };
-    errors.value = { name: '', email: '', phone: '' };
+    form.value = { name: '', email: '' }
+    phoneNational.value = ''
+    errors.value = { name: '', email: '', phone: '' }
   } catch (e) {
-    // Show error toast
-    toast.value = { visible: true, type: 'error' };
-    setTimeout(() => { toast.value.visible = false; }, 5000);
+    console.warn('workshops beacon failed', e)
+    showToast('error', 'Could not submit right now. Please try again.')
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
+
+onMounted(() => {
+  syncPhoneParts()
+})
 </script>
 
 <style scoped>
@@ -235,5 +338,55 @@ const handleSubmit = async () => {
         opacity: 1;
         transform: scale(1)
     }
+}
+/* Make vue-tel-input match existing inputs */
+:deep(.vue-tel-input) {
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.375rem;
+  background: #fff;
+  padding: 0;
+  min-height: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+:deep(.vue-tel-input:focus-within) {
+  outline: 2px solid rgba(221, 73, 18, 0.25);
+  outline-offset: 0px;
+}
+
+/* Left dropdown (flag + dial code) */
+:deep(.vue-tel-input .vti__dropdown) {
+  border-right: 1px solid #00000022;
+  padding: 0 0.75rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Right input */
+:deep(.vue-tel-input input) {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  padding: 0 0.75rem;
+  height: 100%;
+  line-height: 1.5rem;
+  box-sizing: border-box;
+}
+
+:deep(.vue-tel-input .vti__input) {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Country-only mode: hide the internal input */
+:deep(.country-only.vue-tel-input .vti__input) {
+  display: none !important;
 }
 </style>

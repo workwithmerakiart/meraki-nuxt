@@ -30,6 +30,13 @@ export default defineNuxtConfig({
     public: {
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY || '',
       newsletterBeaconUrl: process.env.NUXT_PUBLIC_NEWSLETTER_BEACON_URL || '',
+      eventsBeaconUrl: process.env.NUXT_PUBLIC_EVENTS_BEACON_URL || '',
+      workshopsBeaconUrl: process.env.NUXT_PUBLIC_WORKSHOPS_BEACON_URL || '',
+      activitiesBeaconUrl: process.env.NUXT_PUBLIC_ACTIVITIES_BEACON_URL || '',
+      customOrdersBeaconUrl: process.env.NUXT_PUBLIC_CUSTOM_ORDERS_BEACON_URL || '',
+      franchiseBeaconUrl: process.env.NUXT_PUBLIC_FRANCHISE_BEACON_URL || '',
+      contactBeaconUrl: process.env.NUXT_PUBLIC_CONTACT_BEACON_URL || '',
+      afterSchoolBeaconUrl: process.env.NUXT_PUBLIC_AFTER_SCHOOL_BEACON_URL || '',
     },
   },
 

@@ -115,10 +115,41 @@
                   :class="invalid.email && 'border-red-500'" required />
                 <p v-if="invalid.email" class="text-xs text-red-600 mt-1">Enter a valid email.</p>
               </div>
-              <div>
+              <div class="md:col-span-2">
                 <label class="block text-sm font-medium mb-1">Phone <span class="text-red-600">*</span></label>
-                <input v-model.trim="form.phone" type="tel" class="w-full border rounded px-3 py-2"
-                  :class="invalid.phone && 'border-red-500'" required />
+
+                <div class="flex w-full gap-3">
+                  <!-- Country picker (flag + dial code only) -->
+                  <div class="w-40 md:w-44 flex-shrink-0">
+                    <VueTelInput
+                      v-model="countryModel"
+                      :defaultCountry="selectedCountryIso2"
+                      :autoDefaultCountry="true"
+                      :validCharactersOnly="true"
+                      :autoFormat="false"
+                      :mode="'international'"
+                      :dropdownOptions="{ showFlags: true, showDialCodeInSelection: true, showSearchBox: true }"
+                      :inputOptions="{ placeholder: '', autocomplete: 'off', readonly: true }"
+                      class="w-full country-only"
+                      @country-changed="onCountryChanged"
+                    />
+                  </div>
+
+                  <!-- National digits (validated separately) -->
+                  <div class="flex-1">
+                    <input
+                      v-model.trim="form.phone"
+                      type="tel"
+                      inputmode="numeric"
+                      autocomplete="tel-national"
+                      placeholder="e.g. 55 507 1234"
+                      class="w-full border rounded px-3 py-2"
+                      :class="invalid.phone && 'border-red-500'"
+                      required
+                    />
+                  </div>
+                </div>
+
                 <p v-if="invalid.phone" class="text-xs text-red-600 mt-1">Please add a phone number.</p>
               </div>
               <div>
@@ -285,13 +316,56 @@ const events = [
 ]
 
 import { ref, reactive } from 'vue'
+import { useRuntimeConfig } from '#imports'
+import { VueTelInput } from 'vue-tel-input'
+import 'vue-tel-input/vue-tel-input.css'
 
 const showModal = ref(false)
 const submitting = ref(false)
 
+// Phone: use vue-tel-input ONLY for country picker (flag + dial code)
+const countryModel = ref('')
+const selectedCountryIso2 = ref('AE') // Default UAE
+
+function onCountryChanged(country) {
+  if (!country) return
+  const dial = String(country?.dialCode || '971').replace(/\D/g, '')
+  form.countryCode = dial ? `+${dial}` : '+971'
+}
+
+// --- Google Sheets Beacon (Events Inquiry)
+// Configure via env: NUXT_PUBLIC_EVENTS_BEACON_URL
+const getEventsBeaconUrl = () => String(useRuntimeConfig().public?.eventsBeaconUrl || '').trim()
+
+function submitEventsInquiryBeacon(payload) {
+  const url = getEventsBeaconUrl()
+  if (!url) {
+    // Do not block UX if env is missing
+    try { console.warn('[events] missing beacon url (NUXT_PUBLIC_EVENTS_BEACON_URL)') } catch {}
+    return
+  }
+
+  try {
+    if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=UTF-8' })
+      navigator.sendBeacon(url, blob)
+    } else {
+      fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(payload),
+        keepalive: true,
+      }).catch(() => {})
+    }
+  } catch (e) {
+    try { console.warn('[events] beacon submit failed', e) } catch {}
+  }
+}
+
 const form = reactive({
   name: '',
   email: '',
+  countryCode: '+971',
   phone: '',
   type: '',
   date: '',
@@ -342,11 +416,41 @@ async function submitForm() {
     // TODO: replace with your real submission (API, email service, etc.)
     console.log('Events inquiry payload:', { ...form })
 
+    // Prepare phone/country code
+    const cc = String(form.countryCode || '+971').trim()
+    const national = String(form.phone || '').trim()
+    const phoneFull = (cc && national)
+      ? `${cc}${national.replace(/\s+/g, '')}`
+      : ''
+
+    // Fire-and-forget capture to Google Sheet
+    submitEventsInquiryBeacon({
+      name: String(form.name || '').trim(),
+      email: String(form.email || '').trim(),
+
+      // New: separate code + phone columns in sheet
+      countryCode: cc,                 // e.g. +971
+      phone: national,                 // e.g. 55 507 1234
+      phoneFull,                       // optional (for debugging)
+
+      eventType: String(form.type || '').trim(),
+      date: String(form.date || '').trim(),
+      guests: String(form.guests || '').trim(),
+      location: String(form.location || '').trim(),
+      notes: String(form.notes || '').trim(),
+
+      source: 'events-inquiry',
+
+      // Timestamp for Apps Script (also okay if script uses new Date())
+      ts: Date.now(),
+    })
+
     // simple UX: close + toast/alert
     closeModal()
     alert('Thanks! Your events inquiry has been submitted. We’ll get back to you shortly.')
     // reset form (optional)
     Object.keys(form).forEach(k => (form[k] = ''))
+    form.countryCode = '+971'
   } catch (e) {
     alert('Sorry, something went wrong. Please try again.')
   } finally {
@@ -364,5 +468,56 @@ async function submitForm() {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Make vue-tel-input match existing inputs */
+:deep(.vue-tel-input) {
+  border: 1px solid #000;
+  border-radius: 0.375rem;
+  background: #fff;
+  padding: 0;
+  min-height: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Left dropdown (flag + dial code) */
+:deep(.vue-tel-input .vti__dropdown) {
+  border-right: 1px solid #00000022;
+  padding: 0 0.75rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Right input */
+:deep(.vue-tel-input input) {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  padding: 0 0.75rem;
+  height: 100%;
+  line-height: 1.5rem;
+  box-sizing: border-box;
+}
+
+:deep(.vue-tel-input .vti__input) {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Country-only mode: hide the internal input */
+:deep(.country-only.vue-tel-input .vti__input) {
+  display: none !important;
+}
+
+:deep(.vue-tel-input:focus-within) {
+  outline: 2px solid rgba(37, 99, 235, 0.25);
+  outline-offset: 0px;
 }
 </style>

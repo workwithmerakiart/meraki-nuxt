@@ -95,7 +95,7 @@
       <p class="text-base sm:text-lg text-gray-700">
         We’d love to bring your custom idea to life.
       </p>
-      <button @click="showModal = true"
+      <button @click="openModal"
         class="inline-block border border-black text-black px-4 py-2 rounded hover:bg-[#447c9d] hover:text-white transition">
         Submit a Custom Order Inquiry
       </button>
@@ -105,7 +105,7 @@
     <transition name="fade">
       <div v-if="showModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
         <div class="bg-white rounded-lg shadow-lg max-w-lg w-full mx-4 p-6 relative overflow-y-auto max-h-[90vh]">
-          <button @click="showModal = false" class="absolute top-3 right-3 text-gray-500 hover:text-black">
+          <button @click="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-black">
             ✕
           </button>
           <h3 class="text-2xl font-bold mb-2 text-center">📝 Request a Custom Quote</h3>
@@ -113,22 +113,80 @@
             Let’s turn your vision into a beautiful reality. Fill out the form below and our team will get back to you
             with a tailored quote within 24–48 hours.
           </p>
-          <form class="space-y-4">
+          <form class="space-y-4" @submit.prevent="submitCustomOrder">
             <div>
               <label class="block text-sm font-medium mb-1">Name:</label>
-              <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+              <input
+                v-model.trim="form.name"
+                @blur="touched.name = true"
+                type="text"
+                class="w-full border border-gray-300 rounded px-3 py-2"
+                placeholder="Your full name"
+                required
+              />
+              <p v-if="touched.name && !nameValid" class="mt-1 text-xs text-red-600">
+                Enter your full name (letters, spaces, ' and - only).
+              </p>
             </div>
+
             <div>
               <label class="block text-sm font-medium mb-1">Email Address:</label>
-              <input type="email" class="w-full border border-gray-300 rounded px-3 py-2" />
+              <input
+                v-model.trim="form.email"
+                @blur="touched.email = true"
+                type="email"
+                class="w-full border border-gray-300 rounded px-3 py-2"
+                placeholder="you@example.com"
+                required
+              />
+              <p v-if="touched.email && !emailValid" class="mt-1 text-xs text-red-600">
+                Enter a valid email address.
+              </p>
             </div>
+
             <div>
               <label class="block text-sm font-medium mb-1">Phone Number (optional):</label>
-              <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+
+              <div class="flex w-full gap-3">
+                <!-- Country picker (flag + dial code only) -->
+                <div class="w-44 md:w-52 flex-shrink-0">
+                  <VueTelInput
+                    v-model="countryModel"
+                    :defaultCountry="selectedCountryIso2"
+                    :autoDefaultCountry="true"
+                    :validCharactersOnly="true"
+                    :autoFormat="false"
+                    :mode="'international'"
+                    :dropdownOptions="{ showFlags: true, showDialCodeInSelection: true, showSearchBox: true }"
+                    :inputOptions="{ placeholder: '', autocomplete: 'off', readonly: true }"
+                    class="w-full country-only"
+                    @blur="touched.phone = true"
+                    @country-changed="onCountryChanged"
+                  />
+                </div>
+
+                <!-- National digits -->
+                <div class="flex-1">
+                  <input
+                    v-model.trim="phoneNational"
+                    @blur="touched.phone = true"
+                    type="tel"
+                    inputmode="numeric"
+                    autocomplete="tel-national"
+                    class="w-full border border-gray-300 rounded px-3 py-2"
+                    :placeholder="phonePlaceholder"
+                  />
+                </div>
+              </div>
+
+              <p v-if="touched.phone && !phoneValid" class="mt-1 text-xs text-red-600">
+                Enter a valid phone number ({{ minDigits }}–{{ maxDigits }} digits), or leave it blank.
+              </p>
             </div>
+
             <div>
               <label class="block text-sm font-medium mb-1">Type of Custom Order:</label>
-              <select class="w-full border border-gray-300 rounded px-3 py-2">
+              <select v-model="form.customOrderType" class="w-full border border-gray-300 rounded px-3 py-2">
                 <option>Floral Resin Preservation</option>
                 <option>Large Canvas Artwork</option>
                 <option>Resin Gifting (Bulk Orders)</option>
@@ -137,28 +195,42 @@
                 <option>Other (please describe)</option>
               </select>
             </div>
+
             <div>
               <label class="block text-sm font-medium mb-1">Preferred Quantity (if applicable):</label>
-              <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+              <input v-model.trim="form.quantity" type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
             </div>
+
             <div>
               <label class="block text-sm font-medium mb-1">Deadline (if any):</label>
-              <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+              <input v-model="form.date" type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
             </div>
+
             <div>
               <label class="block text-sm font-medium mb-1">Upload Reference Images (optional):</label>
               <input type="file" multiple class="w-full border border-gray-300 rounded px-3 py-2" />
               <p class="text-xs text-gray-500 mt-1">Max 3 files.</p>
+              <p class="text-xs text-gray-500 mt-1">Note: uploads are not submitted via this form yet — we’ll request them on WhatsApp/email if needed.</p>
             </div>
+
             <div>
               <label class="block text-sm font-medium mb-1">Additional Notes or Specific Requests:</label>
-              <textarea rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+              <textarea v-model.trim="form.notes" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
-            <button type="button"
-              class="w-full bg-[#447c9d] text-white rounded py-2 font-medium hover:bg-[#365f7e] transition">
-              Submit Request
+
+            <button
+              type="submit"
+              :disabled="submitting || !allValid"
+              class="w-full bg-[#447c9d] text-white rounded py-2 font-medium hover:bg-[#365f7e] transition disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {{ submitting ? 'Submitting…' : 'Submit Request' }}
             </button>
-            <p class="text-xs text-gray-500 text-center mt-2">
+
+            <p v-if="toastMsg" class="text-center text-sm mt-2" :class="toastOk ? 'text-green-700' : 'text-red-700'">
+              {{ toastMsg }}
+            </p>
+
+            <p class="text-xs text-gray-500 text-center">
               💌 We’ll be in touch soon to bring your idea to life.
             </p>
           </form>
@@ -169,9 +241,207 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, reactive, watch, onMounted } from 'vue'
+import { useRuntimeConfig } from '#imports'
+import { VueTelInput } from 'vue-tel-input'
+import 'vue-tel-input/vue-tel-input.css'
 
 const showModal = ref(false)
+
+function resetFormState() {
+  // reset validation/toast state
+  touched.name = false
+  touched.email = false
+  touched.phone = false
+  toastMsg.value = ''
+  toastOk.value = false
+  submitting.value = false
+
+  // reset fields (keep default order type)
+  form.name = ''
+  form.email = ''
+  form.customOrderType = 'Floral Resin Preservation'
+  form.quantity = ''
+  form.date = ''
+  form.notes = ''
+
+  // reset phone (keep default country)
+  phoneNational.value = ''
+  selectedCountryIso2.value = 'AE'
+  phoneParts.iso2 = 'AE'
+  phoneParts.countryCode = '+971'
+  phoneParts.phone = ''
+  countryModel.value = ''
+  syncPhoneParts()
+}
+
+function openModal() {
+  resetFormState()
+  showModal.value = true
+}
+
+function closeModal() {
+  showModal.value = false
+  // ensure that if the modal is reopened it doesn't show old validation/toast
+  // and doesn't keep previous values
+  resetFormState()
+}
+
+const cfg = useRuntimeConfig()
+const getBeaconUrl = () => String(cfg.public?.customOrdersBeaconUrl || '').trim()
+
+const submitting = ref(false)
+const toastMsg = ref('')
+const toastOk = ref(false)
+
+const form = reactive({
+  name: '',
+  email: '',
+  customOrderType: 'Floral Resin Preservation',
+  quantity: '',
+  date: '',
+  notes: '',
+})
+
+const touched = reactive({
+  name: false,
+  email: false,
+  phone: false,
+})
+
+// Phone: vue-tel-input used ONLY for country picker (all nations), default UAE
+const countryModel = ref('')
+const selectedCountryIso2 = ref('AE')
+const phoneNational = ref('')
+
+const phoneParts = reactive({
+  iso2: 'AE',
+  countryCode: '+971',
+  phone: '',
+})
+
+const minDigitsByIso2 = { AE: 9 }
+const maxDigitsByIso2 = { AE: 9 }
+
+const minDigits = computed(() => minDigitsByIso2[selectedCountryIso2.value] ?? 6)
+const maxDigits = computed(() => maxDigitsByIso2[selectedCountryIso2.value] ?? 15)
+
+const phonePlaceholder = computed(() => (selectedCountryIso2.value === 'AE' ? 'e.g. 55 507 1234' : 'Phone number'))
+
+function syncPhoneParts() {
+  const dialDigits = String(phoneParts.countryCode || '').replace(/\D/g, '')
+  const nationalDigits = String(phoneNational.value || '').replace(/\D/g, '')
+  phoneParts.phone = nationalDigits
+  phoneParts.countryCode = dialDigits ? `+${dialDigits}` : ''
+}
+
+function onCountryChanged(country) {
+  if (!country) return
+
+  const iso2 = String(country?.iso2 || 'AE').toUpperCase()
+  const dial = String(country?.dialCode || '971').replace(/\D/g, '')
+
+  selectedCountryIso2.value = iso2
+  phoneParts.iso2 = iso2
+  phoneParts.countryCode = dial ? `+${dial}` : ''
+
+  syncPhoneParts()
+}
+
+watch(phoneNational, () => syncPhoneParts())
+
+// Validations
+const nameRe = /^[A-Za-z\u00C0-\u024F' -]{2,}$/
+const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const nameValid = computed(() => nameRe.test(String(form.name || '').trim()))
+const emailValid = computed(() => emailRe.test(String(form.email || '').trim()))
+
+// Phone is optional. If present, must be within digit bounds.
+const phoneValid = computed(() => {
+  const digits = String(phoneNational.value || '').replace(/\D/g, '')
+  if (!digits) return true
+  return digits.length >= minDigits.value && digits.length <= maxDigits.value
+})
+
+const allValid = computed(() => nameValid.value && emailValid.value && phoneValid.value)
+
+async function submitCustomOrder() {
+  toastMsg.value = ''
+  toastOk.value = false
+
+  if (submitting.value) return
+
+  touched.name = true
+  touched.email = true
+  touched.phone = true
+
+  if (!allValid.value) {
+    toastMsg.value = 'Please check the highlighted fields and try again.'
+    toastOk.value = false
+    return
+  }
+
+  const url = getBeaconUrl()
+  if (!url) {
+    toastMsg.value = 'Custom orders form is not configured yet.'
+    toastOk.value = false
+    return
+  }
+
+  submitting.value = true
+  try {
+    syncPhoneParts()
+
+    const payload = {
+      name: String(form.name || '').trim(),
+      email: String(form.email || '').trim(),
+
+      // Send clean +971 (NO apostrophe here). Apps Script will force text formatting.
+      countryCode: String(phoneParts.countryCode || '').trim(),
+      phone: String(phoneParts.phone || '').trim(),
+
+      customOrderType: String(form.customOrderType || '').trim(),
+      quantity: String(form.quantity || '').trim(),
+      date: String(form.date || '').trim(),
+      notes: String(form.notes || '').trim(),
+
+      source: 'custom-orders',
+      ts: Date.now(),
+    }
+
+    if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=UTF-8' })
+      navigator.sendBeacon(url, blob)
+    } else {
+      await fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(payload),
+        keepalive: true,
+      })
+    }
+
+    toastOk.value = true
+    toastMsg.value = 'Request submitted. We’ll get back to you within 24–48 hours.'
+
+    // close modal after a short delay so user can see confirmation
+    setTimeout(() => {
+      closeModal()
+    }, 2000)
+  } catch (e) {
+    console.warn('custom-orders beacon failed', e)
+    toastOk.value = false
+    toastMsg.value = 'Could not submit right now. Please try again.'
+  } finally {
+    submitting.value = false
+  }
+}
+
+onMounted(() => {
+  syncPhoneParts()
+  selectedCountryIso2.value = 'AE'
+})
 
 const customOrders = ref([
   {
@@ -232,5 +502,55 @@ const pastProjects = [
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+/* Make vue-tel-input match existing inputs */
+:deep(.vue-tel-input) {
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.375rem;
+  background: #fff;
+  padding: 0;
+  min-height: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Left dropdown (flag + dial code) */
+:deep(.vue-tel-input .vti__dropdown) {
+  border-right: 1px solid #00000022;
+  padding: 0 0.75rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Right input */
+:deep(.vue-tel-input input) {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  padding: 0 0.75rem;
+  height: 100%;
+  line-height: 1.5rem;
+  box-sizing: border-box;
+}
+
+:deep(.vue-tel-input .vti__input) {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Country-only mode: hide the internal input */
+:deep(.country-only.vue-tel-input .vti__input) {
+  display: none !important;
+}
+
+/* Ensure dropdown list appears above modal */
+:deep(.vti__dropdown-list) {
+  z-index: 9999 !important;
 }
 </style>
