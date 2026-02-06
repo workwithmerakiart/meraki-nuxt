@@ -69,7 +69,7 @@ const matterdxbImages = [
 
         <!-- HERO -->
         <section ref="hero" class="relative h-[68vh] md:h-[86vh] overflow-hidden bg-[var(--matter-dark)] text-white">
-            <img src="/images/story/story_hero.webp" alt="Matter DXB Hero"
+            <img src="/images/matterdxb/DC1.jpg" alt="Matter DXB Hero"
                 class="absolute inset-0 w-full h-full object-cover opacity-60" />
 
             <!-- gradient veil -->
@@ -110,7 +110,7 @@ const matterdxbImages = [
                     <!-- layered frame look -->
                     <div class="absolute -top-6 -left-6 w-24 h-24 bg-[var(--matter-accent)] rounded-md"></div>
                     <div class="absolute -bottom-6 -right-6 w-16 h-28 bg-[var(--matter-accent)] rounded-md"></div>
-                    <img src="/images/story/story_hero.webp" alt="About Matter DXB"
+                    <img src="/images/story/story_kajol.webp" alt="About Matter DXB"
                         class="relative z-[1] w-full rounded-lg shadow-2xl object-cover" />
                 </div>
 
@@ -146,7 +146,7 @@ const matterdxbImages = [
 
                 <div class="grid md:grid-cols-3 gap-8">
                     <div class="group relative aspect-square rounded-full overflow-hidden" data-reveal="up">
-                        <img src="/images/story/story_hero.webp"
+                        <img src="/images/matterdxb/2.jpg"
                             class="w-full h-full object-cover brightness-[.85] group-hover:brightness-100 transition" />
                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition"></div>
                         <span class="absolute inset-0 m-auto h-min text-center tracking-[0.3em] text-xl">CREATIVE</span>
@@ -154,7 +154,7 @@ const matterdxbImages = [
 
                     <div class="group relative aspect-square rounded-full overflow-hidden" data-reveal="up"
                         data-delay="120">
-                        <img src="/images/story/story_hero.webp"
+                        <img src="/images/matterdxb/18.jpg"
                             class="w-full h-full object-cover brightness-[.85] group-hover:brightness-100 transition" />
                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition"></div>
                         <span class="absolute inset-0 m-auto h-min text-center tracking-[0.3em] text-xl">DRIVEN</span>
@@ -162,7 +162,7 @@ const matterdxbImages = [
 
                     <div class="group relative aspect-square rounded-full overflow-hidden" data-reveal="up"
                         data-delay="240">
-                        <img src="/images/story/story_hero.webp"
+                        <img src="/images/matterdxb/ET2.jpg"
                             class="w-full h-full object-cover brightness-[.85] group-hover:brightness-100 transition" />
                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition"></div>
                         <span
@@ -233,7 +233,7 @@ const matterdxbImages = [
         </section>
 
         <!-- HOW IT WORKS / PROCESS -->
-        <section class="relative bg-[url('/images/story/story_hero.webp')] bg-cover bg-center">
+        <section class="relative bg-[url('/images/matterdxb/DH2.jpg')] bg-cover bg-center">
             <div class="absolute inset-0 bg-black/55"></div>
             <div class="relative max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24 text-white">
                 <h3 class="text-center text-3xl md:text-4xl font-semibold" data-reveal="up">How It Works</h3>
@@ -292,7 +292,7 @@ const matterdxbImages = [
                     </NuxtLink>
                 </div>
                 <div class="relative" data-reveal="right" data-delay="60">
-                    <img src="/images/story/story_hero.webp" alt="Project"
+                    <img src="/images/matterdxb/1.jpg" alt="Project"
                         class="w-full rounded-xl shadow-2xl object-cover" />
                 </div>
             </div>

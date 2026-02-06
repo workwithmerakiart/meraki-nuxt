@@ -1,6 +1,6 @@
 <template>
     <section class="featured-in">
-        <h2 class="heading">FEATURED IN</h2>
+        <h2 class="heading">OUR CLIENTS</h2>
         <div class="marquee-wrapper">
             <div v-for="(row, index) in rows" :key="index" class="marquee-row" :class="{ reverse: index % 2 === 1 }">
                 <div class="marquee-content">

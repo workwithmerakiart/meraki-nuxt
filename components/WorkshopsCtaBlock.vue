@@ -29,7 +29,7 @@
 
                     <!-- Form Heading -->
                     <h3 class="text-2xl font-bold mb-6 text-center">
-                        Secure Your Spot in This Upcoming Workshop
+                        Sounds exciting, right? Enquire to learn more about our workshops.
                     </h3>
 
                     <!-- Form -->

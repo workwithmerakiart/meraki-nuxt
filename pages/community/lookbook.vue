@@ -9,9 +9,7 @@ const images = [
   { src: '/images/lookbook/5.webp', alt: 'Event 5' },
   { src: '/images/lookbook/6.webp', alt: 'Event 6' },
   { src: '/images/lookbook/7.webp', alt: 'Event 7' },
-  { src: '/images/lookbook/8.webp', alt: 'Event 8' },
   { src: '/images/lookbook/9.webp', alt: 'Event 9' },
-  { src: '/images/lookbook/10.webp', alt: 'Event 10' },
   { src: '/images/afterschool/afterschool_hero.webp', alt: 'Event 11' },
   { src: '/images/block3_activities.webp', alt: 'Event 12' },
   { src: '/images/activities/activities_hero.webp', alt: 'Event 13' },
@@ -38,9 +36,7 @@ const images = [
   { src: '/images/lookbook/25.webp', alt: 'Event 34' },
   { src: '/images/lookbook/26.webp', alt: 'Event 35' },
   { src: '/images/lookbook/27.webp', alt: 'Event 36' },
-  { src: '/images/activities/activities_block3.webp', alt: 'Event 37' },
   { src: '/images/lookbook/28.webp', alt: 'Event 38' },
-  { src: '/images/activities/activities_hero.webp', alt: 'Event 39' },
   { src: '/images/events/events_hero.webp', alt: 'Event 40' }
 ]
 1,2,3,11,12,13,21,22,23,31,32,33

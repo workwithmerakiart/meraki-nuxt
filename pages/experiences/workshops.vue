@@ -85,7 +85,7 @@ const workshopsData = [
           price: "150 AED",
           vat: true,
           vatValue: 5,
-          registerText: "Add to Cart",
+          registerText: "Book Now",
           imageSrc: "/images/shop/oct2.jpeg",
           imageCaption: "Kids Halloween Workshop at Meraki Art Studio",
           content: `
@@ -130,7 +130,7 @@ const workshopsData = [
           price: "325 AED",
           vat: true,
           vatValue: 5,
-          registerText: "Add to Cart",
+          registerText: "Book Now",
           imageSrc:
             "/images/workshops/2.webp",
           imageCaption:
@@ -171,7 +171,7 @@ const workshopsData = [
           price: "150 AED",
           vat: true,
           vatValue: 5,
-          registerText: "Add to Cart",
+          registerText: "Book Now",
           imageSrc:
             "/images/workshops/3.webp",
           imageCaption:
@@ -217,7 +217,7 @@ const workshopsData = [
           price: "195 AED",
           vat: true,
           vatValue: 5,
-          registerText: "Add to Cart",
+          registerText: "Book Now",
           imageSrc:
             "/images/workshops/1.webp",
           imageCaption:
@@ -258,7 +258,7 @@ const workshopsData = [
           price: "475 AED",
           vat: true,
           vatValue: 5,
-          registerText: "Add to Cart",
+          registerText: "Book Now",
           imageSrc:
             "/images/workshops/1.webp",
           imageCaption:
@@ -298,7 +298,7 @@ const workshopsData = [
           price: "275 AED",
           vat: true,
           vatValue: 5,
-          registerText: "Add to Cart",
+          registerText: "Book Now",
           imageSrc: "/images/shop/oct1.jpeg",
           imageCaption: "Witch’s Brew Candle Workshop at Meraki Art Studio",
           content: `
@@ -311,6 +311,188 @@ const workshopsData = [
           `,
         },
       }
+    ],
+  },
+  {
+    title: "",
+    sections: [
+      {
+        badge: "WORKSHOPS",
+        image: "/images/workshops/tasbih.jpg",
+        title: "Tasbih Making Workshop",
+        price: "160 AED",
+        vat: true,
+        vatValue: 5,
+        dateTs: Date.parse('2026-02-15T00:00:00Z'),
+        sections: [
+          {
+            icon: CalendarDaysIcon,
+            text: "Sunday, 15 February 2026",
+          },
+          {
+            icon: ClockIcon,
+            text: "11:00 AM – 12:00 PM",
+          },
+          {
+            icon: MapPinIcon,
+            text: "Meraki Art Studio",
+          },
+        ],
+        modal: true,
+        modalContent: {
+          title: "Tasbih Making Workshop",
+          dates: "Sunday, 15 February 2026",
+          time: "11:00 AM – 12:00 PM",
+          location: "Meraki Art Studio",
+          price: "160 AED",
+          vat: true,
+          vatValue: 5,
+          registerText: "Book Now",
+          imageSrc: "/images/workshops/tasbih.jpg",
+          imageCaption: "Tasbih Making Workshop at Meraki Art Studio",
+          content: `
+            <p>Design a personalized tasbih in a calm, mindful creative session. Choose from a selection of beads and elements to create a meaningful piece to take home.</p>
+            <ul>
+              <li>All materials included</li>
+              <li>Finished tasbih is taken home</li>
+            </ul>
+          `,
+        },
+      },
+      {
+        badge: "WORKSHOPS",
+        image: "/images/workshops/leather-making.jpg",
+        title: "Leather Making Workshop",
+        price: "195 AED",
+        vat: true,
+        vatValue: 5,
+        dateTs: Date.parse('2026-02-21T00:00:00Z'),
+        sections: [
+          {
+            icon: CalendarDaysIcon,
+            text: "Saturday, 21 February 2026",
+          },
+          {
+            icon: ClockIcon,
+            text: "3:00 PM – 4:30 PM",
+          },
+          {
+            icon: MapPinIcon,
+            text: "Meraki Art Studio",
+          },
+        ],
+        modal: true,
+        modalContent: {
+          title: "Leather Making Workshop",
+          dates: "Saturday, 21 February 2026",
+          time: "3:00 PM – 4:30 PM",
+          location: "Meraki Art Studio",
+          price: "195 AED",
+          vat: true,
+          vatValue: 5,
+          registerText: "Book Now",
+          imageSrc: "/images/workshops/leather-making.jpg",
+          imageCaption: "Leather Making Workshop at Meraki Art Studio",
+          content: `
+            <p>Craft a stylish leather accessory in a hands-on session while learning basic leather techniques. Create a functional piece and take home something you’ve made yourself.</p>
+            <ul>
+              <li>All materials included</li>
+              <li>Finished leather piece is taken home</li>
+            </ul>
+          `,
+        },
+      },
+      {
+        badge: "WORKSHOPS",
+        image: "/images/workshops/sparkly-bag.jpg",
+        title: "Sparkly Bag Making Workshop",
+        price: "295 AED",
+        vat: true,
+        vatValue: 5,
+        dateTs: Date.parse('2026-02-22T00:00:00Z'),
+        sections: [
+          {
+            icon: CalendarDaysIcon,
+            text: "Sunday, 22 February 2026",
+          },
+          {
+            icon: ClockIcon,
+            text: "3:00 PM – 5:30 PM",
+          },
+          {
+            icon: MapPinIcon,
+            text: "Meraki Art Studio",
+          },
+        ],
+        modal: true,
+        modalContent: {
+          title: "Sparkly Bag Making Workshop",
+          dates: "Sunday, 22 February 2026",
+          time: "3:00 PM – 5:30 PM",
+          location: "Meraki Art Studio",
+          price: "295 AED",
+          vat: true,
+          vatValue: 5,
+          registerText: "Book Now",
+          imageSrc: "/images/workshops/sparkly-bag.jpg",
+          imageCaption: "Sparkly Bag Making Workshop at Meraki Art Studio",
+          content: `
+            <p>Create a sparkly bag using hand-knotting techniques and crystal embellishments. Design and take home a statement accessory in this hands-on creative session.</p>
+            <ul>
+              <li>All materials included</li>
+              <li>Finished bag is taken home</li>
+            </ul>
+          `,
+        },
+      },
+    ],
+  },
+  {
+    title: "",
+    sections: [
+      {
+        badge: "WORKSHOPS",
+        image: "/images/workshops/soap-making.jpg",
+        title: "Cold Process Soap Making",
+        price: "350 AED",
+        vat: true,
+        vatValue: 5,
+        dateTs: Date.parse('2026-02-28T00:00:00Z'),
+        sections: [
+          {
+            icon: CalendarDaysIcon,
+            text: "Saturday, 28 February 2026",
+          },
+          {
+            icon: ClockIcon,
+            text: "3:30 PM – 5:30 PM",
+          },
+          {
+            icon: MapPinIcon,
+            text: "Meraki Art Studio",
+          },
+        ],
+        modal: true,
+        modalContent: {
+          title: "Cold Process Soap Making",
+          dates: "Saturday, 28 February 2026",
+          time: "3:30 PM – 5:30 PM",
+          location: "Meraki Art Studio",
+          price: "350 AED",
+          vat: true,
+          vatValue: 5,
+          registerText: "Book Now",
+          imageSrc: "/images/workshops/soap-making.jpg",
+          imageCaption: "Cold Process Soap Making Masterclass at Meraki Art Studio",
+          content: `
+            <p>Learn the art of cold process soap making and create natural soaps from scratch in this hands-on masterclass. Understand ingredients, techniques, and safety while crafting your own soap bars to take home.</p>
+            <ul>
+              <li>All materials included</li>
+              <li>Handmade soaps are taken home</li>
+            </ul>
+          `,
+        },
+      },
     ],
   },
 ];

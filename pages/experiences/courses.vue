@@ -255,7 +255,7 @@ const coursesData = [
       {
         // Display/meta
         badge: "Beginner",
-        image: "/images/courses/courses_resin_advance.webp",
+        image: "/images/courses/epoxy-river-table.jpg",
         title: "Epoxy River Table Workshop",
         description: "Epoxy River Table Workshop",
         skillLevel: "Beginner",
@@ -315,7 +315,7 @@ const coursesData = [
           vat: true,
           vatValue: 5,
           registerText: "Add to Cart",
-          imageSrc: "/images/courses/courses_resin_advance.webp",
+          imageSrc: "/images/courses/epoxy-river-table.jpg",
           imageCaption: "Epoxy River Table Workshop at Meraki Art Studio",
           content: `
             <p><strong>Duration:</strong> 2 Days (3 hrs each)<br/>
@@ -544,7 +544,7 @@ const coursesData = [
       // 2) Acrylic Painting
       {
         badge: "Courses",
-        image: "/images/activities/fine-art.webp",
+        image: "/images/courses/fine-art.jpeg",
         title: "Acrylic Painting",
         description: "Acrylic Painting",
         skillLevel: "All Levels",
@@ -585,7 +585,7 @@ const coursesData = [
           vat: true,
           vatValue: 5,
           registerText: "Add to Cart",
-          imageSrc: "/images/activities/fine-art.webp",
+          imageSrc: "/images/courses/fine-art.jpeg",
           imageCaption: "Acrylic Painting at Meraki Art Studio",
           variants: [
             { key: "8", label: "8 Sessions — AED 1260", sku: "COURSE-FAF-ACRYLIC-8", unitAmount: 1260 },
@@ -623,7 +623,7 @@ const coursesData = [
       // 3) Watercolor Painting
       {
         badge: "Courses",
-        image: "/images/activities/fine-art.webp",
+        image: "/images/courses/watercolor.jpg",
         title: "Watercolor Painting",
         description: "Watercolor Painting",
         skillLevel: "All Levels",
@@ -664,7 +664,7 @@ const coursesData = [
           vat: true,
           vatValue: 5,
           registerText: "Add to Cart",
-          imageSrc: "/images/activities/fine-art.webp",
+          imageSrc: "/images/courses/watercolor.jpg",
           imageCaption: "Watercolor Painting at Meraki Art Studio",
           variants: [
             { key: "8", label: "8 Sessions — AED 1260", sku: "COURSE-FAF-WATERCOLOR-8", unitAmount: 1260 },
@@ -702,7 +702,7 @@ const coursesData = [
       // 4) Oil Painting
       {
         badge: "Courses",
-        image: "/images/activities/fine-art.webp",
+        image: "/images/courses/oilpainting.jpg",
         title: "Oil Painting",
         description: "Oil Painting",
         skillLevel: "All Levels",
@@ -743,7 +743,7 @@ const coursesData = [
           vat: true,
           vatValue: 5,
           registerText: "Add to Cart",
-          imageSrc: "/images/activities/fine-art.webp",
+          imageSrc: "/images/courses/oilpainting.jpg",
           imageCaption: "Oil Painting at Meraki Art Studio",
           variants: [
             { key: "8", label: "8 Sessions — AED 1260", sku: "COURSE-FAF-OIL-8", unitAmount: 1260 },

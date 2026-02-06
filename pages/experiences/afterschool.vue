@@ -62,7 +62,7 @@
                     <!-- Left: all descriptive copy -->
                     <div>
                         <h2 ref="campsTitle" class="text-3xl md:text-4xl font-bold mb-3">🌟 Holiday Art Camps</h2>
-                        <p ref="campsSub" class="text-lg text-gray-700 mb-4">When School’s Out, Art Comes Alive</p>
+                        <p ref="campsSub" class="text-lg text-gray-900 mb-4">When School’s Out, Art Comes Alive</p>
                         <p ref="campsBody" class="text-gray-600 mb-6">
                             Our Holiday Camps offer a colorful escape where kids can explore, imagine, and create
                             freely.
@@ -74,7 +74,7 @@
 
                         <div ref="campsList" class="space-y-4 text-gray-700 mb-6">
                             <div>
-                                <h3 class="text-sm font-semibold tracking-wide text-gray-500 mb-1 uppercase">
+                                <h3 class="text-sm font-semibold tracking-wide text-gray-900 mb-1 uppercase">
                                     Camp details
                                 </h3>
                                 <ul class="space-y-1">
@@ -83,7 +83,7 @@
                             </div>
 
                             <div>
-                                <h3 class="text-sm font-semibold tracking-wide text-gray-500 mb-1 uppercase">
+                                <h3 class="text-sm font-semibold tracking-wide text-gray-900 mb-1 uppercase">
                                     Themes
                                 </h3>
                                 <ul class="space-y-1">
@@ -92,7 +92,7 @@
                             </div>
 
                             <div>
-                                <h3 class="text-sm font-semibold tracking-wide text-gray-500 mb-1 uppercase">
+                                <h3 class="text-sm font-semibold tracking-wide text-gray-900 mb-1 uppercase">
                                     Prices
                                 </h3>
                                 <ul class="space-y-1">
@@ -110,52 +110,12 @@
                     <!-- Right: static Holiday Art Camps cover image -->
                     <div class="order-2 rounded-3xl border border-gray-200 bg-white overflow-hidden">
                         <div class="relative min-h-[280px] sm:min-h-[360px] lg:min-h-[520px] overflow-hidden">
-                            <img src="/images/afterschool/camps/holiday-art-camps.png"
+                            <img src="/images/afterschool/camps/holiday-art-camps.jpg"
                                 alt="Holiday Art Camps at Meraki Art Studio" class="w-full h-full object-cover" />
                         </div>
                     </div>
                 </div>
-                <!-- Full-width slider: camp themes + rotating images -->
-                <div ref="gfxCamps" class="rounded-3xl border border-gray-200 bg-white overflow-hidden">
-                    <div class="grid md:grid-cols-2 h-full">
-                        <!-- Left: taller image block -->
-                        <div class="relative min-h-[280px] sm:min-h-[360px] lg:min-h-[520px] overflow-hidden">
-                            <transition name="fade" mode="out-in">
-                                <img :key="activeCampIndex" :src="campsGallery[activeCampIndex].img"
-                                    :alt="campsGallery[activeCampIndex].title" class="w-full h-full object-cover" />
-                            </transition>
-
-                            <div
-                                class="absolute inset-x-4 bottom-4 rounded-xl bg-black/60 px-4 py-2 backdrop-blur-[2px]">
-                                <p class="text-base sm:text-lg font-semibold text-white">
-                                    {{ campsGallery[activeCampIndex].title }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Right: camp themes list, synced with image -->
-                        <div class="bg-[#F7F0E6] px-6 sm:px-8 py-6 sm:py-8 flex flex-col justify-center">
-                            <p class="text-xs font-semibold tracking-wide text-gray-500 mb-3 uppercase">
-                                Camp themes
-                            </p>
-                            <p class="text-sm text-gray-600 mb-4">
-                                Each week has its own story. Hover or tap to explore the themes.
-                            </p>
-
-                            <div class="space-y-2">
-                                <button v-for="(item, idx) in campsGallery" :key="item.key" type="button"
-                                    class="w-full text-left rounded-xl border px-3 py-2 text-sm sm:text-base transition"
-                                    :class="idx === activeCampIndex
-                                        ? 'bg-black text-white border-black'
-                                        : 'bg-white text-gray-800 border-gray-300 hover:border-black/70'
-                                        " @mouseenter="setActiveCamp(idx)" @focus="setActiveCamp(idx)"
-                                    @click="setActiveCamp(idx)">
-                                    {{ item.title }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
                 <div class="mt-6">
                     <button ref="campsCta" type="button"
                         class="inline-flex items-center rounded-2xl px-5 py-3 text-base font-semibold border border-black text-black hover:bg-black hover:text-white transition"
@@ -186,19 +146,20 @@
                         <form class="p-5 md:p-6 space-y-6 overflow-y-auto" @submit.prevent="submit">
                             <input type="hidden" v-model="form.program" />
 
-                            <!-- Holiday Camp Package (only for Holiday Art Camps) -->
-                            <div v-if="form.program === 'Holiday Art Camps'" class="border-b border-gray-200 pb-6">
-                                <h4 class="text-lg font-semibold mb-3">🏕️ Holiday Camp Package</h4>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Select Package <span
-                                        class="text-red-600">*</span></label>
-                                <select v-model="form.campPackageKey" required
+                            <!-- Package selector (Holiday Camps + Art Classes) -->
+                            <div v-if="requiresPackage" class="border-b border-gray-200 pb-6">
+                                <h4 class="text-lg font-semibold mb-3">{{ packageTitle }}</h4>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                  Select Package <span class="text-red-600">*</span>
+                                </label>
+                                <select v-model="form.packageKey" required
                                     class="w-full rounded-xl border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black/60 focus:border-black/60">
                                     <option disabled value="">Select a package</option>
-                                    <option v-for="pkg in holidayCampPackages" :key="pkg.key" :value="pkg.key">
+                                    <option v-for="pkg in activePackages" :key="pkg.key" :value="pkg.key">
                                         {{ pkg.label }}
                                     </option>
                                 </select>
-                                <p v-if="campPackageError" class="mt-2 text-sm text-red-600">{{ campPackageError }}</p>
+                                <p v-if="packageError" class="mt-2 text-sm text-red-600">{{ packageError }}</p>
                             </div>
 
                             <div class="grid md:grid-cols-2 gap-6">
@@ -384,46 +345,32 @@ const classes = {
 }
 
 const camps = {
-    details: [
-        'Monday to Friday',
-        '10:30 AM to 2:00 PM',
-        'Ages 5–10 years',
-        'Includes all art materials, snacks, and a certificate',
-        'Choose daily, weekly, or all 3 weeks',
-    ],
-    themes: [
-        'Week 1 (Dec 8–12): Dream, Design & Discover',
-        'Week 2 (Dec 15–19): Holidays Around the World',
-        'Week 3 (Dec 22–26): Creative Countdown to 2026',
-    ],
-    prices: [
-        '1 Day – AED 295 + VAT',
-        '1 Week – AED 1,350 + VAT',
-        '2 Weeks – AED 2,600 + VAT',
-        '3 Weeks – AED 3,800 + VAT',
-    ],
+  details: [
+    'Monday to Friday',
+    '10:30 AM to 1:30 PM',
+    'Ages 5–10 years',
+    'All art materials included',
+    'Optional add-on: Lunch (AED 150 per week)',
+    'Spots are limited',
+  ],
+  themes: [
+    'Week 1 (Mar 16–20): Artistic Garden',
+    'Week 2 (Mar 23–27): Fashion & DIY',
+  ],
+  prices: [
+    '1 Week Camp – AED 1,150 + VAT',
+    '1 Week Camp + Lunch – AED 1,300 + VAT',
+    '2 Weeks Camp – AED 2,300 + VAT',
+    '2 Weeks Camp + Lunch – AED 2,450 + VAT',
+    'Day Pass – AED 250 + VAT',
+  ],
 }
 
 const campsGallery = [
     {
         key: 'holiday-main',
         title: 'Holiday Art Camps',
-        img: '/images/afterschool/camps/holiday-art-camps.png', // update to your actual file name
-    },
-    {
-        key: 'week-1',
-        title: 'Dream, Design & Discover',
-        img: '/images/afterschool/camps/week1.png', // update to your actual file name
-    },
-    {
-        key: 'week-2',
-        title: 'Holidays Around the World',
-        img: '/images/afterschool/camps/week2.png', // update to your actual file name
-    },
-    {
-        key: 'week-3',
-        title: 'Creative Countdown to 2026',
-        img: '/images/afterschool/camps/week3.png', // update to your actual file name
+        img: '/images/afterschool/camps/holiday-art-camps.jpg', // update to your actual file name
     },
 ]
 
@@ -440,47 +387,112 @@ function setActiveCamp(i) {
 ------------------------- */
 const formOpen = ref(false)
 // Holiday camp packages (scalable: edit here whenever camps/prices change)
+// Holiday camp packages (scalable: edit here whenever camps/prices change)
 const holidayCampPackages = [
-    {
-        title: '1 Day Art Camp',
-        key: '1-day',
-        duration: '1 Day',
-        price: 295,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-    {
-        title: '1 Week Art Camp',
-        key: '1-week',
-        duration: '1 Week',
-        price: 1350,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-    {
-        title: '2 Weeks Art Camp',
-        key: '2-weeks',
-        duration: '2 Weeks',
-        price: 2600,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-    {
-        title: '3 Weeks Art Camp',
-        key: '3-weeks',
-        duration: '3 Weeks',
-        price: 3800,
-        currency: 'AED',
-        vatIncluded: false,
-    },
+  {
+    title: 'Day Pass',
+    key: 'day-pass',
+    duration: 'Day Pass',
+    price: 250,
+    currency: 'AED',
+    vatIncluded: false,
+  },
+  {
+    title: '1 Week Camp',
+    key: '1-week',
+    duration: '1 Week Camp',
+    price: 1150,
+    currency: 'AED',
+    vatIncluded: false,
+  },
+  {
+    title: '1 Week Camp + Lunch',
+    key: '1-week-lunch',
+    duration: '1 Week Camp + Lunch',
+    price: 1300,
+    currency: 'AED',
+    vatIncluded: false,
+  },
+  {
+    title: '2 Weeks Camp',
+    key: '2-weeks',
+    duration: '2 Weeks Camp',
+    price: 2300,
+    currency: 'AED',
+    vatIncluded: false,
+  },
+  {
+    title: '2 Weeks Camp + Lunch',
+    key: '2-weeks-lunch',
+    duration: '2 Weeks Camp + Lunch',
+    price: 2450,
+    currency: 'AED',
+    vatIncluded: false,
+  },
 ].map((p) => ({
-    ...p,
-    label: `${p.duration} – ${p.currency} ${p.price.toLocaleString()} + VAT`,
+  ...p,
+  label: `${p.duration} – ${p.currency} ${p.price.toLocaleString()} + VAT`,
 }))
+
+// Art Classes packages (scalable: edit here whenever pricing changes)
+const artClassPackages = [
+  {
+    title: '1 Class Pack',
+    key: '1-class',
+    duration: '1 Class',
+    price: 175,
+    currency: 'AED',
+    vatIncluded: true,
+  },
+  {
+    title: '4 Classes Pack',
+    key: '4-classes',
+    duration: '4 Classes',
+    price: 650,
+    currency: 'AED',
+    vatIncluded: true,
+  },
+  {
+    title: '8 Classes Pack',
+    key: '8-classes',
+    duration: '8 Classes',
+    price: 1250,
+    currency: 'AED',
+    vatIncluded: true,
+  },
+  {
+    title: '12 Classes Pack',
+    key: '12-classes',
+    duration: '12 Classes',
+    price: 1800,
+    currency: 'AED',
+    vatIncluded: true,
+  },
+].map((p) => ({
+  ...p,
+  label: `${p.duration}: ${p.currency} ${p.price.toLocaleString()}`,
+}))
+
+const isHolidayCampProgram = computed(() => String(form.value.program || '').trim() === 'Holiday Art Camps')
+const isArtClassesProgram = computed(() => String(form.value.program || '').trim() === 'Art Classes at Meraki')
+
+const requiresPackage = computed(() => isHolidayCampProgram.value || isArtClassesProgram.value)
+
+const packageTitle = computed(() => {
+  if (isHolidayCampProgram.value) return '🏕️ Holiday Camp Package'
+  if (isArtClassesProgram.value) return '🏕️ 🖌️ Art Classes Package'
+  return '🏕️ Package'
+})
+
+const activePackages = computed(() => {
+  if (isHolidayCampProgram.value) return holidayCampPackages
+  if (isArtClassesProgram.value) return artClassPackages
+  return []
+})
 
 const form = ref({
     program: '',
-    campPackageKey: '',
+    packageKey: '',
     childName: '',
     childAge: '',
     parentName: '',
@@ -493,7 +505,7 @@ const form = ref({
 const submitted = ref(false) // kept for backward compatibility, but no longer used in UI
 const addedToCart = ref(false)
 const isAdding = ref(false)
-const campPackageError = ref('')
+const packageError = ref('')
 const phoneError = ref('')
 
 // Phone: vue-tel-input used ONLY for country picker (flag + dial code)
@@ -537,11 +549,11 @@ function openForm(program) {
     // reset state on open
     submitted.value = false
     addedToCart.value = false
-    campPackageError.value = ''
+    packageError.value = ''
     phoneError.value = ''
 
     form.value.program = program
-    form.value.campPackageKey = ''
+    form.value.packageKey = ''
 
     // Reset phone inputs (but keep default country)
     phoneNational.value = ''
@@ -564,19 +576,27 @@ async function submit() {
     // Prevent rapid clicks while adding
     if (isAdding.value) return
 
-    campPackageError.value = ''
+    packageError.value = ''
     phoneError.value = ''
 
-    // If this is Holiday Art Camps, package selection is required
-    if (form.value.program === 'Holiday Art Camps' && !form.value.campPackageKey) {
-        campPackageError.value = 'Please select a holiday camp package.'
-        return
+    // If this is a program that requires a package, selection is required
+    if (requiresPackage.value && !form.value.packageKey) {
+      packageError.value = 'Please select a package.'
+      return
     }
 
-    const isHolidayCamp = form.value.program === 'Holiday Art Camps'
-    const pkg = isHolidayCamp
-        ? holidayCampPackages.find(p => p.key === form.value.campPackageKey)
-        : null
+    const isHolidayCamp = isHolidayCampProgram.value
+    const isArtClasses = isArtClassesProgram.value
+
+    const pkgList = isHolidayCamp ? holidayCampPackages : (isArtClasses ? artClassPackages : [])
+    const pkg = (requiresPackage.value && form.value.packageKey)
+      ? pkgList.find(p => p.key === form.value.packageKey)
+      : null
+
+    if (requiresPackage.value && !pkg) {
+      packageError.value = 'Please select a valid package.'
+      return
+    }
 
     // Sync phone parts and validate phone digits
     syncPhoneParts()
@@ -592,7 +612,7 @@ async function submit() {
     // ---- Fire beacon submission (Google Sheet)
     // Sheet columns:
     // Package | Child’s Full Name | Child’s Age | Parent/Guardian Name | Parent Email | Country Code | Phone | Health & Safety | Notes | Source | Timestamp
-    const packageLabel = (isHolidayCamp && pkg) ? String(pkg.label || '').trim() : String(form.value.program || '').trim()
+    const packageLabel = (pkg && pkg.label) ? String(pkg.label || '').trim() : String(form.value.program || '').trim()
 
     const healthSafety = (String(form.value.hasConditions || 'no') === 'yes')
         ? `Yes: ${String(form.value.conditionNotes || '').trim()}`
@@ -648,46 +668,48 @@ async function submit() {
         childName: form.value.childName,
         childAge: form.value.childAge,
         program: form.value.program,
-        campPackageKey: form.value.campPackageKey || '',
-        packageLabel: (isHolidayCamp && pkg) ? pkg.label : '',
+        packageKey: form.value.packageKey || '',
+        packageLabel: (pkg && pkg.label) ? pkg.label : '',
     })
 
     // Use package title as the purchasable line title (so it survives everywhere like price)
-    const lineTitle = isHolidayCamp && pkg
-        ? `${form.value.program} • ${pkg.title}`
-        : form.value.program
+    const lineTitle = pkg
+      ? `${form.value.program} • ${pkg.title}`
+      : form.value.program
 
     const lineItem = {
         // Try to match your existing cart schema as closely as possible
         type: 'kids-program',
-        sku: isHolidayCamp && pkg ? `kids-holiday-camp-${pkg.key}` : `kids-program-${String(form.value.program || '').toLowerCase().replace(/\s+/g, '-')}`,
+        sku: pkg
+          ? `kids-${String(form.value.program || '').toLowerCase().replace(/\s+/g, '-')}-${pkg.key}`
+          : `kids-program-${String(form.value.program || '').toLowerCase().replace(/\s+/g, '-')}`,
         title: lineTitle,
         image: '/images/afterschool/afterschool_hero.webp',
         qty: 1,
 
-        // Price only makes sense for Holiday Camps (these are paid packages)
-        priceMajor: isHolidayCamp && pkg ? Number(pkg.price || 0) : 0,
-        currency: isHolidayCamp && pkg ? pkg.currency : 'AED',
+        // Price should come from pkg for both Holiday Camps and Art Classes
+        priceMajor: pkg ? Number(pkg.price || 0) : 0,
+        currency: pkg ? pkg.currency : 'AED',
 
-        // UAE VAT (if your store uses these fields)
+        // VAT rules: holiday camps show +VAT in label; art classes do not
         vatEnabled: isHolidayCamp,
-        vatIncluded: isHolidayCamp && pkg ? Boolean(pkg.vatIncluded) : false,
+        vatIncluded: isHolidayCamp ? Boolean(pkg?.vatIncluded) : false,
         vatRate: isHolidayCamp ? 5 : 0,
 
         // Keep your structured package data (incl. title)
         meta: {
             program: form.value.program,
             package: pkg
-                ? {
-                    title: pkg.title,
-                    key: pkg.key,
-                    duration: pkg.duration,
-                    price: pkg.price,
-                    currency: pkg.currency,
-                    vatIncluded: pkg.vatIncluded,
-                    label: pkg.label,
+              ? {
+                  title: pkg.title,
+                  key: pkg.key,
+                  duration: pkg.duration,
+                  price: pkg.price,
+                  currency: pkg.currency,
+                  vatIncluded: pkg.vatIncluded,
+                  label: pkg.label,
                 }
-                : null,
+              : null,
 
             // Useful metadata for follow-up
             childName: form.value.childName,
@@ -751,7 +773,7 @@ async function submit() {
     if (!added) {
         // If nothing worked, stop animation and don't flip UI state
         isAdding.value = false
-        campPackageError.value = 'Could not add to cart. Please try again.'
+        packageError.value = 'Could not add to cart. Please try again.'
         return
     }
 

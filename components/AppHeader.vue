@@ -456,7 +456,7 @@ watch(
                   :class="hoveredIndex === index ? 'text-white active' : 'text-gray-500'"
                   @mouseenter="setHovered(index)"
                   @focus="setHovered(index)"
-                  @touchstart.prevent="setHovered(index)"
+                  @touchstart.stop.prevent="navigate(item.to)"
                   @click.prevent="navigate(item.to)"
                 >
                   {{ item.label }}
