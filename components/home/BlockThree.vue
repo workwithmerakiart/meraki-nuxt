@@ -64,28 +64,28 @@ const products = ref([
     title: 'Events',
     tag: 'Upcoming',
     tagColor: 'bg-gray-900',
-    link: '/events'
+    link: '/experiences/events'
   },
   {
     image: '/images/block3_workshops.webp',
     title: 'Workshops',
     tag: 'Upcoming',
     tagColor: 'bg-gray-900',
-    link: '/workshops'
+    link: '/experiences/workshops'
   },
   {
     image: '/images/block3_activities.webp',
     title: "Activities",
     tag: 'Recommended',
     tagColor: 'bg-gray-900',
-    link: '/activities'
+    link: '/experiences/activities'
   },
   {
     image: '/images/block3_courses.webp',
     title: 'Courses',
     tag: 'Must Buy',
     tagColor: 'bg-gray-900',
-    link: '/courses'
+    link: '/experiences/courses'
   },
   {
     image: '/images/block3_afterschool.webp',
@@ -99,14 +99,14 @@ const products = ref([
     title: 'Shop',
     tag: 'Offer Expiring Soon',
     tagColor: 'bg-gray-900',
-    link: '/shop'
+    link: '/shop/products'
   },
   {
     image: '/images/blogs/blog2/06.webp',
     title: 'Blogs',
     tag: 'Trending',
     tagColor: 'bg-gray-900',
-    link: '/blogs'
+    link: '/community/blogs'
   },
 ])
 
