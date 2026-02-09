@@ -13,6 +13,19 @@ export default defineNuxtConfig({
   },
   modules: ['@nuxtjs/google-fonts', '@oku-ui/motion/nuxt', '@pinia/nuxt'],
 
+  app: {
+    head: {
+      title: 'Meraki Art Studio | Creative Workshops & Experiences in Dubai',
+      meta: [
+        { name: 'description', content: 'Meraki Art Studio offers soulful art workshops, kids activities, creative camps and mindful experiences in Dubai.' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      ],
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/images/meraki-logo-black.png' },
+      ],
+    },
+  },
+
   // Runtime configuration (server vs client)
   // - Server-only secrets live at top-level
   // - Client-exposed values live under `public`
