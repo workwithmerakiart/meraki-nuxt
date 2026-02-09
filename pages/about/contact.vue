@@ -291,7 +291,7 @@ const showToast = (message, type = 'success') => {
 function getBeaconUrl() {
   // Prefer runtimeConfig, but allow env var fallback
   const cfg = useRuntimeConfig()
-  return String(cfg.public?.contactBeaconUrl || process.env.NUXT_PUBLIC_CONTACT_BEACON_URL || '').trim()
+  return String(cfg.public?.contactBeaconUrl || process.env.NUXT_PUBLIC_NEWSLETTER_BEACON_URL || '').trim()
 }
 
 const submit = async () => {

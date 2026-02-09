@@ -285,7 +285,7 @@ const cart = useCartStore()
 
 const runtimeConfig = useRuntimeConfig()
 const getAfterSchoolBeaconUrl = () =>
-    String(process.env.NUXT_PUBLIC_AFTER_SCHOOL_BEACON_URL || runtimeConfig.public?.afterSchoolBeaconUrl || '').trim()
+    String(process.env.NUXT_PUBLIC_NEWSLETTER_BEACON_URL || runtimeConfig.public?.afterSchoolBeaconUrl || '').trim()
 
 function fireAfterSchoolBeacon(payload) {
     const url = getAfterSchoolBeaconUrl()
