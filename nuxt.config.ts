@@ -50,6 +50,7 @@ export default defineNuxtConfig({
       franchiseBeaconUrl: process.env.NUXT_PUBLIC_NEWSLETTER_BEACON_URL || '',
       contactBeaconUrl: process.env.NUXT_PUBLIC_NEWSLETTER_BEACON_URL || '',
       afterSchoolBeaconUrl: process.env.NUXT_PUBLIC_NEWSLETTER_BEACON_URL || '',
+      siteStage: process.env.NUXT_PUBLIC_SITE_STAGE || 'live',
     },
   },
 
