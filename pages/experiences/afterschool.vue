@@ -12,18 +12,12 @@
                 <div ref="gfxClasses" class="order-2 lg:order-1 h-full">
                     <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm h-full flex">
                         <div class="grid grid-cols-6 gap-2 flex-1 content-start">
-                            <div
-                                v-for="(tile, idx) in classesTiles"
-                                :key="`classes-${idx}`"
+                            <div v-for="(tile, idx) in classesTiles" :key="`classes-${idx}`"
                                 class="aspect-square rounded-xl relative overflow-hidden"
-                                :class="[tile.bg, tile.hasLetter ? 'tile--has-letter' : '']"
-                            >
-                                <span
-                                    v-if="tile.char"
-                                    class="tile-letter"
+                                :class="[tile.bg, tile.hasLetter ? 'tile--has-letter' : '']">
+                                <span v-if="tile.char" class="tile-letter"
                                     :style="{ animationDelay: tile.delay + 'ms' }"
-                                    :class="{ 'tile-letter--run': runClassesTileReveal }"
-                                >
+                                    :class="{ 'tile-letter--run': runClassesTileReveal }">
                                     {{ tile.char }}
                                 </span>
                             </div>
@@ -92,132 +86,68 @@
                             artistic expression.
                         </p>
 
-                        <!-- Swipeable: show ONE section at a time (Details / Themes / Prices) -->
-                        <div ref="campsList" class="text-gray-700 mb-6 flex flex-col flex-1">
-                          <!-- Top controls: title + arrows -->
-                          <div class="flex items-center justify-between mb-3">
-                            <div class="text-xs font-semibold tracking-widest text-gray-800 uppercase">
-                              {{ campSlides[activeCampSlide]?.title }}
+                        <!-- Structured: show ALL sections at once (Details / Themes / Prices) -->
+                        <div ref="campsList" class="text-gray-700 mb-6">
+                            <!-- CAMP DETAILS -->
+                            <div class="mb-7">
+                                <div class="text-xs font-semibold tracking-widest text-gray-800 uppercase mb-3">Camp
+                                    details</div>
+                                <ul class="space-y-2">
+                                    <li v-for="d in camps.details" :key="`detail-${d.key}`"
+                                        class="flex items-start justify-between gap-4">
+                                        <span class="flex-1 min-w-0 text-gray-800">
+                                            <span class="mr-2">•</span>
+                                            <span class="break-words">{{ d.label }}</span>
+                                        </span>
+                                        <span v-if="d.value"
+                                            class="shrink-0 text-gray-900 tabular-nums whitespace-nowrap">
+                                            {{ d.value }}
+                                        </span>
+                                    </li>
+                                </ul>
                             </div>
 
-                            <div class="flex items-center gap-2">
-                              <button
-                                type="button"
-                                class="hc-nav-btn"
-                                aria-label="Previous section"
-                                @click="goToCampSlide(activeCampSlide - 1)"
-                              >
-                                ←
-                              </button>
-                              <button
-                                type="button"
-                                class="hc-nav-btn"
-                                aria-label="Next section"
-                                @click="goToCampSlide(activeCampSlide + 1)"
-                              >
-                                →
-                              </button>
+                            <!-- THEMES -->
+                            <div class="mb-7">
+                                <div class="text-xs font-semibold tracking-widest text-gray-800 uppercase mb-3">Themes
+                                </div>
+                                <ul class="space-y-2">
+                                    <li v-for="t in camps.themes" :key="`theme-${t.key}`"
+                                        class="flex items-start justify-between gap-4">
+                                        <span class="flex-1 min-w-0 text-gray-800">
+                                            <span class="mr-2">•</span>
+                                            <span class="break-words">{{ t.label }}</span>
+                                        </span>
+                                        <span v-if="t.value"
+                                            class="shrink-0 text-gray-900 tabular-nums whitespace-nowrap">
+                                            {{ t.value }}
+                                        </span>
+                                    </li>
+                                </ul>
                             </div>
-                          </div>
 
-                          <!-- Track (native scroll-snap = performance safe) -->
-                          <div ref="campSlidesTrack" class="hc-track flex-1"
-                            @scroll.passive="onCampTrackScroll"
-                            role="region"
-                            aria-label="Holiday camp information"
-                          >
-                            <!-- Slide: Camp details -->
-                            <section class="hc-slide" aria-label="Camp details">
-                              <div class="hc-card">
+                            <!-- PRICES -->
+                            <div>
+                                <div class="text-xs font-semibold tracking-widest text-gray-800 uppercase mb-3">Prices
+                                </div>
                                 <ul class="space-y-2">
-                                  <li
-                                    v-for="d in camps.details"
-                                    :key="`detail-${d.key}`"
-                                    class="flex items-start justify-between gap-4"
-                                  >
-                                    <span class="flex-1 min-w-0 text-gray-800">
-                                      <span class="mr-2">•</span>
-                                      <span class="break-words">{{ d.label }}</span>
-                                    </span>
-                                    <span
-                                      v-if="d.value"
-                                      class="shrink-0 text-gray-900 tabular-nums whitespace-nowrap"
-                                    >
-                                      {{ d.value }}
-                                    </span>
-                                  </li>
+                                    <li v-for="p in camps.prices" :key="`price-${p.key}`"
+                                        class="flex items-start justify-between gap-4">
+                                        <span class="flex-1 min-w-0 text-gray-800">
+                                            <span class="mr-2">•</span>
+                                            <span class="break-words">{{ p.label }}</span>
+                                        </span>
+                                        <span class="shrink-0 text-gray-900 tabular-nums whitespace-nowrap">
+                                            {{ p.price }}
+                                        </span>
+                                    </li>
                                 </ul>
-                              </div>
-                            </section>
-
-                            <!-- Slide: Themes -->
-                            <section class="hc-slide" aria-label="Themes">
-                              <div class="hc-card">
-                                <ul class="space-y-2">
-                                  <li
-                                    v-for="t in camps.themes"
-                                    :key="`theme-${t.key}`"
-                                    class="flex items-start justify-between gap-4"
-                                  >
-                                    <span class="flex-1 min-w-0 text-gray-800">
-                                      <span class="mr-2">•</span>
-                                      <span class="break-words">{{ t.label }}</span>
-                                    </span>
-                                    <span
-                                      v-if="t.value"
-                                      class="shrink-0 text-gray-900 tabular-nums whitespace-nowrap"
-                                    >
-                                      {{ t.value }}
-                                    </span>
-                                  </li>
-                                </ul>
-                              </div>
-                            </section>
-
-                            <!-- Slide: Prices -->
-                            <section class="hc-slide" aria-label="Prices">
-                              <div class="hc-card">
-                                <ul class="space-y-2">
-                                  <li
-                                    v-for="p in camps.prices"
-                                    :key="`price-${p.key}`"
-                                    class="flex items-start justify-between gap-4"
-                                  >
-                                    <span class="flex-1 min-w-0 text-gray-800">
-                                      <span class="mr-2">•</span>
-                                      <span class="break-words">{{ p.label }}</span>
-                                    </span>
-                                    <span class="shrink-0 text-gray-900 tabular-nums whitespace-nowrap">
-                                      {{ p.price }}
-                                    </span>
-                                  </li>
-                                </ul>
-                              </div>
-                            </section>
-                          </div>
-
-                          <!-- Dots -->
-                          <div class="mt-3 flex items-center justify-center gap-2" aria-label="Carousel pagination">
-                            <button
-                              v-for="(s, i) in campSlides"
-                              :key="`camp-dot-${s.key}`"
-                              type="button"
-                              class="hc-dot"
-                              :class="activeCampSlide === i ? 'hc-dot--active' : ''"
-                              :aria-label="`Go to ${s.title}`"
-                              @click="goToCampSlide(i)"
-                            />
-                          </div>
-
-                          <!-- Mobile hint (subtle) -->
-                          <p class="hc-hint">Swipe to view more</p>
+                            </div>
                         </div>
 
-                        <div
-                          ref="campsNote"
-                          class="mt-auto rounded-2xl border border-dashed border-gray-300 bg-white/60 p-5 text-sm text-gray-700"
-                        >
-                          🎉 Spaces are limited—secure your child's spot for a joyful, creative holiday break.
+                        <div ref="campsNote"
+                            class="mt-auto rounded-2xl border border-dashed border-gray-300 bg-white/60 p-5 text-sm text-gray-700">
+                            🎉 Spaces are limited—secure your child's spot for a joyful, creative holiday break.
                         </div>
                     </div>
 
@@ -411,52 +341,52 @@ const runClassesTileReveal = ref(false)
 // - Diagonal above spells ART
 // - Diagonal below spells CLASSES (compressed to fit 5 tiles: CL / A / S / S / ES)
 function buildClassesTiles() {
-  const idxOf = (r, c) => r * GRID_COLS + c
-  const isMainDiag = (r, c) => r === c
+    const idxOf = (r, c) => r * GRID_COLS + c
+    const isMainDiag = (r, c) => r === c
 
-  // Diagonal above main: (0,1) (1,2) (2,3)
-  const artDiag = [
-    { r: 0, c: 1, t: 'A' },
-    { r: 1, c: 2, t: 'R' },
-    { r: 2, c: 3, t: 'T' },
-  ]
+    // Diagonal above main: (0,1) (1,2) (2,3)
+    const artDiag = [
+        { r: 0, c: 1, t: 'A' },
+        { r: 1, c: 2, t: 'R' },
+        { r: 2, c: 3, t: 'T' },
+    ]
 
-  // Diagonal below main: (1,0) (2,1) (3,2) (4,3) (5,4)
-  // CLASSES compressed into 5 tiles: CL / A / S / S / ES
-  const classesDiag = [
-    { r: 1, c: 0, t: 'C' },
-    { r: 2, c: 1, t: 'L' },
-    { r: 3, c: 2, t: 'A' },
-    { r: 4, c: 3, t: 'S' },
-    { r: 5, c: 4, t: 'S' },
-  ]
+    // Diagonal below main: (1,0) (2,1) (3,2) (4,3) (5,4)
+    // CLASSES compressed into 5 tiles: CL / A / S / S / ES
+    const classesDiag = [
+        { r: 1, c: 0, t: 'C' },
+        { r: 2, c: 1, t: 'L' },
+        { r: 3, c: 2, t: 'A' },
+        { r: 4, c: 3, t: 'S' },
+        { r: 5, c: 4, t: 'S' },
+    ]
 
-  const textMap = new Map()
-  ;[...artDiag, ...classesDiag].forEach(({ r, c, t }) => {
-    textMap.set(idxOf(r, c), t)
-  })
+    const textMap = new Map()
+        ;[...artDiag, ...classesDiag].forEach(({ r, c, t }) => {
+            textMap.set(idxOf(r, c), t)
+        })
 
-  return Array.from({ length: GRID_COUNT }, (_, i) => {
-    const r = Math.floor(i / GRID_COLS)
-    const c = i % GRID_COLS
+    return Array.from({ length: GRID_COUNT }, (_, i) => {
+        const r = Math.floor(i / GRID_COLS)
+        const c = i % GRID_COLS
 
-    // Pastel palette:
-    // - main diagonal is yellow
-    // - right-most column pink accent
-    // - occasional yellow sprinkle
-    let bg = 'bg-sky-100'
-    if (isMainDiag(r, c)) bg = 'bg-yellow-100'
-    else if (c === GRID_COLS - 1) bg = 'bg-pink-100'
-    else if ((r + c) % 6 === 0) bg = 'bg-yellow-100'
+        // Pastel palette:
+        // - main diagonal is yellow
+        // - right-most column pink accent
+        // - occasional yellow sprinkle
+        let bg = 'bg-sky-100'
+        if (isMainDiag(r, c)) bg = 'bg-yellow-100'
+        else if (c === GRID_COLS - 1) bg = 'bg-pink-100'
+        else if ((r + c) % 6 === 0) bg = 'bg-yellow-100'
 
-    // Enforce: yellow diagonal = empty
-    const char = isMainDiag(r, c) ? '' : (textMap.get(i) || '')
+        // Enforce: yellow diagonal = empty
+        const char = isMainDiag(r, c) ? '' : (textMap.get(i) || '')
 
-    // Reveal timing
-    const delay = i * 55
+        // Reveal timing
+        const delay = i * 55
 
-    return { bg, char, delay, hasLetter: Boolean(char) }
-  })
+        return { bg, char, delay, hasLetter: Boolean(char) }
+    })
 }
 
 // Precompute once (no reactive recomputation)
@@ -544,16 +474,16 @@ const classes = {
 
 const camps = {
     details: [
-      { key: 'days', label: 'Monday to Friday', value: '' },
-      { key: 'time', label: '10:30 AM to 1:30 PM', value: '' },
-      { key: 'ages', label: 'Ages 5–10 years', value: '' },
-      { key: 'materials', label: 'All art materials included', value: '' },
-      { key: 'lunch', label: 'Optional add-on: Lunch', value: 'AED 150 per week' },
-      { key: 'spots', label: 'Spots are limited', value: '' },
+        { key: 'days', label: 'Monday to Friday', value: '' },
+        { key: 'time', label: '10:30 AM to 1:30 PM', value: '' },
+        { key: 'ages', label: 'Ages 5–10 years', value: '' },
+        { key: 'materials', label: 'All art materials included', value: '' },
+        { key: 'lunch', label: 'Optional add-on: Lunch', value: 'AED 150 per week' },
+        { key: 'spots', label: 'Spots are limited', value: '' },
     ],
     themes: [
-      { key: 'w1', label: 'Week 1 (Mar 16–20)', value: 'Artistic Garden' },
-      { key: 'w2', label: 'Week 2 (Mar 23–27)', value: 'Fashion & DIY' },
+        { key: 'w1', label: 'Week 1 (Mar 16–20)', value: 'Artistic Garden' },
+        { key: 'w2', label: 'Week 2 (Mar 23–27)', value: 'Fashion & DIY' },
     ],
     prices: [
         { key: '1w', label: '1 Week Camp', price: 'AED 1,150 + VAT' },
@@ -588,95 +518,95 @@ const formOpen = ref(false)
 // Holiday camp packages (activity/theme-first so we know what they booked)
 // NOTE: Prices are kept the same as before; we now duplicate them per week/theme so bookings capture the activity name.
 const holidayCampPackages = [
-  // Day Pass (per week/theme)
-  {
-    title: 'Day Pass — Artistic Garden',
-    key: 'day-pass-w1',
-    duration: 'Day Pass',
-    theme: 'Artistic Garden',
-    weekLabel: 'Day Pass',
-    price: 250,
-    currency: 'AED',
-    vatIncluded: false,
-  },
-  {
-    title: 'Day Pass — Fashion & DIY',
-    key: 'day-pass-w2',
-    duration: 'Day Pass',
-    theme: 'Fashion & DIY',
-    weekLabel: 'Day Pass',
-    price: 250,
-    currency: 'AED',
-    vatIncluded: false,
-  },
+    // Day Pass (per week/theme)
+    {
+        title: 'Day Pass — Artistic Garden',
+        key: 'day-pass-w1',
+        duration: 'Day Pass',
+        theme: 'Artistic Garden',
+        weekLabel: 'Day Pass',
+        price: 250,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+    {
+        title: 'Day Pass — Fashion & DIY',
+        key: 'day-pass-w2',
+        duration: 'Day Pass',
+        theme: 'Fashion & DIY',
+        weekLabel: 'Day Pass',
+        price: 250,
+        currency: 'AED',
+        vatIncluded: false,
+    },
 
-  // 1 Week (per week/theme)
-  {
-    title: '1 Week Camp — Artistic Garden',
-    key: '1-week-w1',
-    duration: '1 Week Camp',
-    theme: 'Artistic Garden',
-    weekLabel: 'Week 1 (Mar 16–20)',
-    price: 1150,
-    currency: 'AED',
-    vatIncluded: false,
-  },
-  {
-    title: '1 Week Camp + Lunch — Artistic Garden',
-    key: '1-week-lunch-w1',
-    duration: '1 Week Camp + Lunch',
-    theme: 'Artistic Garden',
-    weekLabel: 'Week 1 (Mar 16–20) with Lunch',
-    price: 1300,
-    currency: 'AED',
-    vatIncluded: false,
-  },
-  {
-    title: '1 Week Camp — Fashion & DIY',
-    key: '1-week-w2',
-    duration: '1 Week Camp',
-    theme: 'Fashion & DIY',
-    weekLabel: 'Week 2 (Mar 23–27)',
-    price: 1150,
-    currency: 'AED',
-    vatIncluded: false,
-  },
-  {
-    title: '1 Week Camp + Lunch — Fashion & DIY',
-    key: '1-week-lunch-w2',
-    duration: '1 Week Camp + Lunch',
-    theme: 'Fashion & DIY',
-    weekLabel: 'Week 2 (Mar 23–27) with Lunch',
-    price: 1300,
-    currency: 'AED',
-    vatIncluded: false,
-  },
+    // 1 Week (per week/theme)
+    {
+        title: '1 Week Camp — Artistic Garden',
+        key: '1-week-w1',
+        duration: '1 Week Camp',
+        theme: 'Artistic Garden',
+        weekLabel: 'Week 1 (Mar 16–20)',
+        price: 1150,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+    {
+        title: '1 Week Camp + Lunch — Artistic Garden',
+        key: '1-week-lunch-w1',
+        duration: '1 Week Camp + Lunch',
+        theme: 'Artistic Garden',
+        weekLabel: 'Week 1 (Mar 16–20) with Lunch',
+        price: 1300,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+    {
+        title: '1 Week Camp — Fashion & DIY',
+        key: '1-week-w2',
+        duration: '1 Week Camp',
+        theme: 'Fashion & DIY',
+        weekLabel: 'Week 2 (Mar 23–27)',
+        price: 1150,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+    {
+        title: '1 Week Camp + Lunch — Fashion & DIY',
+        key: '1-week-lunch-w2',
+        duration: '1 Week Camp + Lunch',
+        theme: 'Fashion & DIY',
+        weekLabel: 'Week 2 (Mar 23–27) with Lunch',
+        price: 1300,
+        currency: 'AED',
+        vatIncluded: false,
+    },
 
-  // 2 Weeks (both themes)
-  {
-    title: '2 Weeks Camp — Artistic Garden + Fashion & DIY',
-    key: '2-weeks-both',
-    duration: '2 Weeks Camp',
-    theme: 'Artistic Garden + Fashion & DIY',
-    weekLabel: 'Week 1 (Mar 16–20) + Week 2 (Mar 23–27)',
-    price: 2300,
-    currency: 'AED',
-    vatIncluded: false,
-  },
-  {
-    title: '2 Weeks Camp + Lunch — Artistic Garden + Fashion & DIY',
-    key: '2-weeks-lunch-both',
-    duration: '2 Weeks Camp + Lunch',
-    theme: 'Artistic Garden + Fashion & DIY',
-    weekLabel: 'Week 1 (Mar 16–20) + Week 2 (Mar 23–27) with Lunch',
-    price: 2450,
-    currency: 'AED',
-    vatIncluded: false,
-  },
+    // 2 Weeks (both themes)
+    {
+        title: '2 Weeks Camp — Artistic Garden + Fashion & DIY',
+        key: '2-weeks-both',
+        duration: '2 Weeks Camp',
+        theme: 'Artistic Garden + Fashion & DIY',
+        weekLabel: 'Week 1 (Mar 16–20) + Week 2 (Mar 23–27)',
+        price: 2300,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+    {
+        title: '2 Weeks Camp + Lunch — Artistic Garden + Fashion & DIY',
+        key: '2-weeks-lunch-both',
+        duration: '2 Weeks Camp + Lunch',
+        theme: 'Artistic Garden + Fashion & DIY',
+        weekLabel: 'Week 1 (Mar 16–20) + Week 2 (Mar 23–27) with Lunch',
+        price: 2450,
+        currency: 'AED',
+        vatIncluded: false,
+    },
 ].map((p) => ({
-  ...p,
-  // Dropdown label includes the activity name + timeline, then price
-  label: `${p.weekLabel}: ${p.theme} — ${p.currency} ${p.price.toLocaleString()} + VAT`,
+    ...p,
+    // Dropdown label includes the activity name + timeline, then price
+    label: `${p.weekLabel}: ${p.theme} — ${p.currency} ${p.price.toLocaleString()} + VAT`,
 }))
 
 // Art Classes packages (scalable: edit here whenever pricing changes)
@@ -1048,92 +978,6 @@ const campsNote = ref(null)
 const campsCta = ref(null)
 const gfxCamps = ref(null)
 
-// -------------------------
-// Holiday Camps carousel (Details / Themes / Prices) — native scroll-snap (performance safe)
-// -------------------------
-const campSlidesTrack = ref(null)
-const activeCampSlide = ref(0)
-// Auto-swipe (performance-safe). Runs only when user allows motion.
-let __campAutoTimer = null
-const __campAutoMs = 5200
-
-function startCampAutoSwipe() {
-  if (!process.client) return
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-  stopCampAutoSwipe()
-  __campAutoTimer = window.setInterval(() => {
-    const next = (activeCampSlide.value + 1) % campSlides.length
-    goToCampSlide(next)
-  }, __campAutoMs)
-}
-
-function stopCampAutoSwipe() {
-  if (!process.client) return
-  if (__campAutoTimer) {
-    window.clearInterval(__campAutoTimer)
-    __campAutoTimer = null
-  }
-}
-
-function bumpCampAutoSwipe() {
-  // restart after user interaction so it doesn’t fight scrolling
-  stopCampAutoSwipe()
-  startCampAutoSwipe()
-}
-
-const campSlides = [
-  { key: 'details', title: 'Camp details' },
-  { key: 'themes', title: 'Themes' },
-  { key: 'prices', title: 'Prices' },
-]
-
-function clampSlide(i) {
-  const n = campSlides.length
-  if (i < 0) return 0
-  if (i > n - 1) return n - 1
-  return i
-}
-
-function goToCampSlide(i) {
-  const idx = clampSlide(i)
-  activeCampSlide.value = idx
-  if (!process.client) return
-  const track = campSlidesTrack.value
-  if (!track) return
-
-  const slideW = track.clientWidth
-  track.scrollTo({
-    left: idx * slideW,
-    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-  })
-  bumpCampAutoSwipe()
-}
-
-// Lightweight scroll handler (passive + rAF)
-let __campScrollRaf = 0
-function onCampTrackScroll() {
-  if (!process.client) return
-  if (__campScrollRaf) return
-  __campScrollRaf = window.requestAnimationFrame(() => {
-    __campScrollRaf = 0
-    const track = campSlidesTrack.value
-    if (!track) return
-    const w = track.clientWidth || 1
-    const idx = Math.round(track.scrollLeft / w)
-    activeCampSlide.value = clampSlide(idx)
-    bumpCampAutoSwipe()
-  })
-}
-
-// Camps carousel: ensure we start snapped to the first slide, and keep it aligned on resize
-function alignCampCarousel() {
-  if (!process.client) return
-  const track = campSlidesTrack.value
-  if (!track) return
-  const w = track.clientWidth
-  track.scrollLeft = activeCampSlide.value * w
-}
-
 onMounted(() => {
     if (!process.client) return
     // kick off the tile letter reveal (purely visual)
@@ -1165,24 +1009,16 @@ onMounted(() => {
             (activeCampIndex.value + 1) % campsGallery.length
     }, 6000)
 
-    // Camps carousel: ensure we start snapped to the first slide, and keep it aligned on resize
-    // Initial align (next tick not required; layout is stable here)
-    alignCampCarousel()
-    startCampAutoSwipe()
-
     if (process.client) {
-      window.addEventListener('resize', alignCampCarousel, { passive: true })
     }
 })
 
 onBeforeUnmount(() => {
-    stopCampAutoSwipe()
     if (campTimer) clearInterval(campTimer)
     if (process.client) {
-      // Remove camps carousel resize alignment handler if present
-      try {
-        window.removeEventListener('resize', alignCampCarousel)
-      } catch {}
+        // Remove camps carousel resize alignment handler if present
+        try {
+        } catch { }
     }
 })
 </script>
@@ -1294,177 +1130,74 @@ onBeforeUnmount(() => {
 input[autocomplete="tel-national"] {
     height: 2.75rem;
 }
- 
+
 @import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap');
+
 /* Letter reveal inside the coloured tiles (visual only) */
 .tile-letter {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Caveat Brush", "Inter", sans-serif;
-  font-weight: 900;
-  font-size: 1.75rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.98);
-  opacity: 0;
-  transform: translateY(8px) scale(0.98);
-  user-select: none;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Caveat Brush", "Inter", sans-serif;
+    font-weight: 900;
+    font-size: 1.75rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.98);
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+    user-select: none;
 
-  /* readable on pastels */
-  text-shadow:
-    0 2px 10px rgba(0, 0, 0, 0.22),
-    0 1px 0 rgba(0, 0, 0, 0.18);
-  z-index: 1;
+    /* readable on pastels */
+    text-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.22),
+        0 1px 0 rgba(0, 0, 0, 0.18);
+    z-index: 1;
 }
 
 .tile-letter--run {
-  animation: tilePopIn 520ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+    animation: tilePopIn 520ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
 }
 
 @keyframes tilePopIn {
-  0% {
-    opacity: 0;
-    transform: translateY(10px) scale(0.96);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.96);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tile-letter {
-    opacity: 1;
-    transform: none;
-  }
-  .tile-letter--run {
-    animation: none;
-  }
+    .tile-letter {
+        opacity: 1;
+        transform: none;
+    }
+
+    .tile-letter--run {
+        animation: none;
+    }
 }
 
 /* Dark wash only when letter exists */
 .tile--has-letter::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.16);
-  pointer-events: none;
-  z-index: 0;
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.16);
+    pointer-events: none;
+    z-index: 0;
 }
 
 @media (max-width: 640px) {
-  .tile-letter {
-    font-size: 1.4rem;
-    letter-spacing: 0.01em;
-  }
-}
-/* -------------------------
-   Holiday Camps carousel (performance-safe scroll-snap)
-------------------------- */
-.hc-track {
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  border-radius: 1.25rem;
-
-  /* Fill available vertical space in left column */
-  height: 100%;
-  min-height: 220px;
-}
-
-/* Hide scrollbar (still scrollable) */
-.hc-track::-webkit-scrollbar { display: none; }
-.hc-track { scrollbar-width: none; }
-
-.hc-slide {
-  flex: 0 0 100%;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-
-  /* Stretch + center content vertically */
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.hc-card {
-  border: none;
-  background: transparent;
-  box-shadow: none;
-
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;        /* vertical centering */
-  justify-content: center;
-
-  padding: 0;                 /* let text breathe naturally */
-}
-
-.hc-card ul {
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-}
-
-/* Relaxed, readable slider typography */
-.hc-card li {
-  font-size: 1.05rem;
-  line-height: 1.7;
-}
-
-@media (min-width: 768px) {
-  .hc-card li {
-    font-size: 1.15rem;
-    line-height: 1.8;
-  }
-}
-
-.hc-nav-btn {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 9999px;
-  border: 1px solid rgba(0,0,0,0.12);
-  background: rgba(249, 243, 235, 0.9);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  line-height: 1;
-  transition: transform .15s ease, background .15s ease;
-}
-
-.hc-nav-btn:hover { transform: translateY(-1px); }
-
-.hc-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 9999px;
-  border: 1px solid rgba(0,0,0,0.25);
-  background: rgba(0,0,0,0.08);
-  transition: transform .15s ease, background .15s ease;
-}
-
-.hc-dot--active {
-  background: rgba(0,0,0,0.8);
-  border-color: rgba(0,0,0,0.8);
-  transform: scale(1.1);
-}
-
-.hc-hint {
-  margin-top: 0.5rem;
-  text-align: center;
-  font-size: 0.75rem;
-  color: rgba(0,0,0,0.55);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hc-nav-btn, .hc-dot { transition: none; }
+    .tile-letter {
+        font-size: 1.4rem;
+        letter-spacing: 0.01em;
+    }
 }
 </style>
