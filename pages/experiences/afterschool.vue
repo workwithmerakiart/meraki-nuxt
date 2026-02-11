@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="order-1 lg:order-2">
-                    <h2 ref="classesTitle" class="text-3xl md:text-4xl font-bold tracking-tight mb-2">🖌️ Art Classes at
+                    <h2 ref="classesTitle" class="block-two-headings text-3xl md:text-4xl font-bold tracking-tight mb-2 text-[#447C9D]">🖌️ Art Classes at
                         Meraki</h2>
                     <p ref="classesSub" class="text-lg text-gray-700 mb-5">Build Real Art Skills Through Fun &amp;
                         Exploration</p>
@@ -74,7 +74,7 @@
                 <div class="grid lg:grid-cols-2 gap-10 items-stretch">
                     <!-- Left: all descriptive copy -->
                     <div class="flex flex-col h-full">
-                        <h2 ref="campsTitle" class="text-3xl md:text-4xl font-bold tracking-tight mb-2">🌟 Holiday Art
+                        <h2 ref="campsTitle" class="block-two-headings text-3xl md:text-4xl font-bold tracking-tight mb-2 text-[#447C9D]">🌟 Holiday Art
                             Camps</h2>
                         <p ref="campsSub" class="text-lg text-gray-900 mb-5">When School’s Out, Art Comes Alive</p>
                         <p ref="campsBody" class="text-gray-600 mb-6">
@@ -90,7 +90,7 @@
                         <div ref="campsList" class="text-gray-700 mb-6">
                             <!-- CAMP DETAILS -->
                             <div class="mb-7">
-                                <div class="text-xs font-semibold tracking-widest text-gray-800 uppercase mb-3">Camp
+                                <div class="text-lg md:text-xl font-semibold tracking-wide text-[#447C9D] mb-4">Camp
                                     details</div>
                                 <ul class="space-y-2">
                                     <li v-for="d in camps.details" :key="`detail-${d.key}`"
@@ -109,7 +109,7 @@
 
                             <!-- THEMES -->
                             <div class="mb-7">
-                                <div class="text-xs font-semibold tracking-widest text-gray-800 uppercase mb-3">Themes
+                                <div class="text-lg md:text-xl font-semibold tracking-wide text-[#447C9D] mb-4">Themes
                                 </div>
                                 <ul class="space-y-2">
                                     <li v-for="t in camps.themes" :key="`theme-${t.key}`"
@@ -128,7 +128,7 @@
 
                             <!-- PRICES -->
                             <div>
-                                <div class="text-xs font-semibold tracking-widest text-gray-800 uppercase mb-3">Prices
+                                <div class="text-lg md:text-xl font-semibold tracking-wide text-[#447C9D] mb-4">Prices
                                 </div>
                                 <ul class="space-y-2">
                                     <li v-for="p in camps.prices" :key="`price-${p.key}`"
@@ -1132,6 +1132,10 @@ input[autocomplete="tel-national"] {
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap');
+
+.block-two-headings {
+    font-family: "Caveat Brush", serif;
+}
 
 /* Letter reveal inside the coloured tiles (visual only) */
 .tile-letter {
