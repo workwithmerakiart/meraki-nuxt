@@ -1024,6 +1024,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap');
 /* Make the header background transparent on this route ONLY when header is transparent */
 :global(body.page-afterschool header.bg-transparent),
 :global(body.page-afterschool #site-header.bg-transparent),
@@ -1130,8 +1131,6 @@ onBeforeUnmount(() => {
 input[autocomplete="tel-national"] {
     height: 2.75rem;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap');
 
 .block-two-headings {
     font-family: "Caveat Brush", serif;
