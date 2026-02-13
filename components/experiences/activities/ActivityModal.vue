@@ -64,14 +64,25 @@
                                     <div class="mt-3 flex items-center gap-3">
                                         <span class="text-sm font-medium">Quantity</span>
                                         <div class="inline-flex items-center border rounded-lg overflow-hidden">
-                                            <button type="button" class="px-3 py-1 text-lg"
-                                                @click="decQty(subtype.id)">−</button>
-                                            <input :value="getQty(subtype.id)" readonly
-                                                class="w-12 text-center py-1 border-l border-r" />
+                                            <button
+                                              type="button"
+                                              class="px-3 py-1 text-lg disabled:opacity-40 disabled:cursor-not-allowed"
+                                              :disabled="getQty(subtype.id) <= getMinTickets(subtype.id)"
+                                              @click="decQty(subtype.id)"
+                                            >−</button>
+                                            <input
+                                              :value="getQty(subtype.id)"
+                                              readonly
+                                              class="w-12 text-center py-1 border-l border-r"
+                                              :min="getMinTickets(subtype.id)"
+                                            />
                                             <button type="button" class="px-3 py-1 text-lg"
                                                 @click="incQty(subtype.id)">+</button>
                                         </div>
                                     </div>
+                                    <p v-if="subtype.minTickets && Number(subtype.minTickets) > 1" class="text-xs text-gray-500 mt-1">
+                                      Minimum {{ subtype.minTickets }} tickets
+                                    </p>
                                     <!-- /NEW -->
 
                                     <!-- CTA -->
@@ -124,15 +135,26 @@ const router = useRouter(); // ⬅️ NEW: for programmatic navigation
 const props = defineProps({ activity: Object });
 const emit = defineEmits(['close']);
 
-const selectedVariants = reactive({});
-const modalContent = ref(null);
-const showScrollTop = ref(false);
-
-// NEW: per-subtype quantity store & helpers
+// NEW: per-subtype quantity store & helpers (supports minTickets)
 const quantities = reactive({});
-const getQty = (id) => (quantities[id] ?? 1);
+const minTicketsById = reactive({});
+
+const getMinTickets = (id) => {
+  const v = Number(minTicketsById[id] ?? 1);
+  return Number.isFinite(v) && v > 0 ? v : 1;
+};
+
+const getQty = (id) => {
+  const min = getMinTickets(id);
+  const v = Number(quantities[id] ?? min);
+  return Math.max(min, Number.isFinite(v) ? v : min);
+};
+
 const incQty = (id) => (quantities[id] = getQty(id) + 1);
-const decQty = (id) => (quantities[id] = Math.max(1, getQty(id) - 1));
+const decQty = (id) => {
+  const min = getMinTickets(id);
+  quantities[id] = Math.max(min, getQty(id) - 1);
+};
 
 const goToAvailability = async (subtype, variantName = null) => {
     // NEW: resolve unit price & VAT (variant-aware)
@@ -146,8 +168,11 @@ const goToAvailability = async (subtype, variantName = null) => {
         }
     }
     const qty = getQty(subtype.id);
+    // Enforce minimum tickets (e.g., Neon Art Attack subtype 1.1 has minTickets=2)
+    const minT = Number(subtype?.minTickets || 1);
+    const enforcedQty = Math.max(Number.isFinite(minT) && minT > 0 ? minT : 1, qty);
     const numeric = parseFloat((unitPrice || '').replace(/[^\d.]/g, '')) || 0;
-    const totalPrice = numeric ? `AED ${numeric * qty}` : unitPrice;
+    const totalPrice = numeric ? `AED ${numeric * enforcedQty}` : unitPrice;
 
     await navigateTo({
         path: '/experiences/activities/availability',
@@ -158,7 +183,7 @@ const goToAvailability = async (subtype, variantName = null) => {
             image: subtype.image || activity.image,
             description: subtype.description,
             variant: variantName || '',
-            quantity: String(qty),                // NEW
+            quantity: String(enforcedQty),                // NEW
             totalPrice,                           // NEW
             vatIncluded: String(vatIncluded),     // NEW
             minTickets: subtype.minTickets ? String(subtype.minTickets) : '' // NEW
@@ -166,11 +191,6 @@ const goToAvailability = async (subtype, variantName = null) => {
     })
     emit('close') // triggers delayed modal removal
 }
-
-
-
-
-
 
 // Select first variant
 watch(
@@ -181,7 +201,11 @@ watch(
                 if (sub.variants?.length) {
                     selectedVariants[sub.id] = sub.variants[0].name;
                 }
-                if (quantities[sub.id] == null) quantities[sub.id] = 1; // NEW default qty
+                // Store and enforce minimum tickets per subtype
+                minTicketsById[sub.id] = Number(sub.minTickets || 1);
+                const min = getMinTickets(sub.id);
+                if (quantities[sub.id] == null) quantities[sub.id] = min;
+                else quantities[sub.id] = Math.max(min, Number(quantities[sub.id]) || min);
             });
             await nextTick();
             modalContent.value?.scrollTo({ top: 0, behavior: 'smooth' });
@@ -204,6 +228,10 @@ const checkScroll = () => {
 const scrollToTop = () => {
     modalContent.value?.scrollTo({ top: 0, behavior: 'smooth' });
 };
+
+const selectedVariants = reactive({});
+const modalContent = ref(null);
+const showScrollTop = ref(false);
 
 onMounted(() => {
     window.addEventListener('keydown', handleKeydown);

@@ -18,6 +18,37 @@ export default defineEventHandler(async (event) => {
     return { ok: false, status: 'missing' as const, message: 'session_id is required' }
   }
 
+  // --- Upstash (order store)
+  const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL
+  const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN
+
+  async function upstash(cmd: any[]) {
+    if (!UPSTASH_URL || !UPSTASH_TOKEN) return { result: null }
+    const r = await fetch(UPSTASH_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${UPSTASH_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(cmd),
+    })
+    const j = await r.json().catch(() => ({}))
+    if (!r.ok) throw new Error(`Upstash error ${r.status}`)
+    return j
+  }
+
+  async function getOrderFromUpstash(orderRef: string) {
+    if (!orderRef) return null
+    try {
+      const key = `order:${orderRef}`
+      const res = await upstash(['GET', key])
+      const raw = res?.result
+      return raw ? JSON.parse(raw) : null
+    } catch {
+      return null
+    }
+  }
+
   // 1) Best-effort: read what the webhook may have persisted.
   // IMPORTANT: On Netlify/serverless this storage is not durable, and may not even exist.
   const storage = useStorage('data')
@@ -30,11 +61,15 @@ export default defineEventHandler(async (event) => {
 
   if (cached?.status) {
     const status = normalizeStatus(cached.status)
+    const orderRef = cached.orderRef || null
+    const order = orderRef ? await getOrderFromUpstash(String(orderRef)) : null
+
     return {
       ok: true,
       status,
       session_id: cached.session_id || sessionId,
-      orderRef: cached.orderRef || null,
+      orderRef,
+      order,
       updatedAt: cached.updatedAt || null,
       source: 'webhook-cache',
       meta: {
@@ -72,6 +107,7 @@ export default defineEventHandler(async (event) => {
     const stripe = new Stripe(String(secretKey), { apiVersion: '2024-06-20' })
     const s = await stripe.checkout.sessions.retrieve(sessionId)
     const orderRef = (s.client_reference_id as string) || (s.metadata as any)?.orderRef || null
+    const order = orderRef ? await getOrderFromUpstash(String(orderRef)) : null
 
     // Stripe session fields:
     // - status: 'open' | 'complete' | 'expired'
@@ -110,6 +146,7 @@ export default defineEventHandler(async (event) => {
       status,
       session_id: sessionId,
       orderRef,
+      order,
       updatedAt: Date.now(),
       source: 'stripe-api',
       meta: {

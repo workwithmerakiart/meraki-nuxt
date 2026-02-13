@@ -1,7 +1,7 @@
 <template>
-  <section class="success-page relative min-h-[100svh] bg-white">
+  <section class="success-page relative min-h-[100svh] bg-white w-full min-w-[100vw] overflow-x-hidden">
     <!-- Background image + overlay -->
-    <div class="absolute inset-0">
+    <div class="absolute inset-0 w-full">
       <img
         src="/images/shop/shopnew.webp"
         alt="Meraki Art Studio"
@@ -11,10 +11,11 @@
     </div>
 
     <!-- Content -->
-    <div class="relative z-10 mx-auto max-w-3xl px-4 sm:px-6">
+    <div class="relative z-10 w-full">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6">
       <!-- Give space so it doesn't clash with header strap -->
       <div class="pt-24 sm:pt-28 pb-16 sm:pb-20">
-        <div class="mx-auto max-w-xl text-center">
+        <div class="mx-auto w-full max-w-xl text-center">
           <div class="inline-flex items-center justify-center w-14 h-14 rounded-full border border-black bg-white">
             <span v-if="uiState === 'paid'" class="text-2xl" aria-hidden="true">✓</span>
             <span v-else-if="uiState === 'failed' || uiState === 'expired'" class="text-2xl" aria-hidden="true">!</span>
@@ -24,8 +25,108 @@
           <h1 class="mt-5 text-2xl sm:text-3xl font-semibold text-black">{{ titleText }}</h1>
           <p class="mt-2 text-sm sm:text-base text-black/70">{{ subtitleText }}</p>
 
-          <div class="mt-8 rounded-xl border border-black bg-white/90 backdrop-blur p-5 sm:p-6 text-left">
-            <div class="flex items-start justify-between gap-4">
+          <div class="mt-8 mx-auto w-full max-w-xl rounded-xl border border-black bg-white/90 backdrop-blur p-5 sm:p-6 text-left">
+            <!-- Order details (preferred) -->
+            <div v-if="order && uiState === 'paid'" class="space-y-4">
+              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="text-xs uppercase tracking-wider text-black/60">Order confirmed</p>
+                  <p class="mt-1 text-sm text-black/70">
+                    Order ID:
+                    <span class="font-mono text-black break-all">{{ orderRef || '—' }}</span>
+                  </p>
+                  <p class="mt-1 text-sm text-black/70" v-if="order?.createdAt">
+                    Date:
+                    <span class="text-black">{{ formatOrderDate(order.createdAt) }}</span>
+                  </p>
+                  <p class="mt-1 text-sm text-black/70" v-if="amountText">
+                    Total paid:
+                    <span class="font-medium text-black">{{ amountText }}</span>
+                  </p>
+                </div>
+
+                <button
+                  v-if="orderRef"
+                  type="button"
+                  class="text-xs underline text-black hover:opacity-70 self-start"
+                  @click="copyOrderId"
+                >
+                  {{ copied ? 'Copied' : 'Copy order ID' }}
+                </button>
+              </div>
+
+              <!-- Items -->
+              <div class="border border-black/10 rounded-lg bg-white/70 overflow-hidden">
+                <div class="px-4 py-3 border-b border-black/10">
+                  <p class="text-xs uppercase tracking-wider text-black/60">Items</p>
+                </div>
+                <div class="divide-y divide-black/10">
+                  <div
+                    v-for="(line, idx) in orderLines"
+                    :key="(line?.key || line?.sku || line?.id || idx)"
+                    class="px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3"
+                  >
+                    <div class="w-14 h-14 sm:w-14 sm:h-14 bg-gray-100 flex-shrink-0 overflow-hidden rounded">
+                      <img
+                        v-if="line?.image"
+                        :src="line.image"
+                        :alt="line?.title || 'Item'"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-semibold text-black truncate">{{ line?.title || 'Item' }}</p>
+                      <p class="text-xs text-black/70 mt-0.5">
+                        Qty: {{ line?.qty || 1 }}
+                        <span v-if="line?.priceMajor != null"> • {{ moneyMajor(line.priceMajor) }} each</span>
+                      </p>
+                      <p
+                        v-if="line?.type === 'activity' && line?.meta && (line.meta.slotStartISO || line.meta.selectedSlotISO)"
+                        class="text-xs text-black/70 mt-1"
+                      >
+                        {{ formatDubaiSlot(line.meta) }}
+                      </p>
+                    </div>
+                    <div class="text-sm text-black whitespace-nowrap sm:ml-auto">
+                      {{ moneyMajor((Number(line?.priceMajor || 0) * Number(line?.qty || 1))) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Totals -->
+              <div class="border border-black/10 rounded-lg bg-white/70 overflow-hidden">
+                <div class="px-4 py-3 border-b border-black/10">
+                  <p class="text-xs uppercase tracking-wider text-black/60">Summary</p>
+                </div>
+                <div class="px-4 py-3 space-y-2 text-sm">
+                  <div class="flex items-center justify-between">
+                    <span class="text-black/70">Subtotal</span>
+                    <span class="text-black">{{ moneyMajor(orderTotals.subtotalExVat) }}</span>
+                  </div>
+                  <div v-if="orderTotals.discountExVat > 0" class="flex items-center justify-between">
+                    <span class="text-black/70">Discount</span>
+                    <span class="text-black">-{{ moneyMajor(orderTotals.discountExVat) }}</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-black/70">VAT</span>
+                    <span class="text-black">{{ moneyMajor(orderTotals.vat) }}</span>
+                  </div>
+                  <div class="flex items-center justify-between pt-2 border-t border-black/10 font-medium">
+                    <span class="text-black">Total</span>
+                    <span class="text-black">{{ moneyMajor(orderTotals.total) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Small reference (optional) -->
+              <p class="text-[11px] text-black/50 break-all">
+                Payment reference: <span class="font-mono">{{ sessionId || '—' }}</span>
+              </p>
+            </div>
+
+            <!-- Fallback (if order payload is not available yet) -->
+            <div v-else class="flex items-start justify-between gap-4">
               <div class="min-w-0">
                 <p class="text-xs uppercase tracking-wider text-black/60">Reference</p>
                 <p class="mt-1 font-mono text-xs sm:text-sm text-black break-all">{{ sessionId || '—' }}</p>
@@ -87,14 +188,92 @@
         </div>
       </div>
     </div>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useCartStore } from '~/stores/cart'
 
 const route = useRoute()
+const cart = useCartStore()
+const clearedCart = ref(false)
 const copied = ref(false)
+
+const order = ref<any>(null)
+
+const orderLines = computed(() => {
+  const lines = order.value?.lines
+  return Array.isArray(lines) ? lines : []
+})
+
+const orderTotals = computed(() => {
+  const t = order.value?.totals || {}
+  return {
+    subtotalExVat: Number(t.subtotalExVat || 0),
+    discountExVat: Number(t.discountExVat || 0),
+    vat: Number(t.vat || 0),
+    total: Number(t.total || 0),
+  }
+})
+
+const orderCurrency = computed(() => String(order.value?.currency || meta.value?.currency || 'AED').toUpperCase())
+
+function moneyMajor(n: unknown) {
+  const v = Number((n as any)?.value !== undefined ? (n as any).value : n)
+  if (!Number.isFinite(v)) return `${orderCurrency.value} 0.00`
+  return `${orderCurrency.value} ${v.toFixed(2)}`
+}
+
+function formatOrderDate(input: any) {
+  try {
+    const d = new Date(input)
+    return d.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
+  } catch {
+    return ''
+  }
+}
+
+function formatDubaiSlot(meta: any) {
+  const startISO = meta?.slotStartISO || meta?.selectedSlotISO
+  const endISO = meta?.slotEndISO || meta?.selectedSlotEndISO
+  if (!startISO) return ''
+
+  const s = new Date(startISO)
+  const e = endISO ? new Date(endISO) : null
+
+  const dateFmt = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Dubai',
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  })
+  const timeFmt = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Dubai',
+    hour: 'numeric',
+    minute: '2-digit',
+  })
+
+  const dateLabel = dateFmt.format(s)
+  const startLabel = timeFmt.format(s)
+  const endLabel = e ? timeFmt.format(e) : ''
+
+  return endLabel
+    ? `${dateLabel} • ${startLabel} – ${endLabel} (Dubai)`
+    : `${dateLabel} • ${startLabel} (Dubai)`
+}
+
+async function copyOrderId() {
+  try {
+    if (!orderRef.value) return
+    await navigator.clipboard.writeText(orderRef.value)
+    copied.value = true
+    setTimeout(() => (copied.value = false), 1200)
+  } catch {
+    // ignore
+  }
+}
 
 const sessionId = computed(() => String(route.query.session_id || '').trim())
 const orderRef = ref('')
@@ -108,6 +287,15 @@ useHead({
 // UI state comes from webhook-confirmed storage via /api/stripe/session-status
 const uiState = ref<'missing' | 'verifying' | 'paid' | 'failed' | 'expired' | 'pending'>('verifying')
 const meta = ref<{ amount_total?: number | null; currency?: string | null; payment_status?: string | null } | null>(null)
+
+watch(uiState, (v) => {
+  if (v === 'paid' && !clearedCart.value) {
+    cart.clear()
+    cart.clearPromo()
+    cart.setNote('')
+    clearedCart.value = true
+  }
+})
 
 const titleText = computed(() => {
   if (uiState.value === 'paid') return 'Payment confirmed'
@@ -159,6 +347,9 @@ async function fetchStatusOnce() {
     const status = String(res?.status || 'pending')
     meta.value = res?.meta || null
     orderRef.value = String(res?.orderRef || res?.meta?.orderRef || '')
+
+    // Prefer order payload if backend provides it (same shape as checkout payload)
+    order.value = res?.order || res?.payload || res?.orderPayload || null
 
     if (status === 'paid') uiState.value = 'paid'
     else if (status === 'failed') uiState.value = 'failed'

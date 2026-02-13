@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-white">
-    <div class="max-w-6xl mx-auto px-4 pt-10 md:pt-14 pb-10">
+    <div class="max-w-6xl mx-auto px-4 pt-24 sm:pt-28 md:pt-32 pb-10">
 
       <h1 class="text-3xl font-semibold mb-8">Checkout</h1>
 
@@ -582,5 +582,22 @@ body.page-checkout header [class*="burger"]::after {
 
 body.page-checkout header {
   background: transparent !important;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+}
+
+/* Ensure page content starts below the fixed header */
+body.page-checkout {
+  padding-top: 0;
+}
+
+/* Extra safety for small screens where the header/logo can be taller */
+@media (max-width: 640px) {
+  body.page-checkout .max-w-6xl {
+    padding-top: 6rem; /* aligns with pt-24 */
+  }
 }
 </style>

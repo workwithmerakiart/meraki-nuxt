@@ -1,3 +1,4 @@
+import { DefaultMagicKeysAliasMap } from '@vueuse/core'
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -7,7 +8,24 @@ if (!process.env.RESEND_API_KEY) {
 
 // Must be a direct, publicly accessible image URL (https). Example: https://yourdomain.com/logo.png
 const EMAIL_LOGO_URL = process.env.EMAIL_LOGO_URL || ''
-const EMAIL_FROM = process.env.EMAIL_FROM || 'bookingsatmeraki@gmail.com'
+
+// Brand Details
+const STUDIO_NAME = 'Meraki Art Studio'
+const STUDIO_ADDRESS = '40, Meraki Art Studio, Goshi Warehouse Village, Al Quoz 3, Dubai'
+const STUDIO_PHONE = '+971 50 852 3600'
+const DIRECTIONS_URL = 'https://www.google.com/maps/search/?api=1&query=Meraki+Art+%26+Design+Studio,+Al+Quoz+-+Al+Quoz+Industrial+Area+3+-+Dubai'
+
+// Sender/recipient routing
+// - Customer email: FROM bookings@... TO customer
+// - Brand email:    FROM bookings@... TO hello@...
+// NOTE: Resend often prefers a "Name <email>" format for best deliverability.
+const EMAIL_FROM_ADDRESS = (process.env.EMAIL_FROM || 'bookings@merakiartstudio.ae').trim() || 'bookings@merakiartstudio.ae'
+const EMAIL_FROM = EMAIL_FROM_ADDRESS.includes('<')
+  ? EMAIL_FROM_ADDRESS
+  : `${STUDIO_NAME} <${EMAIL_FROM_ADDRESS}>`
+
+// Brand inbox recipient
+const EMAIL_TO = (process.env.EMAIL_TO || 'hello@merakiartstudio.ae').trim() || 'hello@merakiartstudio.ae'
 
 type OrderLine = {
   title: string
@@ -41,11 +59,6 @@ type Order = {
   }
 }
 
-const STUDIO_NAME = 'Meraki Art Studio'
-const STUDIO_ADDRESS = '40, Meraki Art Studio, Goshi Warehouse Village, Al Quoz 3, Dubai'
-const STUDIO_PHONE = '+971 50 852 3600'
-const DIRECTIONS_URL = 'https://www.google.com/maps/search/?api=1&query=Meraki+Art+%26+Design+Studio,+Al+Quoz+-+Al+Quoz+Industrial+Area+3+-+Dubai'
-
 function safeJsonParse(s?: string) {
   try {
     return s ? JSON.parse(s) : {}
@@ -57,9 +70,16 @@ function safeJsonParse(s?: string) {
 function resolveCustomer(order: Order) {
   const fromCustomer = order.customer || {}
   const note = safeJsonParse(order.note)
+
   const name = String(fromCustomer.name || note?.name || 'Customer').trim()
   const email = String(fromCustomer.email || note?.email || '').trim()
-  return { name, email }
+
+  // Optional contact fields often live in `note`
+  const phone = String(note?.phone || '').trim()
+  const countryCode = String(note?.countryCode || '').trim()
+  const phoneNational = String(note?.phoneNational || '').trim()
+
+  return { name, email, phone, countryCode, phoneNational }
 }
 
 function formatDubaiSlot(startISO?: string, endISO?: string) {
@@ -144,32 +164,15 @@ function computeTotals(order: Order) {
   return { currency, subtotalExVat, discountExVat, vat, total }
 }
 
-export async function sendOrderConfirmationEmail(order: Order) {
-  const { name: customerName, email: customerEmail } = resolveCustomer(order)
-  if (!customerEmail) {
-    console.warn('Email skipped: missing customer email (order.customer.email and order.note.email both empty)', { orderRef: order?.orderRef })
-    return null
-  }
+function buildOrderEmailHtml(params: {
+  order: Order
+  heading: string
+  intro: string
+  showCustomerBlock?: boolean
+}) {
+  const { order, heading, intro, showCustomerBlock } = params
 
-  const itemsHtml = (order.lines || [])
-    .map((l) => {
-      const isActivity = l.type === 'activity'
-      const slot = isActivity
-        ? formatDubaiSlot(l.meta?.slotStartISO, l.meta?.slotEndISO)
-        : ''
-
-      return `
-        <tr>
-          <td style="padding:8px 0;">
-            <strong>${l.title}</strong><br/>
-            Qty: ${l.qty}
-            ${slot ? `<br/><span style="color:#555">${slot}</span>` : ''}
-          </td>
-        </tr>
-      `
-    })
-    .join('')
-
+  const customer = resolveCustomer(order)
   const { currency, subtotalExVat, discountExVat, vat, total } = computeTotals(order)
 
   const logoHtml = EMAIL_LOGO_URL
@@ -184,12 +187,35 @@ export async function sendOrderConfirmationEmail(order: Order) {
     `
     : ''
 
+  const customerBlock = showCustomerBlock
+    ? (() => {
+        const phonePretty = customer.phone
+          ? customer.phone
+          : (customer.countryCode || customer.phoneNational)
+            ? `${customer.countryCode || ''}${customer.phoneNational || ''}`
+            : ''
+
+        return `
+          <div style="background:#fff;border:1px solid #eee;border-radius:12px;padding:12px 14px;margin-bottom:18px;">
+            <div style="font-size:12px;color:#666;text-transform:uppercase;letter-spacing:.08em;">Customer</div>
+            <div style="margin-top:8px;color:#111;font-size:13px;line-height:1.6;">
+              <div><strong>${customer.name || 'Customer'}</strong></div>
+              ${customer.email ? `<div>Email: <a href="mailto:${customer.email}" style="color:#111;text-decoration:underline;">${customer.email}</a></div>` : ''}
+              ${phonePretty ? `<div>Phone: <a href="tel:${phonePretty.replace(/\s+/g,'')}" style="color:#111;text-decoration:underline;">${phonePretty}</a></div>` : ''}
+            </div>
+          </div>
+        `
+      })()
+    : ''
+
   const html = `
   <div style="font-family:Inter,Arial,sans-serif;max-width:640px;margin:auto;padding:28px 24px 24px">
     ${logoHtml}
 
-    <h2 style="margin:0 0 6px">Thank you for your order, ${customerName}!</h2>
-    <p style="margin:0 0 16px;color:#444;">Your payment has been successfully received.</p>
+    <h2 style="margin:0 0 6px">${heading}</h2>
+    <p style="margin:0 0 16px;color:#444;">${intro}</p>
+
+    ${customerBlock}
 
     <div style="background:#fafafa;border:1px solid #eee;border-radius:12px;padding:12px 14px;margin-bottom:18px;">
       <div style="font-size:12px;color:#666;text-transform:uppercase;letter-spacing:.08em;">Order ID</div>
@@ -217,7 +243,7 @@ export async function sendOrderConfirmationEmail(order: Order) {
               <tr>
                 <td style="padding:12px 0;border-bottom:1px solid #eee;">
                   <div style="font-weight:600;color:#111;">${l.title}</div>
-                  ${slot ? `<div style="margin-top:4px;font-size:12px;color:#666;">${slot}</div>` : ''}
+                  ${slot ? `<div style=\"margin-top:4px;font-size:12px;color:#666;\">${slot}</div>` : ''}
                 </td>
                 <td align="right" style="padding:12px 0;border-bottom:1px solid #eee;color:#111;white-space:nowrap;">${qty} × ${money(currency, unit)}</td>
                 <td align="right" style="padding:12px 0;border-bottom:1px solid #eee;color:#111;white-space:nowrap;">${money(currency, lineTotal)}</td>
@@ -234,10 +260,7 @@ export async function sendOrderConfirmationEmail(order: Order) {
         <span>Subtotal</span>
         <span>&nbsp;${money(currency, subtotalExVat)}</span>
       </div>
-      ${order.promoCode ? `<div style="display:flex;justify-content:space-between;font-size:13px;color:#2f7d32;margin:6px 0;">
-        <span>Promo (${order.promoCode})</span>
-        <span>&nbsp;${discountExVat > 0 ? `- ${money(currency, discountExVat)}` : 'Applied'}</span>
-      </div>` : ''}
+      ${order.promoCode ? `<div style=\"display:flex;justify-content:space-between;font-size:13px;color:#2f7d32;margin:6px 0;\">\n          <span>Promo (${order.promoCode})</span>\n          <span>&nbsp;${discountExVat > 0 ? `- ${money(currency, discountExVat)}` : 'Applied'}</span>\n        </div>` : ''}
       <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;margin:6px 0;">
         <span>VAT</span>
         <span>&nbsp;${money(currency, vat)}</span>
@@ -252,7 +275,7 @@ export async function sendOrderConfirmationEmail(order: Order) {
 
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid #eee;color:#666;font-size:12px;line-height:1.6;">
       <strong style="color:#111">Need help?</strong><br/>
-      Email us at <a href="mailto:${EMAIL_FROM}" style="color:#111;text-decoration:underline;">${EMAIL_FROM}</a><br/>
+      Email us at <a href="mailto:${EMAIL_TO}" style="color:#111;text-decoration:underline;">${EMAIL_TO}</a><br/>
       Call us at <a href="tel:${STUDIO_PHONE.replace(/\s+/g,'')}" style="color:#111;text-decoration:underline;">${STUDIO_PHONE}</a><br/>
       <a href="${DIRECTIONS_URL}" target="_blank" rel="noopener" style="color:#111;text-decoration:underline;">Get Directions</a><br/>
       <span style="color:#777">${STUDIO_ADDRESS}</span>
@@ -264,21 +287,42 @@ export async function sendOrderConfirmationEmail(order: Order) {
   </div>
   `
 
-  const text = `
-Thank you for your order, ${customerName}!
+  return { html }
+}
 
+function buildOrderEmailText(params: {
+  order: Order
+  heading: string
+  intro: string
+  showCustomerBlock?: boolean
+}) {
+  const { order, heading, intro, showCustomerBlock } = params
+  const customer = resolveCustomer(order)
+  const { currency, subtotalExVat, discountExVat, vat, total } = computeTotals(order)
+
+  const customerLines = showCustomerBlock
+    ? `\nCustomer:\n- Name: ${customer.name || 'Customer'}\n- Email: ${customer.email || '(missing)'}\n- Phone: ${customer.phone || ((customer.countryCode || customer.phoneNational) ? `${customer.countryCode || ''}${customer.phoneNational || ''}` : '(missing)')}\n`
+    : ''
+
+  const items = (order.lines || [])
+    .map((l) => {
+      const slot = l.type === 'activity' ? formatDubaiSlot(l.meta?.slotStartISO, l.meta?.slotEndISO) : ''
+      const qty = Math.max(1, Number(l.qty || 1))
+      const unit = Number(l.priceMajor || 0)
+      const lineTotal = unit * qty
+      return `- ${l.title} | Qty: ${qty} | Unit: ${money(currency, unit)} | Line: ${money(currency, lineTotal)}${slot ? ` | ${slot}` : ''}`
+    })
+    .join('\n')
+
+  return `
+${heading}
+
+${intro}
+${customerLines}
 Order ID: ${order.orderRef}
 
 Order Details:
-${(order.lines || [])
-  .map((l) => {
-    const slot = l.type === 'activity' ? formatDubaiSlot(l.meta?.slotStartISO, l.meta?.slotEndISO) : ''
-    const qty = Math.max(1, Number(l.qty || 1))
-    const unit = Number(l.priceMajor || 0)
-    const lineTotal = unit * qty
-    return `- ${l.title} | Qty: ${qty} | Unit: ${money(currency, unit)} | Line: ${money(currency, lineTotal)}${slot ? ` | ${slot}` : ''}`
-  })
-  .join('\n')}
+${items || '(No items found)'}
 
 Subtotal: ${money(currency, subtotalExVat)}
 ${order.promoCode ? `Promo (${order.promoCode}): ${discountExVat > 0 ? `- ${money(currency, discountExVat)}` : 'Applied'}` : ''}
@@ -286,41 +330,120 @@ VAT: ${money(currency, vat)}
 Total: ${money(currency, total)}
 
 Need help?
-Email: ${EMAIL_FROM}
+Email: ${EMAIL_TO}
 Phone: ${STUDIO_PHONE}
 Get Directions: ${DIRECTIONS_URL}
 Address: ${STUDIO_ADDRESS}
 
 — ${STUDIO_NAME}
-`
+`.trim()
+}
 
+async function sendCustomerOrderEmail(order: Order) {
+  const { name: customerName, email: customerEmail } = resolveCustomer(order)
+  if (!customerEmail) {
+    console.warn('Customer email skipped: missing customer email (order.customer.email and order.note.email both empty)', { orderRef: order?.orderRef })
+    return null
+  }
+
+  const { html } = buildOrderEmailHtml({
+    order,
+    heading: `Thank you for your order, ${customerName}!`,
+    intro: 'Your payment has been successfully received.',
+    showCustomerBlock: false,
+  })
+
+  const text = buildOrderEmailText({
+    order,
+    heading: `Order Confirmed — ${STUDIO_NAME}`,
+    intro: `Thank you for your order, ${customerName}! Your payment has been successfully received.`,
+    showCustomerBlock: false,
+  })
+
+  const result = await resend.emails.send({
+    from: EMAIL_FROM,
+    to: customerEmail,
+    replyTo: EMAIL_TO,
+    subject: `Order Confirmed — Meraki Art Studio (Order #${order.orderRef})`,
+    html,
+    text,
+  })
+
+  console.log('[EMAIL] Customer email sent', {
+    orderRef: order.orderRef,
+    to: customerEmail,
+    id: (result as any)?.id,
+  })
+
+  return result
+}
+
+async function sendBrandOrderEmail(order: Order) {
+  const to = String(EMAIL_TO || '').trim()
+  if (!to) {
+    console.warn('[EMAIL] Brand email skipped: EMAIL_TO is empty', { orderRef: order?.orderRef })
+    return null
+  }
+
+  const { name: customerName } = resolveCustomer(order)
+
+  const { html } = buildOrderEmailHtml({
+    order,
+    heading: 'New order placed',
+    intro: `${customerName || 'A customer'} has placed a new order on ${STUDIO_NAME}.`,
+    showCustomerBlock: true,
+  })
+
+  const text = buildOrderEmailText({
+    order,
+    heading: `New Order Placed — ${STUDIO_NAME}`,
+    intro: `${customerName || 'A customer'} has placed a new order.`,
+    showCustomerBlock: true,
+  })
+
+  const result = await resend.emails.send({
+    from: EMAIL_FROM,
+    to,
+    replyTo: EMAIL_TO,
+    subject: `New Order Placed — Meraki Art Studio (Order #${order.orderRef})`,
+    html,
+    text,
+  })
+
+  console.log('[EMAIL] Brand email sent', {
+    orderRef: order.orderRef,
+    to,
+    id: (result as any)?.id,
+  })
+
+  return result
+}
+
+export async function sendOrderEmails(order: Order) {
+  // Send brand email regardless; customer email only if we have a customer address.
+  // Return both results for logging/upstash idempotency tracking.
   try {
-    const result = await resend.emails.send({
-      from: EMAIL_FROM,
-      to: customerEmail,
-      replyTo: EMAIL_FROM,
-      subject: `Order Confirmed — Meraki Art Studio (Order #${order.orderRef})`,
-      html,
-      text,
-    })
+    const [customerResult, brandResult] = await Promise.allSettled([
+      sendCustomerOrderEmail(order),
+      sendBrandOrderEmail(order),
+    ])
 
-    console.log('[EMAIL] Resend send OK', {
-      orderRef: order.orderRef,
-      to: customerEmail,
-      id: (result as any)?.id,
-      result,
-    })
-
-    return result
-  } catch (err: any) {
-    // Resend SDK errors sometimes include statusCode/message.
-    console.error('[EMAIL] Resend send FAILED', {
-      orderRef: order?.orderRef,
-      to: customerEmail,
-      statusCode: err?.statusCode,
-      message: err?.message,
-      error: err,
-    })
+    return {
+      customer: customerResult.status === 'fulfilled' ? customerResult.value : null,
+      brand: brandResult.status === 'fulfilled' ? brandResult.value : null,
+      customerError: customerResult.status === 'rejected' ? customerResult.reason : null,
+      brandError: brandResult.status === 'rejected' ? brandResult.reason : null,
+    }
+  } catch (err) {
+    console.error('[EMAIL] sendOrderEmails failed', { orderRef: order?.orderRef, err })
     throw err
   }
+}
+
+// Backwards compatible export (existing webhook import can keep working)
+export async function sendOrderConfirmationEmail(order: Order) {
+  const res = await sendOrderEmails(order)
+  // Preserve previous behaviour: throw if customer email send fails and customer email exists.
+  // If customer email is missing, we still return.
+  return res.customer
 }

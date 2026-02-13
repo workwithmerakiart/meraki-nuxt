@@ -398,8 +398,27 @@ body.page-cart header [class*="burger"]::after {
     border-color: #000 !important;
 }
 
-/* If your header uses a transparent background, keep it readable on this page */
+/* Make header stable and keep content from sliding under it */
 body.page-cart header {
-    background: transparent !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Push page content below the fixed header (prevents logo/title overlap) */
+body.page-cart section {
+    padding-top: clamp(96px, 12vh, 140px);
+}
+
+/* Extra safety for small screens where header is taller */
+@media (max-width: 640px) {
+    body.page-cart section {
+        padding-top: 124px;
+    }
 }
 </style>

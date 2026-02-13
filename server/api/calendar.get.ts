@@ -89,12 +89,12 @@ export default defineEventHandler(async (event) => { // NEW
 // Mon closed; Tue 12–19; Wed–Sun 10–19
 const STUDIO_HOURS: Record<number, { open?: string; close?: string }> = {
   1: {}, // Mon closed
-  2: { open: '12:00', close: '19:00' }, // Tue
-  3: { open: '10:00', close: '19:00' }, // Wed
-  4: { open: '10:00', close: '19:00' }, // Thu
-  5: { open: '10:00', close: '19:00' }, // Fri
-  6: { open: '10:00', close: '19:00' }, // Sat
-  0: { open: '10:00', close: '19:00' }, // Sun
+  2: { open: '12:00', close: '18:30' }, // Tue
+  3: { open: '10:00', close: '18:30' }, // Wed
+  4: { open: '10:00', close: '18:30' }, // Thu
+  5: { open: '10:00', close: '18:30' }, // Fri
+  6: { open: '10:00', close: '18:30' }, // Sat
+  0: { open: '10:00', close: '18:30' }, // Sun
 }
 
 // Capacity rules (per slot)

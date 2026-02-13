@@ -166,7 +166,7 @@
 
 <script setup>
 import { useRoute } from 'vue-router'
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useCartStore } from '~/stores/cart'
 
 const route = useRoute()
@@ -198,6 +198,15 @@ const selectedSubtype = computed(() => ({
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const now = new Date()
 const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+// Live clock tick so past-time disabling updates without refresh
+const nowTick = ref(Date.now())
+let nowTimer
+
+// Helper: is a Dubai-time slot in the future?
+function isFutureDubaiSlot(dateKey, hhmm) {
+    const slotMs = new Date(`${dateKey}T${hhmm}:00+04:00`).getTime()
+    return slotMs > nowTick.value
+}
 const currentMonth = ref(new Date(today.getFullYear(), today.getMonth(), 1))
 const selectedDate = ref(today)
 
@@ -261,12 +270,12 @@ const selectedTime = ref('')
 // Mon closed; Tue 12–19; Wed–Sun 10–19
 const STUDIO_HOURS = {
     1: null, // Mon closed
-    2: { open: '12:00', close: '19:00' }, // Tue
-    3: { open: '10:00', close: '19:00' }, // Wed
-    4: { open: '10:00', close: '19:00' }, // Thu
-    5: { open: '10:00', close: '19:00' }, // Fri
-    6: { open: '10:00', close: '19:00' }, // Sat
-    0: { open: '10:00', close: '19:00' }, // Sun
+    2: { open: '12:00', close: '18:30' }, // Tue
+    3: { open: '10:00', close: '18:30' }, // Wed
+    4: { open: '10:00', close: '18:30' }, // Thu
+    5: { open: '10:00', close: '18:30' }, // Fri
+    6: { open: '10:00', close: '18:30' }, // Sat
+    0: { open: '10:00', close: '18:30' }, // Sun
 }
 const SLOT_STEP_MIN = 30
 
@@ -299,7 +308,15 @@ const dayGridHHMM = computed(() => {
 const showInLocalTz = ref(false)
 const displayTimeZone = computed(() => (showInLocalTz.value ? undefined : 'Asia/Dubai'))
 
-const hasSlots = (d) => (slotsMap.value[ymdDubai(d)] || []).length > 0
+const hasSlots = (d) => {
+    const key = ymdDubai(d)
+    const raw = Array.isArray(slotsMap.value[key]) ? slotsMap.value[key] : []
+    // Only show dot if there is at least one FUTURE slot for that Dubai day
+    return raw.some(v => {
+        const hhmm = normalizeToHHMM(v)
+        return hhmm ? isFutureDubaiSlot(key, hhmm) : false
+    })
+}
 
 function longDate(d) {
     return d.toLocaleDateString('en-US', {
@@ -355,11 +372,16 @@ const slotsForSelected = computed(() => {
 
     const availableSet = new Set(raw.map(v => normalizeToHHMM(v)).filter(Boolean))
 
-    return dayGridHHMM.value.map((hhmm) => ({
-        label: toDisplayLabel(selectedDate.value, hhmm),
-        value: hhmm,
-        available: availableSet.has(hhmm),
-    }))
+    return dayGridHHMM.value.map((hhmm) => {
+        const inFuture = isFutureDubaiSlot(key, hhmm)
+        const available = availableSet.has(hhmm) && inFuture
+
+        return {
+            label: toDisplayLabel(selectedDate.value, hhmm),
+            value: hhmm,
+            available,
+        }
+    })
 })
 
 async function fetchWeekFor(date) {
@@ -447,6 +469,14 @@ const addError = ref('')
 async function addActivityToCart() {
     addError.value = ''
     if (!selectedSlotISO.value) return
+
+    // Extra safety: prevent adding a slot that has already passed
+    const startMs = new Date(selectedSlotISO.value).getTime()
+    if (startMs <= Date.now()) {
+        addError.value = 'This slot has already passed. Please choose another time.'
+        return
+    }
+
     adding.value = true
     try {
         const sku = String(route.query.sku || route.query.id || route.query.title || 'ACTIVITY')
@@ -501,7 +531,16 @@ watch(selectedDate, (d) => {
 })
 
 onMounted(() => {
+    // Update every minute so slots automatically flip to grey as time passes
+    nowTimer = setInterval(() => {
+        nowTick.value = Date.now()
+    }, 60_000)
+
     fetchWeekFor(selectedDate.value)
+})
+
+onBeforeUnmount(() => {
+    if (nowTimer) clearInterval(nowTimer)
 })
 </script>
 
