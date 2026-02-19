@@ -11,19 +11,75 @@ export default defineNuxtConfig({
       tailwindcss(),
     ],
   },
-  modules: ['@nuxtjs/google-fonts', '@oku-ui/motion/nuxt', '@pinia/nuxt'],
+  modules: ['@nuxtjs/google-fonts', '@oku-ui/motion/nuxt', '@pinia/nuxt', 'nuxt-simple-sitemap'],
 
   app: {
     head: {
       title: 'Meraki Art Studio | Creative Workshops & Experiences in Dubai',
       meta: [
         { name: 'description', content: 'Meraki Art Studio offers soulful art workshops, kids activities, creative camps and mindful experiences in Dubai.' },
+        { name: 'robots', content: 'index,follow' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: '/images/meraki-logo-black.png' },
       ],
     },
+  },
+
+  // --- SEO: sitemap (submit /sitemap.xml to Google Search Console)
+  site: {
+    url: process.env.SITE_URL || 'https://www.merakiartstudio.ae',
+  },
+
+  sitemap: {
+    // Keep this tight so Google only crawls important pages.
+    // (Do NOT include cart/checkout/order success/failure, etc.)
+    urls: [
+      // Home
+      { loc: '/', changefreq: 'weekly', priority: 1.0 },
+
+      // About
+      { loc: '/about/contact', changefreq: 'monthly', priority: 0.6 },
+      { loc: '/about/faqs', changefreq: 'monthly', priority: 0.6 },
+
+      // Experiences
+      { loc: '/experiences/activities', changefreq: 'weekly', priority: 0.8 },
+      { loc: '/experiences/workshops', changefreq: 'weekly', priority: 0.8 },
+      { loc: '/experiences/courses', changefreq: 'weekly', priority: 0.7 },
+      { loc: '/experiences/afterschool', changefreq: 'weekly', priority: 0.7 },
+      { loc: '/experiences/events', changefreq: 'weekly', priority: 0.7 },
+      { loc: '/experiences/schedule', changefreq: 'weekly', priority: 0.7 },
+
+      // Community
+      { loc: '/community/lookbook', changefreq: 'monthly', priority: 0.6 },
+      { loc: '/community/blogs', changefreq: 'weekly', priority: 0.6 },
+
+      // Shop
+      { loc: '/shop/products', changefreq: 'weekly', priority: 0.7 },
+      { loc: '/shop/custom-orders', changefreq: 'monthly', priority: 0.6 },
+
+      // Studio
+      { loc: '/studio/our-story', changefreq: 'monthly', priority: 0.6 },
+      { loc: '/studio/franchise', changefreq: 'monthly', priority: 0.6 },
+
+      // Misc
+      { loc: '/matterdxb', changefreq: 'monthly', priority: 0.5 },
+    ],
+
+    // Explicitly exclude routes that should never be indexed.
+    exclude: [
+      '/about',
+      '/community',
+      '/experiences',
+      '/shop',
+      '/studio',
+      '/cart',
+      '/checkout',
+      '/order/success',
+      '/order/failed',
+      '/experiences/activities/availability',
+    ],
   },
 
   // Runtime configuration (server vs client)
