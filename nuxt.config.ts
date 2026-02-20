@@ -113,6 +113,13 @@ export default defineNuxtConfig({
   // Ensure Stripe receives raw request body for signature verification
   routeRules: {
     '/api/stripe/webhook': { bodyParser: false },
+
+    // Force sitemap to return correct XML content-type (prevents GSC "Sitemap is HTML")
+    '/sitemap.xml': {
+      headers: {
+        'Content-Type': 'application/xml; charset=utf-8',
+      },
+    },
   },
 
   // @ts-expect-error: Google Fonts config not typed by default
