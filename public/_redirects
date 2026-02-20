@@ -1,0 +1,15 @@
+# Old Wix Services
+/services-*          /experiences/courses     301!
+
+# Old Wix service pages
+/service-page/*      /                        301!
+
+# Old Wix product pages
+/product-page/*      /shop/products           301!
+
+# Old Wix blog posts (if any)
+/post/*              /community/blogs         301!
+/single-post/*       /community/blogs         301!
+
+# Random Wix about pages
+/about-*             /studio/our-story        301!
