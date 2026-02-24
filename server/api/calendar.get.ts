@@ -56,12 +56,19 @@ export default defineEventHandler(async (event) => { // NEW
       // Include transparent events by default since we do not filter by transparency here
     })
     const events = eventsRes.data.items || []
-    anyEventsBusy = events.map(e => {
-      // Normalize start/end from dateTime or date
-      const start = e.start?.dateTime || e.start?.date
-      const end = e.end?.dateTime || e.end?.date
-      return { start, end }
-    }).filter(e => e.start && e.end) as { start: string; end: string }[]
+    anyEventsBusy = events
+      .map((e) => {
+        // Normalize start/end from dateTime or date (all-day events use `date`)
+        const startRaw = e.start?.dateTime || e.start?.date
+        const endRaw = e.end?.dateTime || e.end?.date
+
+        // If we only have dates, treat them as full-day in Dubai time
+        const start = startRaw && startRaw.length === 10 ? `${startRaw}T00:00:00+04:00` : startRaw
+        const end = endRaw && endRaw.length === 10 ? `${endRaw}T00:00:00+04:00` : endRaw
+
+        return { start, end }
+      })
+      .filter((e): e is { start: string; end: string } => Boolean(e.start && e.end))
   }
 
   // --- Upstash counters for capacity-based booking (optional)
@@ -86,7 +93,7 @@ export default defineEventHandler(async (event) => { // NEW
   const STEP = Number(process.env.SLOT_INTERVAL || 30)
 
 // Studio hours (Dubai)
-// Mon closed; Tue 12–19; Wed–Sun 10–19
+// Mon closed; Tue 12:00–18:30; Wed–Sun 10:00–18:30 (Dubai)
 const STUDIO_HOURS: Record<number, { open?: string; close?: string }> = {
   1: {}, // Mon closed
   2: { open: '12:00', close: '18:30' }, // Tue
@@ -136,9 +143,25 @@ const mo = parts.find(p => p.type === 'month')?.value
 const da = parts.find(p => p.type === 'day')?.value
 const dateStr = `${y}-${mo}-${da}`
 
-// Determine weekday in Dubai
-const weekday = new Date(`${dateStr}T00:00:00+04:00`).getDay()
+// Determine weekday in Dubai (robust)
+const weekdayLabel = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'Asia/Dubai',
+  weekday: 'short',
+}).format(new Date(`${dateStr}T12:00:00Z`))
+
+const WEEKDAY_TO_NUM: Record<string, number> = {
+  Sun: 0,
+  Mon: 1,
+  Tue: 2,
+  Wed: 3,
+  Thu: 4,
+  Fri: 5,
+  Sat: 6,
+}
+
+const weekday = WEEKDAY_TO_NUM[weekdayLabel] ?? new Date(`${dateStr}T00:00:00+04:00`).getDay()
 const hours = STUDIO_HOURS[weekday] || {}
+
 const daySlots: string[] = []
 const daySlotWindows: Array<{ hhmm: string; startISO: string; endISO: string }> = []
 

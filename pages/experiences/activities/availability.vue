@@ -261,6 +261,28 @@ function ymdDubai(d) {
     return `${y}-${m}-${da}`
 }
 
+// Dubai weekday number (0=Sun..6=Sat) independent of viewer locale
+function weekdayNumDubai(d) {
+    const dateStr = ymdDubai(d)
+    // Use a stable midday UTC anchor so day doesn't shift across timezones
+    const weekdayLabel = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Dubai',
+        weekday: 'short',
+    }).format(new Date(`${dateStr}T12:00:00Z`))
+
+    const WEEKDAY_TO_NUM = {
+        Sun: 0,
+        Mon: 1,
+        Tue: 2,
+        Wed: 3,
+        Thu: 4,
+        Fri: 5,
+        Sat: 6,
+    }
+
+    return WEEKDAY_TO_NUM[weekdayLabel] ?? 0
+}
+
 // availability state
 const isLoading = ref(false)
 const error = ref('')
@@ -290,8 +312,7 @@ function minutesToHHMM(min) {
 }
 
 const studioWindowForSelected = computed(() => {
-    const key = ymdDubai(selectedDate.value)
-    const wd = new Date(`${key}T00:00:00+04:00`).getDay()
+    const wd = weekdayNumDubai(selectedDate.value) // Dubai weekday (0=Sun..6=Sat)
     return STUDIO_HOURS[wd] || null
 })
 
@@ -388,13 +409,15 @@ async function fetchWeekFor(date) {
     isLoading.value = true
     error.value = ''
 
-    const base = new Date(date)
-    const weekStart = new Date(base)
-    weekStart.setDate(base.getDate() - base.getDay())
+    // Dubai week window (Sun–Sat), independent of viewer timezone
+    const dateKey = ymdDubai(date)
+    const baseDubaiMidnight = new Date(`${dateKey}T00:00:00+04:00`)
+    const wdDubai = weekdayNumDubai(date) // 0=Sun..6=Sat (Dubai)
+
+    const weekStart = new Date(baseDubaiMidnight.getTime() - wdDubai * 24 * 60 * 60 * 1000)
     weekStart.setHours(0, 0, 0, 0)
 
-    const weekEnd = new Date(weekStart)
-    weekEnd.setDate(weekStart.getDate() + 6)
+    const weekEnd = new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000)
     weekEnd.setHours(23, 59, 59, 999)
 
     try {

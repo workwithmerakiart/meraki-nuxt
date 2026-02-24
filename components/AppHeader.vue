@@ -399,6 +399,16 @@ watch(
           'filter-black': !showLightHeader && isScrolled,
         }" style="transition: filter 0.3s ease" alt="Logo" />
       </NuxtLink>
+      <!-- SEO: Always-present primary links (hidden visually, readable by crawlers/screen readers) -->
+      <nav aria-label="Primary" class="sr-only">
+        <NuxtLink to="/experiences/activities">Activities</NuxtLink>
+        <NuxtLink to="/experiences/courses">Courses</NuxtLink>
+        <NuxtLink to="/experiences/workshops">Workshops</NuxtLink>
+        <NuxtLink to="/experiences/afterschool">Art Camps</NuxtLink>
+        <NuxtLink to="/shop/products">Shop</NuxtLink>
+        <NuxtLink to="/about/faqs">FAQs</NuxtLink>
+        <NuxtLink to="/about/contact">Contact</NuxtLink>
+      </nav>
       <!-- Right controls: Cart + Hamburger grouped -->
       <div class="flex items-center z-50">
         <!-- Cart Button -->
