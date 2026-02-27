@@ -261,6 +261,14 @@ function ymdDubai(d) {
     return `${y}-${m}-${da}`
 }
 
+// Add days using a Dubai-anchored timestamp, and return a Dubai date key (YYYY-MM-DD)
+function addDaysDubaiKey(dateKey, deltaDays) {
+    // Use midday in Dubai to avoid date shifting at timezone boundaries
+    const dt = new Date(`${dateKey}T12:00:00+04:00`)
+    dt.setUTCDate(dt.getUTCDate() + deltaDays)
+    return ymdDubai(dt)
+}
+
 // Dubai weekday number (0=Sun..6=Sat) independent of viewer locale
 function weekdayNumDubai(d) {
     const dateStr = ymdDubai(d)
@@ -409,33 +417,32 @@ async function fetchWeekFor(date) {
     isLoading.value = true
     error.value = ''
 
-    // Dubai week window (Sun–Sat), independent of viewer timezone
-    const dateKey = ymdDubai(date)
-    const baseDubaiMidnight = new Date(`${dateKey}T00:00:00+04:00`)
+    // Build a Dubai week window (Sun–Sat) that is independent of the viewer's timezone.
+    // IMPORTANT: Avoid setHours()/local-time mutations which can shift dates in UK vs UAE.
+    const baseKey = ymdDubai(date)
     const wdDubai = weekdayNumDubai(date) // 0=Sun..6=Sat (Dubai)
 
-    const weekStart = new Date(baseDubaiMidnight.getTime() - wdDubai * 24 * 60 * 60 * 1000)
-    weekStart.setHours(0, 0, 0, 0)
+    const weekStartKey = addDaysDubaiKey(baseKey, -wdDubai)
+    const weekEndKey = addDaysDubaiKey(weekStartKey, 6)
 
-    const weekEnd = new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000)
-    weekEnd.setHours(23, 59, 59, 999)
+    // Convert Dubai-local boundaries to UTC ISO strings for the API
+    const startISO = new Date(`${weekStartKey}T00:00:00+04:00`).toISOString()
+    const endISO = new Date(`${weekEndKey}T23:59:59.999+04:00`).toISOString()
 
     try {
-        const startISO = weekStart.toISOString()
-        const endISO = weekEnd.toISOString()
-
         // Pass activity identity to the API so capacity counters are scoped per activity
         const sku = String(route.query.sku || route.query.id || route.query.title || 'activity')
         const subtypeId = String(route.query.subtypeId || route.query.subtype || '')
 
         const res = await $fetch('/api/calendar', {
-          query: {
-            start: startISO,
-            end: endISO,
-            sku,
-            subtypeId,
-          },
+            query: {
+                start: startISO,
+                end: endISO,
+                sku,
+                subtypeId,
+            },
         })
+
         const got = res?.slots ?? {}
         if (got && typeof got === 'object') {
             slotsMap.value = { ...slotsMap.value, ...got }

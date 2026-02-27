@@ -3,40 +3,63 @@ import { google } from 'googleapis'
 import { getQuery, createError } from 'h3'
 
 export default defineEventHandler(async (event) => { // NEW
-  const query = getQuery(event) as { start?: string; end?: string; sku?: string; subtypeId?: string; capacity?: string } // NEW
-  if (!query.start || !query.end) { // NEW
-    throw createError({ statusCode: 400, statusMessage: 'Missing start/end' }) // NEW
-  } // NEW
+  const query = getQuery(event) as {
+    start?: string
+    end?: string
+    weekStart?: string
+    weekEnd?: string
+    tz?: string
+    sku?: string
+    subtypeId?: string
+    capacity?: string
+  }
+  if (!query.weekStart && (!query.start || !query.end)) {
+    throw createError({ statusCode: 400, statusMessage: 'Missing weekStart/weekEnd or start/end' })
+  }
 
-  const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID // NEW
-  const CLIENT_EMAIL = process.env.GOOGLE_SERVICE_EMAIL // NEW
-  const PRIVATE_KEY_RAW = process.env.GOOGLE_PRIVATE_KEY // NEW
+  const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID
+  const CLIENT_EMAIL = process.env.GOOGLE_SERVICE_EMAIL
+  const PRIVATE_KEY_RAW = process.env.GOOGLE_PRIVATE_KEY
 
-  if (!CALENDAR_ID || !CLIENT_EMAIL || !PRIVATE_KEY_RAW) { // NEW
-    throw createError({ statusCode: 500, statusMessage: 'Missing Google Calendar env vars' }) // NEW
-  } // NEW
+  if (!CALENDAR_ID || !CLIENT_EMAIL || !PRIVATE_KEY_RAW) {
+    throw createError({ statusCode: 500, statusMessage: 'Missing Google Calendar env vars' })
+  }
 
-  const PRIVATE_KEY = PRIVATE_KEY_RAW.replace(/\\n/g, '\n') // NEW
+  const PRIVATE_KEY = PRIVATE_KEY_RAW.replace(/\\n/g, '\n')
 
-  const auth = new google.auth.JWT({ // NEW
-    email: CLIENT_EMAIL, // NEW
-    key: PRIVATE_KEY, // NEW
-    scopes: ['https://www.googleapis.com/auth/calendar.readonly'], // NEW
-  }) // NEW
+  const auth = new google.auth.JWT({
+    email: CLIENT_EMAIL,
+    key: PRIVATE_KEY,
+    scopes: ['https://www.googleapis.com/auth/calendar.readonly'],
+  })
 
-  const calendar = google.calendar({ version: 'v3', auth }) // NEW
+  const calendar = google.calendar({ version: 'v3', auth })
 
-  // FreeBusy to get busy blocks for the week                   // NEW
+  const tz = String(query.tz || 'Asia/Dubai')
+
+  const keyRe = /^\d{4}-\d{2}-\d{2}$/
+  const weekStart = String(query.weekStart || '')
+  const weekEnd = String(query.weekEnd || '')
+
+  const timeMin = keyRe.test(weekStart)
+    ? new Date(`${weekStart}T00:00:00+04:00`).toISOString()
+    : new Date(String(query.start)).toISOString()
+
+  const timeMax = keyRe.test(weekEnd)
+    ? new Date(`${weekEnd}T23:59:59.999+04:00`).toISOString()
+    : new Date(String(query.end)).toISOString()
+
+  // FreeBusy to get busy blocks for the week
   const fb = await calendar.freebusy.query({
     requestBody: {
-      timeMin: new Date(query.start).toISOString(),
-      timeMax: new Date(query.end).toISOString(),
-      timeZone: 'Asia/Dubai',
+      timeMin,
+      timeMax,
+      timeZone: tz,
       items: [{ id: CALENDAR_ID }],
     },
   })
 
-  const busy = (fb.data.calendars?.[CALENDAR_ID]?.busy || []) as { start: string; end: string }[] // NEW
+  const busy = (fb.data.calendars?.[CALENDAR_ID]?.busy || []) as { start: string; end: string }[]
 
   // --- Exclusive activity logic for Neon Art Attack (subtypeId === '1.1')
   // Robust detection: sometimes subtypeId is not present in query; fall back to sku/title.
@@ -48,8 +71,8 @@ export default defineEventHandler(async (event) => { // NEW
     // Fetch all events (including transparent) in the range
     const eventsRes = await calendar.events.list({
       calendarId: CALENDAR_ID,
-      timeMin: new Date(query.start).toISOString(),
-      timeMax: new Date(query.end).toISOString(),
+      timeMin,
+      timeMax,
       singleEvents: true,
       orderBy: 'startTime',
       showDeleted: false,
@@ -121,31 +144,48 @@ function slotKey(startISO: string, endISO: string) {
 }
 
   const byDate: Record<string, string[]> = {}
-  const start = new Date(query.start)
-  const end = new Date(query.end)
-  // Normalize to UTC midnight for safe day iteration
-  const startDay = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()))
-  const endDay = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate()))
 
-  const toMinutes = (t: string) => { const [h, m] = t.split(':').map(Number); return h * 60 + m } // NEW
-  const toTime = (mins: number) => { const h = String(Math.floor(mins/60)).padStart(2,'0'); const m = String(mins%60).padStart(2,'0'); return `${h}:${m}` } // NEW
+  function addDaysKey(dateStr: string, days: number) {
+    const anchor = new Date(`${dateStr}T12:00:00Z`)
+    anchor.setUTCDate(anchor.getUTCDate() + days)
 
-  for (let d = new Date(startDay); d <= endDay; d.setUTCDate(d.getUTCDate() + 1)) {
-    // Use Dubai date key to match frontend ymdDubai()
-const parts = new Intl.DateTimeFormat('en-CA', {
-  timeZone: 'Asia/Dubai',
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-}).formatToParts(d)
-const y = parts.find(p => p.type === 'year')?.value
-const mo = parts.find(p => p.type === 'month')?.value
-const da = parts.find(p => p.type === 'day')?.value
-const dateStr = `${y}-${mo}-${da}`
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: tz,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(anchor)
+
+    const y = parts.find(p => p.type === 'year')?.value
+    const m = parts.find(p => p.type === 'month')?.value
+    const d = parts.find(p => p.type === 'day')?.value
+    return `${y}-${m}-${d}`
+  }
+
+  let cursor = keyRe.test(weekStart)
+    ? weekStart
+    : new Intl.DateTimeFormat('en-CA', {
+        timeZone: tz,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(new Date(String(query.start)))
+
+  const endKey = keyRe.test(weekEnd)
+    ? weekEnd
+    : new Intl.DateTimeFormat('en-CA', {
+        timeZone: tz,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(new Date(String(query.end)))
+
+  while (true) {
+    const dateStr = cursor
 
 // Determine weekday in Dubai (robust)
 const weekdayLabel = new Intl.DateTimeFormat('en-US', {
-  timeZone: 'Asia/Dubai',
+  timeZone: tz,
   weekday: 'short',
 }).format(new Date(`${dateStr}T12:00:00Z`))
 
@@ -168,11 +208,12 @@ const daySlotWindows: Array<{ hhmm: string; startISO: string; endISO: string }> 
 // Closed day
 if (!hours.open || !hours.close) {
   byDate[dateStr] = []
-  continue
-}
+} else {
+  const toMinutes = (t: string) => { const [h, m] = t.split(':').map(Number); return h * 60 + m }
+  const toTime = (mins: number) => { const h = String(Math.floor(mins/60)).padStart(2,'0'); const m = String(mins%60).padStart(2,'0'); return `${h}:${m}` }
 
-const dayStart = toMinutes(hours.open)
-const dayEnd = toMinutes(hours.close)
+  const dayStart = toMinutes(hours.open)
+  const dayEnd = toMinutes(hours.close)
     for (let m = dayStart; m < dayEnd; m += STEP) {
       const slotStart = new Date(`${dateStr}T${toTime(m)}:00+04:00`).getTime()
       const slotEnd = slotStart + STEP * 60 * 1000
@@ -215,6 +256,10 @@ const dayEnd = toMinutes(hours.close)
       // If counter lookup fails, fall back to FreeBusy-only availability
       byDate[dateStr] = daySlots
     }
+  }
+
+    if (dateStr === endKey) break
+    cursor = addDaysKey(cursor, 1)
   }
 
   return { slots: byDate }
