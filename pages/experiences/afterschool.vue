@@ -599,10 +599,21 @@ const holidayCampPackages = [
         currency: 'AED',
         vatIncluded: false,
     },
-].map((p) => ({
-    ...p,
-    label: `${p.weekLabel}: ${p.theme} — ${p.currency} ${p.price.toLocaleString()} + VAT`,
-}))
+].map((p) => {
+    const isDayPass = p.duration === 'Day Pass'
+    const hasLunch = String(p.duration || '').toLowerCase().includes('lunch')
+
+    const prefix = isDayPass
+        ? `Day Pass: ${p.theme}`
+        : hasLunch
+            ? `${p.weekLabel}: ${p.theme} (with Lunch)`
+            : `${p.weekLabel}: ${p.theme}`
+
+    return {
+        ...p,
+        label: `${prefix} — ${p.currency} ${p.price.toLocaleString()} + VAT`,
+    }
+})
 
 // Art Classes packages (scalable: edit here whenever pricing changes)
 const artClassPackages = [
