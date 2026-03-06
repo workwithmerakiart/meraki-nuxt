@@ -475,21 +475,19 @@ const classes = {
 const camps = {
     details: [
         { key: 'days', label: 'Monday to Friday', value: '' },
-        { key: 'time', label: '10:30 AM to 1:30 PM', value: '' },
+        { key: 'time', label: '10:30 AM – 1:30 PM', value: '' },
         { key: 'ages', label: 'Ages 5–10 years', value: '' },
         { key: 'materials', label: 'All art materials included', value: '' },
-        { key: 'lunch', label: 'Optional add-on: Lunch', value: 'AED 150 per week' },
-        { key: 'spots', label: 'Spots are limited', value: '' },
+        { key: 'lunch', label: 'Optional add-on: Lunch', value: '' },
+        { key: 'spots', label: 'Limited spots available', value: '' },
     ],
     themes: [
-        { key: 'w1', label: 'Week 1 (Mar 16–20)', value: 'Artistic Garden' },
-        { key: 'w2', label: 'Week 2 (Mar 23–27)', value: 'Fashion & DIY' },
+        { key: 'w1', label: 'Week 1 (Mar 9–13)', value: 'Fashion & DIY' },
+        { key: 'w2', label: 'Week 2 (Mar 16–20)', value: 'Artistic Garden' },
     ],
     prices: [
-        { key: '1w', label: '1 Week Camp', price: 'AED 1,150 + VAT' },
-        { key: '1w-lunch', label: '1 Week Camp with Lunch', price: 'AED 1,300 + VAT' },
-        { key: '2w', label: '2 Weeks Camp', price: 'AED 2,300 + VAT' },
-        { key: '2w-lunch', label: '2 Weeks Camp with Lunch', price: 'AED 2,450 + VAT' },
+        { key: '1w', label: '1 Week', price: 'AED 1,150 + VAT' },
+        { key: '2w', label: '2 Weeks', price: 'AED 2,300 + VAT' },
         { key: 'day', label: 'Day Pass', price: 'AED 250 + VAT' },
     ],
 }
@@ -515,26 +513,24 @@ function setActiveCamp(i) {
 ------------------------- */
 const formOpen = ref(false)
 // Holiday camp packages (scalable: edit here whenever camps/prices change)
-// Holiday camp packages (activity/theme-first so we know what they booked)
-// NOTE: Prices are kept the same as before; we now duplicate them per week/theme so bookings capture the activity name.
 const holidayCampPackages = [
     // Day Pass (per week/theme)
     {
-        title: 'Day Pass — Artistic Garden',
+        title: 'Day Pass — Fashion & DIY',
         key: 'day-pass-w1',
         duration: 'Day Pass',
-        theme: 'Artistic Garden',
-        weekLabel: 'Day Pass',
+        theme: 'Fashion & DIY',
+        weekLabel: 'Week 1 (Mar 9–13)',
         price: 250,
         currency: 'AED',
         vatIncluded: false,
     },
     {
-        title: 'Day Pass — Fashion & DIY',
+        title: 'Day Pass — Artistic Garden',
         key: 'day-pass-w2',
         duration: 'Day Pass',
-        theme: 'Fashion & DIY',
-        weekLabel: 'Day Pass',
+        theme: 'Artistic Garden',
+        weekLabel: 'Week 2 (Mar 16–20)',
         price: 250,
         currency: 'AED',
         vatIncluded: false,
@@ -542,41 +538,41 @@ const holidayCampPackages = [
 
     // 1 Week (per week/theme)
     {
-        title: '1 Week Camp — Artistic Garden',
+        title: '1 Week Camp — Fashion & DIY',
         key: '1-week-w1',
         duration: '1 Week Camp',
-        theme: 'Artistic Garden',
-        weekLabel: 'Week 1 (Mar 16–20)',
-        price: 1150,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-    {
-        title: '1 Week Camp + Lunch — Artistic Garden',
-        key: '1-week-lunch-w1',
-        duration: '1 Week Camp + Lunch',
-        theme: 'Artistic Garden',
-        weekLabel: 'Week 1 (Mar 16–20) with Lunch',
-        price: 1300,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-    {
-        title: '1 Week Camp — Fashion & DIY',
-        key: '1-week-w2',
-        duration: '1 Week Camp',
         theme: 'Fashion & DIY',
-        weekLabel: 'Week 2 (Mar 23–27)',
+        weekLabel: 'Week 1 (Mar 9–13)',
         price: 1150,
         currency: 'AED',
         vatIncluded: false,
     },
     {
         title: '1 Week Camp + Lunch — Fashion & DIY',
-        key: '1-week-lunch-w2',
+        key: '1-week-lunch-w1',
         duration: '1 Week Camp + Lunch',
         theme: 'Fashion & DIY',
-        weekLabel: 'Week 2 (Mar 23–27) with Lunch',
+        weekLabel: 'Week 1 (Mar 9–13)',
+        price: 1300,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+    {
+        title: '1 Week Camp — Artistic Garden',
+        key: '1-week-w2',
+        duration: '1 Week Camp',
+        theme: 'Artistic Garden',
+        weekLabel: 'Week 2 (Mar 16–20)',
+        price: 1150,
+        currency: 'AED',
+        vatIncluded: false,
+    },
+    {
+        title: '1 Week Camp + Lunch — Artistic Garden',
+        key: '1-week-lunch-w2',
+        duration: '1 Week Camp + Lunch',
+        theme: 'Artistic Garden',
+        weekLabel: 'Week 2 (Mar 16–20)',
         price: 1300,
         currency: 'AED',
         vatIncluded: false,
@@ -584,28 +580,27 @@ const holidayCampPackages = [
 
     // 2 Weeks (both themes)
     {
-        title: '2 Weeks Camp — Artistic Garden + Fashion & DIY',
+        title: '2 Weeks Camp — Fashion & DIY + Artistic Garden',
         key: '2-weeks-both',
         duration: '2 Weeks Camp',
-        theme: 'Artistic Garden + Fashion & DIY',
-        weekLabel: 'Week 1 (Mar 16–20) + Week 2 (Mar 23–27)',
+        theme: 'Fashion & DIY + Artistic Garden',
+        weekLabel: 'Week 1 (Mar 9–13) + Week 2 (Mar 16–20)',
         price: 2300,
         currency: 'AED',
         vatIncluded: false,
     },
     {
-        title: '2 Weeks Camp + Lunch — Artistic Garden + Fashion & DIY',
+        title: '2 Weeks Camp + Lunch — Fashion & DIY + Artistic Garden',
         key: '2-weeks-lunch-both',
         duration: '2 Weeks Camp + Lunch',
-        theme: 'Artistic Garden + Fashion & DIY',
-        weekLabel: 'Week 1 (Mar 16–20) + Week 2 (Mar 23–27) with Lunch',
+        theme: 'Fashion & DIY + Artistic Garden',
+        weekLabel: 'Week 1 (Mar 9–13) + Week 2 (Mar 16–20)',
         price: 2450,
         currency: 'AED',
         vatIncluded: false,
     },
 ].map((p) => ({
     ...p,
-    // Dropdown label includes the activity name + timeline, then price
     label: `${p.weekLabel}: ${p.theme} — ${p.currency} ${p.price.toLocaleString()} + VAT`,
 }))
 
