@@ -492,7 +492,7 @@ const coursesData = [
         location: "Meraki Art Studio",
         sections: [
           { icon: CalendarDaysIcon, text: "8 or 12 sessions" },
-          { icon: ClockIcon, text: "2 hours per session | All materials included" },
+          { icon: ClockIcon, text: "1.5 Hours per session | All materials included" },
           { icon: MapPinIcon, text: "Flexible scheduling available" },
         ],
         overview: "Build a strong foundation with sketching, shading, perspective, and composition.",
@@ -500,7 +500,7 @@ const coursesData = [
         modalContent: {
           title: "Basics of Drawing — AED 1260 – 1825",
           dates: "Flexible scheduling available",
-          time: "2 Hours per session | All Materials Included",
+          time: "1.5 Hours per session | All Materials Included",
           location: "Meraki Art Studio",
           price: "AED 1260 – 1825",
           vat: true,
@@ -518,7 +518,7 @@ const coursesData = [
             <p><strong>Each Course Includes:</strong><br/>
             8 Sessions — AED 1260<br/>
             12 Sessions — AED 1825<br/>
-            2 Hours per session | All Materials Included<br/>
+            1.5 Hours per session | All Materials Included<br/>
             Flexible scheduling available</p>
           `,
           checkoutPayload: {
@@ -571,7 +571,7 @@ const coursesData = [
         location: "Meraki Art Studio",
         sections: [
           { icon: CalendarDaysIcon, text: "8 or 12 sessions" },
-          { icon: ClockIcon, text: "2 hours per session | All materials included" },
+          { icon: ClockIcon, text: "1.5 Hours per session | All materials included" },
           { icon: MapPinIcon, text: "Flexible scheduling available" },
         ],
         overview: "Explore color theory, brush techniques, and canvas layering using bold, vibrant acrylics.",
@@ -579,7 +579,7 @@ const coursesData = [
         modalContent: {
           title: "Acrylic Painting — AED 1260 – 1825",
           dates: "Flexible scheduling available",
-          time: "2 Hours per session | All Materials Included",
+          time: "1.5 Hours per session | All Materials Included",
           location: "Meraki Art Studio",
           price: "AED 1260 – 1825",
           vat: true,
@@ -597,7 +597,7 @@ const coursesData = [
             <p><strong>Each Course Includes:</strong><br/>
             8 Sessions — AED 1260<br/>
             12 Sessions — AED 1825<br/>
-            2 Hours per session | All Materials Included<br/>
+            1.5 Hours per session | All Materials Included<br/>
             Flexible scheduling available</p>
           `,
           checkoutPayload: {
@@ -650,7 +650,7 @@ const coursesData = [
         location: "Meraki Art Studio",
         sections: [
           { icon: CalendarDaysIcon, text: "8 or 12 sessions" },
-          { icon: ClockIcon, text: "2 hours per session | All materials included" },
+          { icon: ClockIcon, text: "1.5 Hours per session | All materials included" },
           { icon: MapPinIcon, text: "Flexible scheduling available" },
         ],
         overview: "Master dreamy washes, florals, and fluid landscapes — perfect for mindfulness through art.",
@@ -658,7 +658,7 @@ const coursesData = [
         modalContent: {
           title: "Watercolor Painting — AED 1260 – 1825",
           dates: "Flexible scheduling available",
-          time: "2 Hours per session | All Materials Included",
+          time: "1.5 Hours per session | All Materials Included",
           location: "Meraki Art Studio",
           price: "AED 1260 – 1825",
           vat: true,
@@ -676,7 +676,7 @@ const coursesData = [
             <p><strong>Each Course Includes:</strong><br/>
             8 Sessions — AED 1260<br/>
             12 Sessions — AED 1825<br/>
-            2 Hours per session | All Materials Included<br/>
+            1.5 Hours per session | All Materials Included<br/>
             Flexible scheduling available</p>
           `,
           checkoutPayload: {
@@ -729,7 +729,7 @@ const coursesData = [
         location: "Meraki Art Studio",
         sections: [
           { icon: CalendarDaysIcon, text: "8 or 12 sessions" },
-          { icon: ClockIcon, text: "2 hours per session | All materials included" },
+          { icon: ClockIcon, text: "1.5 Hours per session | All materials included" },
           { icon: MapPinIcon, text: "Flexible scheduling available" },
         ],
         overview: "Create timeless, textured masterpieces with a deep dive into classical oil painting techniques.",
@@ -737,7 +737,7 @@ const coursesData = [
         modalContent: {
           title: "Oil Painting — AED 1260 – 1825",
           dates: "Flexible scheduling available",
-          time: "2 Hours per session | All Materials Included",
+          time: "1.5 Hours per session | All Materials Included",
           location: "Meraki Art Studio",
           price: "AED 1260 – 1825",
           vat: true,
@@ -755,7 +755,7 @@ const coursesData = [
             <p><strong>Each Course Includes:</strong><br/>
             8 Sessions — AED 1260<br/>
             12 Sessions — AED 1825<br/>
-            2 Hours per session | All Materials Included<br/>
+            1.5 Hours per session | All Materials Included<br/>
             Flexible scheduling available</p>
           `,
           checkoutPayload: {

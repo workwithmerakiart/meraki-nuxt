@@ -73,8 +73,8 @@
         <div class="flex-1">
           <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <div v-for="product in filteredVisibleProducts" :key="product.id"
-              class="bg-white border border-black rounded overflow-hidden flex flex-col hover:shadow-md transition">
-              <div class="aspect-square overflow-hidden">
+              class="bg-white border border-black rounded overflow-hidden flex flex-col hover:shadow-md transition group">
+              <div class="aspect-square overflow-hidden relative">
                 <img
                   v-if="product.image"
                   :src="product.image"
@@ -83,6 +83,23 @@
                   :class="product.category === 'Gift' ? 'object-top' : ''"
                 />
                 <div v-else class="text-gray-400 text-sm">No Image</div>
+                <!-- Description overlay on hover (desktop) -->
+                <div v-if="product.description"
+                  class="absolute inset-0 bg-black/60 flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  <p class="text-white text-xs leading-relaxed p-3">{{ product.description }}</p>
+                </div>
+                <!-- Info icon for mobile tap -->
+                <button v-if="product.description"
+                  class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/80 text-black text-xs font-bold flex items-center justify-center shadow md:hidden"
+                  @click.stop="toggleDescription(product.id)">
+                  i
+                </button>
+                <!-- Mobile description overlay on tap -->
+                <div v-if="product.description && activeDescriptionId === product.id"
+                  class="absolute inset-0 bg-black/60 flex items-end md:hidden"
+                  @click.stop="toggleDescription(null)">
+                  <p class="text-white text-xs leading-relaxed p-3">{{ product.description }}</p>
+                </div>
               </div>
               <div class="p-4 flex flex-col flex-1">
                 <h3 class="text-sm font-semibold text-black mb-1">{{ product.title }}</h3>
@@ -95,12 +112,16 @@
             </div>
           </div>
 
-          <!-- Loader -->
-          <div v-if="isLoading" class="flex justify-center mt-6">
-            <svg class="animate-spin h-6 w-6 text-black" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-            </svg>
+          <!-- Scroll hint with trailing dot animation (only when more to load) -->
+          <div v-if="hasMore" class="flex flex-col items-center mt-8 gap-3">
+            <div class="flex items-center gap-2">
+              <span class="h-px w-8 bg-gray-300"></span>
+              <span class="text-[11px] uppercase tracking-widest text-black">scroll for more</span>
+              <span class="h-px w-8 bg-gray-300"></span>
+            </div>
+            <div class="scroll-trail">
+              <span class="scroll-trail-dot"></span>
+            </div>
           </div>
         </div>
       </div>
@@ -183,6 +204,14 @@
         </div>
       </div>
     </transition>
+
+    <!-- Sticky product counter pill -->
+    <transition name="fade">
+      <div v-if="filteredVisibleProducts.length > 0 && filteredVisibleProducts.length < totalFilteredCount"
+        class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-black/80 backdrop-blur-sm text-white text-[11px] tracking-wide px-4 py-2 rounded-full shadow-lg">
+        {{ filteredVisibleProducts.length }} of {{ totalFilteredCount }} products
+      </div>
+    </transition>
   </section>
 </template>
 
@@ -195,6 +224,11 @@ import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
 const categoryExpanded = ref(true)
 const priceExpanded = ref(true)
 const selectedCategory = ref('All')
+const activeDescriptionId = ref(null)
+
+function toggleDescription(id) {
+  activeDescriptionId.value = activeDescriptionId.value === id ? null : id
+}
 
 const categories = ['DIY Kits', 'Starter Kits']
 
@@ -225,6 +259,8 @@ const allProducts = ref([
   , { id: 17, title: 'Fluid Art Labubu', price: 175, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
   , { id: 18, title: 'Fluid Art Bunny', price: 160, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
   , { id: 19, title: 'Fluid Art Bear Phone Holder', price: 75, category: 'DIY Kits', image: '/images/shop/shopnew.webp' }
+  , { id: 21, title: 'Paint by Numbers Kit', price: 95, category: 'DIY Kits', image: '/images/shop/numberskit.png', description: 'A calming DIY art kit for adults and kids. Includes numbered canvas roll (50x70cm), paint pots & brushes.' }
+  , { id: 22, title: 'Bear Pouring Kit', price: 125, category: 'DIY Kits', image: '/images/shop/bearnew.png', description: 'A fun DIY fluid art bear kit. Includes bear figurine (18cm), 3 pouring paints, mixing cup & stick, gloves & apron.' }
 
   // Gift Card (always available via floating button)
   , { id: 20, title: 'Meraki Gift Card', price: 100, category: 'Gift', image: '/images/shop/meraki-gift-card-new.webp' },
@@ -232,7 +268,7 @@ const allProducts = ref([
 
 
 const visibleProducts = ref([])
-const itemsPerLoad = 6
+const itemsPerLoad = 9
 const isLoading = ref(false)
 const isGiftModalOpen = ref(false)
 const cartStore = useCartStore()
@@ -347,9 +383,10 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (giftHideTimer) clearTimeout(giftHideTimer)
+  window.removeEventListener('scroll', handleScroll)
 })
 const giftProduct = computed(() => allProducts.value.find(p => p.category === 'Gift' || p.title === 'Meraki Gift Card'))
-let offset = 0
+const offset = ref(0)
 
 const filteredVisibleProducts = computed(() => {
   return visibleProducts.value.filter(
@@ -359,16 +396,28 @@ const filteredVisibleProducts = computed(() => {
   )
 })
 
+const totalFilteredCount = computed(() => {
+  return allProducts.value.filter(
+    p =>
+      (selectedCategory.value === 'All' || p.category === selectedCategory.value) &&
+      p.price <= priceRange.value
+  ).length
+})
+
+const hasMore = computed(() => {
+  return offset.value < allProducts.value.length
+})
+
 function loadMore() {
-  if (isLoading.value) return
+  if (isLoading.value || offset.value >= allProducts.value.length) return
   isLoading.value = true
 
   setTimeout(() => {
-    const newItems = allProducts.value.slice(offset, offset + itemsPerLoad)
+    const newItems = allProducts.value.slice(offset.value, offset.value + itemsPerLoad)
     visibleProducts.value.push(...newItems)
-    offset += itemsPerLoad
+    offset.value += itemsPerLoad
     isLoading.value = false
-  }, 500)
+  }, 300)
 }
 
 function setCategory(cat) {
@@ -383,21 +432,22 @@ function clearFilters() {
 }
 
 function resetProducts() {
-  offset = 0
+  offset.value = 0
   visibleProducts.value = []
   loadMore()
 }
 
-onMounted(() => {
-  loadMore()
-  window.addEventListener('scroll', handleScroll)
-})
-
 function handleScroll() {
-  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+  if (offset.value >= allProducts.value.length) return
+  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300) {
     loadMore()
   }
 }
+
+onMounted(() => {
+  loadMore()
+  window.addEventListener('scroll', handleScroll, { passive: true })
+})
 
 function openGiftModal() {
   isGiftModalOpen.value = true
@@ -430,5 +480,42 @@ function buttonClass(cat) {
 
 input[type=range] {
   accent-color: #447c9d;
+}
+
+/* Trailing dot scroll indicator */
+.scroll-trail {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, black 60%, transparent);
+  position: relative;
+  border-radius: 1px;
+}
+
+.scroll-trail-dot {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: black;
+  animation: trail-dot 1.6s ease-in-out infinite;
+}
+
+@keyframes trail-dot {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
 }
 </style>

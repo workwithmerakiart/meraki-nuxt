@@ -55,45 +55,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
+import { getAllBlogs } from '~/data/blogs.js'
 
-const posts = ref([
-  {
-    slug: 'how-art-helps-kids-grow-beyond-the-canvas',
-    title: 'How Art Helps Kids Grow Beyond the Canvas',
-    excerpt: 'Art activities help children build emotional strength, motor skills, confidence, and communication through hands-on creative learning.',
-    image: '/images/blogs/blog1/01.webp',
-    date: '2025-09-03'
-  },
-  {
-    slug: 'inside-the-resin-room-tips-from-our-artists',
-    title: 'Inside the resin room: Tips from our artists',
-    excerpt: 'Practical guidance on resin art with tips from artists in Dubai, covering tools, safety, and classes for beginners and experienced creators.',
-    image: '/images/blogs/blog2/01.webp',
-    date: '2025-09-01'
-  },
-  {
-    slug: 'throwing-a-creative-birthday-party-heres-what-you-need-to-know',
-    title: 'Throwing a Creative Birthday Party? Here’s What You Need to Know',
-    excerpt: 'Plan a kids art birthday party in Dubai with hands-on activities, fun workshops, and a checklist to make creative celebrations easy to organise.',
-    image: '/images/blogs/blog3/01.webp',
-    date: '2025-08-28'
-  },
-  {
-    slug: 'top-5-diy-projects-you-can-try-this-weekend',
-    title: 'Top 5 DIY Art Projects You Can Try This Weekend',
-    excerpt: 'Turn weekends into mini art festivals with 5 DIY projects using Dubai art supplies. Create useful crafts with a splash of colour and a dose of imagination.',
-    image: '/images/blogs/blog4/01.webp',
-    date: '2025-08-21'
-  },
-  {
-    slug: 'artist-spotlight-the-story-behind-the-dubai-art-studio',
-    title: 'Artist Spotlight: The Story Behind the Dubai Art Studio',
-    excerpt: 'Meet the artists behind our Dubai art studio. Discover their story, creative journey, and the vision that shapes our workshops and experiences.',
-    image: '/images/blogs/blog5/01.webp',
-    date: '2025-09-29'
-  }
-])
+const posts = computed(() =>
+  getAllBlogs()
+    .map(b => ({
+      slug: b.slug,
+      title: b.title,
+      excerpt: b.excerpt || b.metaDescription,
+      image: b.coverThumb || b.heroImage,
+      date: b.date,
+    }))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+)
 
 function formatDate(iso: string) {
   try {

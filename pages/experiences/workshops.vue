@@ -39,7 +39,7 @@ const blockOneData = {
   title: "Workshops",
   tagline: "Create, Explore, Evolve.",
   description:
-    "Meraki Art Studio offers Dubai’s most thoughtfully curated workshops and courses.",
+    "Meraki Art Studio offers Dubai's most thoughtfully curated workshops and courses.",
 };
 
 const blockTwoData = {
@@ -47,7 +47,7 @@ const blockTwoData = {
     "/images/workshops/workshops_block2.webp",
   title: "",
   description:
-    "Whether you’re seeking a fun outing or building mastery, every experience is hands-on, inspiring, and curated to help you unlock your artistic potential. Choose from one-time sessions perfect for tourists, families, and friends looking for memorable fun, or embark on multi-day courses tailored for aspiring artists ready to deepen their skills. Every workshop is guided by passionate mentors, using premium materials.",
+    "Whether you're seeking a fun outing or building mastery, every experience is hands-on, inspiring, and curated to help you unlock your artistic potential. Choose from one-time sessions perfect for tourists, families, and friends looking for memorable fun, or embark on multi-day courses tailored for aspiring artists ready to deepen their skills. Every workshop is guided by passionate mentors, using premium materials.",
 };
 
 const workshopsData = [
@@ -56,65 +56,20 @@ const workshopsData = [
     sections: [
       {
         badge: "WORKSHOPS",
-        image: "/images/shop/oct2.jpeg",
-        title: "Kids Halloween Workshop",
-        price: "150 AED",
-        vat: true,
-        vatValue: 5,
-        dateTs: Date.parse('2025-10-31T00:00:00Z'),
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Friday, 31 October 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "3:30 PM – 5:30 PM",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Meraki Art Studio",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Kids Halloween Workshop",
-          dates: "Friday, 31 October 2025",
-          time: "3:30 PM – 5:30 PM",
-          location: "Meraki Art Studio",
-          price: "150 AED",
-          vat: true,
-          vatValue: 5,
-          registerText: "Book Now",
-          imageSrc: "/images/shop/oct2.jpeg",
-          imageCaption: "Kids Halloween Workshop at Meraki Art Studio",
-          content: `
-            <p>A fun-filled Halloween afternoon featuring Glow Slime + Mini Pumpkin Painting.</p>
-            <ul>
-              <li>Guided slime making with glow effects</li>
-              <li>Paint your own mini pumpkin</li>
-              <li>Halloween special drink included</li>
-            </ul>
-          `,
-        },
-      },
-      {
-        badge: "WORKSHOPS",
-        image:
-          "/images/workshops/2.webp",
+        image: "/images/workshops/2.webp",
         title: "Moon Texture Art",
-        price: "325 AED",
+        price: "250 AED",
         vat: true,
         vatValue: 5,
-        dateTs: Date.parse('2025-09-04T00:00:00Z'),
+        dateTs: Date.parse('2026-04-04T00:00:00Z'),
         sections: [
           {
             icon: CalendarDaysIcon,
-            text: "From 4 September 2025",
+            text: "Saturday, 4 April 2026",
           },
           {
             icon: ClockIcon,
-            text: "10:30 AM – 12:30 PM",
+            text: "3:00 PM \u2013 5:00 PM",
           },
           {
             icon: MapPinIcon,
@@ -124,38 +79,34 @@ const workshopsData = [
         modal: true,
         modalContent: {
           title: "Moon Texture Art",
-          dates: "From 4 September 2025",
-          time: "10:30 AM – 12:30 PM",
+          dates: "Saturday, 4 April 2026",
+          time: "3:00 PM \u2013 5:00 PM",
           location: "Meraki Art Studio",
-          price: "325 AED",
+          price: "250 AED",
           vat: true,
           vatValue: 5,
           registerText: "Book Now",
-          imageSrc:
-            "/images/workshops/2.webp",
-          imageCaption:
-            "Moon Texture Art. Photo: Meraki Art Studio",
-          content:
-            "<p>Create your own moon-textured masterpiece.</p>",
+          imageSrc: "/images/workshops/2.webp",
+          imageCaption: "Moon Texture Art at Meraki Art Studio",
+          content: "<p>Create your own textured moon-inspired artwork in a calming and hands-on guided session.</p>",
         },
       },
       {
         badge: "WORKSHOPS",
-        image:
-          "/images/workshops/3.webp",
-        title: "Paint & Sip",
-        price: "150 AED",
+        image: "/images/workshops/3.webp",
+        title: "Guided Painting",
+        price: "95 AED",
         vat: true,
         vatValue: 5,
-        dateTs: Date.parse('2025-09-04T00:00:00Z'),
+        dateTs: Date.parse('2026-04-05T00:00:00Z'),
         sections: [
           {
             icon: CalendarDaysIcon,
-            text: "From 4 September 2025",
+            text: "Sunday, 5 April 2026",
           },
           {
             icon: ClockIcon,
-            text: "10:30 AM – 12:30 PM",
+            text: "11:00 AM \u2013 1:00 PM",
           },
           {
             icon: MapPinIcon,
@@ -164,333 +115,17 @@ const workshopsData = [
         ],
         modal: true,
         modalContent: {
-          title: "Paint & Sip",
-          dates: "From 4 September 2025",
-          time: "10:30 AM – 12:30 PM",
+          title: "Guided Painting",
+          dates: "Sunday, 5 April 2026",
+          time: "11:00 AM \u2013 1:00 PM",
           location: "Meraki Art Studio",
-          price: "150 AED",
+          price: "95 AED",
           vat: true,
           vatValue: 5,
           registerText: "Book Now",
-          imageSrc:
-            "/images/workshops/3.webp",
-          imageCaption:
-            "Paint & Sip. Photo: Meraki Art Studio",
-          content:
-            "<p>Relax with brushes, brews & colors.</p>",
-        },
-      },
-    ],
-  },
-  {
-    title: "",
-    sections: [
-      {
-        badge: "WORKSHOPS",
-        image:
-          "/images/workshops/4.webp",
-        title: "Perfume Making",
-        price: "195 AED",
-        vat: true,
-        vatValue: 5,
-        dateTs: Date.parse('2025-09-18T00:00:00Z'),
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "From 18 September 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "10:30 AM – 12:30 PM",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Meraki Art Studio",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Perfume Making",
-          dates: "From 18 September 2025",
-          time: "10:30 AM – 12:30 PM",
-          location: "Meraki Art Studio",
-          price: "195 AED",
-          vat: true,
-          vatValue: 5,
-          registerText: "Book Now",
-          imageSrc:
-            "/images/workshops/1.webp",
-          imageCaption:
-            "Perfume Making. Photo: Meraki Art Studio",
-          content:
-            "<p>Blend your own personalized fragrance.</p>",
-        },
-      },
-      {
-        badge: "WORKSHOPS",
-        image:
-          "/images/workshops/5.webp",
-        title: "Cold Process Soap Making",
-        price: "475 AED",
-        vat: true,
-        vatValue: 5,
-        dateTs: Date.parse('2025-09-25T00:00:00Z'),
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "From 25 September 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "10:30 AM – 12:30 PM",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Meraki Art Studio",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Cold Process Soap Making",
-          dates: "From 25 September 2025",
-          time: "10:30 AM – 12:30 PM",
-          location: "Meraki Art Studio",
-          price: "475 AED",
-          vat: true,
-          vatValue: 5,
-          registerText: "Book Now",
-          imageSrc:
-            "/images/workshops/1.webp",
-          imageCaption:
-            "Creative Mornings @ Meraki. Photo: Meraki Art Studio",
-          content:
-            "<p>Handcraft natural soaps with soothing scents.</p>",
-        },
-      }
-      , {
-        badge: "WORKSHOPS",
-        image: "/images/shop/oct1.jpeg",
-        title: "Witch’s Brew Candle Workshop",
-        price: "275 AED",
-        vat: true,
-        vatValue: 5,
-        dateTs: Date.parse('2025-10-30T00:00:00Z'),
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Thursday, 30 October 2025",
-          },
-          {
-            icon: ClockIcon,
-            text: "10:30 AM – 12:00 PM",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Meraki Art Studio",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Witch’s Brew Candle Workshop",
-          dates: "Thursday, 30 October 2025",
-          time: "10:30 AM – 12:00 PM",
-          location: "Meraki Art Studio",
-          price: "275 AED",
-          vat: true,
-          vatValue: 5,
-          registerText: "Book Now",
-          imageSrc: "/images/shop/oct1.jpeg",
-          imageCaption: "Witch’s Brew Candle Workshop at Meraki Art Studio",
-          content: `
-            <p>Make spooky-scented candles in mini cauldron jars with black wax, gold shimmer, and magical Halloween scents like Midnight Amber, Smoky Vanilla, and Pumpkin Spice.</p>
-            <ul>
-              <li>Add crystal toppings & glitter dust</li>
-              <li>Label your potion “No. 9”</li>
-              <li>Halloween special drink included</li>
-            </ul>
-          `,
-        },
-      }
-    ],
-  },
-  {
-    title: "",
-    sections: [
-      {
-        badge: "WORKSHOPS",
-        image: "/images/workshops/tasbih.jpg",
-        title: "Tasbih Making Workshop",
-        price: "160 AED",
-        vat: true,
-        vatValue: 5,
-        dateTs: Date.parse('2026-02-15T00:00:00Z'),
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Sunday, 15 February 2026",
-          },
-          {
-            icon: ClockIcon,
-            text: "11:00 AM – 12:00 PM",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Meraki Art Studio",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Tasbih Making Workshop",
-          dates: "Sunday, 15 February 2026",
-          time: "11:00 AM – 12:00 PM",
-          location: "Meraki Art Studio",
-          price: "160 AED",
-          vat: true,
-          vatValue: 5,
-          registerText: "Book Now",
-          imageSrc: "/images/workshops/tasbih.jpg",
-          imageCaption: "Tasbih Making Workshop at Meraki Art Studio",
-          content: `
-            <p>Design a personalized tasbih in a calm, mindful creative session. Choose from a selection of beads and elements to create a meaningful piece to take home.</p>
-            <ul>
-              <li>All materials included</li>
-              <li>Finished tasbih is taken home</li>
-            </ul>
-          `,
-        },
-      },
-      {
-        badge: "WORKSHOPS",
-        image: "/images/workshops/leather-making.jpg",
-        title: "Leather Making Workshop",
-        price: "195 AED",
-        vat: true,
-        vatValue: 5,
-        dateTs: Date.parse('2026-02-21T00:00:00Z'),
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Saturday, 21 February 2026",
-          },
-          {
-            icon: ClockIcon,
-            text: "3:00 PM – 4:30 PM",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Meraki Art Studio",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Leather Making Workshop",
-          dates: "Saturday, 21 February 2026",
-          time: "3:00 PM – 4:30 PM",
-          location: "Meraki Art Studio",
-          price: "195 AED",
-          vat: true,
-          vatValue: 5,
-          registerText: "Book Now",
-          imageSrc: "/images/workshops/leather-making.jpg",
-          imageCaption: "Leather Making Workshop at Meraki Art Studio",
-          content: `
-            <p>Craft a stylish leather accessory in a hands-on session while learning basic leather techniques. Create a functional piece and take home something you’ve made yourself.</p>
-            <ul>
-              <li>All materials included</li>
-              <li>Finished leather piece is taken home</li>
-            </ul>
-          `,
-        },
-      },
-      {
-        badge: "WORKSHOPS",
-        image: "/images/workshops/sparkly-bag.jpg",
-        title: "Sparkly Bag Making Workshop",
-        price: "375 AED",
-        vat: true,
-        vatValue: 5,
-        dateTs: Date.parse('2026-02-22T00:00:00Z'),
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Sunday, 22 February 2026",
-          },
-          {
-            icon: ClockIcon,
-            text: "3:00 PM – 5:30 PM",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Meraki Art Studio",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Sparkly Bag Making Workshop",
-          dates: "Sunday, 22 February 2026",
-          time: "3:00 PM – 5:30 PM",
-          location: "Meraki Art Studio",
-          price: "375 AED",
-          vat: true,
-          vatValue: 5,
-          registerText: "Book Now",
-          imageSrc: "/images/workshops/sparkly-bag.jpg",
-          imageCaption: "Sparkly Bag Making Workshop at Meraki Art Studio",
-          content: `
-            <p>Create a sparkly bag using hand-knotting techniques and crystal embellishments. Design and take home a statement accessory in this hands-on creative session.</p>
-            <ul>
-              <li>All materials included</li>
-              <li>Finished bag is taken home</li>
-            </ul>
-          `,
-        },
-      },
-    ],
-  },
-  {
-    title: "",
-    sections: [
-      {
-        badge: "WORKSHOPS",
-        image: "/images/workshops/soap-making.jpg",
-        title: "Cold Process Soap Making",
-        price: "350 AED",
-        vat: true,
-        vatValue: 5,
-        dateTs: Date.parse('2026-02-28T00:00:00Z'),
-        sections: [
-          {
-            icon: CalendarDaysIcon,
-            text: "Saturday, 28 February 2026",
-          },
-          {
-            icon: ClockIcon,
-            text: "3:30 PM – 5:30 PM",
-          },
-          {
-            icon: MapPinIcon,
-            text: "Meraki Art Studio",
-          },
-        ],
-        modal: true,
-        modalContent: {
-          title: "Cold Process Soap Making",
-          dates: "Saturday, 28 February 2026",
-          time: "3:30 PM – 5:30 PM",
-          location: "Meraki Art Studio",
-          price: "350 AED",
-          vat: true,
-          vatValue: 5,
-          registerText: "Book Now",
-          imageSrc: "/images/workshops/soap-making.jpg",
-          imageCaption: "Cold Process Soap Making Masterclass at Meraki Art Studio",
-          content: `
-            <p>Learn the art of cold process soap making and create natural soaps from scratch in this hands-on masterclass. Understand ingredients, techniques, and safety while crafting your own soap bars to take home.</p>
-            <ul>
-              <li>All materials included</li>
-              <li>Handmade soaps are taken home</li>
-            </ul>
-          `,
+          imageSrc: "/images/workshops/3.webp",
+          imageCaption: "Guided Painting at Meraki Art Studio",
+          content: "<p>A relaxing step-by-step painting experience designed for all skill levels. (25x30cm)</p>",
         },
       },
     ],
@@ -565,7 +200,7 @@ const eventBlockData = {
 const imageStackData = {
   title: "The Pop Up Grocer Fund",
   description: [
-    "Every store pays it forward. We contribute a portion of total product sales to our Fund, through which we further support founders—those that are under-resourced and underrepresented—and their creations, with a combination of cash and services.",
+    "Every store pays it forward. We contribute a portion of total product sales to our Fund, through which we further support founders\u2014those that are under-resourced and underrepresented\u2014and their creations, with a combination of cash and services.",
     "Are you a founder that qualifies?",
   ],
   button: "Apply for The Fund",

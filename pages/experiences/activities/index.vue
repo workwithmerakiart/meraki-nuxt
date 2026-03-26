@@ -361,6 +361,16 @@ const activities = [
         price: "AED 125",
         vatIncluded: false,
         bottomNote: "Scented fizzies made by you — soak, relax, repeat."
+      },
+      {
+        id: "5.4",
+        title: "Perfume Making (50ml)",
+        image: "/images/activities/beauty-blend.webp",
+        description: "Create your own signature fragrance by blending unique scents into a personalized perfume.",
+        price: "AED 225",
+        vatIncluded: false,
+        duration: "1 hour",
+        bottomNote: "Blend, layer, and bottle your own one-of-a-kind scent!"
       }
     ]
   },

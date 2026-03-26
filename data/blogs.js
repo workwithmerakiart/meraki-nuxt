@@ -548,9 +548,487 @@ export const blogs = [
                     'The best way to choose is to begin with curiosity. Resin workshops are social and high energy fun while formats inspired by art therapy offer deeper personal reflection and rejuvenation. Whether you’re joining as a family, solo, or a group, Meraki’s team has something to offer for every experience. It is this openness that has made the studio a favourite for those looking for behind the scenes art studio experiences or even an informal artist interview in Dubai. If you’re ready to explore art in a way that feels personal and fulfilling, you can browse our workshops or learn about our story on www.merakiartstudio.ae'
             }
         ]
-    }
+    },
+    {
+        slug: 'custom-orders-by-meraki-art-studio',
+        title: 'Custom Orders by Meraki Art Studio: Thoughtful, Creative & Made Just for You',
+        date: '2026-03-26',
+        metaDescription:
+            'Discover custom orders at Meraki Art Studio Dubai. Personalized gifts, corporate gifting, wedding favors, branded keepsakes and handmade event pieces crafted with care.',
+        heroImage: '/images/custom/custom_hero.webp',
+        excerpt:
+            'From personalized keepsakes to creative event favors, we create handcrafted pieces that feel special, thoughtful, and truly one of a kind.',
+        coverThumb: '/images/custom/custom_hero.webp',
+        tags: ['Custom Orders', 'Gifting', 'Events'],
 
-    // Add your other 4 blogs here with the same shape
+        blocks: [
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    'At Meraki Art Studio, we believe the most meaningful pieces are the ones made with intention. Whether you\'re planning a corporate event, a brand activation, a wedding, a birthday, or simply looking for something unique to gift, our <a href="/shop/custom-orders">custom orders</a> are designed to bring your ideas to life in a beautiful and memorable way.'
+            },
+            {
+                type: 'paragraph',
+                text:
+                    'From personalized keepsakes to creative event favors, we create handcrafted pieces that feel special, thoughtful, and truly one of a kind.'
+            },
+            {
+                type: 'image',
+                src: '/images/custom/custom_flora.webp',
+                alt: 'Custom floral resin sculpture by Meraki Art Studio',
+                caption: 'Custom floral resin preservation at Meraki Art Studio | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+
+            { type: 'heading', level: 2, text: 'What Are Custom Orders at Meraki?' },
+            {
+                type: 'paragraph',
+                text:
+                    'Our custom orders are specially curated pieces made for a wide range of occasions and purposes. Every order is tailored based on your theme, colors, branding, event type, quantity, and budget.'
+            },
+            {
+                type: 'list',
+                items: [
+                    'Corporate gifting',
+                    'Brand events & activations',
+                    'Weddings & bridal events',
+                    'Ramadan / Eid gifting',
+                    'Birthday return favors',
+                    'Baby showers & celebrations',
+                    'Retail collaborations',
+                    'Personalized gifts'
+                ]
+            },
+
+            { type: 'heading', level: 2, text: 'What Can Be Customized?' },
+            {
+                type: 'paragraph',
+                text:
+                    'We offer a wide range of creative products and experiences that can be customized for your occasion. Some of our most loved custom orders include:'
+            },
+            {
+                type: 'image',
+                src: '/images/custom/custom_large_scale.webp',
+                alt: 'Custom large-scale canvas art by Meraki',
+                caption: 'Custom large-scale artwork crafted at Meraki Art Studio | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+            {
+                type: 'list',
+                items: [
+                    'Tasbih / prayer beads',
+                    'Perfume bottles',
+                    'Resin bookmarks',
+                    'Keychains',
+                    'Decoden mirrors & accessories',
+                    'Jesmonite trays and coasters',
+                    'Leather accessories',
+                    'Paint-your-own kits',
+                    'Creative gift boxes',
+                    'Workshop take-home favors',
+                    'Handmade keepsakes for events'
+                ]
+            },
+            {
+                type: 'paragraph',
+                text:
+                    'Depending on the project, we can also customize packaging, color palettes, branding and logo placement, tags and name cards, personalized names or initials, and theme-based details.'
+            },
+
+            { type: 'heading', level: 2, text: 'Perfect for Events, Brands & Special Occasions' },
+            {
+                type: 'paragraph',
+                text:
+                    'One of the reasons clients love custom orders is because they make events feel more personal and elevated.'
+            },
+            {
+                type: 'image',
+                src: '/images/custom/1.jpeg',
+                alt: 'Custom corporate gifting by Meraki Art Studio',
+                caption: 'Custom corporate gifting crafted for brand events | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+            { type: 'heading', level: 3, text: 'For brands and corporate clients' },
+            {
+                type: 'paragraph',
+                text:
+                    'Custom pieces can be created for PR gifting, launch events, influencer boxes, mall activations, team building gifts, and client appreciation gifting.'
+            },
+            { type: 'heading', level: 3, text: 'For weddings and celebrations' },
+            {
+                type: 'paragraph',
+                text:
+                    'Custom favors add a beautiful, memorable touch to bridal showers, wedding welcome gifts, mehendi and haldi favors, baby showers, and birthday return gifts.'
+            },
+            {
+                type: 'paragraph',
+                text:
+                    'Whether you need 10 pieces or a larger bulk order, we work closely with you to create something that feels aligned with your vision.'
+            },
+
+            { type: 'heading', level: 2, text: 'Why Clients Love Custom Orders' },
+            {
+                type: 'paragraph',
+                text:
+                    'Custom orders are not just about gifting \u2014 they create an experience. In a world full of generic gifting, custom-made pieces feel much more intentional and leave a lasting impression.'
+            },
+            {
+                type: 'image',
+                src: '/images/custom/2.jpeg',
+                alt: 'Handcrafted custom pieces by Meraki',
+                caption: 'Handcrafted pieces designed for memorable gifting | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+            {
+                type: 'list',
+                items: [
+                    'Personal',
+                    'Creative',
+                    'Thoughtful',
+                    'Aesthetic',
+                    'Memorable',
+                    'Brandable'
+                ]
+            },
+
+            { type: 'heading', level: 2, text: 'How the Process Works' },
+            {
+                type: 'paragraph',
+                text:
+                    'We keep the process simple and collaborative.'
+            },
+            {
+                type: 'image',
+                src: '/images/custom/3.jpeg',
+                alt: 'Custom order process at Meraki Art Studio',
+                caption: 'From concept to creation \u2014 our collaborative custom order process | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+            {
+                type: 'list',
+                ordered: true,
+                items: [
+                    'Share your idea \u2014 Tell us what you\'re looking for: product, event, theme, quantity, colors, and timeline.',
+                    'We curate options \u2014 Based on your brief, we suggest suitable ideas, finishes, and customizations.',
+                    'Sampling / approval \u2014 For certain orders, we can share a sample or reference before final production.',
+                    'Production \u2014 Once approved, we begin creating your order with care and attention to detail.',
+                    'Delivery / event setup \u2014 Depending on the order, we can arrange pickup, delivery, or event activation support.'
+                ]
+            },
+
+            { type: 'heading', level: 2, text: 'Can You Customize for My Brand or Event Theme?' },
+            {
+                type: 'paragraph',
+                text:
+                    'Absolutely. This is one of our favorite parts of what we do. Whether you want something minimal and elegant, playful and colorful, or luxury and elevated, we can create something that fits beautifully.'
+            },
+            {
+                type: 'list',
+                items: [
+                    'Your brand colors',
+                    'Your campaign concept',
+                    'Your event aesthetic',
+                    'Your logo / initials',
+                    'Your packaging style',
+                    'Your occasion'
+                ]
+            },
+
+            { type: 'heading', level: 2, text: 'Why Choose Meraki for Custom Orders in Dubai?' },
+            {
+                type: 'paragraph',
+                text:
+                    'At Meraki, we don\'t believe in one-size-fits-all creativity. We work with both individual clients and brands, and we love transforming simple ideas into beautiful final pieces.'
+            },
+            {
+                type: 'image',
+                src: '/images/custom/4.jpeg',
+                alt: 'Premium custom orders by Meraki Art Studio Dubai',
+                caption: 'Premium handmade custom pieces by Meraki Art Studio | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+            {
+                type: 'list',
+                items: [
+                    'Attention to detail',
+                    'Aesthetic presentation',
+                    'Thoughtful finishing',
+                    'Creative flexibility',
+                    'A premium, handmade touch'
+                ]
+            },
+
+            { type: 'heading', level: 2, text: 'Let\'s Create Something Meaningful' },
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    'If you\'re looking for custom gifts, personalized favors, branded keepsakes, or handmade event pieces in Dubai, we\'d love to create something with you. Whether it\'s for a special celebration, a brand experience, or a beautiful gift, we\'re here to help bring your idea to life.'
+            },
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    'To place a custom order, get in touch with us via WhatsApp or Instagram and our team will guide you through the options. You can also <a href="/shop/custom-orders">submit a custom order inquiry</a> directly on our website.'
+            },
+            {
+                type: 'list',
+                items: [
+                    'Meraki Art Studio, Dubai',
+                    'WhatsApp: +971 50 852 3600',
+                    'Instagram: @merakistudio_dubai',
+                    'Website: www.merakiartstudio.ae'
+                ]
+            },
+            { type: 'spacer', size: 'lg' }
+        ]
+    },
+    {
+        slug: 'corporate-team-building-activities-in-dubai-that-actually-work',
+        title: 'Corporate Team Building Activities in Dubai That Actually Work',
+        date: '2026-03-26',
+        metaDescription:
+            'Discover creative corporate team building activities in Dubai. From perfume making to resin art workshops, find team experiences that actually work at Meraki Art Studio.',
+        heroImage: '/images/activities/corporate.webp',
+        excerpt:
+            'The most effective teams are built through shared experiences and creativity. Discover corporate team building activities in Dubai that actually work.',
+        coverThumb: '/images/activities/corporate.webp',
+        tags: ['Corporate', 'Team Building', 'Workshops'],
+
+        blocks: [
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    'In today\'s fast-paced work culture, teams need more than just meetings, deadlines, and office routines to stay connected. The most effective teams are built through shared experiences, creativity, and meaningful moments outside the usual work environment.'
+            },
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    'That\'s where corporate team building activities come in. At <a href="/experiences/activities">Meraki Art Studio</a> in Dubai, we\'ve seen firsthand how the right activity can help teams bond, relax, collaborate, and reconnect \u2014 while still having fun in a beautiful and inspiring setting.'
+            },
+            {
+                type: 'image',
+                src: '/images/activities/corporate.webp',
+                alt: 'Corporate team building at Meraki Art Studio Dubai',
+                caption: 'Corporate team building sessions at Meraki Art Studio | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+
+            { type: 'heading', level: 2, text: 'Why Team Building Matters More Than Ever' },
+            {
+                type: 'paragraph',
+                text:
+                    'A strong team doesn\'t happen by accident. When colleagues get the chance to connect in a more relaxed and creative environment, it can lead to:'
+            },
+            {
+                type: 'list',
+                items: [
+                    'Better communication',
+                    'Stronger collaboration',
+                    'Improved morale',
+                    'Increased creativity',
+                    'Reduced stress',
+                    'A healthier workplace culture'
+                ]
+            },
+            {
+                type: 'paragraph',
+                text:
+                    'The best part? Team building doesn\'t have to feel forced or awkward. The most successful activities are the ones people genuinely enjoy.'
+            },
+
+            { type: 'heading', level: 2, text: 'What Makes a Team Building Activity Actually Effective?' },
+            {
+                type: 'paragraph',
+                text:
+                    'Not every team activity creates real connection. The best corporate experiences are interactive, easy to participate in, relaxing but engaging, inclusive for different personalities, memorable, and well-organized.'
+            },
+            {
+                type: 'paragraph',
+                text:
+                    'People are much more likely to open up, laugh, connect, and enjoy themselves when the activity feels natural \u2014 not like another work task. That\'s why creative workshops have become one of the most popular choices for corporate events in Dubai.'
+            },
+            {
+                type: 'image',
+                src: '/images/activities/activities_hero.webp',
+                alt: 'Creative activities at Meraki Art Studio',
+                caption: 'A vibrant creative space designed for team experiences | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+
+            { type: 'heading', level: 2, text: 'Best Corporate Team Building Activities in Dubai' },
+
+            { type: 'heading', level: 3, text: '1. Perfume Making Workshops' },
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    '<a href="/experiences/workshops">Perfume making</a> is one of the most unique and elevated team building experiences. It allows team members to explore scent, creativity, and personal expression while creating something they can take home. It\'s interactive, sophisticated, and works especially well for office teams, brand teams, leadership groups, and client engagement events.'
+            },
+            {
+                type: 'paragraph',
+                text:
+                    'It also feels more premium than traditional team building formats, which makes it ideal for companies looking for a more refined experience.'
+            },
+            {
+                type: 'image',
+                src: '/images/activities/beauty-blend.webp',
+                alt: 'Perfume and beauty blend workshops at Meraki',
+                caption: 'Perfume making \u2014 a premium team building experience | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+
+            { type: 'heading', level: 3, text: '2. Resin Art Workshops' },
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    '<a href="/experiences/activities">Resin workshops</a> are a great choice for teams that want something fun, hands-on, and visually satisfying. Team members can create coasters, trays, bookmarks, and decorative keepsakes. This works especially well because it\'s easy to participate in even if someone doesn\'t consider themselves "creative."'
+            },
+            {
+                type: 'image',
+                src: '/images/activities/resin/activities_resin_art.webp',
+                alt: 'Resin art workshop at Meraki Art Studio',
+                caption: 'Resin art \u2014 fun, hands-on, and visually satisfying | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+
+            { type: 'heading', level: 3, text: '3. Jesmonite Workshops' },
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    '<a href="/experiences/activities">Jesmonite</a> is a modern and stylish creative activity that\'s perfect for teams looking for something a little different. It\'s ideal for creating coasters, trays, pots, and decorative home pieces. This type of workshop feels modern, premium, and design-led \u2014 making it a great fit for companies who want a more polished team experience.'
+            },
+            {
+                type: 'image',
+                src: '/images/activities/jesmonite/activities_jesmonite.webp',
+                alt: 'Jesmonite workshop at Meraki Art Studio',
+                caption: 'Jesmonite creations \u2014 modern, premium, and design-led | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+
+            { type: 'heading', level: 3, text: '4. Texture Art & Canvas Painting' },
+            {
+                type: 'paragraph',
+                text:
+                    'For teams that want to slow down, disconnect from screens, and enjoy something expressive, painting workshops are a beautiful option. These are especially effective because they encourage relaxation, creative thinking, self-expression, and light conversation. It\'s a great way for team members to unwind while still sharing an experience together.'
+            },
+            {
+                type: 'image',
+                src: '/images/activities/other/activities_other_texture.webp',
+                alt: 'Texture art workshop at Meraki',
+                caption: 'Texture art \u2014 expressive, calming, and collaborative | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+
+            { type: 'heading', level: 3, text: '5. Collaborative Creative Challenges' },
+            {
+                type: 'paragraph',
+                text:
+                    'If you want something more dynamic, group-based creative challenges can also be a fun and effective format. These can include group canvas art, team art stations, custom brand-themed creative sessions, and collaborative installations. This style of activity works well for larger teams and adds an extra layer of teamwork and interaction.'
+            },
+
+            { type: 'heading', level: 2, text: 'Why Creative Team Building Works So Well' },
+            {
+                type: 'paragraph',
+                text:
+                    'Creative workshops are different from traditional team building because they naturally encourage people to talk, collaborate, share ideas, help each other, and relax. There\'s no pressure to "perform" or compete. Instead, people connect through the process.'
+            },
+            {
+                type: 'paragraph',
+                text:
+                    'This is especially valuable in today\'s workplace, where teams are often dealing with stress, busy schedules, and digital overload. Creative team building offers a chance to pause, connect, and enjoy a shared experience in a meaningful way.'
+            },
+            {
+                type: 'image',
+                src: '/images/activities/other/activities_other_diy.webp',
+                alt: 'Team DIY painting session at Meraki',
+                caption: 'Teams connecting through creative expression | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+
+            { type: 'heading', level: 2, text: 'How to Choose the Right Team Building Activity' },
+            {
+                type: 'paragraph',
+                text:
+                    'The best activity depends on your team and the kind of experience you want to create.'
+            },
+            {
+                type: 'list',
+                items: [
+                    'Something premium and unique \u2014 Choose Perfume Making',
+                    'Something fun and hands-on \u2014 Choose Resin Art or Jesmonite',
+                    'Something calming and expressive \u2014 Choose Canvas Painting or Texture Art',
+                    'A more interactive group experience \u2014 Choose Collaborative Creative Challenges'
+                ]
+            },
+            {
+                type: 'paragraph',
+                text:
+                    'At Meraki, we can also help curate the right workshop based on your team size, budget, event duration, team preferences, occasion or celebration, and brand style or event theme.'
+            },
+
+            { type: 'heading', level: 2, text: 'Why Dubai Companies Are Choosing Creative Team Building' },
+            {
+                type: 'paragraph',
+                text:
+                    'Dubai companies are moving away from generic team lunches and repetitive office activities. Instead, they\'re choosing experiences that feel more memorable, more engaging, more meaningful, and more aligned with modern workplace culture.'
+            },
+            {
+                type: 'paragraph',
+                text:
+                    'Creative workshops offer a fresh alternative that people actually look forward to. And unlike many one-time event formats, your team leaves with something they made themselves \u2014 which makes the experience even more memorable.'
+            },
+
+            { type: 'heading', level: 2, text: 'Corporate Team Building at Meraki Art Studio' },
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    'At <a href="/experiences/activities">Meraki Art Studio</a>, we offer thoughtfully curated corporate team building workshops in Dubai for teams, brands, and organizations looking for something creative, elevated, and genuinely enjoyable.'
+            },
+            {
+                type: 'image',
+                src: '/images/activities/activities_block2.webp',
+                alt: 'Meraki Art Studio creative space',
+                caption: 'Our studio \u2014 designed for creative team experiences | Picture Courtesy \u2014 Meraki Art Studio'
+            },
+            {
+                type: 'paragraph',
+                text:
+                    'We can host small teams, large groups, brand activations, employee engagement sessions, client experiences, and wellness-inspired team events. Our workshops can be tailored based on your team size, budget, event duration, brand style, team preferences, and occasion.'
+            },
+
+            { type: 'heading', level: 3, text: 'Hosted at Our Studio or Your Location' },
+            {
+                type: 'paragraph',
+                text:
+                    'We can host your corporate workshop at our Meraki Art Studio in Dubai, or we can bring the experience to your office, event venue, showroom, or preferred location for added convenience. This makes it easy for teams to enjoy a creative and engaging activity without needing to travel far or manage complicated logistics.'
+            },
+
+            { type: 'heading', level: 3, text: 'Food & Refreshment Options Available' },
+            {
+                type: 'paragraph',
+                text:
+                    'To make the experience even more enjoyable, we also offer food and refreshment options that can be added to your team building session. Depending on your event, this can include light bites, coffee and beverages, add-on catering options, and custom celebration setups.'
+            },
+
+            { type: 'heading', level: 2, text: 'Let\'s Plan a Team Experience Your Team Will Actually Enjoy' },
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    'If you\'re looking for corporate team building activities in Dubai that feel fresh, creative, and memorable, we\'d love to help. Whether you want a <a href="/experiences/workshops">perfume workshop</a>, <a href="/experiences/activities">resin session</a>, creative art activity, or a fully customized team experience, Meraki can curate something that works beautifully for your team.'
+            },
+            {
+                type: 'paragraph',
+                html: true,
+                text:
+                    'We also offer on-site workshops at your location, studio-hosted sessions, food & refreshment add-ons, and custom setups for teams and brands. To plan your next corporate workshop, <a href="/shop/custom-orders">get in touch with us</a> and our team will be happy to help curate the right experience for your group.'
+            },
+            {
+                type: 'list',
+                items: [
+                    'Meraki Art Studio, Dubai',
+                    'WhatsApp: +971 50 852 3600',
+                    'Instagram: @merakistudio_dubai',
+                    'Website: www.merakiartstudio.ae'
+                ]
+            },
+            { type: 'spacer', size: 'lg' }
+        ]
+    }
 ];
 
 export function getAllBlogs() {
