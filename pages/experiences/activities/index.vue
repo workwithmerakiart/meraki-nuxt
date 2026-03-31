@@ -365,7 +365,7 @@ const activities = [
       {
         id: "5.4",
         title: "Perfume Making (50ml)",
-        image: "/images/activities/beauty-blend.webp",
+        image: "/images/activities/perfume-making.png",
         description: "Create your own signature fragrance by blending unique scents into a personalized perfume.",
         price: "AED 225",
         vatIncluded: false,
@@ -538,9 +538,9 @@ const blockBetweenOneAndTwoData = {
 
 const bookActivitiesContent = {
   heading: "Ready for happy-time?",
-  body: "Swipe through a mix of our favorite activities. You can book and pay online in a few clicks — or reserve your spot now and pay at the studio when you arrive.",
+  body: "Swipe through a mix of our favorite activities. You can book and pay online in a few clicks - or send us an inquiry now.",
   highlights: ["All materials included", "Guided sessions", "Suitable for all ages", "Pay at studio"],
-  ctaText: "Book Your Session Now",
+  ctaText: "Inquire Now",
 
   // NEWLY ADDED
   productOptions: activities.flatMap(activity =>

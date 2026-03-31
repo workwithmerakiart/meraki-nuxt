@@ -867,7 +867,7 @@ export const blogs = [
             },
             {
                 type: 'image',
-                src: '/images/activities/beauty-blend.webp',
+                src: '/images/activities/perfume-making.png',
                 alt: 'Perfume and beauty blend workshops at Meraki',
                 caption: 'Perfume making \u2014 a premium team building experience | Picture Courtesy \u2014 Meraki Art Studio'
             },

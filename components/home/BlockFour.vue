@@ -58,9 +58,9 @@ const swiperModules = [Navigation, Autoplay, A11y]
 
 const blocksData = ref([
   { id: 1, type: 'WORKSHOPS', imageUrl: '/images/workshops/1.webp', title: 'Creative Mornings @ Meraki', link: '/experiences/workshops' },
-  { id: 2, type: 'WORKSHOPS', imageUrl: '/images/workshops/2.webp', title: 'Moon Texture Art', link: '/experiences/workshops' },
-  { id: 3, type: 'WORKSHOPS', imageUrl: '/images/workshops/3.webp', title: 'Paint & Sip', link: '/experiences/workshops' },
-  { id: 4, type: 'WORKSHOPS', imageUrl: '/images/workshops/4.webp', title: 'Perfume Making', link: '/experiences/workshops' },
+  { id: 2, type: 'WORKSHOPS', imageUrl: '/images/workshops/2.jpg', title: 'Moon Texture Art', link: '/experiences/workshops' },
+  { id: 3, type: 'WORKSHOPS', imageUrl: '/images/workshops/3.png', title: 'Paint & Sip', link: '/experiences/workshops' },
+  { id: 4, type: 'WORKSHOPS', imageUrl: '/images/activities/perfume-making.png', title: 'Perfume Making', link: '/experiences/workshops' },
   { id: 5, type: 'WORKSHOPS', imageUrl: '/images/workshops/5.webp', title: 'Cold Process Soap Making', link: '/experiences/workshops' },
 ])
 

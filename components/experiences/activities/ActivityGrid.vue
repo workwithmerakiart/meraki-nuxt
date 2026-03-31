@@ -17,7 +17,7 @@
                 <div class="p-4">
                     <h3 class="text-xl font-semibold text-[#447C9D]">{{ activity.name }}</h3>
                     <p class="text-sm text-gray-500 mt-2">{{ activity.shortDescription }}</p>
-                    <button class="mt-4 text-sm font-semibold text-[#447C9D] hover:underline">Explore</button>
+                    <button class="mt-4 text-sm font-semibold text-[#447C9D] hover:underline">Book Now</button>
                 </div>
             </motion>
         </div>

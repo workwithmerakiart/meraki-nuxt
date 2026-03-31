@@ -10,7 +10,7 @@
         &times;
       </button>
 
-      <h2 class="text-2xl font-bold text-[#447C9D] mb-4 text-center">Book Your Creative Session</h2>
+      <h2 class="text-2xl font-bold text-[#447C9D] mb-4 text-center">Inquire About Your Creative Session</h2>
 
       <form @submit.prevent="submitForm" class="space-y-5">
         <!-- 👤 Your Details -->
@@ -101,36 +101,6 @@
           </p>
         </div>
 
-        <!-- 🗓️ Date & Time -->
-        <div>
-          <label class="block font-medium text-sm mb-1">Preferred Date & Time*</label>
-          <input
-            type="datetime-local"
-            v-model="form.dateTime"
-            @blur="touched.dateTime = true"
-            required
-            class="w-full border border-gray-300 rounded px-3 py-2"
-          />
-          <p v-if="touched.dateTime && !dateTimeValid" class="mt-1 text-xs text-red-600">
-            Please select a preferred date & time.
-          </p>
-        </div>
-
-        <div>
-          <label class="block font-medium text-sm mb-1">Number of Participants*</label>
-          <input
-            type="number"
-            min="1"
-            v-model.number="form.participants"
-            @blur="touched.participants = true"
-            required
-            class="w-full border border-gray-300 rounded px-3 py-2"
-          />
-          <p v-if="touched.participants && !participantsValid" class="mt-1 text-xs text-red-600">
-            Participants must be at least 1.
-          </p>
-        </div>
-
         <!-- 📝 Notes -->
         <div>
           <label class="block font-medium text-sm mb-1">Additional Notes</label>
@@ -176,8 +146,6 @@ const form = reactive({
   name: '',
   email: '',
   product: '',
-  dateTime: '',
-  participants: 1,
   notes: '',
 })
 
@@ -186,8 +154,6 @@ const touched = reactive({
   email: false,
   phone: false,
   product: false,
-  dateTime: false,
-  participants: false,
 })
 
 // Phone: use vue-tel-input ONLY for country picker (flag + dial code)
@@ -245,10 +211,8 @@ const phoneValid = computed(() => {
   return digits.length >= minDigits.value && digits.length <= maxDigits.value
 })
 const productValid = computed(() => Boolean(String(form.product || '').trim()))
-const dateTimeValid = computed(() => Boolean(String(form.dateTime || '').trim()))
-const participantsValid = computed(() => Number(form.participants || 0) >= 1)
 
-const allValid = computed(() => nameValid.value && emailValid.value && phoneValid.value && productValid.value && dateTimeValid.value && participantsValid.value)
+const allValid = computed(() => nameValid.value && emailValid.value && phoneValid.value && productValid.value)
 
 const submitting = ref(false)
 const toastMsg = ref('')
@@ -265,8 +229,6 @@ async function submitForm() {
   touched.email = true
   touched.phone = true
   touched.product = true
-  touched.dateTime = true
-  touched.participants = true
 
   if (!allValid.value) {
     toastMsg.value = 'Please check the highlighted fields and try again.'
@@ -289,8 +251,6 @@ async function submitForm() {
       countryCode: phoneParts.countryCode || '', // ✅ includes +
       phone: String(phoneParts.phone || ''),
       activityType: String(form.product || '').trim(),
-      dateTime: String(form.dateTime || ''),
-      participants: Number(form.participants || 1),
       notes: String(form.notes || ''),
       source: 'activities-form',
       ts: Date.now(),
@@ -310,7 +270,7 @@ async function submitForm() {
     }
 
     toastOk.value = true
-    toastMsg.value = 'We have reserved your spot and would be waiting for your welcome at the studio.'
+    toastMsg.value = 'We have received your inquiry. Our team will get in touch with you shortly.'
 
     // Let the success toast be visible before the parent closes the modal
     setTimeout(() => {
@@ -323,8 +283,6 @@ async function submitForm() {
       form.name = ''
       form.email = ''
       form.product = ''
-      form.dateTime = ''
-      form.participants = 1
       form.notes = ''
       phoneNational.value = ''
       syncPhoneParts()
