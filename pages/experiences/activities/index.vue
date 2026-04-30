@@ -376,13 +376,42 @@ const activities = [
   },
   {
     id: 6,
+    name: "Fluffy Friends",
+    image: "/images/activities/plushie-making.png",
+    shortDescription: "Stuff, stitch, and snuggle — make your own cuddly companion!",
+    modal: true,
+    subtypes: [
+      {
+        id: "6.1",
+        title: "Plushie Making",
+        image: "/images/activities/plushie-making.png",
+        description: "Create your very own plushie companion. Choose your character and colors — bear, dog, cat, bunny, or dino.",
+        price: "AED 195",
+        vatIncluded: false,
+        duration: "45 mins",
+        bottomNote: "Create a cuddly friend that's uniquely yours! Add-on accessories available."
+      },
+      {
+        id: "6.2",
+        title: "Bear Stuffing",
+        image: "/images/activities/bear-stuffing.jpg",
+        description: "Stuff your very own plushie bear.",
+        price: "AED 160",
+        duration: "30 mins",
+        vatIncluded: false,
+        bottomNote: "Create a furry friend that's uniquely yours!"
+      }
+    ]
+  },
+  {
+    id: 7,
     name: "Other Creative Experiences",
     image: "/images/activities/other/activities_other.webp",
     shortDescription: "Eclectic DIY fun – pour, paint, sculpt and stuff!",
     modal: true,
     subtypes: [
       {
-        id: "6.1",
+        id: "7.1",
         title: "Bear Pouring (Classic)",
         image: "/images/activities/other/activities_other_bear.webp",
         description: "Pour and customize your own adorable resin bear.",
@@ -396,7 +425,7 @@ const activities = [
         ]
       },
       {
-        id: "6.2",
+        id: "7.2",
         title: "Fluid Art (Non-Neon)",
         image: "/images/activities/other/activities_other_fluid_art.webp",
         description: "Pour and swirl high-gloss abstract art in your favorite colors.",
@@ -411,7 +440,7 @@ const activities = [
         ]
       },
       {
-        id: "6.3",
+        id: "7.3",
         title: "DIY Painting Session",
         image: "/images/activities/other/activities_other_diy.webp",
         description: "Rent a canvas, brushes, and unlimited paints at our open bar.",
@@ -426,7 +455,7 @@ const activities = [
         ]
       },
       {
-        id: "6.4",
+        id: "7.4",
         title: "Regular Slime",
         image: "/images/activities/regular-slime.jpg",
         description: "Classic slime-making fun with unlimited squish!",
@@ -436,17 +465,7 @@ const activities = [
         bottomNote: "Stretch, swirl, and squish your own perfect slime mix."
       },
       {
-        id: "6.5",
-        title: "Bear Stuffing",
-        image: "/images/activities/bear-stuffing.jpg",
-        description: "Stuff your very own plushie bear.",
-        price: "AED 160",
-        duration: "30 mins",
-        vatIncluded: false,
-        bottomNote: "Create a furry friend that’s uniquely yours!"
-      },
-      {
-        id: "6.6",
+        id: "7.5",
         title: "Russian Floral Sculpture",
         image: "/images/activities/other/activities_other_russian.webp",
         description: "Sculpt stunningly realistic florals from clay.",
@@ -456,7 +475,7 @@ const activities = [
         bottomNote: "Master intricate flower-making techniques in this elegant session."
       },
       {
-        id: "6.7",
+        id: "7.6",
         title: "Texture Painting",
         image: "/images/activities/other/activities_other_texture.webp",
         description: "Add dimension and style to your art using texture mediums.",
@@ -466,7 +485,7 @@ const activities = [
         bottomNote: "Bold strokes and textured depth — a feast for your walls."
       },
       {
-        id: "6.8",
+        id: "7.7",
         title: "3D Texture Painting",
         image: "/images/activities/other/activities_other_3D.webp",
         description: "Sculpt and paint elevated textures for a 3D effect.",
@@ -476,7 +495,7 @@ const activities = [
         bottomNote: "Sculptural artistry that truly pops!"
       },
       {
-        id: "6.9",
+        id: "7.8",
         title: "Tote Bag Painting",
         image: "/images/activities/tote-bag.jpg",
         description: "Design your own custom canvas tote bag.",
@@ -486,7 +505,7 @@ const activities = [
         bottomNote: "Wear your art wherever you go."
       },
       {
-        id: "6.10",
+        id: "7.9",
         title: "Pot Painting",
         image: "/images/activities/pot-painting.webp",
         description: "Paint cute and quirky patterns on your very own pot.",
@@ -496,7 +515,7 @@ const activities = [
         bottomNote: "The perfect addition to your window sill or balcony garden."
       },
       {
-        id: "6.11",
+        id: "7.10",
         title: "Fabric Painting",
         image: "/images/activities/other/activities_other_fabric.webp",
         description: "Unleash your creativity on fabric with vibrant colors.",

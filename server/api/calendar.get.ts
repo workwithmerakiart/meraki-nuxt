@@ -79,7 +79,8 @@ export default defineEventHandler(async (event) => { // NEW
       // Include transparent events by default since we do not filter by transparency here
     })
     const events = eventsRes.data.items || []
-    anyEventsBusy = events
+    const filteredEvents = events.filter((e) => e.transparency !== 'transparent')
+    anyEventsBusy = filteredEvents
       .map((e) => {
         // Normalize start/end from dateTime or date (all-day events use `date`)
         const startRaw = e.start?.dateTime || e.start?.date

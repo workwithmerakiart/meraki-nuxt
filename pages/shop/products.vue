@@ -245,11 +245,6 @@ const allProducts = ref([
   { id: 3, title: 'Resin Agate Floral Kit', price: 325, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
   { id: 4, title: 'Resin Dried Flower Kit', price: 325, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
   { id: 5, title: 'Resin Agate Geode Kit', price: 400, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
-  { id: 6, title: 'Resin Art Starter Box', price: 350, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
-  { id: 7, title: 'Premium DIY Art Kit', price: 450, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
-  { id: 8, title: 'Creative DIY Bundle', price: 380, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
-  { id: 9, title: 'DIY Resin Gift Pack', price: 300, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
-  { id: 10, title: 'Complete DIY Set', price: 420, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
   , { id: 11, title: 'Resin Clock Kit', price: 350, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
   , { id: 12, title: 'Resin Table Kit', price: 525, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
   , { id: 13, title: 'Resin Cheeseboard Kit', price: 350, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
