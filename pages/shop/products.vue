@@ -245,7 +245,7 @@ const allProducts = ref([
   { id: 3, title: 'Resin Agate Floral Kit', price: 325, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
   { id: 4, title: 'Resin Dried Flower Kit', price: 325, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
   { id: 5, title: 'Resin Agate Geode Kit', price: 400, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' },
-  , { id: 11, title: 'Resin Clock Kit', price: 350, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
+  { id: 11, title: 'Resin Clock Kit', price: 350, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
   , { id: 12, title: 'Resin Table Kit', price: 525, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
   , { id: 13, title: 'Resin Cheeseboard Kit', price: 350, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
   , { id: 14, title: 'Resin Agate Coaster Kit', price: 325, category: 'DIY Kits', image: '/images/shop/shop_color_kit.webp' }
