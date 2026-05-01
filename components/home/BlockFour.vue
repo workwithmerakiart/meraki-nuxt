@@ -3,7 +3,7 @@
     <!-- Heading -->
     <div class="heading-bg p-2.5 mb-5">
       <h2 class="heading text-5xl font-bold text-[#447c9d] inter-font">
-        POPULAR ACTIVITIES
+        JOIN OUR UPCOMING EVENTS
       </h2>
     </div>
 
