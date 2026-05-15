@@ -220,9 +220,9 @@ const activities = [
     subtypes: [
       {
         id: "3.1",
-        title: "Tray",
+        title: "Jesmonite Tray",
         image: "/images/activities/jesmonite/activities_jesmonite_tray.webp",
-        description: "Craft your own minimalistic tray with unique textures.",
+        description: "Craft your own minimalistic jesmonite tray with unique textures.",
         price: "AED 150",
         vatIncluded: false,
         bottomNote: "Perfect for keys, candles, or just aesthetic organization."
