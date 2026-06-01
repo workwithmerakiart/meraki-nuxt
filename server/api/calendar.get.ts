@@ -183,6 +183,12 @@ function slotKey(startISO: string, endISO: string) {
 
   while (true) {
     const dateStr = cursor
+    if (dateStr === '2026-06-02') {
+      byDate[dateStr] = []
+      if (dateStr === endKey) break
+      cursor = addDaysKey(cursor, 1)
+      continue
+    }
 
 // Determine weekday in Dubai (robust)
 const weekdayLabel = new Intl.DateTimeFormat('en-US', {
