@@ -70,109 +70,136 @@
 
         <!-- SECTION: Holiday Camps -->
         <section id="camps" class="px-6 md:px-10 lg:px-16 py-16 bg-[#F9F3EB] border-t border-black/5">
-            <div class="max-w-7xl mx-auto space-y-8">
-                <div class="grid lg:grid-cols-2 gap-10 items-stretch">
-                    <!-- Left: all descriptive copy -->
-                    <div class="flex flex-col h-full">
-                        <h2 ref="campsTitle" class="block-two-headings text-3xl md:text-4xl font-bold tracking-tight mb-2 text-[#447C9D]">🌟 Holiday Art
-                            Camps</h2>
-                        <p ref="campsSub" class="text-lg text-gray-900 mb-5">When School’s Out, Art Comes Alive</p>
-                        <p ref="campsBody" class="text-gray-600 mb-6">
-                            Our Holiday Camps offer a colorful escape where kids can explore, imagine, and create
-                            freely.
-                            From
-                            paint-splashed canvases to sculpted crafts and group masterpieces, each day is an adventure
-                            through
-                            artistic expression.
-                        </p>
-
-                        <!-- Structured: show ALL sections at once (Details / Themes / Prices) -->
-                        <div ref="campsList" class="text-gray-700 mb-6">
-                            <!-- CAMP DETAILS -->
-                            <div class="mb-7">
-                                <div class="text-lg md:text-xl font-semibold tracking-wide text-[#447C9D] mb-4">Camp
-                                    details</div>
-                                <ul class="space-y-2">
-                                    <li v-for="d in camps.details" :key="`detail-${d.key}`"
-                                        class="flex items-start justify-between gap-4">
-                                        <span class="flex-1 min-w-0 text-gray-800">
-                                            <span class="mr-2">•</span>
-                                            <span class="break-words">{{ d.label }}</span>
-                                        </span>
-                                        <span v-if="d.value"
-                                            class="shrink-0 text-gray-900 tabular-nums whitespace-nowrap">
-                                            {{ d.value }}
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- THEMES -->
-                            <div class="mb-7">
-                                <div class="text-lg md:text-xl font-semibold tracking-wide text-[#447C9D] mb-4">Themes
-                                </div>
-                                <ul class="space-y-2">
-                                    <li v-for="t in camps.themes" :key="`theme-${t.key}`"
-                                        class="flex items-start justify-between gap-4">
-                                        <span class="flex-1 min-w-0 text-gray-800">
-                                            <span class="mr-2">•</span>
-                                            <span class="break-words">{{ t.label }}</span>
-                                        </span>
-                                        <span v-if="t.value"
-                                            class="shrink-0 text-gray-900 tabular-nums whitespace-nowrap">
-                                            {{ t.value }}
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- PRICES -->
-                            <div>
-                                <div class="text-lg md:text-xl font-semibold tracking-wide text-[#447C9D] mb-4">Prices
-                                </div>
-                                <ul class="space-y-2">
-                                    <li v-for="p in camps.prices" :key="`price-${p.key}`"
-                                        class="flex items-start justify-between gap-4">
-                                        <span class="flex-1 min-w-0 text-gray-800">
-                                            <span class="mr-2">•</span>
-                                            <span class="break-words">{{ p.label }}</span>
-                                        </span>
-                                        <span class="shrink-0 text-gray-900 tabular-nums whitespace-nowrap">
-                                            {{ p.price }}
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div ref="campsNote"
-                            class="mt-auto rounded-2xl border border-dashed border-gray-300 bg-white/60 p-5 text-sm text-gray-700">
-                            🎉 Spaces are limited—secure your child's spot for a joyful, creative holiday break.
-                        </div>
-                    </div>
-
-                    <!-- Right: static Holiday Art Camps cover image -->
-                    <div class="order-2 rounded-3xl border border-gray-200 bg-white overflow-hidden shadow-sm h-full">
-                        <div class="relative h-full min-h-[280px] sm:min-h-[360px] lg:min-h-[520px] overflow-hidden">
-                            <img src="/images/afterschool/camps/holiday-art-camps.jpg"
-                                alt="Holiday Art Camps at Meraki Art Studio" class="w-full h-full object-cover" />
-                        </div>
-                    </div>
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div ref="campsHead" class="text-center max-w-3xl mx-auto mb-10">
+                    <h2 class="block-two-headings text-3xl md:text-4xl font-bold tracking-tight mb-2 text-[#447C9D]">
+                        🌟 Holiday Art Camps</h2>
+                    <p class="text-lg text-gray-900 mb-3">When School’s Out, Art Comes Alive</p>
+                    <p class="text-gray-600">
+                        Five themed weeks of hands-on creativity. Book a full week, or pick just the days that excite
+                        your child — each day a brand new adventure.
+                    </p>
                 </div>
 
-                <div class="mt-6">
-                    <button ref="campsCta" type="button"
-                        class="relative overflow-hidden inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold border border-black bg-white text-black transition group"
-                        @click="openForm('Holiday Art Camps')">
-                        <span
-                            class="absolute inset-0 bg-black transition-transform duration-[700ms] ease-out -translate-x-full group-hover:translate-x-0"
-                            aria-hidden="true"></span>
-                        <span
-                            class="relative z-10 inline-flex items-center gap-2 transition-colors group-hover:text-white">
-                            View Camp Schedule &amp; Register
-                            <span aria-hidden="true">→</span>
-                        </span>
+                <!-- Camp pill selector -->
+                <div ref="campsPills" class="flex flex-wrap justify-center gap-2 md:gap-3 mb-10">
+                    <button v-for="(camp, i) in holidayCamps" :key="camp.key" type="button"
+                        @click="setActiveCamp(i)" :class="[
+                            'inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm md:text-base font-semibold transition',
+                            activeCampIndex === i
+                                ? 'border-[#447C9D] bg-[#447C9D] text-white shadow-sm'
+                                : 'border-gray-300 bg-white text-gray-700 hover:border-[#447C9D] hover:text-[#447C9D]'
+                        ]">
+                        <span class="text-lg">{{ camp.emoji }}</span>
+                        <span>{{ camp.shortName }}</span>
                     </button>
+                </div>
+
+                <!-- Active camp panel (fluid swap) -->
+                <transition name="camp-swap" mode="out-in">
+                    <div :key="activeCamp.key" class="grid lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
+                        <!-- Left: cover + info + pricing + CTA -->
+                        <div class="order-2 lg:order-1 flex flex-col">
+                            <div class="rounded-3xl border border-gray-200 bg-white overflow-hidden shadow-sm">
+                                <div class="relative min-h-[220px] sm:min-h-[300px] lg:min-h-[360px]">
+                                    <img :src="activeCamp.image" :alt="activeCamp.name"
+                                        class="absolute inset-0 w-full h-full object-cover" />
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent">
+                                    </div>
+                                    <div class="absolute bottom-0 left-0 right-0 p-5 text-white">
+                                        <div class="text-2xl md:text-3xl font-bold flex items-center gap-2">
+                                            <span>{{ activeCamp.emoji }}</span>
+                                            <span>{{ activeCamp.name }}</span>
+                                        </div>
+                                        <div class="text-sm md:text-base opacity-90">{{ activeCamp.dateLabel }}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="text-gray-600 mt-5 mb-5">{{ activeCamp.blurb }}</p>
+
+                            <!-- info chips -->
+                            <div class="grid sm:grid-cols-2 gap-3 mb-5">
+                                <div
+                                    class="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800">
+                                    <span>🎂</span> Ages {{ activeCamp.ages }}
+                                </div>
+                                <div
+                                    class="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800">
+                                    <span>⏰</span> {{ activeCamp.time }}
+                                </div>
+                                <div
+                                    class="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800">
+                                    <span>🍱</span> Lunch &amp; snacks included
+                                </div>
+                                <div
+                                    class="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800">
+                                    <span>🎨</span> All materials provided
+                                </div>
+                            </div>
+
+                            <!-- pricing -->
+                            <div class="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm mb-5">
+                                <div class="flex flex-wrap items-center justify-between gap-4">
+                                    <div>
+                                        <div class="text-sm text-gray-500">Day Pass</div>
+                                        <div class="text-lg font-bold text-gray-900">
+                                            AED {{ activeCamp.dayPrice.toLocaleString() }}
+                                            <span class="text-sm font-normal text-gray-500">+ VAT / day</span>
+                                        </div>
+                                    </div>
+                                    <div class="h-9 w-px bg-gray-200 hidden sm:block"></div>
+                                    <div>
+                                        <div class="text-sm text-gray-500">Full Week</div>
+                                        <div class="text-lg font-bold text-gray-900">
+                                            AED {{ activeCamp.weekPrice.toLocaleString() }}
+                                            <span class="text-sm font-normal text-gray-500">+ VAT</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button"
+                                class="relative overflow-hidden inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-semibold border border-black bg-white text-black transition group mt-auto self-start"
+                                @click="openForm('Holiday Art Camps', activeCamp.key)">
+                                <span
+                                    class="absolute inset-0 bg-black transition-transform duration-[700ms] ease-out -translate-x-full group-hover:translate-x-0"
+                                    aria-hidden="true"></span>
+                                <span
+                                    class="relative z-10 inline-flex items-center gap-2 transition-colors group-hover:text-white">
+                                    Register for {{ activeCamp.shortName }}
+                                    <span aria-hidden="true">→</span>
+                                </span>
+                            </button>
+                        </div>
+
+                        <!-- Right: day-by-day timeline -->
+                        <div class="order-1 lg:order-2">
+                            <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm h-full">
+                                <div class="text-lg md:text-xl font-semibold tracking-wide text-[#447C9D] mb-5">
+                                    ⏳ Camp Timeline</div>
+                                <ol class="relative border-l border-gray-200 ml-3 space-y-6">
+                                    <li v-for="day in activeCamp.days" :key="day.key" class="relative pl-6">
+                                        <span
+                                            class="absolute -left-[0.95rem] top-0 flex h-7 w-7 items-center justify-center rounded-full bg-[#F9F3EB] border border-gray-200 text-sm">
+                                            {{ day.emoji }}
+                                        </span>
+                                        <div class="font-semibold text-gray-900">Day {{ day.n }} – {{ day.theme }}</div>
+                                        <ul class="mt-1 space-y-1 text-sm text-gray-600">
+                                            <li v-for="p in day.projects" :key="p">• {{ p }}</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+
+                <div
+                    class="mt-8 rounded-2xl border border-dashed border-gray-300 bg-white/60 p-5 text-sm text-gray-700 text-center">
+                    🎉 Spaces are limited—secure your child's spot for a joyful, creative holiday break.
                 </div>
             </div>
         </section>
@@ -197,8 +224,87 @@
                         <form class="p-5 md:p-6 space-y-6 overflow-y-auto" @submit.prevent="submit">
                             <input type="hidden" v-model="form.program" />
 
-                            <!-- Package selector (Holiday Camps + Art Classes) -->
-                            <div v-if="requiresPackage" class="border-b border-gray-200 pb-6">
+                            <!-- Holiday Camps: camp + pass type + day picker -->
+                            <div v-if="isHolidayCampProgram" class="border-b border-gray-200 pb-6 space-y-5">
+                                <h4 class="text-lg font-semibold">🏕️ Holiday Camp</h4>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                                        Select Camp <span class="text-red-600">*</span>
+                                    </label>
+                                    <select v-model="form.campKey" required
+                                        class="w-full rounded-xl border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black/60 focus:border-black/60">
+                                        <option disabled value="">Select a camp</option>
+                                        <option v-for="c in holidayCamps" :key="c.key" :value="c.key">
+                                            {{ c.emoji }} {{ c.name }} · {{ c.dateLabel }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div v-if="selectedCamp">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Pass Type <span class="text-red-600">*</span>
+                                    </label>
+                                    <div class="grid sm:grid-cols-2 gap-3">
+                                        <label :class="[
+                                            'flex items-center gap-3 rounded-xl border px-4 py-3 cursor-pointer transition',
+                                            form.passType === 'week' ? 'border-[#447C9D] ring-1 ring-[#447C9D] bg-[#447C9D]/5' : 'border-gray-300 hover:border-[#447C9D]'
+                                        ]">
+                                            <input type="radio" value="week" v-model="form.passType"
+                                                class="accent-[#447C9D]" />
+                                            <span class="text-sm">
+                                                <span class="font-semibold block">Full Week</span>
+                                                <span class="text-gray-500">AED
+                                                    {{ selectedCamp.weekPrice.toLocaleString() }} + VAT</span>
+                                            </span>
+                                        </label>
+                                        <label :class="[
+                                            'flex items-center gap-3 rounded-xl border px-4 py-3 cursor-pointer transition',
+                                            form.passType === 'day' ? 'border-[#447C9D] ring-1 ring-[#447C9D] bg-[#447C9D]/5' : 'border-gray-300 hover:border-[#447C9D]'
+                                        ]">
+                                            <input type="radio" value="day" v-model="form.passType"
+                                                class="accent-[#447C9D]" />
+                                            <span class="text-sm">
+                                                <span class="font-semibold block">Day Pass</span>
+                                                <span class="text-gray-500">AED
+                                                    {{ selectedCamp.dayPrice.toLocaleString() }} + VAT / day</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div v-if="selectedCamp && form.passType === 'day'">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Select Day(s) <span class="text-red-600">*</span>
+                                    </label>
+                                    <div class="space-y-2">
+                                        <label v-for="day in selectedCamp.days" :key="day.key" :class="[
+                                            'flex items-center gap-3 rounded-xl border px-4 py-2.5 cursor-pointer transition',
+                                            form.selectedDays.includes(day.key) ? 'border-[#447C9D] bg-[#447C9D]/5' : 'border-gray-300 hover:border-[#447C9D]'
+                                        ]">
+                                            <input type="checkbox" :value="day.key" v-model="form.selectedDays"
+                                                class="accent-[#447C9D]" />
+                                            <span class="text-sm text-gray-800">
+                                                <span class="mr-1">{{ day.emoji }}</span>Day {{ day.n }} – {{ day.theme }}
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div v-if="campPriceMajor > 0"
+                                    class="flex items-center justify-between rounded-xl bg-[#F9F3EB] border border-gray-200 px-4 py-3">
+                                    <span class="text-sm text-gray-600">{{ campSummaryLabel }}</span>
+                                    <span class="font-bold text-gray-900">
+                                        AED {{ campPriceMajor.toLocaleString() }}
+                                        <span class="text-sm font-normal text-gray-500">+ VAT</span>
+                                    </span>
+                                </div>
+
+                                <p v-if="packageError" class="text-sm text-red-600">{{ packageError }}</p>
+                            </div>
+
+                            <!-- Art Classes: package dropdown -->
+                            <div v-else-if="isArtClassesProgram" class="border-b border-gray-200 pb-6">
                                 <h4 class="text-lg font-semibold mb-3">{{ packageTitle }}</h4>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">
                                     Select Package <span class="text-red-600">*</span>
@@ -472,39 +578,134 @@ const classes = {
     ],
 }
 
-const camps = {
-    details: [
-        { key: 'days', label: 'Monday to Friday', value: '' },
-        { key: 'time', label: '10:30 AM – 1:30 PM', value: '' },
-        { key: 'ages', label: 'Ages 5–10 years', value: '' },
-        { key: 'materials', label: 'All art materials included', value: '' },
-        { key: 'lunch', label: 'Optional add-on: Lunch', value: '' },
-        { key: 'spots', label: 'Limited spots available', value: '' },
-    ],
-    themes: [
-        { key: 'w1', label: 'Week 1 (Mar 9–13)', value: 'Fashion & DIY' },
-        { key: 'w2', label: 'Week 2 (Mar 16–20)', value: 'Artistic Garden' },
-    ],
-    prices: [
-        { key: '1w', label: '1 Week', price: 'AED 1,150 + VAT' },
-        { key: '2w', label: '2 Weeks', price: 'AED 2,300 + VAT' },
-        { key: 'day', label: 'Day Pass', price: 'AED 250 + VAT' },
-    ],
-}
+/* -------------------------
+   Holiday Camps data
+   Edit here each season: dates, themes, projects, pricing, images.
+   Drop cover images in /public/images/afterschool/camps/<key>.jpg
+------------------------- */
+const DAY_PRICE = 275
+const WEEK_PRICE = 1250
+const CAMP_AGES = '5–12 Years'
+const CAMP_TIME = '10:30 AM – 12:30 PM'
 
-const campsGallery = [
+const holidayCamps = [
     {
-        key: 'holiday-main',
-        title: 'Holiday Art Camps',
-        img: '/images/afterschool/camps/holiday-art-camps.jpg', // update to your actual file name
+        key: 'treasure-island',
+        shortName: 'Treasure Island',
+        name: 'Treasure Island Camp',
+        emoji: '🏴‍☠️',
+        dateLabel: '6–10 July 2026',
+        image: '/images/afterschool/camps/treasure-island.jpg',
+        blurb:
+            'Set sail on a week of pirate adventures, hidden treasures, island discoveries, and creative challenges. Campers complete exciting hands-on projects while solving clues and exploring the world of pirates and treasure hunters.',
+        ages: CAMP_AGES,
+        time: CAMP_TIME,
+        dayPrice: DAY_PRICE,
+        weekPrice: WEEK_PRICE,
+        currency: 'AED',
+        days: [
+            { key: 'd1', n: 1, emoji: '🗺️', theme: 'The Lost Treasure Map', projects: ['Gel Candle Making', 'Ice Cream Stick Name Plate'] },
+            { key: 'd2', n: 2, emoji: '🏝️', theme: "Pirate's Discovery", projects: ['Leather Adventure Journal', 'Painted Seashell Wind Chimes'] },
+            { key: 'd3', n: 3, emoji: '💎', theme: 'Hidden Treasure Cove', projects: ['Crystal Geode Treasure Box', 'Island Terrarium'] },
+            { key: 'd4', n: 4, emoji: '🧜‍♀️', theme: 'Mermaid Lagoon', projects: ['Foot Scrub Making', 'Glow-in-the-Dark Squishy'] },
+            { key: 'd5', n: 5, emoji: '🦜', theme: "Captain's Challenge", projects: ['Pirate Parrot Sculpture', 'Massive Treasure Hunt'] },
+        ],
+    },
+    {
+        key: 'wonders',
+        shortName: 'Wonders',
+        name: 'Wonders of the World Camp',
+        emoji: '🌍',
+        dateLabel: '13–17 July 2026',
+        image: '/images/afterschool/camps/wonders.jpg',
+        blurb:
+            'Travel across the globe through art and creativity. Each day explores a different country through culture-inspired projects, architecture, traditions, and artistic techniques.',
+        ages: CAMP_AGES,
+        time: CAMP_TIME,
+        dayPrice: DAY_PRICE,
+        weekPrice: WEEK_PRICE,
+        currency: 'AED',
+        days: [
+            { key: 'd1', n: 1, emoji: '🍕', theme: 'Italy', projects: ['Mosaic Leaning Tower of Pisa Artwork', 'Roman Clay Vase Charms'] },
+            { key: 'd2', n: 2, emoji: '👑', theme: 'England', projects: ['Royal Guard Card Figures', 'Mixed Media Resin Coasters'] },
+            { key: 'd3', n: 3, emoji: '🏙️', theme: 'Dubai', projects: ['Perspective Architecture Painting', 'Upcycled Book Organizer'] },
+            { key: 'd4', n: 4, emoji: '🕌', theme: 'Morocco', projects: ['Moroccan Lamp Shade Painting', 'Shrink Art Keychains'] },
+            { key: 'd5', n: 5, emoji: '🗽', theme: 'USA', projects: ['NYC-Inspired Tissue Box Design', 'UP-Inspired Hot Air Balloon Canvas'] },
+        ],
+    },
+    {
+        key: 'grow-up',
+        shortName: 'When I Grow Up',
+        name: 'When I Grow Up Camp',
+        emoji: '👩‍🚀',
+        dateLabel: '27–31 July 2026',
+        image: '/images/afterschool/camps/grow-up.jpg',
+        blurb:
+            'A week designed to inspire future dreamers. Children explore different careers through creative projects while discovering new skills, interests, and possibilities.',
+        ages: CAMP_AGES,
+        time: CAMP_TIME,
+        dayPrice: DAY_PRICE,
+        weekPrice: WEEK_PRICE,
+        currency: 'AED',
+        days: [
+            { key: 'd1', n: 1, emoji: '🎨', theme: 'Artist', projects: ['Picasso Portraits', 'Foam Clay Mirror'] },
+            { key: 'd2', n: 2, emoji: '🌸', theme: 'Florist', projects: ['Resin Floral Bookmark', 'Wire Flower Art'] },
+            { key: 'd3', n: 3, emoji: '🧁', theme: 'Baker', projects: ['Cupcake Decorating', 'Decoden Mirror'] },
+            { key: 'd4', n: 4, emoji: '⚓', theme: 'Sailor', projects: ['Jesmonite Beach Tray with Resin', 'Sunglasses Design Studio'] },
+            { key: 'd5', n: 5, emoji: '💄', theme: 'Beauty Brand Owner', projects: ['Lip Gloss Making', 'Soap Making'] },
+        ],
+    },
+    {
+        key: 'candyland',
+        shortName: 'Candyland',
+        name: 'Candyland Camp',
+        emoji: '🍭',
+        dateLabel: '10–14 August 2026',
+        image: '/images/afterschool/camps/candyland.jpg',
+        blurb:
+            'Step into a colourful world of sweets, treats, and imagination. This playful camp combines art, design, sensory activities, and creative making inspired by all things candy.',
+        ages: CAMP_AGES,
+        time: CAMP_TIME,
+        dayPrice: DAY_PRICE,
+        weekPrice: WEEK_PRICE,
+        currency: 'AED',
+        days: [
+            { key: 'd1', n: 1, emoji: '🍬', theme: 'Sweet Treat Studio', projects: ['Soap Making Fun', 'Resin Confetti Trays'] },
+            { key: 'd2', n: 2, emoji: '🍫', theme: 'Candy Factory Creations', projects: ['Candy Collage / Decoupage Art', 'Crazy Tumblers'] },
+            { key: 'd3', n: 3, emoji: '💎', theme: 'Sugar Rush Day', projects: ['Candy Jewelry Making', 'Sweet Treat Jewelry Box'] },
+            { key: 'd4', n: 4, emoji: '🍦', theme: 'Ice Cream Dreamland', projects: ['Summer Hat Customization', 'Puffy Paint Ice Cream Cone Art'] },
+            { key: 'd5', n: 5, emoji: '🎡', theme: 'Candy Carnival', projects: ['Cake Stickle Decorating', 'Candy Slime Making'] },
+        ],
+    },
+    {
+        key: 'art-through-time',
+        shortName: 'Art Through Time',
+        name: 'Art Through Time Camp',
+        emoji: '🎨',
+        dateLabel: '17–21 August 2026',
+        image: '/images/afterschool/camps/art-through-time.jpg',
+        blurb:
+            'A creative journey through history exploring how art has evolved across different eras, cultures, and artistic movements. From prehistoric cave paintings to futuristic design, campers experiment with a variety of techniques while discovering the story of art through hands-on projects.',
+        ages: CAMP_AGES,
+        time: CAMP_TIME,
+        dayPrice: DAY_PRICE,
+        weekPrice: WEEK_PRICE,
+        currency: 'AED',
+        days: [
+            { key: 'd1', n: 1, emoji: '🦴', theme: 'The First Artists', projects: ['Cave Creation & Cave Painting', 'Fossil Impressions'] },
+            { key: 'd2', n: 2, emoji: '🏺', theme: 'Ancient Civilizations', projects: ['Hieroglyphics Name Plaque', 'Block Printing'] },
+            { key: 'd3', n: 3, emoji: '🎨', theme: 'Classical Art', projects: ['Artist-Inspired Painting', 'Texture & Gold Leaf Art'] },
+            { key: 'd4', n: 4, emoji: '✨', theme: 'Modern Art', projects: ['Fluid Art', 'Jesmonite Mirror'] },
+            { key: 'd5', n: 5, emoji: '🚀', theme: 'Future Art', projects: ['Resin Neon Squishy', 'Robot Design Challenge'] },
+        ],
     },
 ]
 
 const activeCampIndex = ref(0)
-let campTimer = null
+const activeCamp = computed(() => holidayCamps[activeCampIndex.value] || holidayCamps[0])
 
 function setActiveCamp(i) {
-    if (i < 0 || i >= campsGallery.length) return
+    if (i < 0 || i >= holidayCamps.length) return
     activeCampIndex.value = i
 }
 
@@ -512,108 +713,6 @@ function setActiveCamp(i) {
    Modal state
 ------------------------- */
 const formOpen = ref(false)
-// Holiday camp packages (scalable: edit here whenever camps/prices change)
-const holidayCampPackages = [
-    // Day Pass (per week/theme)
-    {
-        title: 'Day Pass — Fashion & DIY',
-        key: 'day-pass-w1',
-        duration: 'Day Pass',
-        theme: 'Fashion & DIY',
-        weekLabel: 'Week 1 (Mar 9–13)',
-        price: 250,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-    {
-        title: 'Day Pass — Artistic Garden',
-        key: 'day-pass-w2',
-        duration: 'Day Pass',
-        theme: 'Artistic Garden',
-        weekLabel: 'Week 2 (Mar 16–20)',
-        price: 250,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-
-    // 1 Week (per week/theme)
-    {
-        title: '1 Week Camp — Fashion & DIY',
-        key: '1-week-w1',
-        duration: '1 Week Camp',
-        theme: 'Fashion & DIY',
-        weekLabel: 'Week 1 (Mar 9–13)',
-        price: 1150,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-    {
-        title: '1 Week Camp + Lunch — Fashion & DIY',
-        key: '1-week-lunch-w1',
-        duration: '1 Week Camp + Lunch',
-        theme: 'Fashion & DIY',
-        weekLabel: 'Week 1 (Mar 9–13)',
-        price: 1300,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-    {
-        title: '1 Week Camp — Artistic Garden',
-        key: '1-week-w2',
-        duration: '1 Week Camp',
-        theme: 'Artistic Garden',
-        weekLabel: 'Week 2 (Mar 16–20)',
-        price: 1150,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-    {
-        title: '1 Week Camp + Lunch — Artistic Garden',
-        key: '1-week-lunch-w2',
-        duration: '1 Week Camp + Lunch',
-        theme: 'Artistic Garden',
-        weekLabel: 'Week 2 (Mar 16–20)',
-        price: 1300,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-
-    // 2 Weeks (both themes)
-    {
-        title: '2 Weeks Camp — Fashion & DIY + Artistic Garden',
-        key: '2-weeks-both',
-        duration: '2 Weeks Camp',
-        theme: 'Fashion & DIY + Artistic Garden',
-        weekLabel: 'Week 1 (Mar 9–13) + Week 2 (Mar 16–20)',
-        price: 2300,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-    {
-        title: '2 Weeks Camp + Lunch — Fashion & DIY + Artistic Garden',
-        key: '2-weeks-lunch-both',
-        duration: '2 Weeks Camp + Lunch',
-        theme: 'Fashion & DIY + Artistic Garden',
-        weekLabel: 'Week 1 (Mar 9–13) + Week 2 (Mar 16–20)',
-        price: 2450,
-        currency: 'AED',
-        vatIncluded: false,
-    },
-].map((p) => {
-    const isDayPass = p.duration === 'Day Pass'
-    const hasLunch = String(p.duration || '').toLowerCase().includes('lunch')
-
-    const prefix = isDayPass
-        ? `Day Pass: ${p.theme}`
-        : hasLunch
-            ? `${p.weekLabel}: ${p.theme} (with Lunch)`
-            : `${p.weekLabel}: ${p.theme}`
-
-    return {
-        ...p,
-        label: `${prefix} — ${p.currency} ${p.price.toLocaleString()} + VAT`,
-    }
-})
 
 // Art Classes packages (scalable: edit here whenever pricing changes)
 const artClassPackages = [
@@ -659,14 +758,9 @@ const isArtClassesProgram = computed(() => String(form.value.program || '').trim
 
 const requiresPackage = computed(() => isHolidayCampProgram.value || isArtClassesProgram.value)
 
-const packageTitle = computed(() => {
-    if (isHolidayCampProgram.value) return '🏕️ Holiday Camp Package'
-    if (isArtClassesProgram.value) return '🏕️ 🖌️ Art Classes Package'
-    return '🏕️ Package'
-})
+const packageTitle = computed(() => '🖌️ Art Classes Package')
 
 const activePackages = computed(() => {
-    if (isHolidayCampProgram.value) return holidayCampPackages
     if (isArtClassesProgram.value) return artClassPackages
     return []
 })
@@ -674,6 +768,10 @@ const activePackages = computed(() => {
 const form = ref({
     program: '',
     packageKey: '',
+    // Holiday camp selection
+    campKey: '',
+    passType: '', // 'week' | 'day'
+    selectedDays: [], // array of day keys, e.g. ['d1','d3']
     childName: '',
     childAge: '',
     parentName: '',
@@ -683,6 +781,79 @@ const form = ref({
     conditionNotes: '',
     notes: ''
 })
+
+// Currently selected camp object (in the modal)
+const selectedCamp = computed(() => holidayCamps.find((c) => c.key === form.value.campKey) || null)
+
+// Selected day objects, in camp order
+const selectedDayObjs = computed(() => {
+    const camp = selectedCamp.value
+    if (!camp) return []
+    return camp.days.filter((d) => form.value.selectedDays.includes(d.key))
+})
+
+// Live price for the modal summary
+const campPriceMajor = computed(() => {
+    const camp = selectedCamp.value
+    if (!camp) return 0
+    if (form.value.passType === 'week') return camp.weekPrice
+    if (form.value.passType === 'day') return selectedDayObjs.value.length * camp.dayPrice
+    return 0
+})
+
+const campSummaryLabel = computed(() => {
+    const camp = selectedCamp.value
+    if (!camp) return ''
+    if (form.value.passType === 'week') return 'Full Week'
+    const n = selectedDayObjs.value.length
+    if (form.value.passType === 'day' && n) return `${n} day${n > 1 ? 's' : ''} × AED ${camp.dayPrice.toLocaleString()}`
+    return ''
+})
+
+// Normalized "package" object for the cart / beacon (mirrors artClassPackages shape)
+const campPurchase = computed(() => {
+    const camp = selectedCamp.value
+    if (!camp) return null
+
+    if (form.value.passType === 'week') {
+        return {
+            key: `${camp.key}-week`,
+            title: `${camp.name} — Full Week`,
+            duration: 'Full Week',
+            price: camp.weekPrice,
+            currency: camp.currency,
+            vatIncluded: false,
+            campKey: camp.key,
+            passType: 'week',
+            dateLabel: camp.dateLabel,
+            days: [],
+            label: `${camp.name} (${camp.dateLabel}) — Full Week · ${camp.currency} ${camp.weekPrice.toLocaleString()} + VAT`,
+        }
+    }
+
+    if (form.value.passType === 'day') {
+        const days = selectedDayObjs.value
+        if (!days.length) return null
+        const price = days.length * camp.dayPrice
+        const dayList = days.map((d) => `Day ${d.n} – ${d.theme}`).join(', ')
+        return {
+            key: `${camp.key}-day-${days.map((d) => d.key).join('+')}`,
+            title: `${camp.name} — Day Pass: ${dayList}`,
+            duration: `Day Pass (${days.length} day${days.length > 1 ? 's' : ''})`,
+            price,
+            currency: camp.currency,
+            vatIncluded: false,
+            campKey: camp.key,
+            passType: 'day',
+            dateLabel: camp.dateLabel,
+            days: days.map((d) => ({ key: d.key, n: d.n, theme: d.theme, label: `Day ${d.n} – ${d.theme}` })),
+            label: `${camp.name} (${camp.dateLabel}) — Day Pass: ${dayList} · ${camp.currency} ${price.toLocaleString()} + VAT`,
+        }
+    }
+
+    return null
+})
+
 const submitted = ref(false) // kept for backward compatibility, but no longer used in UI
 const addedToCart = ref(false)
 const isAdding = ref(false)
@@ -726,7 +897,11 @@ function onCountryChanged(country) {
 
 watch(phoneNational, () => syncPhoneParts())
 
-function openForm(program) {
+// Reset day selection when switching camp or pass type so stale days never carry over
+watch(() => form.value.campKey, () => { form.value.selectedDays = [] })
+watch(() => form.value.passType, (t) => { if (t !== 'day') form.value.selectedDays = [] })
+
+function openForm(program, campKey = '') {
     // reset state on open
     submitted.value = false
     addedToCart.value = false
@@ -735,6 +910,9 @@ function openForm(program) {
 
     form.value.program = program
     form.value.packageKey = ''
+    form.value.campKey = campKey || ''
+    form.value.passType = ''
+    form.value.selectedDays = []
 
     // Reset phone inputs (but keep default country)
     phoneNational.value = ''
@@ -760,23 +938,39 @@ async function submit() {
     packageError.value = ''
     phoneError.value = ''
 
-    // If this is a program that requires a package, selection is required
-    if (requiresPackage.value && !form.value.packageKey) {
-        packageError.value = 'Please select a package.'
-        return
-    }
-
     const isHolidayCamp = isHolidayCampProgram.value
     const isArtClasses = isArtClassesProgram.value
 
-    const pkgList = isHolidayCamp ? holidayCampPackages : (isArtClasses ? artClassPackages : [])
-    const pkg = (requiresPackage.value && form.value.packageKey)
-        ? pkgList.find(p => p.key === form.value.packageKey)
-        : null
-
-    if (requiresPackage.value && !pkg) {
-        packageError.value = 'Please select a valid package.'
-        return
+    // Resolve the purchasable "package" for this program
+    let pkg = null
+    if (isHolidayCamp) {
+        if (!form.value.campKey) {
+            packageError.value = 'Please select a camp.'
+            return
+        }
+        if (!form.value.passType) {
+            packageError.value = 'Please choose Full Week or Day Pass.'
+            return
+        }
+        if (form.value.passType === 'day' && !form.value.selectedDays.length) {
+            packageError.value = 'Please select at least one day.'
+            return
+        }
+        pkg = campPurchase.value
+        if (!pkg) {
+            packageError.value = 'Please complete your camp selection.'
+            return
+        }
+    } else if (isArtClasses) {
+        if (!form.value.packageKey) {
+            packageError.value = 'Please select a package.'
+            return
+        }
+        pkg = artClassPackages.find((p) => p.key === form.value.packageKey) || null
+        if (!pkg) {
+            packageError.value = 'Please select a valid package.'
+            return
+        }
     }
 
     // Sync phone parts and validate phone digits
@@ -849,7 +1043,7 @@ async function submit() {
         childName: form.value.childName,
         childAge: form.value.childAge,
         program: form.value.program,
-        packageKey: form.value.packageKey || '',
+        packageKey: pkg?.key || form.value.packageKey || '',
         packageLabel: (pkg && pkg.label) ? pkg.label : '',
     })
 
@@ -865,7 +1059,9 @@ async function submit() {
             ? `kids-${String(form.value.program || '').toLowerCase().replace(/\s+/g, '-')}-${pkg.key}`
             : `kids-program-${String(form.value.program || '').toLowerCase().replace(/\s+/g, '-')}`,
         title: lineTitle,
-        image: '/images/afterschool/afterschool_hero.webp',
+        image: pkg?.campKey
+            ? (selectedCamp.value?.image || '/images/afterschool/afterschool_hero.webp')
+            : '/images/afterschool/afterschool_hero.webp',
         qty: 1,
 
         // Price should come from pkg for both Holiday Camps and Art Classes
@@ -889,6 +1085,10 @@ async function submit() {
                     currency: pkg.currency,
                     vatIncluded: pkg.vatIncluded,
                     label: pkg.label,
+                    // Holiday-camp specifics (carry camp + day names through to checkout)
+                    ...(pkg.passType
+                        ? { campKey: pkg.campKey, passType: pkg.passType, dateLabel: pkg.dateLabel, days: pkg.days }
+                        : {}),
                 }
                 : null,
 
@@ -976,13 +1176,8 @@ const classesCard = ref(null)
 const classesCta = ref(null)
 const gfxClasses = ref(null)
 
-const campsTitle = ref(null)
-const campsSub = ref(null)
-const campsBody = ref(null)
-const campsList = ref(null)
-const campsNote = ref(null)
-const campsCta = ref(null)
-const gfxCamps = ref(null)
+const campsHead = ref(null)
+const campsPills = ref(null)
 
 onMounted(() => {
     if (!process.client) return
@@ -1001,31 +1196,12 @@ onMounted(() => {
     gsap.fromTo(gfxClasses.value, { scale: .96, opacity: 0 }, { scale: 1, opacity: 1, duration: .7, ease: 'power2.out', delay: .2 })
 
     // Camps
-    fadeUp(campsTitle.value, .05)
-    fadeUp(campsSub.value, .12)
-    fadeUp(campsBody.value, .18)
-    if (campsList.value) gsap.fromTo(campsList.value.children, { y: 10, opacity: 0 }, { y: 0, opacity: 1, stagger: .05, duration: .6, ease: 'power3.out', delay: .22 })
-    fadeUp(campsNote.value, .28)
-    fadeUp(campsCta.value, .34)
-    gsap.fromTo(gfxCamps.value, { scale: .96, opacity: 0 }, { scale: 1, opacity: 1, duration: .7, ease: 'power2.out', delay: .2 })
-
-    // Auto-rotate camp themes / images
-    campTimer = setInterval(() => {
-        activeCampIndex.value =
-            (activeCampIndex.value + 1) % campsGallery.length
-    }, 6000)
-
-    if (process.client) {
-    }
+    if (campsHead.value) gsap.fromTo(campsHead.value.children, { y: 18, opacity: 0 }, { y: 0, opacity: 1, stagger: .08, duration: .7, ease: 'power3.out', delay: .05 })
+    if (campsPills.value) gsap.fromTo(campsPills.value.children, { y: 10, opacity: 0 }, { y: 0, opacity: 1, stagger: .04, duration: .5, ease: 'power3.out', delay: .2 })
 })
 
 onBeforeUnmount(() => {
-    if (campTimer) clearInterval(campTimer)
-    if (process.client) {
-        // Remove camps carousel resize alignment handler if present
-        try {
-        } catch { }
-    }
+    // nothing to clean up currently
 })
 </script>
 
@@ -1073,6 +1249,22 @@ onBeforeUnmount(() => {
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
+}
+
+/* Fluid camp panel swap */
+.camp-swap-enter-active,
+.camp-swap-leave-active {
+    transition: opacity .35s ease, transform .35s ease;
+}
+
+.camp-swap-enter-from {
+    opacity: 0;
+    transform: translateY(12px);
+}
+
+.camp-swap-leave-to {
+    opacity: 0;
+    transform: translateY(-8px);
 }
 
 /* Make vue-tel-input match existing inputs */
