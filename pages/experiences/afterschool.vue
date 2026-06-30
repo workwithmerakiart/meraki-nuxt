@@ -586,7 +586,7 @@ const classes = {
 const DAY_PRICE = 275
 const WEEK_PRICE = 1250
 const CAMP_AGES = '5–12 Years'
-const CAMP_TIME = '10:30 AM – 12:30 PM'
+const CAMP_TIME = '10:30 AM – 1:30 PM'
 
 const holidayCamps = [
     {
@@ -595,7 +595,7 @@ const holidayCamps = [
         name: 'Treasure Island Camp',
         emoji: '🏴‍☠️',
         dateLabel: '6–10 July 2026',
-        image: '/images/afterschool/camps/treasure-island.jpg',
+        image: '/images/afterschool/camps/treasure-island.jpeg',
         blurb:
             'Set sail on a week of pirate adventures, hidden treasures, island discoveries, and creative challenges. Campers complete exciting hands-on projects while solving clues and exploring the world of pirates and treasure hunters.',
         ages: CAMP_AGES,
@@ -617,7 +617,7 @@ const holidayCamps = [
         name: 'Wonders of the World Camp',
         emoji: '🌍',
         dateLabel: '13–17 July 2026',
-        image: '/images/afterschool/camps/wonders.jpg',
+        image: '/images/afterschool/camps/wonders.jpeg',
         blurb:
             'Travel across the globe through art and creativity. Each day explores a different country through culture-inspired projects, architecture, traditions, and artistic techniques.',
         ages: CAMP_AGES,
@@ -639,7 +639,7 @@ const holidayCamps = [
         name: 'When I Grow Up Camp',
         emoji: '👩‍🚀',
         dateLabel: '27–31 July 2026',
-        image: '/images/afterschool/camps/grow-up.jpg',
+        image: '/images/afterschool/camps/when-i-grow-up.jpeg',
         blurb:
             'A week designed to inspire future dreamers. Children explore different careers through creative projects while discovering new skills, interests, and possibilities.',
         ages: CAMP_AGES,
@@ -661,7 +661,7 @@ const holidayCamps = [
         name: 'Candyland Camp',
         emoji: '🍭',
         dateLabel: '10–14 August 2026',
-        image: '/images/afterschool/camps/candyland.jpg',
+        image: '/images/afterschool/camps/candyland.jpeg',
         blurb:
             'Step into a colourful world of sweets, treats, and imagination. This playful camp combines art, design, sensory activities, and creative making inspired by all things candy.',
         ages: CAMP_AGES,
@@ -683,7 +683,7 @@ const holidayCamps = [
         name: 'Art Through Time Camp',
         emoji: '🎨',
         dateLabel: '17–21 August 2026',
-        image: '/images/afterschool/camps/art-through-time.jpg',
+        image: '/images/afterschool/camps/art-through-time.jpeg',
         blurb:
             'A creative journey through history exploring how art has evolved across different eras, cultures, and artistic movements. From prehistoric cave paintings to futuristic design, campers experiment with a variety of techniques while discovering the story of art through hands-on projects.',
         ages: CAMP_AGES,
