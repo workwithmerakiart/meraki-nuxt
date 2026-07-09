@@ -386,9 +386,9 @@ const activities = [
         title: "Plushie Making",
         image: "/images/activities/plushie-making.png",
         description: "Create your very own plushie companion. Choose your character and colors — bear, dog, cat, bunny, or dino.",
-        price: "AED 195",
+        price: "AED 225",
         vatIncluded: false,
-        duration: "45 mins",
+        duration: "90 mins",
         bottomNote: "Create a cuddly friend that's uniquely yours! Add-on accessories available."
       },
       {
