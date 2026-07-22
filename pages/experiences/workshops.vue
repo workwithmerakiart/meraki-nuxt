@@ -393,8 +393,14 @@ const workshopsData = [
 
 const sortedWorkshopTiles = computed(() => {
   const tiles = workshopsData.flatMap(section => section.sections || [])
-  // Sort latest first; missing dates go last
-  return tiles.slice().sort((a, b) => (Number(b.dateTs || 0) - Number(a.dateTs || 0)))
+  // Sort earliest first; missing dates go last
+  return tiles.slice().sort((a, b) => {
+    const ta = Number(a.dateTs || 0)
+    const tb = Number(b.dateTs || 0)
+    if (!ta) return 1
+    if (!tb) return -1
+    return ta - tb
+  })
 })
 
 const cartStore = useCartStore()
