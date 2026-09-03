@@ -70,13 +70,22 @@ export default defineEventHandler(async (event) => {
 
   const gcal = canWriteCalendar ? google.calendar({ version: 'v3', auth: gAuth as any }) : null
 
-  async function blockCalendarSlot(args: { title: string; startISO: string; endISO: string; orderRef: string; sku?: string; qty?: number; busyBlock?: boolean }) {
+  async function blockCalendarSlot(args: { title: string; startISO: string; endISO: string; orderRef: string; sku?: string; qty?: number; busyBlock?: boolean; customerName?: string; customerPhone?: string; sessionLabel?: string }) {
     if (!gcal || !CALENDAR_ID) return ''
+
+    // Line 1 keeps the original machine-readable format unchanged (existing tooling may
+    // parse it); customer contact details are appended below it for studio staff.
+    const descLines = [`orderRef=${args.orderRef} sku=${args.sku || ''} qty=${args.qty || 1}`]
+    if (args.customerName) descLines.push(`Name: ${args.customerName}`)
+    if (args.customerPhone) descLines.push(`Phone: ${args.customerPhone}`)
+
     const inserted = await gcal.events.insert({
       calendarId: CALENDAR_ID,
       requestBody: {
-        summary: `Meraki Booking — ${args.title}`,
-        description: `orderRef=${args.orderRef} sku=${args.sku || ''} qty=${args.qty || 1}`,
+        summary: args.sessionLabel
+          ? `Meraki Booking — ${args.title} (${args.sessionLabel})`
+          : `Meraki Booking — ${args.title}`,
+        description: descLines.join('\n'),
         start: { dateTime: args.startISO, timeZone: 'Asia/Dubai' },
         end: { dateTime: args.endISO, timeZone: 'Asia/Dubai' },
         // Neon Art Attack is exclusive and should block the time window for ALL activities.
@@ -204,90 +213,166 @@ export default defineEventHandler(async (event) => {
                 console.error('Upstash saveOrder (paid) failed', e)
               }
 
+              // Customer contact for calendar events.
+              // Our own checkout form is authoritative: it validates the name against a
+              // character pattern and the phone against per-country digit-length rules
+              // before submit, so it is more reliable than Stripe's free-text billing name.
+              // Stripe's customer_details is only the fallback (e.g. legacy orders whose
+              // `note` predates this payload, or a non-JSON note).
+              let customerName = ''
+              let customerPhone = ''
+              let contactSource = 'none'
+
+              try {
+                const noteMeta = JSON.parse(String(order.note || '{}'))
+                customerName = String(noteMeta?.name || '').trim()
+                customerPhone = String(noteMeta?.phone || noteMeta?.phoneFull || '').trim()
+                if (customerName || customerPhone) contactSource = 'checkout-form'
+              } catch {
+                // `note` is free text on some flows — not JSON. Fall through to Stripe.
+              }
+
+              if (!customerName) {
+                customerName = String(session.customer_details?.name || '').trim()
+                if (customerName) contactSource = contactSource === 'checkout-form' ? 'mixed' : 'stripe'
+              }
+              if (!customerPhone) {
+                customerPhone = String(session.customer_details?.phone || '').trim()
+                if (customerPhone) contactSource = contactSource === 'checkout-form' ? 'mixed' : 'stripe'
+              }
+
+              // Log presence and source only; never log the PII itself.
+              log({ level: 'info', msg: 'Customer contact resolved', orderRef, contactSource, hasName: !!customerName, hasPhone: !!customerPhone })
+
               // 2) Calendar inserts (idempotent)
               let changed = false
               if (Array.isArray(order.lines)) {
                 for (const l of order.lines) {
-                  if (String(l.type || '') !== 'activity') continue
+                  const lineType = String(l.type || '')
+                  if (lineType !== 'activity' && lineType !== 'workshop') continue
 
-                  const startISO =
-                    l?.meta?.slotStartISO ||
-                    l?.slotStartISO ||
-                    l?.meta?.slot?.startISO ||
-                    l?.meta?.selectedSlotISO ||
-                    l?.selectedSlotISO ||
-                    ''
+                  // Slots to place on the calendar for this line.
+                  // Activity  -> the single slot the customer picked.
+                  // Workshop  -> one entry per scheduled session day (multi-day courses).
+                  const slots: Array<{ startISO: string; endISO: string; label: string }> = []
 
-                  const endISO =
-                    l?.meta?.slotEndISO ||
-                    l?.slotEndISO ||
-                    l?.meta?.slot?.endISO ||
-                    l?.meta?.selectedSlotEndISO ||
-                    l?.selectedSlotEndISO ||
-                    ''
+                  if (lineType === 'activity') {
+                    const startISO =
+                      l?.meta?.slotStartISO ||
+                      l?.slotStartISO ||
+                      l?.meta?.slot?.startISO ||
+                      l?.meta?.selectedSlotISO ||
+                      l?.selectedSlotISO ||
+                      ''
 
-                  if (!startISO || !endISO) {
-                    log({ level: 'warn', msg: 'Activity line missing slot ISO', orderRef, sku: l?.sku, title: l?.title })
-                    continue
-                  }
+                    const endISO =
+                      l?.meta?.slotEndISO ||
+                      l?.slotEndISO ||
+                      l?.meta?.slot?.endISO ||
+                      l?.meta?.selectedSlotEndISO ||
+                      l?.selectedSlotEndISO ||
+                      ''
 
-                  const fingerprint = `${orderRef}|${String(l.sku || l.title || '')}|${startISO}|${endISO}`
-                  const already = order.calendarEvents.some((x: any) => x?.fingerprint === fingerprint)
-                  if (already) {
-                    log({ level: 'info', msg: 'Calendar event already created (skip)', orderRef, fingerprint })
-                    continue
-                  }
-
-                  try {
-                    log({ level: 'info', msg: 'Calendar insert attempt', orderRef, title: l?.title, startISO, endISO })
-                    const subtypeId = String(l?.meta?.subtypeId || l?.meta?.subtype || '')
-                    const titleLower = String(l?.title || '').toLowerCase()
-                    const skuLower = String(l?.sku || '').toLowerCase()
-                    const isNeonArtAttack = subtypeId === '1.1' || titleLower === 'neon art attack' || skuLower === 'neon art attack'
-
-                    // Capacity counters (Upstash) — only for non-exclusive activities.
-                    // Idempotent per orderRef via a lock key so webhook retries don't double count.
-                    try {
-                      if (!isNeonArtAttack) {
-                        const skuForCap = String(l?.sku || l?.title || 'activity')
-                        const qtyForCap = Math.max(1, Number(l?.qty || 1))
-                        const lock = capLockKey(orderRef, skuForCap, String(startISO), String(endISO))
-
-                        // SETNX lock; if already set, skip increment
-                        const setnx = await upstash(['SET', lock, '1', 'NX', 'EX', ORDER_TTL])
-                        const didLock = Boolean(setnx?.result === 'OK')
-
-                        if (didLock) {
-                          const counter = capKey(skuForCap, String(startISO), String(endISO))
-                          await upstash(['INCRBY', counter, String(qtyForCap)])
-                          log({ level: 'info', msg: 'Capacity counter incremented', orderRef, sku: skuForCap, qty: qtyForCap, startISO, endISO })
-                        } else {
-                          log({ level: 'info', msg: 'Capacity counter already incremented (skip)', orderRef, sku: skuForCap, startISO, endISO })
-                        }
-                      }
-                    } catch (e) {
-                      console.error('Capacity counter increment failed', e)
+                    if (!startISO || !endISO) {
+                      log({ level: 'warn', msg: 'Activity line missing slot ISO', orderRef, sku: l?.sku, title: l?.title })
+                      continue
                     }
 
-                    const eventId = await blockCalendarSlot({
-                      title: String(l.title || 'Activity'),
-                      startISO: String(startISO),
-                      endISO: String(endISO),
-                      orderRef,
-                      sku: String(l.sku || ''),
-                      qty: Number(l.qty || 1),
-                      busyBlock: isNeonArtAttack,
+                    slots.push({ startISO: String(startISO), endISO: String(endISO), label: '' })
+                  } else {
+                    const sessions = Array.isArray(l?.meta?.sessions) ? l.meta.sessions : []
+                    if (!sessions.length) {
+                      log({ level: 'warn', msg: 'Workshop line missing sessions', orderRef, sku: l?.sku, title: l?.title })
+                      continue
+                    }
+
+                    sessions.forEach((s: any, i: number) => {
+                      const startISO = String(s?.startISO || '')
+                      const endISO = String(s?.endISO || '')
+                      if (!startISO || !endISO) return
+                      slots.push({
+                        startISO,
+                        endISO,
+                        label: sessions.length > 1 ? `Day ${i + 1}/${sessions.length}` : '',
+                      })
                     })
 
-                    if (eventId) {
-                      order.calendarEvents.push({ fingerprint, eventId, createdAt: Date.now() })
-                      changed = true
-                      log({ level: 'info', msg: 'Calendar insert OK', orderRef, eventId, fingerprint })
-                    } else {
-                      log({ level: 'warn', msg: 'Calendar insert returned empty eventId', orderRef, fingerprint })
+                    if (!slots.length) {
+                      log({ level: 'warn', msg: 'Workshop sessions missing ISO times', orderRef, sku: l?.sku, title: l?.title })
+                      continue
                     }
-                  } catch (e) {
-                    console.error('Calendar insert FAILED', e)
+                  }
+
+                  for (const slot of slots) {
+                    const { startISO, endISO } = slot
+
+                    const fingerprint = `${orderRef}|${String(l.sku || l.title || '')}|${startISO}|${endISO}`
+                    const already = order.calendarEvents.some((x: any) => x?.fingerprint === fingerprint)
+                    if (already) {
+                      log({ level: 'info', msg: 'Calendar event already created (skip)', orderRef, fingerprint })
+                      continue
+                    }
+
+                    try {
+                      log({ level: 'info', msg: 'Calendar insert attempt', orderRef, lineType, title: l?.title, startISO, endISO })
+
+                      const subtypeId = String(l?.meta?.subtypeId || l?.meta?.subtype || '')
+                      const titleLower = String(l?.title || '').toLowerCase()
+                      const skuLower = String(l?.sku || '').toLowerCase()
+                      // Only activities can be the exclusive Neon Art Attack booking.
+                      const isNeonArtAttack =
+                        lineType === 'activity' &&
+                        (subtypeId === '1.1' || titleLower === 'neon art attack' || skuLower === 'neon art attack')
+
+                      // Capacity counters (Upstash) — ACTIVITIES ONLY, and only for
+                      // non-exclusive ones. Workshops must never touch these counters.
+                      // Idempotent per orderRef via a lock key so webhook retries don't double count.
+                      try {
+                        if (lineType === 'activity' && !isNeonArtAttack) {
+                          const skuForCap = String(l?.sku || l?.title || 'activity')
+                          const qtyForCap = Math.max(1, Number(l?.qty || 1))
+                          const lock = capLockKey(orderRef, skuForCap, String(startISO), String(endISO))
+
+                          // SETNX lock; if already set, skip increment
+                          const setnx = await upstash(['SET', lock, '1', 'NX', 'EX', ORDER_TTL])
+                          const didLock = Boolean(setnx?.result === 'OK')
+
+                          if (didLock) {
+                            const counter = capKey(skuForCap, String(startISO), String(endISO))
+                            await upstash(['INCRBY', counter, String(qtyForCap)])
+                            log({ level: 'info', msg: 'Capacity counter incremented', orderRef, sku: skuForCap, qty: qtyForCap, startISO, endISO })
+                          } else {
+                            log({ level: 'info', msg: 'Capacity counter already incremented (skip)', orderRef, sku: skuForCap, startISO, endISO })
+                          }
+                        }
+                      } catch (e) {
+                        console.error('Capacity counter increment failed', e)
+                      }
+
+                      const eventId = await blockCalendarSlot({
+                        title: String(l.title || (lineType === 'workshop' ? 'Workshop' : 'Activity')),
+                        startISO: String(startISO),
+                        endISO: String(endISO),
+                        orderRef,
+                        sku: String(l.sku || ''),
+                        qty: Number(l.qty || 1),
+                        // Workshops are visible on the calendar but never block activity availability.
+                        busyBlock: isNeonArtAttack,
+                        customerName,
+                        customerPhone,
+                        sessionLabel: slot.label,
+                      })
+
+                      if (eventId) {
+                        order.calendarEvents.push({ fingerprint, eventId, createdAt: Date.now() })
+                        changed = true
+                        log({ level: 'info', msg: 'Calendar insert OK', orderRef, eventId, fingerprint })
+                      } else {
+                        log({ level: 'warn', msg: 'Calendar insert returned empty eventId', orderRef, fingerprint })
+                      }
+                    } catch (e) {
+                      console.error('Calendar insert FAILED', e)
+                    }
                   }
                 }
               }
