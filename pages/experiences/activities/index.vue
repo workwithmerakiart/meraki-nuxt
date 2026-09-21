@@ -104,6 +104,18 @@ const activities = [
           { name: "60x90 cm", price: "AED 375", vatIncluded: false },
           { name: "75x100 cm", price: "AED 525", vatIncluded: false }
         ]
+      },
+      {
+        id: "1.5",
+        title: "Neon Squishy",
+        image: "/images/activities/neonartzone/paw-squishy.jpeg",
+        description: "Paint and customise your own squishy using bright neon colours and take your new squishy friend home! Ages 5+. Includes squishy, neon paints and all painting materials.",
+        duration: "45–60 mins",
+        bottomNote: "Get messy in the most vibrant way with our signature neon paint experience!",
+        variants: [
+          { name: "Paw", price: "AED 65", vatIncluded: false },
+          { name: "Chicken", price: "AED 75", vatIncluded: false }
+        ]
       }
     ]
   },
@@ -400,6 +412,45 @@ const activities = [
         duration: "30 mins",
         vatIncluded: false,
         bottomNote: "Create a furry friend that's uniquely yours!"
+      }
+    ]
+  },
+  {
+    id: 8,
+    name: "Bedazzle Bar",
+    image: "/images/activities/bedazzle/bedazzle-bear.jpeg",
+    shortDescription: "Bling it your way! Customise your favourite pieces with rhinestones, gems and embellishments.",
+    modal: true,
+    subtypes: [
+      {
+        id: "8.1",
+        title: "Bedazzle Tumbler",
+        image: "/images/activities/bedazzle/bedazzle-tumbler.jpeg",
+        description: "Decorate your own tumbler with rhinestones, gems and embellishments to create a statement piece that’s completely your own. Ages 6+. Includes tumbler and all bedazzling materials.",
+        price: "AED 110",
+        vatIncluded: false,
+        duration: "45–60 mins",
+        bottomNote: "Sip in style with a tumbler that sparkles just like you!"
+      },
+      {
+        id: "8.2",
+        title: "Bedazzle Phone Case",
+        image: "/images/activities/bedazzle/bedazzle-phone-case.jpeg",
+        description: "Create your own statement phone case using rhinestones, gems and fun embellishments. Ages 6+. Includes phone case and all bedazzling materials.",
+        price: "AED 110",
+        vatIncluded: false,
+        duration: "45–60 mins",
+        bottomNote: "Turn your everyday essential into a dazzling accessory."
+      },
+      {
+        id: "8.3",
+        title: "Bedazzle Bear",
+        image: "/images/activities/bedazzle/bedazzle-bear.jpeg",
+        description: "Transform your own bear into a sparkling statement piece using rhinestones, gems and embellishments. Ages 6+. Includes bear and all bedazzling materials.",
+        price: "AED 165",
+        vatIncluded: false,
+        duration: "60–90 mins",
+        bottomNote: "A cuddly keepsake with all the sparkle."
       }
     ]
   },
