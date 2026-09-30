@@ -13,7 +13,13 @@
               class="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition hover:shadow-xl activity-card transition-transform transform-gpu [will-change:transform]"
               @click="$emit('open-modal', activity)"
             >
-                <img :src="activity.image" :alt="activity.name" class="w-full h-52 object-cover" />
+                <!-- `imageFit: 'contain'` on an activity shows the whole subject instead of
+                     filling the frame — for tall/portrait product shots on a white background
+                     that `object-cover` would otherwise crop. -->
+                <img :src="activity.image" :alt="activity.name" :class="[
+                    'w-full h-52',
+                    activity.imageFit === 'contain' ? 'object-contain bg-white p-2' : 'object-cover'
+                ]" />
                 <div class="p-4">
                     <h3 class="text-xl font-semibold text-[#447C9D]">{{ activity.name }}</h3>
                     <p class="text-sm text-gray-500 mt-2">{{ activity.shortDescription }}</p>

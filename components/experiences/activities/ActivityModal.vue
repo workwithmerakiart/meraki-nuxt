@@ -97,11 +97,20 @@
 
                                 <!-- Right Column: Image (uniform landscape) -->
                                 <div class="w-full lg:w-1/2">
-                                  <div class="relative landscape overflow-hidden bg-gray-200">
+                                  <!-- `imageFit: 'contain'` on a subtype shows the whole subject
+                                       instead of filling the frame — for tall/portrait product
+                                       shots that the 4:3 frame would otherwise crop. -->
+                                  <div :class="[
+                                      'relative landscape overflow-hidden',
+                                      subtype.imageFit === 'contain' ? 'bg-white' : 'bg-gray-200'
+                                  ]">
                                     <img
                                       :src="subtype.image || activity.image"
                                       :alt="subtype.title"
-                                      class="absolute inset-0 w-full h-full object-cover object-center" />
+                                      :class="[
+                                        'absolute inset-0 w-full h-full object-center',
+                                        subtype.imageFit === 'contain' ? 'object-contain p-2' : 'object-cover'
+                                      ]" />
                                   </div>
                                 </div>
                             </div>

@@ -419,6 +419,8 @@ const activities = [
     id: 8,
     name: "Bedazzle Bar",
     image: "/images/activities/bedazzle/bedazzle-bear.jpeg",
+    // Portrait (2:3) shot on white — contain so the full bear is visible, not a cropped torso.
+    imageFit: "contain",
     shortDescription: "Bling it your way! Customise your favourite pieces with rhinestones, gems and embellishments.",
     modal: true,
     subtypes: [
@@ -446,6 +448,8 @@ const activities = [
         id: "8.3",
         title: "Bedazzle Bear",
         image: "/images/activities/bedazzle/bedazzle-bear.jpeg",
+        // Portrait (2:3) shot on white — contain so the full bear is visible in the 4:3 frame.
+        imageFit: "contain",
         description: "Transform your own bear into a sparkling statement piece using rhinestones, gems and embellishments. Ages 6+. Includes bear and all bedazzling materials.",
         price: "AED 165",
         vatIncluded: false,

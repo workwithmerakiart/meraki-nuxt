@@ -77,13 +77,16 @@
                         🌟 Holiday Art Camps</h2>
                     <p class="text-lg text-gray-900 mb-3">When School’s Out, Art Comes Alive</p>
                     <p class="text-gray-600">
-                        Five themed weeks of hands-on creativity. Book a full week, or pick just the days that excite
+                        Themed weeks of hands-on creativity. Book a full week, or pick just the days that excite
                         your child — each day a brand new adventure.
                     </p>
                 </div>
 
                 <!-- Camp pill selector -->
-                <div ref="campsPills" class="flex flex-wrap justify-center gap-2 md:gap-3 mb-10">
+                <!-- Hidden while only one camp is live; returns automatically as soon as a
+                     second entry is added to `holidayCamps`. -->
+                <div v-if="holidayCamps.length > 1" ref="campsPills"
+                    class="flex flex-wrap justify-center gap-2 md:gap-3 mb-10">
                     <button v-for="(camp, i) in holidayCamps" :key="camp.key" type="button"
                         @click="setActiveCamp(i)" :class="[
                             'inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm md:text-base font-semibold transition',
@@ -124,19 +127,19 @@
                             <div class="grid sm:grid-cols-2 gap-3 mb-5">
                                 <div
                                     class="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800">
-                                    <span>🎂</span> Ages {{ activeCamp.ages }}
+                                    <span>🧒</span> Ages {{ activeCamp.ages }}
                                 </div>
                                 <div
                                     class="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800">
-                                    <span>⏰</span> {{ activeCamp.time }}
+                                    <span>⌚</span> {{ activeCamp.time }}
                                 </div>
                                 <div
                                     class="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800">
-                                    <span>🍱</span> Lunch &amp; snacks included
+                                    <span>🍽️</span> Lunch &amp; snacks included
                                 </div>
                                 <div
                                     class="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800">
-                                    <span>🎨</span> All materials provided
+                                    <span>🖍️</span> All materials provided
                                 </div>
                             </div>
 
@@ -580,8 +583,29 @@ const classes = {
 
 /* -------------------------
    Holiday Camps data
-   Edit here each season: dates, themes, projects, pricing, images.
-   Drop cover images in /public/images/afterschool/camps/<key>.jpg
+
+   This array is the single source of truth for the whole camps flow. Adding an
+   entry here automatically wires up the pill selector, the cover panel, the day
+   timeline, the registration dropdown, the day-pass picker, pricing and the
+   checkout payload — no other file needs to change.
+
+   Each season:
+   - Add the new camp(s) and REMOVE camps whose dates have passed. Anything left
+     in this array stays bookable, so an expired camp left behind can still be
+     paid for.
+   - List camps in display order; the first entry is the one shown by default.
+   - The pill selector hides itself while only one camp is live and reappears on
+     its own once a second entry exists.
+   - Drop cover images in /public/images/afterschool/camps/. Use a photo of the
+     craft work rather than a marketing poster: the cover is a landscape
+     object-cover box with the camp name overlaid, so poster text gets cropped.
+
+   Shape:
+   {
+     key, shortName, name, emoji, dateLabel, image, blurb,
+     ages, time, dayPrice, weekPrice, currency,
+     days: [{ key, n, emoji, theme, projects: [] }]
+   }
 ------------------------- */
 const DAY_PRICE = 275
 const WEEK_PRICE = 1250
@@ -590,113 +614,25 @@ const CAMP_TIME = '10:30 AM – 1:30 PM'
 
 const holidayCamps = [
     {
-        key: 'treasure-island',
-        shortName: 'Treasure Island',
-        name: 'Treasure Island Camp',
-        emoji: '🏴‍☠️',
-        dateLabel: '6–10 July 2026',
-        image: '/images/afterschool/camps/treasure-island.jpeg',
+        key: 'art-escape',
+        shortName: 'Art Escape',
+        name: 'The Art Escape Camp',
+        emoji: '🎒',
+        dateLabel: '12–16 October 2026',
+        image: '/images/afterschool/camps/camp-thumbnail.jpeg',
         blurb:
-            'Set sail on a week of pirate adventures, hidden treasures, island discoveries, and creative challenges. Campers complete exciting hands-on projects while solving clues and exploring the world of pirates and treasure hunters.',
+            'Midterm Break Edition — School’s out, creativity’s in. Five days and ten creative sessions packed with bedazzling, resin, ink and canvas work, so every day of the break ends with something new to take home.',
         ages: CAMP_AGES,
         time: CAMP_TIME,
         dayPrice: DAY_PRICE,
         weekPrice: WEEK_PRICE,
         currency: 'AED',
         days: [
-            { key: 'd1', n: 1, emoji: '🗺️', theme: 'The Lost Treasure Map', projects: ['Gel Candle Making', 'Ice Cream Stick Name Plate'] },
-            { key: 'd2', n: 2, emoji: '🏝️', theme: "Pirate's Discovery", projects: ['Leather Adventure Journal', 'Painted Seashell Wind Chimes'] },
-            { key: 'd3', n: 3, emoji: '💎', theme: 'Hidden Treasure Cove', projects: ['Crystal Geode Treasure Box', 'Island Terrarium'] },
-            { key: 'd4', n: 4, emoji: '🧜‍♀️', theme: 'Mermaid Lagoon', projects: ['Foot Scrub Making', 'Glow-in-the-Dark Squishy'] },
-            { key: 'd5', n: 5, emoji: '🦜', theme: "Captain's Challenge", projects: ['Pirate Parrot Sculpture', 'Massive Treasure Hunt'] },
-        ],
-    },
-    {
-        key: 'wonders',
-        shortName: 'Wonders',
-        name: 'Wonders of the World Camp',
-        emoji: '🌍',
-        dateLabel: '13–17 July 2026',
-        image: '/images/afterschool/camps/wonders.jpeg',
-        blurb:
-            'Travel across the globe through art and creativity. Each day explores a different country through culture-inspired projects, architecture, traditions, and artistic techniques.',
-        ages: CAMP_AGES,
-        time: CAMP_TIME,
-        dayPrice: DAY_PRICE,
-        weekPrice: WEEK_PRICE,
-        currency: 'AED',
-        days: [
-            { key: 'd1', n: 1, emoji: '🍕', theme: 'Italy', projects: ['Mosaic Leaning Tower of Pisa Artwork', 'Roman Clay Vase Charms'] },
-            { key: 'd2', n: 2, emoji: '👑', theme: 'England', projects: ['Royal Guard Card Figures', 'Mixed Media Resin Coasters'] },
-            { key: 'd3', n: 3, emoji: '🏙️', theme: 'Dubai', projects: ['Perspective Architecture Painting', 'Upcycled Book Organizer'] },
-            { key: 'd4', n: 4, emoji: '🕌', theme: 'Morocco', projects: ['Moroccan Lamp Shade Painting', 'Shrink Art Keychains'] },
-            { key: 'd5', n: 5, emoji: '🗽', theme: 'USA', projects: ['NYC-Inspired Tissue Box Design', 'UP-Inspired Hot Air Balloon Canvas'] },
-        ],
-    },
-    {
-        key: 'grow-up',
-        shortName: 'When I Grow Up',
-        name: 'When I Grow Up Camp',
-        emoji: '👩‍🚀',
-        dateLabel: '27–31 July 2026',
-        image: '/images/afterschool/camps/when-i-grow-up.jpeg',
-        blurb:
-            'A week designed to inspire future dreamers. Children explore different careers through creative projects while discovering new skills, interests, and possibilities.',
-        ages: CAMP_AGES,
-        time: CAMP_TIME,
-        dayPrice: DAY_PRICE,
-        weekPrice: WEEK_PRICE,
-        currency: 'AED',
-        days: [
-            { key: 'd1', n: 1, emoji: '🎨', theme: 'Artist', projects: ['Picasso Portraits', 'Foam Clay Mirror'] },
-            { key: 'd2', n: 2, emoji: '🌸', theme: 'Florist', projects: ['Resin Floral Bookmark', 'Wire Flower Art'] },
-            { key: 'd3', n: 3, emoji: '🧁', theme: 'Baker', projects: ['Cupcake Decorating', 'Decoden Mirror'] },
-            { key: 'd4', n: 4, emoji: '⚓', theme: 'Sailor', projects: ['Jesmonite Beach Tray with Resin', 'Sunglasses Design Studio'] },
-            { key: 'd5', n: 5, emoji: '💄', theme: 'Beauty Brand Owner', projects: ['Lip Gloss Making', 'Soap Making'] },
-        ],
-    },
-    {
-        key: 'candyland',
-        shortName: 'Candyland',
-        name: 'Candyland Camp',
-        emoji: '🍭',
-        dateLabel: '10–14 August 2026',
-        image: '/images/afterschool/camps/candyland.jpeg',
-        blurb:
-            'Step into a colourful world of sweets, treats, and imagination. This playful camp combines art, design, sensory activities, and creative making inspired by all things candy.',
-        ages: CAMP_AGES,
-        time: CAMP_TIME,
-        dayPrice: DAY_PRICE,
-        weekPrice: WEEK_PRICE,
-        currency: 'AED',
-        days: [
-            { key: 'd1', n: 1, emoji: '🍬', theme: 'Sweet Treat Studio', projects: ['Soap Making Fun', 'Resin Confetti Trays'] },
-            { key: 'd2', n: 2, emoji: '🍫', theme: 'Candy Factory Creations', projects: ['Candy Collage / Decoupage Art', 'Crazy Tumblers'] },
-            { key: 'd3', n: 3, emoji: '💎', theme: 'Sugar Rush Day', projects: ['Candy Jewelry Making', 'Sweet Treat Jewelry Box'] },
-            { key: 'd4', n: 4, emoji: '🍦', theme: 'Ice Cream Dreamland', projects: ['Summer Hat Customization', 'Puffy Paint Ice Cream Cone Art'] },
-            { key: 'd5', n: 5, emoji: '🎡', theme: 'Candy Carnival', projects: ['Cake Stickle Decorating', 'Candy Slime Making'] },
-        ],
-    },
-    {
-        key: 'art-through-time',
-        shortName: 'Art Through Time',
-        name: 'Art Through Time Camp',
-        emoji: '🎨',
-        dateLabel: '17–21 August 2026',
-        image: '/images/afterschool/camps/art-through-time.jpeg',
-        blurb:
-            'A creative journey through history exploring how art has evolved across different eras, cultures, and artistic movements. From prehistoric cave paintings to futuristic design, campers experiment with a variety of techniques while discovering the story of art through hands-on projects.',
-        ages: CAMP_AGES,
-        time: CAMP_TIME,
-        dayPrice: DAY_PRICE,
-        weekPrice: WEEK_PRICE,
-        currency: 'AED',
-        days: [
-            { key: 'd1', n: 1, emoji: '🦴', theme: 'The First Artists', projects: ['Cave Creation & Cave Painting', 'Fossil Impressions'] },
-            { key: 'd2', n: 2, emoji: '🏺', theme: 'Ancient Civilizations', projects: ['Hieroglyphics Name Plaque', 'Block Printing'] },
-            { key: 'd3', n: 3, emoji: '🎨', theme: 'Classical Art', projects: ['Artist-Inspired Painting', 'Texture & Gold Leaf Art'] },
-            { key: 'd4', n: 4, emoji: '✨', theme: 'Modern Art', projects: ['Fluid Art', 'Jesmonite Mirror'] },
-            { key: 'd5', n: 5, emoji: '🚀', theme: 'Future Art', projects: ['Resin Neon Squishy', 'Robot Design Challenge'] },
+            { key: 'd1', n: 1, emoji: '✨', theme: 'Sparkle & Shine', projects: ['Bedazzled Hairbrush', 'Alcohol Ink Mugs'] },
+            { key: 'd2', n: 2, emoji: '🎈', theme: 'Design It Your Way', projects: ['Design & Paint Your Own Squishy', 'Personalised Name Plate'] },
+            { key: 'd3', n: 3, emoji: '🥤', theme: 'Resin & Fabric Art', projects: ['Make Your Own Resin Tumbler – Part 1', 'Kinusaiga Art'] },
+            { key: 'd4', n: 4, emoji: '📓', theme: 'Finishing Touches', projects: ['Make Your Own Resin Tumbler – Part 2', 'Leather Journal Personalisation'] },
+            { key: 'd5', n: 5, emoji: '🖼️', theme: 'Paint & Pamper', projects: ['Canvas Painting', 'Bath Salt Art'] },
         ],
     },
 ]
