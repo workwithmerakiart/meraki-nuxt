@@ -49,6 +49,7 @@ export default defineNuxtConfig({
       { loc: '/experiences/courses', changefreq: 'weekly', priority: 0.7 },
       { loc: '/experiences/afterschool', changefreq: 'weekly', priority: 0.7 },
       { loc: '/experiences/events', changefreq: 'weekly', priority: 0.7 },
+      { loc: '/experiences/activations', changefreq: 'monthly', priority: 0.7 },
       { loc: '/experiences/schedule', changefreq: 'weekly', priority: 0.7 },
 
       // Community

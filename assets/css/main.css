@@ -16,3 +16,33 @@ img[src$="/images/shop/shop_color_kit.webp"],
 img[src$="shop_color_kit.webp"] {
   transform: rotate(90deg);
 }
+/* Light ray that runs along a line once useScrollReveal has drawn it (data-anim="line").
+   Animated with transform only, and only while the line is on screen (.is-lit). */
+.ray-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.ray-line::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 22%;
+  background: linear-gradient(90deg, transparent, var(--ray, #dd4912), transparent);
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+.ray-line.is-lit::after {
+  animation: ray-sweep 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes ray-sweep {
+  0% { transform: translateX(-100%); }
+  40%, 100% { transform: translateX(460%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ray-line.is-lit::after { animation: none; }
+}

@@ -76,6 +76,7 @@ const navigation = [
     to: "/experiences",
     children: [
       { label: "Events", to: "/experiences/events" },
+      { label: "Activations", to: "/experiences/activations" },
       { label: "Workshops", to: "/experiences/workshops" },
       { label: "Courses", to: "/experiences/courses" },
       { label: "Activities", to: "/experiences/activities" },
