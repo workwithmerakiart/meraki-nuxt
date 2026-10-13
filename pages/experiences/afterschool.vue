@@ -611,6 +611,10 @@ const DAY_PRICE = 275
 const WEEK_PRICE = 1250
 const CAMP_AGES = '5–12 Years'
 const CAMP_TIME = '10:30 AM – 1:30 PM'
+// Machine-readable session window (Dubai, 24h) used to build Google Calendar
+// events after payment. Keep in sync with CAMP_TIME above.
+const CAMP_START_24H = '10:30'
+const CAMP_END_24H = '13:30'
 
 const holidayCamps = [
     {
@@ -624,15 +628,17 @@ const holidayCamps = [
             'Midterm Break Edition — School’s out, creativity’s in. Five days and ten creative sessions packed with bedazzling, resin, ink and canvas work, so every day of the break ends with something new to take home.',
         ages: CAMP_AGES,
         time: CAMP_TIME,
+        startTime: CAMP_START_24H,
+        endTime: CAMP_END_24H,
         dayPrice: DAY_PRICE,
         weekPrice: WEEK_PRICE,
         currency: 'AED',
         days: [
-            { key: 'd1', n: 1, emoji: '✨', theme: 'Sparkle & Shine', projects: ['Bedazzled Hairbrush', 'Alcohol Ink Mugs'] },
-            { key: 'd2', n: 2, emoji: '🎈', theme: 'Design It Your Way', projects: ['Design & Paint Your Own Squishy', 'Personalised Name Plate'] },
-            { key: 'd3', n: 3, emoji: '🥤', theme: 'Resin & Fabric Art', projects: ['Make Your Own Resin Tumbler – Part 1', 'Kinusaiga Art'] },
-            { key: 'd4', n: 4, emoji: '📓', theme: 'Finishing Touches', projects: ['Make Your Own Resin Tumbler – Part 2', 'Leather Journal Personalisation'] },
-            { key: 'd5', n: 5, emoji: '🖼️', theme: 'Paint & Pamper', projects: ['Canvas Painting', 'Bath Salt Art'] },
+            { key: 'd1', n: 1, date: '2026-10-12', emoji: '✨', theme: 'Sparkle & Shine', projects: ['Bedazzled Hairbrush', 'Alcohol Ink Mugs'] },
+            { key: 'd2', n: 2, date: '2026-10-13', emoji: '🎈', theme: 'Design It Your Way', projects: ['Design & Paint Your Own Squishy', 'Personalised Name Plate'] },
+            { key: 'd3', n: 3, date: '2026-10-14', emoji: '🥤', theme: 'Resin & Fabric Art', projects: ['Make Your Own Resin Tumbler – Part 1', 'Kinusaiga Art'] },
+            { key: 'd4', n: 4, date: '2026-10-15', emoji: '📓', theme: 'Finishing Touches', projects: ['Make Your Own Resin Tumbler – Part 2', 'Leather Journal Personalisation'] },
+            { key: 'd5', n: 5, date: '2026-10-16', emoji: '🖼️', theme: 'Paint & Pamper', projects: ['Canvas Painting', 'Bath Salt Art'] },
         ],
     },
 ]
@@ -746,6 +752,22 @@ const campSummaryLabel = computed(() => {
     return ''
 })
 
+// Build machine-readable calendar sessions (Dubai) for a set of camp days.
+// The Stripe webhook turns each entry into one Google Calendar event.
+function buildCampSessions(camp, days) {
+    if (!camp?.startTime || !camp?.endTime) return []
+    const total = camp.days?.length || days.length
+    return days
+        .filter((d) => Boolean(d?.date))
+        .map((d) => ({
+            startISO: `${d.date}T${camp.startTime}:00+04:00`,
+            endISO: `${d.date}T${camp.endTime}:00+04:00`,
+            // Day N/5 stays accurate even when only some days are booked
+            label: `Day ${d.n}/${total}`,
+            dayLabel: `Day ${d.n} – ${d.theme}`,
+        }))
+}
+
 // Normalized "package" object for the cart / beacon (mirrors artClassPackages shape)
 const campPurchase = computed(() => {
     const camp = selectedCamp.value
@@ -763,6 +785,7 @@ const campPurchase = computed(() => {
             passType: 'week',
             dateLabel: camp.dateLabel,
             days: [],
+            sessions: buildCampSessions(camp, camp.days || []),
             label: `${camp.name} (${camp.dateLabel}) — Full Week · ${camp.currency} ${camp.weekPrice.toLocaleString()} + VAT`,
         }
     }
@@ -783,6 +806,7 @@ const campPurchase = computed(() => {
             passType: 'day',
             dateLabel: camp.dateLabel,
             days: days.map((d) => ({ key: d.key, n: d.n, theme: d.theme, label: `Day ${d.n} – ${d.theme}` })),
+            sessions: buildCampSessions(camp, days),
             label: `${camp.name} (${camp.dateLabel}) — Day Pass: ${dayList} · ${camp.currency} ${price.toLocaleString()} + VAT`,
         }
     }
@@ -1012,6 +1036,9 @@ async function submit() {
         // Keep your structured package data (incl. title)
         meta: {
             program: form.value.program,
+            // Machine-readable session times (Dubai) -> one calendar event per camp day.
+            // Empty for Art Classes packs, which have no fixed schedule yet.
+            sessions: Array.isArray(pkg?.sessions) ? pkg.sessions : [],
             package: pkg
                 ? {
                     title: pkg.title,

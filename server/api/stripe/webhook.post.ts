@@ -70,7 +70,21 @@ export default defineEventHandler(async (event) => {
 
   const gcal = canWriteCalendar ? google.calendar({ version: 'v3', auth: gAuth as any }) : null
 
-  async function blockCalendarSlot(args: { title: string; startISO: string; endISO: string; orderRef: string; sku?: string; qty?: number; busyBlock?: boolean; customerName?: string; customerPhone?: string; sessionLabel?: string }) {
+  // 'YYYY-MM-DD' for a timestamp, in Dubai time
+  function dubaiDateKey(ms: number) {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Dubai', year: 'numeric', month: '2-digit', day: '2-digit',
+    }).format(new Date(ms))
+  }
+
+  // Google all-day events use an exclusive end date
+  function nextDateKey(key: string) {
+    const d = new Date(`${key}T00:00:00Z`)
+    d.setUTCDate(d.getUTCDate() + 1)
+    return d.toISOString().slice(0, 10)
+  }
+
+  async function blockCalendarSlot(args: { title: string; startISO?: string; endISO?: string; allDayDate?: string; orderRef: string; sku?: string; qty?: number; busyBlock?: boolean; customerName?: string; customerPhone?: string; sessionLabel?: string; extraLines?: string[]; summaryPrefix?: string }) {
     if (!gcal || !CALENDAR_ID) return ''
 
     // Line 1 keeps the original machine-readable format unchanged (existing tooling may
@@ -78,18 +92,32 @@ export default defineEventHandler(async (event) => {
     const descLines = [`orderRef=${args.orderRef} sku=${args.sku || ''} qty=${args.qty || 1}`]
     if (args.customerName) descLines.push(`Name: ${args.customerName}`)
     if (args.customerPhone) descLines.push(`Phone: ${args.customerPhone}`)
+    for (const line of args.extraLines || []) {
+      if (line) descLines.push(line)
+    }
+
+    const prefix = args.summaryPrefix || 'Meraki Booking'
+    const summary = args.sessionLabel
+      ? `${prefix} — ${args.title} (${args.sessionLabel})`
+      : `${prefix} — ${args.title}`
+
+    // An all-day entry (used for "needs scheduling" reminders) has no clock time.
+    const timing = args.allDayDate
+      ? { start: { date: args.allDayDate }, end: { date: nextDateKey(args.allDayDate) } }
+      : {
+        start: { dateTime: args.startISO, timeZone: 'Asia/Dubai' },
+        end: { dateTime: args.endISO, timeZone: 'Asia/Dubai' },
+      }
 
     const inserted = await gcal.events.insert({
       calendarId: CALENDAR_ID,
       requestBody: {
-        summary: args.sessionLabel
-          ? `Meraki Booking — ${args.title} (${args.sessionLabel})`
-          : `Meraki Booking — ${args.title}`,
+        summary,
         description: descLines.join('\n'),
-        start: { dateTime: args.startISO, timeZone: 'Asia/Dubai' },
-        end: { dateTime: args.endISO, timeZone: 'Asia/Dubai' },
+        ...timing,
         // Neon Art Attack is exclusive and should block the time window for ALL activities.
         // Other activity bookings are capacity-based and should not block FreeBusy.
+        // Workshops and kids' camps are visible but never block activity availability.
         transparency: args.busyBlock ? 'opaque' : 'transparent',
       },
     })
@@ -249,12 +277,29 @@ export default defineEventHandler(async (event) => {
               if (Array.isArray(order.lines)) {
                 for (const l of order.lines) {
                   const lineType = String(l.type || '')
-                  if (lineType !== 'activity' && lineType !== 'workshop') continue
+                  if (lineType !== 'activity' && lineType !== 'workshop' && lineType !== 'kids-program') continue
+
+                  // Extra description lines for kids' programmes (camps / class packs),
+                  // which capture the attending child as well as the paying parent.
+                  const kidsLines: string[] = []
+                  if (lineType === 'kids-program') {
+                    const m = l?.meta || {}
+                    const childName = String(m.childName || '').trim()
+                    const childAge = String(m.childAge || '').trim()
+                    if (childName) kidsLines.push(`Child: ${childName}${childAge ? ` (Age ${childAge})` : ''}`)
+                    const parentName = String(m.parentName || '').trim()
+                    if (parentName) kidsLines.push(`Parent: ${parentName}`)
+                  }
+                  const passLine = lineType === 'kids-program' && l?.meta?.package?.duration
+                    ? `Pass: ${String(l.meta.package.duration)}`
+                    : ''
 
                   // Slots to place on the calendar for this line.
-                  // Activity  -> the single slot the customer picked.
-                  // Workshop  -> one entry per scheduled session day (multi-day courses).
-                  const slots: Array<{ startISO: string; endISO: string; label: string }> = []
+                  // Activity     -> the single slot the customer picked.
+                  // Workshop     -> one entry per scheduled session day (multi-day courses).
+                  // Kids camp    -> one entry per booked camp day.
+                  // Class pack   -> no sessions; handled as an all-day reminder below.
+                  const slots: Array<{ startISO: string; endISO: string; label: string; extra: string[] }> = []
 
                   if (lineType === 'activity') {
                     const startISO =
@@ -278,11 +323,45 @@ export default defineEventHandler(async (event) => {
                       continue
                     }
 
-                    slots.push({ startISO: String(startISO), endISO: String(endISO), label: '' })
+                    slots.push({ startISO: String(startISO), endISO: String(endISO), label: '', extra: [] })
                   } else {
                     const sessions = Array.isArray(l?.meta?.sessions) ? l.meta.sessions : []
+
+                    // An Art Classes pack has no fixed schedule yet. Instead of skipping it,
+                    // drop an all-day "needs scheduling" reminder so it is not forgotten.
+                    if (!sessions.length && lineType === 'kids-program') {
+                      const dayKey = dubaiDateKey(Number(order.paidAt) || Date.now())
+                      const fp = `${orderRef}|${String(l.sku || l.title || '')}|schedule-needed`
+                      if (order.calendarEvents.some((x: any) => x?.fingerprint === fp)) {
+                        log({ level: 'info', msg: 'Schedule reminder already created (skip)', orderRef, fingerprint: fp })
+                        continue
+                      }
+                      try {
+                        const reminderId = await blockCalendarSlot({
+                          title: String(l.title || 'Kids Programme'),
+                          allDayDate: dayKey,
+                          orderRef,
+                          sku: String(l.sku || ''),
+                          qty: Number(l.qty || 1),
+                          busyBlock: false,
+                          customerName,
+                          customerPhone,
+                          summaryPrefix: 'SCHEDULE NEEDED',
+                          extraLines: [...kidsLines, passLine],
+                        })
+                        if (reminderId) {
+                          order.calendarEvents.push({ fingerprint: fp, eventId: reminderId, createdAt: Date.now() })
+                          changed = true
+                          log({ level: 'info', msg: 'Schedule reminder created', orderRef, eventId: reminderId })
+                        }
+                      } catch (e) {
+                        console.error('Schedule reminder insert FAILED', e)
+                      }
+                      continue
+                    }
+
                     if (!sessions.length) {
-                      log({ level: 'warn', msg: 'Workshop line missing sessions', orderRef, sku: l?.sku, title: l?.title })
+                      log({ level: 'warn', msg: 'Line missing sessions', orderRef, lineType, sku: l?.sku, title: l?.title })
                       continue
                     }
 
@@ -290,15 +369,22 @@ export default defineEventHandler(async (event) => {
                       const startISO = String(s?.startISO || '')
                       const endISO = String(s?.endISO || '')
                       if (!startISO || !endISO) return
+                      // A session may carry its own label (camps use "Day 2/5" so partial
+                      // day-pass bookings still show the real camp day); otherwise fall
+                      // back to position within this booking.
+                      const label = String(s?.label || '') ||
+                        (sessions.length > 1 ? `Day ${i + 1}/${sessions.length}` : '')
+                      const dayLabel = String(s?.dayLabel || '').trim()
                       slots.push({
                         startISO,
                         endISO,
-                        label: sessions.length > 1 ? `Day ${i + 1}/${sessions.length}` : '',
+                        label,
+                        extra: dayLabel ? [`Day: ${dayLabel}`] : [],
                       })
                     })
 
                     if (!slots.length) {
-                      log({ level: 'warn', msg: 'Workshop sessions missing ISO times', orderRef, sku: l?.sku, title: l?.title })
+                      log({ level: 'warn', msg: 'Sessions missing ISO times', orderRef, lineType, sku: l?.sku, title: l?.title })
                       continue
                     }
                   }
@@ -350,7 +436,7 @@ export default defineEventHandler(async (event) => {
                       }
 
                       const eventId = await blockCalendarSlot({
-                        title: String(l.title || (lineType === 'workshop' ? 'Workshop' : 'Activity')),
+                        title: String(l.title || (lineType === 'activity' ? 'Activity' : lineType === 'workshop' ? 'Workshop' : 'Kids Programme')),
                         startISO: String(startISO),
                         endISO: String(endISO),
                         orderRef,
@@ -361,6 +447,7 @@ export default defineEventHandler(async (event) => {
                         customerName,
                         customerPhone,
                         sessionLabel: slot.label,
+                        extraLines: [...kidsLines, ...slot.extra, passLine],
                       })
 
                       if (eventId) {
