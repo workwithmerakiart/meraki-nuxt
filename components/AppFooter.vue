@@ -152,7 +152,7 @@ const sitemap = [
             { label: 'Workshops', to: '/experiences/workshops' },
             { label: 'Courses', to: '/experiences/courses' },
             { label: 'Activities', to: '/experiences/activities' },
-            { label: 'Afterschool Classes', to: '/experiences/afterschool' },
+            { label: 'Camps & Classes', to: '/experiences/afterschool' },
         ]
     },
     {
