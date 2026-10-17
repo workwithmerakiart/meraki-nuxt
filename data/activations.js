@@ -47,7 +47,7 @@ export const activationGroups = [
     id: 'live-personalisation',
     label: 'Live Personalisation',
     accent: '#DD4912',
-    catalogue: '/brochures/station/corporate-activations.pdf',
+    catalogue: '/brochures/station/Meraki_Live_Personalisation.pdf',
     intro: 'Names, initials and messages added live, so every guest leaves with something made for them.',
     activations: [
       {
@@ -216,7 +216,7 @@ export const activationGroups = [
     id: 'fragrance-scent',
     label: 'Fragrance & Scent Experiences',
     accent: '#B8860B',
-    catalogue: '/brochures/station/corporate-activations.pdf',
+    catalogue: '/brochures/station/Meraki_Fragrance_and_Scent_Experiences.pdf',
     intro: 'Scent built note by note, blended and bottled by the guest and carried home.',
     activations: [
       {
@@ -339,7 +339,7 @@ export const activationGroups = [
     id: 'fashion-charms-accessories',
     label: 'Fashion, Charms & Accessories',
     accent: '#C2577A',
-    catalogue: '/brochures/station/corporate-activations.pdf',
+    catalogue: '/brochures/station/Meraki_Fashion_Charms_and_Accessories.pdf',
     intro: 'Pieces guests design and wear out of the room, assembled charm by charm.',
     activations: [
       {
@@ -401,7 +401,7 @@ export const activationGroups = [
     id: 'beauty-self-care',
     label: 'Beauty & Self-Care',
     accent: '#8C6A9D',
-    catalogue: '/brochures/station/corporate-activations.pdf',
+    catalogue: '/brochures/station/Meraki_Beauty_and_Self_Care.pdf',
     intro: 'Slow, sensory stations where guests mix and bottle something made for themselves.',
     activations: [
       {
@@ -446,7 +446,7 @@ export const activationGroups = [
     id: 'art-creative',
     label: 'Art & Creative Experiences',
     accent: '#447C9D',
-    catalogue: '/brochures/station/corporate-activations.pdf',
+    catalogue: '/brochures/station/Meraki_Art_and_Creative_Experiences.pdf',
     intro: 'Our widest range — paint, resin, stone and botanicals, shaped to the brand in the room.',
     activations: [
       {
@@ -746,7 +746,7 @@ export const activationGroups = [
     id: 'kids-playful',
     label: 'Kids & Playful Experiences',
     accent: '#5E8C61',
-    catalogue: '/brochures/station/corporate-activations.pdf',
+    catalogue: '/brochures/station/Meraki_Kids_and_Playful_Experiences.pdf',
     intro: 'Loud, colourful and hands-on — built for family days and younger guests.',
     activations: [
       {
