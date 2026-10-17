@@ -1,8 +1,9 @@
 <script setup>
+import { WHATSAPP_NUMBER } from '~/composables/useWhatsApp'
 import { ref, onMounted } from 'vue'
 
 // ✅ WhatsApp number & default message
-const phoneNumber = '+971508523600'
+const phoneNumber = WHATSAPP_NUMBER
 const defaultWhatsAppMessage =
     "Hello Meraki Art Studio 👋,\nI’m interested in learning more about your art experiences. Could you please share details? 🎨✨"
 

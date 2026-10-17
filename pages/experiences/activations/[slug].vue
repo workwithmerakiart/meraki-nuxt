@@ -11,6 +11,7 @@
         <img
           :src="cover"
           :alt="activation.title"
+          :style="coverFocus ? { objectPosition: coverFocus } : null"
           class="hero-img absolute inset-0 w-full h-full object-cover"
           fetchpriority="high"
         />
@@ -35,7 +36,7 @@
           </NuxtLink>
         </div>
 
-        <p class="mt-7 text-[10.5px] font-medium uppercase tracking-[0.24em]" :style="{ color: group.accent }">
+        <p class="mt-7 text-[12px] md:text-[13.5px] font-medium uppercase tracking-[0.22em]" :style="{ color: group.accent }">
           {{ pad(indexInGroup + 1) }} · {{ group.label }}
         </p>
 
@@ -51,46 +52,32 @@
 
     <!-- Intro -->
     <div class="max-w-[1480px] mx-auto px-5 md:px-10 lg:px-14 py-14 md:py-20">
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_minmax(260px,340px)] gap-10 lg:gap-20">
-        <p data-anim="bottom" class="text-[1.05rem] md:text-[1.45rem] font-light leading-[1.5] tracking-[-0.015em] text-[#3F362F] max-w-[52ch]">
+      <div class="max-w-[64ch]">
+        <p data-anim="bottom" class="text-[1.05rem] md:text-[1.45rem] font-light leading-[1.55] tracking-[-0.015em] text-[#3F362F]">
           {{ activation.description }}
         </p>
 
-        <div data-anim="bottom" data-delay="0.15">
-          <div v-if="activation.includes?.length">
-            <p class="text-[10px] font-medium uppercase tracking-[0.22em] text-[#A89B8F]">Includes</p>
-            <ul class="mt-4 border-t border-black/12">
-              <li
-                v-for="item in activation.includes"
-                :key="item"
-                class="py-2.5 border-b border-black/10 text-[14.5px] text-[#5E5048]"
-              >
-                {{ item }}
-              </li>
-            </ul>
-          </div>
-
-          <a
-            v-if="group.catalogue"
-            :href="group.catalogue"
-            target="_blank"
-            rel="noopener"
-            class="mt-7 inline-flex items-center gap-2.5 text-[13px] text-[#5E5048] underline underline-offset-4 decoration-[#C4B8AC] hover:text-black transition-colors"
-          >
-            Download catalogue
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0 5-5m-5 5-5-5M5 20h14" />
-            </svg>
-          </a>
-        </div>
+        <a
+          v-if="group.catalogue"
+          data-anim="bottom"
+          data-delay="0.15"
+          :href="group.catalogue"
+          target="_blank"
+          rel="noopener"
+          class="mt-8 inline-flex items-center gap-2.5 text-[13.5px] text-[#5E5048] underline underline-offset-4 decoration-[#C4B8AC] hover:text-black transition-colors"
+        >
+          Download the {{ group.label }} catalogue
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0 5-5m-5 5-5-5M5 20h14" />
+          </svg>
+        </a>
       </div>
     </div>
 
     <!-- Past work -->
     <div v-if="projects.length" class="max-w-[1480px] mx-auto px-5 md:px-10 lg:px-14">
-      <div class="flex items-end justify-between gap-6 border-t border-black/15 pt-6">
-        <h2 class="text-[11px] font-medium uppercase tracking-[0.24em]" :style="{ color: group.accent }">Past Work</h2>
-        <p class="text-[11px] tabular-nums tracking-[0.16em] text-[#A89B8F]">{{ pad(projects.length) }}</p>
+      <div class="border-t border-black/15 pt-6">
+        <h2 class="text-[12px] md:text-[13px] font-medium uppercase tracking-[0.22em]" :style="{ color: group.accent }">Past Projects</h2>
       </div>
 
       <article
@@ -100,18 +87,18 @@
       >
         <!-- image, alternating side -->
         <div
-          class="lg:col-span-7"
-          :class="i % 2 === 1 ? 'lg:order-2' : ''"
+          class="lg:row-start-1 lg:col-span-5"
+          :class="i % 2 === 1 ? 'lg:col-start-8' : 'lg:col-start-1'"
         >
           <div
             :data-anim="i % 2 === 1 ? 'right' : 'left'"
-            class="group/p relative w-full overflow-hidden bg-black/5"
-            :class="i % 3 === 1 ? 'aspect-[4/5] lg:aspect-[3/2]' : 'aspect-[4/3] lg:aspect-[16/10]'"
+            class="group/p relative w-full aspect-[4/5] overflow-hidden bg-black/5"
           >
             <img
               v-if="p.images?.length"
               :src="p.images[0]"
               :alt="`${p.client} — ${p.subject || activation.title}`"
+              :style="p.focus ? { objectPosition: p.focus } : null"
               loading="lazy"
               decoding="async"
               class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(.16,1,.3,1)] group-hover/p:scale-[1.05]"
@@ -120,7 +107,7 @@
         </div>
 
         <!-- copy -->
-        <div class="lg:col-span-5" :class="i % 2 === 1 ? 'lg:order-1' : ''">
+        <div class="lg:row-start-1 lg:col-span-6" :class="i % 2 === 1 ? 'lg:col-start-1' : 'lg:col-start-7'">
           <div :data-anim="i % 2 === 1 ? 'left' : 'right'" data-delay="0.1">
             <div class="flex items-center gap-4">
               <span class="text-[10px] tabular-nums tracking-[0.2em] text-[#C4B8AC]">{{ pad(i + 1) }}</span>
@@ -134,10 +121,13 @@
               />
             </div>
 
-            <h3 class="mt-5 text-[1.9rem] md:text-[2.6rem] font-extralight tracking-[-0.04em] leading-[1.02]">
-              {{ p.client }}
+            <!-- what was made leads; the brand follows as a byline -->
+            <h3 class="mt-5 text-[1.9rem] md:text-[2.6rem] font-extralight tracking-[-0.04em] leading-[1.05]">
+              {{ p.subject || p.client }}
             </h3>
-            <p v-if="p.subject" class="mt-1.5 text-[14px] text-[#A89B8F]">{{ p.subject }}</p>
+            <p v-if="p.subject" class="mt-2.5 text-[12px] md:text-[13px] font-medium uppercase tracking-[0.16em] text-[#5E5048]">
+              {{ p.client }}
+            </p>
 
             <p class="mt-5 text-[14.5px] md:text-[15px] text-[#5E5048] leading-relaxed max-w-[46ch]">
               {{ p.caption }}
@@ -164,14 +154,16 @@
         <p class="text-[15px] text-[#7A6A5E] max-w-[46ch]">
           This station is available to book for brand activations, corporate events and private celebrations.
         </p>
-        <NuxtLink
-          to="/about/contact"
+        <a
+          :href="enquiryLink"
+          target="_blank"
+          rel="noopener"
           class="mt-5 inline-flex items-center gap-2.5 text-[14px] transition-colors"
           :style="{ color: group.accent }"
         >
-          Talk to us about {{ activation.title }}
-          <span aria-hidden="true">→</span>
-        </NuxtLink>
+          <WhatsAppIcon class="w-[17px] h-[17px]" />
+          Text us on WhatsApp
+        </a>
       </div>
     </div>
 
@@ -186,13 +178,15 @@
             text="Bring this to your event"
             class="text-[1.9rem] md:text-[2.8rem] font-extralight tracking-[-0.04em] leading-[1.02] max-w-[14ch]"
           />
-          <NuxtLink
-            to="/about/contact"
+          <a
+            :href="enquiryLink"
+            target="_blank"
+            rel="noopener"
             class="mt-7 inline-flex items-center gap-3 border border-black px-7 py-3 text-[14.5px] hover:bg-black hover:text-white transition-colors duration-500"
           >
-            Enquire about {{ activation.title }}
-            <span aria-hidden="true">→</span>
-          </NuxtLink>
+            <WhatsAppIcon class="w-[18px] h-[18px]" />
+            Text us on WhatsApp
+          </a>
         </div>
 
         <NuxtLink
@@ -223,6 +217,8 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter, createError } from '#imports'
 import { activationGroups } from '~/data/activations'
 import SplitText from '~/components/motion/SplitText.vue'
+import WhatsAppIcon from '~/components/activations/WhatsAppIcon.vue'
+import { whatsappLink } from '~/composables/useWhatsApp'
 import ScrollToTop from '~/components/activations/ScrollToTop.vue'
 import CursorTrail from '~/components/activations/CursorTrail.vue'
 import { useScrollReveal } from '~/composables/useScrollReveal'
@@ -249,6 +245,13 @@ const group = computed(() => current.value?.group)
 const indexInGroup = computed(() => current.value?.indexInGroup ?? 0)
 const projects = computed(() => activation.value?.projects || [])
 const cover = computed(() => activation.value?.image || projects.value?.[0]?.images?.[0] || '')
+// focal point follows whichever photo is actually used as the cover
+const coverFocus = computed(() =>
+  activation.value?.image ? activation.value?.imageFocus || '' : projects.value?.[0]?.focus || '',
+)
+const enquiryLink = computed(() =>
+  whatsappLink(`Hi Meraki, I’d like to enquire about the ${activation.value?.title || ''} activation for an event.`),
+)
 
 const flatIndex = computed(() => flat.findIndex((x) => x.activation.id === route.params.slug))
 const nextActivation = computed(() => {

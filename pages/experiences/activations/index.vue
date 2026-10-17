@@ -25,11 +25,11 @@
             v-for="(g, gi) in activationGroups"
             :key="g.id"
             :href="`#${g.id}`"
-            class="group/j shrink-0 flex items-baseline gap-2 text-[12px] md:text-[12.5px] whitespace-nowrap transition-colors duration-300"
+            class="group/j shrink-0 flex items-baseline gap-2 text-[13.5px] md:text-[14.5px] font-medium tracking-[-0.01em] whitespace-nowrap transition-colors duration-300"
             :style="{ color: activeSection === g.id ? g.accent : null }"
-            :class="activeSection === g.id ? '' : 'text-[#9C8E82] hover:text-black'"
+            :class="activeSection === g.id ? '' : 'text-[#6B5D52] hover:text-black'"
           >
-            <span class="text-[9.5px] tabular-nums tracking-[0.16em] opacity-70">{{ pad(gi + 1) }}</span>
+            <span class="text-[10px] tabular-nums tracking-[0.16em] opacity-60">{{ pad(gi + 1) }}</span>
             {{ g.label }}
           </a>
         </nav>
@@ -65,7 +65,8 @@
             mode="words"
             data-anim="rise"
             :text="group.label"
-            class="text-[2.1rem] md:text-[3.4rem] lg:text-[4rem] font-extralight tracking-[-0.045em] leading-[0.98] max-w-[16ch]"
+            class="text-[2.5rem] md:text-[4rem] lg:text-[4.9rem] font-light tracking-[-0.045em] leading-[0.96] max-w-[15ch]"
+            :style="{ color: group.accent }"
           />
         </div>
 
@@ -99,6 +100,7 @@
               v-if="coverOf(a)"
               :src="coverOf(a)"
               :alt="a.title"
+              :style="a.imageFocus ? { objectPosition: a.imageFocus } : null"
               loading="lazy"
               decoding="async"
               class="absolute inset-0 w-full h-full object-cover will-change-transform transition-transform duration-[1200ms] ease-[cubic-bezier(.16,1,.3,1)] group-hover/t:scale-[1.06]"
@@ -117,14 +119,11 @@
           <div class="mt-4 flex items-start gap-4">
             <span class="text-[10px] tabular-nums tracking-[0.18em] text-[#C4B8AC] pt-1.5">{{ pad(ai + 1) }}</span>
             <div class="min-w-0 flex-1">
-              <h3 class="text-[1.15rem] md:text-[1.4rem] font-light tracking-[-0.025em] leading-snug transition-colors duration-500 group-hover/t:text-[var(--accent)]">
+              <h3 class="text-[1.3rem] md:text-[1.65rem] font-normal text-[#2A231E] tracking-[-0.025em] leading-snug transition-colors duration-500 group-hover/t:text-[var(--accent)]">
                 {{ a.title }}
               </h3>
-              <p class="mt-1.5 text-[11px] uppercase tracking-[0.16em] tabular-nums" :style="{ color: group.accent }">
-                <template v-if="a.projects.length">
-                  {{ pad(a.projects.length) }} {{ a.projects.length === 1 ? 'project' : 'projects' }}
-                </template>
-                <span v-else class="text-[#C4B8AC]">Available to book</span>
+              <p class="mt-1.5 text-[11px] uppercase tracking-[0.16em]" :style="{ color: group.accent }">
+                {{ a.projects.length ? 'View past projects' : 'View activation' }}
               </p>
             </div>
             <span
@@ -188,13 +187,15 @@
         and guest experience, with custom branding and packaging options available.
       </p>
       <div data-anim="bottom" data-delay="0.35">
-        <NuxtLink
-          to="/about/contact"
+        <a
+          :href="whatsappLink('Hi Meraki, I’d like to enquire about activations for an event.')"
+          target="_blank"
+          rel="noopener"
           class="mt-8 inline-flex items-center gap-3 border border-black px-8 py-3 text-[15px] tracking-tight hover:bg-black hover:text-white transition-colors duration-500"
         >
-          Connect with us
-          <span aria-hidden="true">→</span>
-        </NuxtLink>
+          <WhatsAppIcon class="w-[18px] h-[18px]" />
+          Text us on WhatsApp
+        </a>
       </div>
     </div>
 
@@ -230,6 +231,8 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { activationGroups } from '~/data/activations'
 import SplitText from '~/components/motion/SplitText.vue'
+import WhatsAppIcon from '~/components/activations/WhatsAppIcon.vue'
+import { whatsappLink } from '~/composables/useWhatsApp'
 import ScrollToTop from '~/components/activations/ScrollToTop.vue'
 import CursorTrail from '~/components/activations/CursorTrail.vue'
 import { useScrollReveal } from '~/composables/useScrollReveal'
@@ -249,7 +252,7 @@ useHead({
 })
 
 const blockOneData = {
-  image: '/images/activations/images/Tea%20Blending%20Bar.webp',
+  image: '/images/activations/images/AGMC%E2%80%94%20Arabic%20Calligraphy%20on%20A%20car.webp',
   title: 'Activations',
   tagline: 'Hands-on experiences for brands, corporate events and private celebrations.',
   description:

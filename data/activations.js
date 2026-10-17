@@ -14,9 +14,10 @@
 // Activation
 //   id          unique slug
 //   title       e.g. 'Live Debossing'
-//   description what the station is
-//   includes    products/options offered at the station
-//   image       optional cover photo; layout is typographic and works without one
+//   description what the station is and what guests can make (shown in full on its page)
+//   image       cover photo; if empty, the first project photo is used
+//   imageFocus  optional CSS object-position for the cover, e.g. '50% 36%' to keep
+//               the subject in frame when the photo is cropped
 //   projects    past work, newest first
 //
 // Project
@@ -26,7 +27,8 @@
 //   stat     optional headline number, e.g. '35 personalised pieces'
 //   location optional, e.g. 'Kuwait · Dubai · Abu Dhabi · Qatar'
 //   logo     optional brand mark shown beside the client name
-//   images   optional photos; none yet, the layout degrades gracefully
+//   images   1 photo (first is shown)
+//   focus    optional CSS object-position for the photo, e.g. '50% 62%'
 
 const LOGO = {
   bvlgari: '/images/Bulgari-Logo.wine.png',
@@ -54,8 +56,7 @@ export const activationGroups = [
         id: 'live-debossing',
         title: 'Live Debossing',
         description:
-          'A premium personalisation experience for leather goods, with names, initials or selected designs debossed live during the event.',
-        includes: ['Pouches', 'Luggage tags', 'Keychains', 'Card holders', 'Notebooks', 'Valet trays'],
+          'A premium personalisation experience for leather goods, with names, initials or selected designs debossed live during the event. Suitable for pouches, luggage tags, keychains, card holders, notebooks, valet trays and other leather accessories.',
         image: '/images/activations/images/Live%20Debossing.webp',
         projects: [
           {
@@ -88,6 +89,7 @@ export const activationGroups = [
             stat: '100 personalised books',
             logo: LOGO.seddiqi,
             images: ['/images/activations/images/Ahmed%20Siddique%20&%20Sons%20%E2%80%94%20Books.webp'],
+            focus: '40% 68%',
           },
         ],
       },
@@ -96,7 +98,6 @@ export const activationGroups = [
         title: 'Live Engraving',
         description:
           'A refined live personalisation experience for selected metal, acrylic and glass products. Guests can personalise bottles, tags, keychains, keepsakes and other items with names, initials or short messages.',
-        includes: ['Bottles', 'Tags', 'Keychains', 'Keepsakes'],
         image: '/images/activations/images/Live%20Engraving.webp',
         projects: [
           {
@@ -106,6 +107,7 @@ export const activationGroups = [
               'Bespoke floral Christmas baubles personalised with live engraving for guests as part of a festive in-store activation.',
             logo: LOGO.harveyNichols,
             images: ['/images/activations/images/Harvey%20Nichols%20%E2%80%94%20Christmas%20Baubles.webp'],
+            focus: '45% 62%',
           },
           {
             client: 'Dubai Watch Week',
@@ -138,8 +140,7 @@ export const activationGroups = [
         id: 'laser-engraving',
         title: 'Laser Engraving',
         description:
-          'Precision laser personalisation for a clean and contemporary finish. Names, initials, logos, artwork or selected designs can be engraved onto suitable materials. Ideal for branded gifting and high-volume event personalisation.',
-        includes: ['Wood', 'Acrylic', 'Leather', 'Metal'],
+          'Precision laser personalisation for a clean and contemporary finish. Names, initials, logos, artwork or selected designs can be engraved onto suitable materials, including wood, acrylic, leather and metal. Ideal for branded gifting and high-volume event personalisation.',
         image: '/images/activations/images/laser%20engraving.webp',
         projects: [],
       },
@@ -148,7 +149,6 @@ export const activationGroups = [
         title: 'Live Calligraphy',
         description:
           'Elegant Arabic or English calligraphy created live at the event. Personalisation can be added to cards, notebooks, pouches, bottles, gift boxes, tags and other selected products.',
-        includes: ['Cards', 'Notebooks', 'Pouches', 'Bottles', 'Gift boxes', 'Tags'],
         image: '/images/activations/images/Live%20Calligraphy.webp',
         projects: [
           {
@@ -170,8 +170,7 @@ export const activationGroups = [
         id: 'live-embroidery',
         title: 'Live Embroidery',
         description:
-          'Personalised embroidery created live for guests, with names, initials, monograms or selected designs stitched onto fabric products.',
-        includes: ['Caps', 'Tote bags', 'Pouches', 'Clothing', 'Scarves', 'Aprons'],
+          'Personalised embroidery created live for guests, with names, initials, monograms or selected designs stitched onto fabric products. Suitable for caps, tote bags, pouches, clothing, scarves, aprons and other textile items.',
         image: '/images/activations/images/Live%20Embroidery.webp',
         projects: [],
       },
@@ -179,8 +178,7 @@ export const activationGroups = [
         id: 'heat-press-personalisation',
         title: 'Heat Press Personalisation',
         description:
-          'Names, initials, logos or custom designs applied using heat-press techniques. Suitable for a wide range of fabric items.',
-        includes: ['T-shirts', 'Caps', 'Tote bags', 'Pouches', 'Aprons'],
+          'Names, initials, logos or custom designs applied using heat-press techniques. Suitable for T-shirts, caps, tote bags, pouches, aprons and other fabric items.',
         image: '/images/activations/images/Heat%20Press%20Personalisation.webp',
         projects: [
           {
@@ -203,8 +201,7 @@ export const activationGroups = [
         id: 'live-caricature-illustration',
         title: 'Live Caricature & Illustration',
         description:
-          'A personalised art experience where guests receive an illustration created especially for them.',
-        includes: ['Fashion illustrations', 'Hand-drawn portraits', 'Digital caricatures'],
+          'A personalised art experience where guests receive an illustration created especially for them. Options include fashion illustrations, hand-drawn portraits and digital caricatures.',
         image: '/images/activations/images/Live%20Caricature%20&%20Illustration.webp',
         projects: [],
       },
@@ -223,8 +220,7 @@ export const activationGroups = [
         id: 'perfume-fragrance-bar',
         title: 'Perfume & Fragrance Bar',
         description:
-          'Guests explore a curated selection of fragrance notes and create a scent that is uniquely their own, with custom packaging and branding options available.',
-        includes: ['Perfumes', 'Reed diffusers', 'Car diffusers', 'Room fragrances'],
+          'Guests explore a curated selection of fragrance notes and create a scent that is uniquely their own. The experience can be offered as personalised perfumes, reed diffusers, car diffusers, room fragrances and other scented products, with custom packaging and branding options available.',
         image: '/images/activations/images/Perfume%20&%20Fragrance%20Bar.webp',
         projects: [
           {
@@ -259,8 +255,7 @@ export const activationGroups = [
         id: 'bakhoor-bar',
         title: 'Bakhoor Bar',
         description:
-          'A fragrance experience inspired by the traditions of the region. Guests create or customise their own bakhoor blend by selecting scents and ingredients, followed by personalised packaging.',
-        includes: ['Scent selection', 'Blending', 'Personalised packaging'],
+          'A fragrance experience inspired by the traditions of the region. Guests can create or customise their own bakhoor blend by selecting scents and ingredients, followed by personalised packaging.',
         image: '/images/activations/images/Bakhoor%20Bar.webp',
         projects: [
           {
@@ -276,8 +271,7 @@ export const activationGroups = [
         id: 'candle-bar',
         title: 'Candle Bar',
         description:
-          'Guests create their own scented candle by selecting their preferred fragrance and personalising the final piece.',
-        includes: ['Candle pouring', 'Fragrance blending', 'Decorative finishing'],
+          'Guests create their own scented candle by selecting their preferred fragrance and personalising the final piece. The experience can include candle pouring, fragrance blending and decorative finishing.',
         image: '/images/activations/images/Candle%20Bar.webp',
         projects: [
           {
@@ -286,6 +280,7 @@ export const activationGroups = [
             caption:
               'A festive candle-making experience inspired by Diwali, with colourful decorative elements and personalised candles for guests.',
             images: ['/images/activations/images/Kate%20Spade%20%E2%80%94%20Diwali%20Candle%20Bar.webp'],
+            focus: '50% 62%',
           },
           {
             client: 'Parker’s',
@@ -328,6 +323,7 @@ export const activationGroups = [
               'A Ramadan-inspired candle experience where guests personalised candles with florals and decorative elements, creating a thoughtful festive keepsake.',
             logo: LOGO.harveyNichols,
             images: ['/images/activations/images/Harvey%20Nichols%20%E2%80%94%20Ramadan%20Candle%20Bar.webp'],
+            focus: '50% 64%',
           },
         ],
       },
@@ -346,8 +342,7 @@ export const activationGroups = [
         id: 'charm-bar',
         title: 'Charm Bar',
         description:
-          'Guests create their own personalised accessories from a curated selection of charms, beads and decorative elements.',
-        includes: ['Bracelets', 'Necklaces', 'Phone charms', 'Bag charms', 'Keychains'],
+          'Guests create their own personalised accessories from a curated selection of charms, beads and decorative elements. Options include bracelets, necklaces, phone charms, bag charms and keychains.',
         image: '/images/activations/images/Charm%20Bar.webp',
         projects: [
           {
@@ -363,8 +358,7 @@ export const activationGroups = [
         id: 'jewellery-making',
         title: 'Jewellery Making',
         description:
-          'A hands-on jewellery experience where guests design their own pieces using beads, charms and decorative elements.',
-        includes: ['Bracelets', 'Necklaces', 'Keychains', 'Personalised accessories'],
+          'A hands-on jewellery experience where guests design their own pieces using beads, charms and decorative elements. Options can include bracelets, necklaces, keychains and other personalised accessories.',
         image: '/images/activations/images/Jewellery%20Making.webp',
         projects: [
           {
@@ -380,8 +374,7 @@ export const activationGroups = [
         id: 'bedazzle-bar',
         title: 'Bedazzle Bar',
         description:
-          'A high-impact customisation experience where guests personalise accessories and lifestyle items using rhinestones, crystals and decorative embellishments.',
-        includes: ['Tumblers', 'Pouches', 'Bags', 'Caps', 'Phone cases', 'Denim', 'Mirrors'],
+          'A high-impact customisation experience where guests personalise accessories and lifestyle items using rhinestones, crystals and decorative embellishments. Suitable for tumblers, pouches, bags, caps, phone cases, denim pieces, mirrors and other selected products.',
         image: '/images/activations/images/Bedazzle%20Bar.webp',
         projects: [
           {
@@ -408,8 +401,7 @@ export const activationGroups = [
         id: 'beauty-bar',
         title: 'Beauty Bar',
         description:
-          'An interactive beauty and self-care experience where guests create and personalise their own products.',
-        includes: ['Lip gloss', 'Body scrubs', 'Hair mist', 'Bath salts', 'Body shimmer'],
+          'An interactive beauty and self-care experience where guests create and personalise their own products. Options can include lip gloss, body scrubs, hair mist, bath salts, body shimmer and other selected products.',
         image: '/images/activations/images/Beauty%20Bar.webp',
         projects: [
           {
@@ -426,7 +418,6 @@ export const activationGroups = [
         title: 'Tea Blending Bar',
         description:
           'A sensory experience where guests create personalised tea blends using aromatic herbs, botanicals and floral ingredients.',
-        includes: ['Aromatic herbs', 'Botanicals', 'Floral ingredients'],
         image: '/images/activations/images/Tea%20Blending%20Bar.webp',
         projects: [
           {
@@ -453,8 +444,7 @@ export const activationGroups = [
         id: 'painting',
         title: 'Painting',
         description:
-          'A versatile creative experience tailored to the event, brand or campaign. Guests can paint and personalise their own pieces, or a professional artist can create bespoke artwork live.',
-        includes: ['Canvases', 'Ceramics', 'Fashion pieces', 'Bags', 'Accessories', 'Packaging'],
+          'A versatile creative experience tailored to the event, brand or campaign. Guests can paint and personalise their own pieces, or a professional artist can create bespoke artwork live. The experience can be adapted across canvases, ceramics, fashion pieces, bags, accessories, packaging and other selected surfaces.',
         image: '',
         projects: [
           {
@@ -485,6 +475,7 @@ export const activationGroups = [
             caption:
               'A hands-on screen-printing activation where guests customised tote bags with specially designed graphics and motifs.',
             images: ['/images/activations/images/Moser%20%E2%80%94%20Tote%20Bag%20Screen%20Printing.webp'],
+            focus: '50% 56%',
           },
           {
             client: 'Ethan Allen',
@@ -520,8 +511,7 @@ export const activationGroups = [
         id: 'uv-resin',
         title: 'UV Resin',
         description:
-          'Guests create personalised resin pieces using colours, dried florals, glitter, charms and other decorative elements.',
-        includes: ['Keychains', 'Bookmarks', 'Magnets', 'Charms', 'Small keepsakes'],
+          'Guests create personalised resin pieces using colours, dried florals, glitter, charms and other decorative elements. Options include keychains, bookmarks, magnets, charms and small keepsakes.',
         image: '/images/activations/images/UV%20Resin.webp',
         projects: [
           {
@@ -561,8 +551,7 @@ export const activationGroups = [
         id: 'mosaic',
         title: 'Mosaic',
         description:
-          'Guests create their own mosaic designs using a curated selection of tiles, colours and patterns.',
-        includes: ['Coasters', 'Trays', 'Mirrors', 'Frames', 'Decorative artworks'],
+          'Guests create their own mosaic designs using a curated selection of tiles, colours and patterns. Options include coasters, trays, mirrors, frames and larger decorative artworks.',
         image: '/images/activations/images/Mosaic.webp',
         projects: [
           {
@@ -579,8 +568,7 @@ export const activationGroups = [
         id: 'jesmonite',
         title: 'Jesmonite',
         description:
-          'A contemporary craft experience where guests create or decorate modern home accessories.',
-        includes: ['Trays', 'Coasters', 'Trinket dishes', 'Décor pieces'],
+          'A contemporary craft experience where guests create or decorate modern home accessories. Options can include trays, coasters, trinket dishes and other décor pieces.',
         image: '/images/activations/images/Jesmonite.webp',
         projects: [
           {
@@ -616,6 +604,7 @@ export const activationGroups = [
               'A playful Jesmonite experience featuring vibrant pigments and terrazzo-style detailing, with guests creating colourful decorative trays.',
             logo: LOGO.harveyNichols,
             images: ['/images/activations/images/Harvey%20Nicoles%20%E2%80%94%20Colourful%20Terrazzo%20Trays.webp'],
+            focus: '50% 72%',
           },
           {
             client: 'Bvlgari',
@@ -653,8 +642,7 @@ export const activationGroups = [
         id: 'pressed-flowers',
         title: 'Pressed Flowers',
         description:
-          'A delicate botanical customisation experience using real pressed flowers and natural elements to create elegant, personalised keepsakes.',
-        includes: ['Frames', 'Resin pieces', 'Candles', 'Trays', 'Coasters'],
+          'A delicate botanical customisation experience using real pressed flowers and natural elements to create elegant, personalised keepsakes. The concept can be adapted across frames, resin pieces, candles, trays, coasters and other decorative items, with florals and colours curated to suit the brand or event.',
         image: '/images/activations/images/Pressed%20Flowers.webp',
         projects: [
           {
@@ -699,8 +687,7 @@ export const activationGroups = [
         id: 'terrarium-planting',
         title: 'Terrarium & Planting',
         description:
-          'A calming, nature-inspired experience where guests create their own miniature terrariums using plants, moss, stones, soil and decorative elements.',
-        includes: ['Plants', 'Moss', 'Stones', 'Decorative vessels'],
+          'A calming, nature-inspired experience where guests create their own miniature terrariums using plants, moss, stones, soil and decorative elements. The activation can be tailored with different vessels, colour palettes and styling to suit the brand, venue or event theme.',
         image: '/images/activations/images/Terrarium%20&%20Planting.webp',
         projects: [
           {
@@ -725,8 +712,8 @@ export const activationGroups = [
         title: 'Live Origami Art',
         description:
           'An elegant live art activation where skilled origami artists transform paper into intricate flowers, sculptures and personalised keepsakes.',
-        includes: ['Origami flowers', 'Sculptures', 'Personalised keepsakes'],
         image: '/images/activations/images/Live%20Origami%20Art.webp',
+        imageFocus: '50% 36%',
         projects: [
           {
             client: 'Marli New York',
@@ -735,6 +722,7 @@ export const activationGroups = [
               'A luxury in-store activation featuring handcrafted origami flowers, creating delicate, personalised keepsakes for guests.',
             logo: LOGO.marli,
             images: ['/images/activations/images/Marli%20New%20York%20%E2%80%94%20Live%20Origami%20Flowers.webp'],
+            focus: '50% 62%',
           },
         ],
       },
@@ -753,8 +741,7 @@ export const activationGroups = [
         id: 'slime-bar',
         title: 'Slime Bar',
         description:
-          'A hands-on slime-making experience where guests create and customise their own slime.',
-        includes: ['Colours', 'Textures', 'Scents', 'Glitter', 'Charms'],
+          'A hands-on slime-making experience where guests create and customise their own slime. Colours, textures, scents, glitter, charms and other add-ons can be selected to make each creation unique.',
         image: '/images/activations/images/Slime%20Bar.webp',
         projects: [],
       },
@@ -762,8 +749,7 @@ export const activationGroups = [
         id: 'squishy-bar',
         title: 'Squishy Bar',
         description:
-          'A playful activity where guests decorate and personalise their own squishy toys using paints, colours and creative details.',
-        includes: ['Paints', 'Colours', 'Creative details'],
+          'A playful activity where guests decorate and personalise their own squishy toys using paints, colours and creative details. Ideal for children’s events, family days and youth-focused activations.',
         image: '/images/activations/images/Squishy%20Bar.webp',
         projects: [],
       },
@@ -771,8 +757,7 @@ export const activationGroups = [
         id: 'decoden',
         title: 'Decoden',
         description:
-          'A playful customisation experience where guests decorate accessories using decoden cream, charms and decorative pieces.',
-        includes: ['Jewellery boxes', 'Mirrors', 'Phone cases', 'Hairbrushes'],
+          'A playful customisation experience where guests decorate accessories using decoden cream, charms and decorative pieces. Popular options include jewellery boxes, mirrors, phone cases, hairbrushes and other accessories.',
         image: '/images/activations/images/Decoden.webp',
         projects: [],
       },
@@ -780,8 +765,7 @@ export const activationGroups = [
         id: 'fluid-art-bar',
         title: 'Fluid Art Bar',
         description:
-          'A dynamic, hands-on art experience where guests create one-of-a-kind pieces using fluid pouring techniques and vibrant colour combinations.',
-        includes: ['Sculptural bears', 'Canvases', 'Figurines'],
+          'A dynamic, hands-on art experience where guests create one-of-a-kind pieces using fluid pouring techniques and vibrant colour combinations. The activation can be adapted across sculptural bears, canvases, figurines and other selected surfaces, with colours and forms customised to suit the brand or event concept.',
         image: '/images/activations/images/Fluid%20Art%20Bar.webp',
         projects: [
           {
