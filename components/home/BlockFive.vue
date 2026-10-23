@@ -1,11 +1,11 @@
 <template>
   <div class="bg-[#F9F3EB] py-16">
     <div class="container mx-auto px-4">
-      <h1
+      <h2
         class="text-6xl block-five-headings font-extrabold text-black text-center mb-4">
         <span class="text-[#dd4912] block-five-headings">Experience</span>
         <span class="text-[#1A1A1A] block-five-headings"> The Vibe</span>
-      </h1>
+      </h2>
       <p class="text-black text-center block-five-subheadings mb-12 font-light">
         Colorful, uninhibited fun for all ages - here's a sneak peak of our unique space:
       </p>

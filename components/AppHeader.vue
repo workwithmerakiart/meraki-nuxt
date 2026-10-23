@@ -398,14 +398,17 @@ watch(
         <img ref="logoRef" class="h-12 sm:h-16 md:h-24" :src="'/images/meraki-logo-black.png'" :class="{
           'filter-white': showLightHeader || !isScrolled, // ⭐ changed: prefer white when hero under header
           'filter-black': !showLightHeader && isScrolled,
-        }" style="transition: filter 0.3s ease" alt="Logo" />
+        }" style="transition: filter 0.3s ease" alt="Meraki Art Studio" />
       </NuxtLink>
       <!-- SEO: Always-present primary links (hidden visually, readable by crawlers/screen readers) -->
       <nav aria-label="Primary" class="sr-only">
         <NuxtLink to="/experiences/activities">Activities</NuxtLink>
         <NuxtLink to="/experiences/courses">Courses</NuxtLink>
         <NuxtLink to="/experiences/workshops">Workshops</NuxtLink>
-        <NuxtLink to="/experiences/afterschool">Art Camps</NuxtLink>
+        <NuxtLink to="/studio/our-story">Our Story</NuxtLink>
+        <NuxtLink to="/experiences/activations">Activations</NuxtLink>
+        <NuxtLink to="/experiences/afterschool">Art Camps &amp; Classes</NuxtLink>
+        <NuxtLink to="/experiences/events">Events</NuxtLink>
         <NuxtLink to="/shop/products">Shop</NuxtLink>
         <NuxtLink to="/about/faqs">FAQs</NuxtLink>
         <NuxtLink to="/about/contact">Contact</NuxtLink>

@@ -36,6 +36,14 @@ import {
 import ActivityGrid from "~/components/experiences/activities/ActivityGrid.vue";
 import ActivityModal from "~/components/experiences/activities/ActivityModal.vue";
 import BookActivities from "~/components/experiences/activities/BookActivities.vue";
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Activities: Hands-On Art in Dubai | Meraki Art Studio",
+  description:
+    "Book ahead or walk in for hands-on art in Dubai: neon art, resin, Jesmonite, decoden, Bedazzle Bar and more, for every age, at Meraki Art Studio in Al Quoz.",
+  image: "/images/block3_activities.webp",
+})
 
 const selectedActivity = ref(null);
 

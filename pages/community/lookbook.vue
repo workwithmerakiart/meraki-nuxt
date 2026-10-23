@@ -1,5 +1,12 @@
 <script setup>
 import Lookbook from '@/components/lookbook/Lookbook.vue'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Lookbook: Art Made at Meraki | Meraki Art Studio",
+  description:
+    "A gallery of artwork, workshops and events from Meraki Art Studio in Dubai. See what our community has created and find inspiration for your next visit.",
+})
 
 const images = [
   { src: '/images/hero_workshops.webp', alt: 'Event 1' },

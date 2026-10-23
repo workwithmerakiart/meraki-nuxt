@@ -123,6 +123,13 @@
 import { ref } from 'vue'
 import Carousel from '~/components/Carousel.vue'
 import Testimonials from '~/components/Testimonials.vue'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Our Story: Meet the Founders | Meraki Art Studio",
+  description:
+    "The story behind Meraki Art Studio in Dubai. Meet founders Kay & Pooh and the team creating hands-on art experiences, workshops and events in Al Quoz.",
+})
 
 const team = ref([
   { id: 1, name: 'Kajol', role: 'Creative Director & Co-Founder', description: 'The soul behind every creative detail, Kajol infuses the studio with imagination and purpose.', image: '/images/story/story_kajol.webp' },

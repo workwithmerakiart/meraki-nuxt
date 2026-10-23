@@ -200,6 +200,13 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRuntimeConfig } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
 import 'vue-tel-input/vue-tel-input.css'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Contact Us | Meraki Art Studio, Al Quoz, Dubai",
+  description:
+    "Visit Meraki Art Studio at Goshi Warehouse Village, Al Quoz 3, Dubai. Call or WhatsApp +971 50 852 3600, or email hello@merakiartstudio.ae.",
+})
 
 const firstName = ref('')
 const lastName = ref('')

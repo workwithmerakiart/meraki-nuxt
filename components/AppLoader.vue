@@ -1,7 +1,7 @@
 <template>
   <div
     class="fixed inset-0 z-[9999] bg-white flex items-center justify-center transition-opacity duration-500 opacity-100 pointer-events-auto">
-    <img class="h-16 w-auto animate-scale-pulse" src="/images/meraki-logo-black.png" alt="Logo" />
+    <img class="h-16 w-auto animate-scale-pulse" src="/images/meraki-logo-black.png" alt="Meraki Art Studio" />
   </div>
 </template>
 

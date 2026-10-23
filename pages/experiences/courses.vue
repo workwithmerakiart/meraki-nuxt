@@ -16,6 +16,14 @@ import {
   MapPinIcon,
 } from "@heroicons/vue/24/outline";
 import { useCartStore } from '~/stores/cart'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Courses: Resin & Art Courses in Dubai | Meraki Art Studio",
+  description:
+    "Multi-day art courses in Dubai, from resin basics to advanced techniques. Expert instruction, premium materials and private sessions at Meraki Art Studio.",
+  image: "/images/block3_courses.webp",
+})
 
 const blockOneData = {
   image:

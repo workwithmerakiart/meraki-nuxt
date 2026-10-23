@@ -30,10 +30,10 @@
               {{ slide.tagline }}
             </p>
 
-            <h1
+            <component :is="slide.title ? 'h2' : 'div'"
               class="text-white text-4xl md:text-5xl lg:text-6xl font-serif uppercase mb-6 font-extrabold hero-slider-headings leading-tight drop-shadow-lg animate-fadein-quick animation-delay-600 animation-backwards">
               {{ slide.title }}
-            </h1>
+            </component>
             <p
               class="text-gray-100 text-base md:text-lg mb-10 animate-fadein-quick animation-delay-800 animation-backwards hero-slider-subheadings">
               {{ slide.description }}

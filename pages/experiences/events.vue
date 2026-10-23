@@ -205,6 +205,14 @@
 </template>
 
 <script setup>
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Events: Art Parties & Celebrations | Meraki Art Studio",
+  description:
+    "Host a creative birthday party, corporate event, school field trip or private celebration at Meraki Art Studio in Dubai, or rent our space for your own event.",
+  image: "/images/block3_events.webp",
+})
 
 const blockOneData = {
   image: "/images/events/events_hero.webp",

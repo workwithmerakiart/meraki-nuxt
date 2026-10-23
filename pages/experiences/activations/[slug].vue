@@ -222,6 +222,7 @@ import { whatsappLink } from '~/composables/useWhatsApp'
 import ScrollToTop from '~/components/activations/ScrollToTop.vue'
 import CursorTrail from '~/components/activations/CursorTrail.vue'
 import { useScrollReveal } from '~/composables/useScrollReveal'
+import { usePageSeo } from '~/composables/usePageSeo'
 
 const route = useRoute()
 const pageRef = ref(null)
@@ -278,10 +279,24 @@ function onKey(e) {
 onMounted(() => process.client && window.addEventListener('keydown', onKey))
 onBeforeUnmount(() => process.client && window.removeEventListener('keydown', onKey))
 
-useHead(() => ({
-  title: `${activation.value?.title || 'Activation'} | Meraki Art Studio`,
-  meta: [{ name: 'description', content: activation.value?.description || '' }],
-}))
+// Search snippet: the activation's opening sentence, plus where it's offered,
+// kept within the ~160 characters Google shows.
+function snippet(a) {
+  const first = (a?.description || '').split(/(?<=\.)\s/)[0]
+  const full = `${first} Available for brand activations and events in Dubai.`
+  if (full.length <= 160) return full
+  return first.length <= 160 ? first : `${first.slice(0, 157).replace(/\s+\S*$/, '')}…`
+}
+
+usePageSeo({
+  title: () => {
+    const name = activation.value?.title || 'Activation'
+    const long = `${name} Activation | Meraki Art Studio`
+    return long.length <= 60 ? long : `${name} | Meraki Art Studio`
+  },
+  description: () => snippet(activation.value),
+  image: () => cover.value,
+})
 </script>
 
 <style scoped>

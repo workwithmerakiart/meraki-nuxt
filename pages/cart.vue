@@ -121,6 +121,9 @@
 </template>
 
 <script setup lang="ts">
+
+// Utility page: keep out of search results
+useSeoMeta({ robots: 'noindex, nofollow' })
 definePageMeta({ ssr: false })
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'

@@ -434,6 +434,14 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '~/stores/cart'
 
 import { gsap } from 'gsap'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Camps & Classes: Kids’ Art in Dubai | Meraki Art Studio",
+  description:
+    "Weekly art classes for ages 5–14 and themed holiday art camps in Dubai, with day passes or full weeks. Hands-on, all materials included, at Meraki Art Studio.",
+  image: "/images/block3_afterschool.webp",
+})
 
 // -------------------------
 // Animated letter tile grid (visual only, performance-safe)

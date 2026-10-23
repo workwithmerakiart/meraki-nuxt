@@ -2,6 +2,13 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import Carousel from '@/components/Carousel.vue'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Matter DXB: Interior Architecture & Design in Dubai",
+  description:
+    "Matter DXB, led by chief interior architect Ms. Kajol Vaswani, designs visually spectacular interiors for corporate and commercial clients across Dubai.",
+})
 
 let io // single IntersectionObserver instance
 

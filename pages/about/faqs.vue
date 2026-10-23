@@ -125,6 +125,13 @@
 <script setup>
 import { ref, computed } from 'vue'
 import PartnerHero from '@/components/partners/PartnerHero.vue'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "FAQs | Meraki Art Studio Dubai",
+  description:
+    "Answers to common questions about Meraki Art Studio’s workshops, activities, events, parties and kids’ programmes in Dubai, from bookings to ages and timings.",
+})
 
 // Actual copy
 const workshops = [

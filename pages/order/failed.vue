@@ -89,6 +89,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
+// Utility page: keep out of search results
+useSeoMeta({ robots: 'noindex, nofollow' })
+
 const route = useRoute()
 const copied = ref(false)
 

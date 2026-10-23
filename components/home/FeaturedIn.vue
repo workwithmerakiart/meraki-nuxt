@@ -5,7 +5,7 @@
             <div v-for="(row, index) in rows" :key="index" class="marquee-row" :class="{ reverse: index % 2 === 1 }">
                 <div class="marquee-content">
                     <div class="logo" v-for="(logo, i) in row.duplicated" :key="i">
-                        <img :src="logo" alt="Logo" />
+                        <img :src="logo" :alt="clientName(logo)" />
                     </div>
                 </div>
             </div>
@@ -55,6 +55,37 @@ const row3 = [
     '/images/Snapchat-Logo.wine.svg',
     '/images/The-Executive-Council-of-Dubai@4x-thumb.png',
 ];
+
+// Brand names for each logo, used as alt text (read by Google and screen readers)
+const CLIENT_NAMES = {
+    'Al-Jalila-Fondation-20-1.png': 'Al Jalila Foundation',
+    'audi-14-logo-svg-vector.svg': 'Audi',
+    'bmw-car-logo.png': 'BMW',
+    'Bulgari-Logo.wine.png': 'Bvlgari',
+    'chalhoub-group-logo-vector.png': 'Chalhoub Group',
+    'DAA_Dubai_American_Academy_GEMS svg.svg': 'GEMS Dubai American Academy',
+    'dubai-health-authority.svg': 'Dubai Health Authority',
+    'ganache-logo-png_seeklogo-426725.png': 'Ganache',
+    'Grant_Thornton_logo.png': 'Grant Thornton',
+    'Harvey_Nichols-Logo.wine.png': 'Harvey Nichols',
+    'Meta-Logo.png': 'Meta',
+    'Dior_Logo.svg.png': 'Dior',
+    'Lancome-logo.png': 'Lancôme',
+    'logo_black_1_1.png.avif': 'Masaba',
+    'Logo_da_Rolex.png': 'Rolex',
+    'Logo_of_the_Young_Presidents_Organization.png': 'Young Presidents’ Organization',
+    'MARLI-LOGO-BLACK-1.webp': 'Marli New York',
+    'Museum_of_the_Future_logo.svg.png': 'Museum of the Future',
+    'Ora_Brand_Logo.png': 'Ora',
+    'png-clipart-loewe-logo-icons-logos-emojis-shop-logos-thumbnail.png': 'Loewe',
+    'png-clipart-procter-gamble-company-nyse-pg-marketing-procter-gamble-logo-blue-text-2.png': 'Procter & Gamble',
+    'png-clipart-the-dubai-mall-ahmed-seddiqi-sons-retail-watch-shopping-watch-text-retail.png': 'Ahmed Seddiqi & Sons',
+    'RIS-310.png': 'Raffles International School',
+    'Screenshot-2023-07-27-at-11.35.05-AM-1.png': 'Chattels & More',
+    'Snapchat-Logo.wine.svg': 'Snapchat',
+    'The-Executive-Council-of-Dubai@4x-thumb.png': 'The Executive Council of Dubai',
+};
+const clientName = (path) => CLIENT_NAMES[path.split('/').pop()] || 'Client logo';
 
 // Duplicate arrays for seamless infinite scrolling
 const rows = computed(() => [

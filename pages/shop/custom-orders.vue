@@ -245,6 +245,13 @@ import { ref, computed, reactive, watch, onMounted } from 'vue'
 import { useRuntimeConfig } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
 import 'vue-tel-input/vue-tel-input.css'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Custom Art Orders: Resin & Canvas | Meraki Art Studio",
+  description:
+    "Commission bespoke art in Dubai: floral resin preservation of bridal bouquets, made-to-measure canvas paintings and custom pieces for homes and offices.",
+})
 
 const showModal = ref(false)
 

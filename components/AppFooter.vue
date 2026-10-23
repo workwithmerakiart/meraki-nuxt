@@ -6,7 +6,7 @@
             <!-- Brand / Address Column -->
             <div class="space-y-4">
                 <NuxtLink to="/" class="inline-block max-w-[180px]">
-                    <img src="/images/meraki-logo-black.png" alt="Meraki Logo" class="h-12 w-auto" />
+                    <img src="/images/meraki-logo-black.png" alt="Meraki Art Studio" class="h-12 w-auto" />
                 </NuxtLink>
                 <p class="text-sm text-black leading-relaxed app-footer-subheading max-w-xs">
                     40, Meraki Art Studio, Goshi Warehouse Village, Al Quoz 3, Dubai

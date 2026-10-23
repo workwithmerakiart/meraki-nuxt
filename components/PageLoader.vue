@@ -1,7 +1,7 @@
 <template>
   <div v-if="visible" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white overflow-hidden">
     <!-- Heartbeat Logo -->
-    <img ref="logoRef" src="/images/meraki-logo-black.png" alt="Logo"
+    <img ref="logoRef" src="/images/meraki-logo-black.png" alt="Meraki Art Studio"
       class="w-40 h-auto object-contain animate-heartbeat" />
   </div>
 </template>

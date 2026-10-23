@@ -236,19 +236,16 @@ import { whatsappLink } from '~/composables/useWhatsApp'
 import ScrollToTop from '~/components/activations/ScrollToTop.vue'
 import CursorTrail from '~/components/activations/CursorTrail.vue'
 import { useScrollReveal } from '~/composables/useScrollReveal'
+import { usePageSeo } from '~/composables/usePageSeo'
 
 const pageRef = ref(null)
 useScrollReveal(pageRef)
 
-useHead({
-  title: 'Corporate Activations | Meraki Art Studio',
-  meta: [
-    {
-      name: 'description',
-      content:
-        'Hands-on activations for brands, corporate events and private celebrations. From live personalisation to creative stations, fully managed at your venue or ours.',
-    },
-  ],
+usePageSeo({
+  title: "Activations: Corporate & Brand Events | Meraki Art Studio",
+  description:
+    "Live personalisation, fragrance, jewellery, beauty and art stations for brand launches, corporate events and celebrations in Dubai, fully managed by us.",
+  image: "/images/activations/images/AGMC%E2%80%94%20Arabic%20Calligraphy%20on%20A%20car.webp",
 })
 
 const blockOneData = {

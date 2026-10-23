@@ -24,6 +24,14 @@ import { useCartStore } from '~/stores/cart'
 import { computed } from 'vue'
 import { useRuntimeConfig } from '#imports'
 import WorkshopsCtaBlock from '~/components/WorkshopsCtaBlock.vue'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Workshops: Art Workshops in Dubai | Meraki Art Studio",
+  description:
+    "Guided, hands-on art workshops in Dubai with premium materials and expert mentors. One-time sessions for friends, families and visitors. See dates and book.",
+  image: "/images/block3_workshops.webp",
+})
 
 const workshopsBeaconUrl = computed(() => {
   try {

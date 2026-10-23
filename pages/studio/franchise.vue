@@ -7,6 +7,13 @@ import ImageLeftTextRight from '@/components/blocks/ImageLeftTextRight.vue'
 
 // Form component that POSTs to your Google Apps Script endpoint
 import FranchiseInquiryForm from '@/components/forms/FranchiseInquiryForm.vue'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Franchise Opportunities | Meraki Art Studio",
+  description:
+    "Bring Meraki Art Studio to your city: a proven creative business model refined in Dubai, trusted by brands like Dior, Rolex and Bvlgari, with full training.",
+})
 </script>
 
 <template>

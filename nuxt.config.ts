@@ -1,5 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from "@tailwindcss/vite";
+import { activationGroups } from "./data/activations.js";
+import { blogs } from "./data/blogs.js";
+
+// Detail pages are listed in the sitemap straight from the data files,
+// so adding an activation or a blog post adds it to the sitemap automatically.
+const activationUrls = activationGroups.flatMap((g) =>
+  g.activations.map((a) => ({ loc: `/experiences/activations/${a.id}`, changefreq: 'monthly', priority: 0.6 }))
+);
+const blogUrls = blogs.map((b) => ({ loc: `/community/blogs/${b.slug}`, changefreq: 'monthly', priority: 0.5 }));
 export default defineNuxtConfig({
   ssr: true,
   nitro: { preset: 'netlify' },
@@ -29,7 +38,7 @@ export default defineNuxtConfig({
 
   // --- SEO: sitemap (submit /sitemap.xml to Google Search Console)
   site: {
-    url: process.env.SITE_URL || 'https://www.merakiartstudio.ae',
+    url: process.env.SITE_URL || 'https://merakiartstudio.ae',
   },
 
   sitemap: {
@@ -66,6 +75,10 @@ export default defineNuxtConfig({
 
       // Misc
       { loc: '/matterdxb', changefreq: 'monthly', priority: 0.5 },
+
+      // Detail pages (generated from the data files above)
+      ...activationUrls,
+      ...blogUrls,
     ],
 
     // Explicitly exclude routes that should never be indexed.
@@ -114,6 +127,13 @@ export default defineNuxtConfig({
   // Ensure Stripe receives raw request body for signature verification
   routeRules: {
     '/api/stripe/webhook': { bodyParser: false },
+
+    // Section parents in the nav are empty placeholder pages; redirect them to a real page
+    '/experiences': { redirect: { to: '/experiences/activities', statusCode: 301 } },
+    '/shop': { redirect: { to: '/shop/products', statusCode: 301 } },
+    '/studio': { redirect: { to: '/studio/our-story', statusCode: 301 } },
+    '/community': { redirect: { to: '/community/lookbook', statusCode: 301 } },
+    '/about': { redirect: { to: '/studio/our-story', statusCode: 301 } },
 
     // Force sitemap to return correct XML content-type (prevents GSC "Sitemap is HTML")
     '/sitemap.xml': {

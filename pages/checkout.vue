@@ -135,6 +135,9 @@ import { useCartStore } from '~/stores/cart'
 import { VueTelInput } from 'vue-tel-input'
 import 'vue-tel-input/vue-tel-input.css'
 
+// Utility page: keep out of search results
+useSeoMeta({ robots: 'noindex, nofollow' })
+
 const route = useRoute()
 
 useHead({

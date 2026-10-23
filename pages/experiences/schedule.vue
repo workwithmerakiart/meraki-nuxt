@@ -50,6 +50,13 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AvailabilityPicker from '~/components/AvailabilityPicker.vue'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Book a Session | Meraki Art Studio",
+  description:
+    "Choose a date and time to book your session at Meraki Art Studio, Goshi Warehouse Village, Al Quoz 3, Dubai.",
+})
 
 const route = useRoute()
 const router = useRouter()

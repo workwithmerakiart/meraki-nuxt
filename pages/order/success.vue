@@ -196,6 +196,9 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useCartStore } from '~/stores/cart'
 
+// Utility page: keep out of search results
+useSeoMeta({ robots: 'noindex, nofollow' })
+
 const route = useRoute()
 const cart = useCartStore()
 const clearedCart = ref(false)

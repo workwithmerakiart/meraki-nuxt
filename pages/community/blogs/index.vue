@@ -57,6 +57,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { getAllBlogs } from '~/data/blogs.js'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Blog: Art Tips & Studio Stories | Meraki Art Studio",
+  description:
+    "Ideas, guides and stories from Meraki Art Studio in Dubai: art techniques, creative inspiration, party planning and news from the studio.",
+})
 
 const posts = computed(() =>
   getAllBlogs()

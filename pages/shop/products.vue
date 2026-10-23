@@ -7,9 +7,9 @@
 
     <!-- Heading -->
     <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight text-black mb-6">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight text-black mb-6">
         THE MERAKI COLLECTION
-      </h2>
+      </h1>
 
       <div class="flex flex-col md:flex-row gap-8">
         <!-- Sidebar -->
@@ -220,6 +220,14 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useCartStore } from '~/stores/cart'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
+import { usePageSeo } from '~/composables/usePageSeo'
+
+usePageSeo({
+  title: "Shop: Resin & DIY Art Kits | Meraki Art Studio",
+  description:
+    "Shop resin art kits and creative supplies from Meraki Art Studio in Dubai, from starter and colour kits to floral resin kits for making art at home.",
+  image: "/images/block3_shop.webp",
+})
 
 const categoryExpanded = ref(true)
 const priceExpanded = ref(true)
